@@ -5,13 +5,34 @@ using System.Web;
 
 namespace Expertia.Estructura.Models
 {
+    /// <summary>
+    /// Contacto B2B
+    /// </summary>
     public class ContactoB2B : Cuenta
     {
+        /// <summary>
+        /// Razón Social
+        /// </summary>
         public string RazonSocial { get; set; } // Razón Social
+        /// <summary>
+        /// Alias
+        /// </summary>
         public string Alias { get; set; } // Alias
+        /// <summary>
+        /// Condición de Pago
+        /// </summary>
         public string CondicionPago { get; set; } // Condición de Pago
-        public List<string> TipoMonedaDeLineaCredito { get; set; } // Tipo de moneda de Linea de credito
+        /// <summary>
+        /// Tipo de Moneda
+        /// </summary>
+        public string TipoMonedaDeLineaCredito { get; set; } // Tipo de moneda de Linea de credito
+        /// <summary>
+        /// Monto de Línea de Crédito
+        /// </summary>
         public string MontoLineaCredito { get; set; } // Monto de Línea de Crédito
-        public string FechaMaximaPagoLDC { get; set; } // Fecha Máxima de Pago de LDC
+        /// <summary>
+        /// Fecha Máxima de Pago de Línea de Crédito
+        /// </summary>
+        public DateTime? FechaMaximaPagoLDC { get; set; } // Fecha Máxima de Pago de LDC
     }
 }

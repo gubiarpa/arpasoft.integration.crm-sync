@@ -9,17 +9,17 @@ using System.Web.Http;
 namespace Expertia.Estructura.Controllers
 {
     /// <summary>
-    /// Mantenimiento para Contactos B2B
+    /// Mantenimiento para Contactos B2C
     /// </summary>
-    public class ContactoB2BController : ApiController
+    public class ContactoB2CController : ApiController
     {
         /// <summary>
-        /// Ingresa un contacto B2B
+        /// Ingresa un contacto B2C
         /// </summary>
         /// <param name="contacto">Datos del nuevo contacto</param>
         /// <returns>Status de transacción</returns>
         [HttpPost]
-        public IHttpActionResult Create(ContactoB2B contacto)
+        public IHttpActionResult Create(ContactoB2C contacto)
         {
             return Ok(contacto);
         }
@@ -30,9 +30,9 @@ namespace Expertia.Estructura.Controllers
         /// <param name="contacto">Datos del contacto afectado</param>
         /// <returns>Status de transacción</returns>
         [HttpPut]
-        public IHttpActionResult Update(ContactoB2B contacto)
+        public IHttpActionResult Update(ContactoB2C contacto)
         {
-            return Ok();
+            return Ok(contacto);
         }
     }
 }
