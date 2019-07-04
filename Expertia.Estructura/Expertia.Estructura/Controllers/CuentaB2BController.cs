@@ -11,7 +11,9 @@ namespace Expertia.Estructura.Controllers
     /// <summary>
     /// Mantenimiento para Contactos B2B
     /// </summary>
-    public class ContactoB2BController : ApiController
+    [AllowAnonymous]
+    [RoutePrefix("api/CuentaB2B")]
+    public class CuentaB2BController : ApiController
     {
         /// <summary>
         /// Ingresa un contacto B2B
@@ -19,9 +21,13 @@ namespace Expertia.Estructura.Controllers
         /// <param name="contacto">Datos del nuevo contacto</param>
         /// <returns>Status de transacción</returns>
         [HttpPost]
-        public IHttpActionResult Create(ContactoB2B contacto)
+        [Route("Create")]
+        public IHttpActionResult Create(CuentaB2B contacto)
         {
-            return Ok(contacto);
+            contacto.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
+            contacto.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
+            contacto.ID = (new Random()).Next(0, 1000);
+            return Ok(new { ID = contacto.ID });
         }
 
         /// <summary>
@@ -29,8 +35,9 @@ namespace Expertia.Estructura.Controllers
         /// </summary>
         /// <param name="contacto">Datos del contacto afectado</param>
         /// <returns>Status de transacción</returns>
-        [HttpPut]
-        public IHttpActionResult Update(ContactoB2B contacto)
+        [HttpPost]
+        [Route("Update")]
+        public IHttpActionResult Update(CuentaB2B contacto)
         {
             return Ok();
         }

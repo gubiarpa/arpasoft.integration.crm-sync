@@ -9,19 +9,23 @@ using System.Web.Http;
 namespace Expertia.Estructura.Controllers
 {
     /// <summary>
-    /// Mantenimiento para Contactos B2C
+    /// Mantenimiento de Contactos
     /// </summary>
-    public class ContactoB2CController : ApiController
+    [AllowAnonymous]
+    [RoutePrefix("api/Contacto")]
+    public class ContactoController : ApiController
     {
         /// <summary>
-        /// Ingresa un contacto B2C
+        /// Ingresa un contacto
         /// </summary>
         /// <param name="contacto">Datos del nuevo contacto</param>
         /// <returns>Status de transacción</returns>
         [HttpPost]
-        public IHttpActionResult Create(ContactoB2C contacto)
+        [Route("Create")]
+        public IHttpActionResult Create(Contacto contacto)
         {
-            return Ok(contacto);
+            contacto.ID = (new Random()).Next(0, 1000);
+            return Ok(contacto.ID);
         }
 
         /// <summary>
@@ -29,10 +33,11 @@ namespace Expertia.Estructura.Controllers
         /// </summary>
         /// <param name="contacto">Datos del contacto afectado</param>
         /// <returns>Status de transacción</returns>
-        [HttpPut]
-        public IHttpActionResult Update(ContactoB2C contacto)
+        [HttpPost]
+        [Route("Update")]
+        public IHttpActionResult Update(Contacto contacto)
         {
-            return Ok(contacto);
+            return Ok();
         }
     }
 }

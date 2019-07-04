@@ -8,7 +8,7 @@ namespace Expertia.Estructura.Models
     /// <summary>
     /// Contacto B2C
     /// </summary>
-    public class ContactoB2C : Cuenta
+    public class CuentaB2C : Cuenta
     {
         /// <summary>
         /// Nombre

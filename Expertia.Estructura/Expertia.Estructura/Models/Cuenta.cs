@@ -11,6 +11,10 @@ namespace Expertia.Estructura.Models
     public class Cuenta
     {
         /// <summary>
+        /// ID de la nueva cuenta (B2B, B2C)
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
         /// Tipo Persona: Natura o Jurídica
         /// </summary>
         public string TipoPersona { get; set; }
@@ -109,7 +113,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Idiomas de Comunicación del Cliente
         /// </summary>
-        public IEnumerable<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
+        public List<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
         /// <summary>
         /// Nivel de Importancia
         /// </summary>

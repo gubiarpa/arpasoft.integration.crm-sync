@@ -8,7 +8,7 @@ namespace Expertia.Estructura.Models
     /// <summary>
     /// Contacto B2B
     /// </summary>
-    public class ContactoB2B : Cuenta
+    public class CuentaB2B : Cuenta
     {
         /// <summary>
         /// Razón Social
@@ -29,7 +29,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Monto de Línea de Crédito
         /// </summary>
-        public string MontoLineaCredito { get; set; } // Monto de Línea de Crédito
+        public decimal MontoLineaCredito { get; set; } // Monto de Línea de Crédito
         /// <summary>
         /// Fecha Máxima de Pago de Línea de Crédito
         /// </summary>
