@@ -1,4 +1,5 @@
-﻿using Expertia.Estructura.Models;
+﻿using Expertia.Estructura.Filters;
+using Expertia.Estructura.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Expertia.Estructura.Controllers
     /// <summary>
     /// Mantenimiento de Contactos
     /// </summary>
-    [AllowAnonymous]
+    [BasicAuthentication]
     [RoutePrefix("api/Contacto")]
     public class ContactoController : ApiController
     {
