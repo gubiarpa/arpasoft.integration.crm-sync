@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Expertia.Estructura.Controllers
     /// Mantenimiento para Contactos B2C
     /// </summary>
     [AllowAnonymous]
-    [RoutePrefix("api/CuentaB2C")]
+    [RoutePrefix(ApiRoutePrefix.CuentaB2C)]
     public class CuentaB2CController : ApiController
     {
         /// <summary>
@@ -21,7 +22,7 @@ namespace Expertia.Estructura.Controllers
         /// <param name="contacto">Datos del nuevo contacto</param>
         /// <returns>Status de transacción</returns>
         [HttpPost]
-        [Route("Create")]
+        [Route(ApiAction.Create)]
         public IHttpActionResult Create(CuentaB2C contacto)
         {
             contacto.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
@@ -36,7 +37,7 @@ namespace Expertia.Estructura.Controllers
         /// <param name="contacto">Datos del contacto afectado</param>
         /// <returns>Status de transacción</returns>
         [HttpPost]
-        [Route("Update")]
+        [Route(ApiAction.Update)]
         public IHttpActionResult Update(CuentaB2C contacto)
         {
             return Ok();

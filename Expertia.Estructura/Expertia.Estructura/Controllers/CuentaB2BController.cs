@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,33 +12,20 @@ namespace Expertia.Estructura.Controllers
     /// <summary>
     /// Mantenimiento para Contactos B2B
     /// </summary>
-    [AllowAnonymous]
-    [RoutePrefix("api/CuentaB2B")]
-    public class CuentaB2BController : ApiController
+    [RoutePrefix(ApiRoutePrefix.CuentaB2B)]
+    public class CuentaB2BController : BaseController<CuentaB2B>
     {
-        /// <summary>
-        /// Ingresa un contacto B2B
-        /// </summary>
-        /// <param name="contacto">Datos del nuevo contacto</param>
-        /// <returns>Status de transacción</returns>
-        [HttpPost]
-        [Route("Create")]
-        public IHttpActionResult Create(CuentaB2B contacto)
+        [Route(ApiAction.Create)]
+        public override IHttpActionResult Create(CuentaB2B entity)
         {
-            contacto.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
-            contacto.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
-            contacto.ID = (new Random()).Next(0, 1000);
-            return Ok(new { ID = contacto.ID });
+            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
+            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
+            entity.ID = (new Random()).Next(0, 1000);
+            return Ok(new { ID = entity.ID });
         }
 
-        /// <summary>
-        /// Actualiza un contacto
-        /// </summary>
-        /// <param name="contacto">Datos del contacto afectado</param>
-        /// <returns>Status de transacción</returns>
-        [HttpPost]
-        [Route("Update")]
-        public IHttpActionResult Update(CuentaB2B contacto)
+        [Route(ApiAction.Update)]
+        public override IHttpActionResult Update(CuentaB2B entity)
         {
             return Ok();
         }

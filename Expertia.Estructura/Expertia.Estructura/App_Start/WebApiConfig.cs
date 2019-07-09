@@ -1,4 +1,6 @@
 ﻿using Expertia.Estructura.Filters;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +12,18 @@ namespace Expertia.Estructura
     {
         public static void Register(HttpConfiguration config)
         {
-            // Configuración y servicios de API web
+            #region Authentication
+            // Agrega autenticación básica
             config.Filters.Add(new BasicAuthenticationAttribute());
+            #endregion
 
-            // Rutas de API web
+            #region CamelCase
+            var settings = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings;
+            settings.Formatting = Formatting.Indented; // Indentado
+            settings.ContractResolver = new CamelCasePropertyNamesContractResolver(); // Camelcase
+            #endregion
+
+            #region WebApiRoutes
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
@@ -21,6 +31,7 @@ namespace Expertia.Estructura
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            #endregion
         }
     }
 }

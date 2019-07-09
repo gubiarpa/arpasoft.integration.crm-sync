@@ -1,44 +1,48 @@
 ﻿using Expertia.Estructura.Filters;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
 {
-    /// <summary>
-    /// Mantenimiento de Contactos
-    /// </summary>
-    [BasicAuthentication]
-    [RoutePrefix("api/Contacto")]
-    public class ContactoController : ApiController
+    [RoutePrefix(ApiRoutePrefix.Contacto)]
+    public class ContactoController : BaseController<Contacto>
     {
-        /// <summary>
-        /// Ingresa un contacto
-        /// </summary>
-        /// <param name="contacto">Datos del nuevo contacto</param>
-        /// <returns>Status de transacción</returns>
-        [HttpPost]
-        [Route("Create")]
-        public IHttpActionResult Create(Contacto contacto)
+        [Route(ApiAction.Create)]
+        public override IHttpActionResult Create(Contacto entity)
         {
-            contacto.ID = (new Random()).Next(0, 1000);
-            return Ok(contacto.ID);
+            var startReq = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            entity.ID = (new Random()).Next(0, 1000);
+            return Ok(new
+                {
+                    ID = entity.ID,
+                    TimeRequest = new TimeRequest()
+                    {
+                        Start = startReq,
+                        End = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
+                    }
+                });
         }
 
-        /// <summary>
-        /// Actualiza un contacto
-        /// </summary>
-        /// <param name="contacto">Datos del contacto afectado</param>
-        /// <returns>Status de transacción</returns>
-        [HttpPost]
-        [Route("Update")]
-        public IHttpActionResult Update(Contacto contacto)
+        [Route(ApiAction.Update)]
+        public override IHttpActionResult Update(Contacto entity)
         {
-            return Ok();
+            var startReq = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            return Ok(new
+                {
+                    timeRequest = new
+                    {
+                        StartRequest = startReq,
+                        EndRequest = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
+                    }
+                });
         }
     }
 }

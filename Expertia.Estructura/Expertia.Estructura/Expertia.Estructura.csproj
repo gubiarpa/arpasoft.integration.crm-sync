@@ -134,6 +134,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CuentaB2BController.cs" />
     <Compile Include="Controllers\CuentaB2CController.cs" />
     <Compile Include="Controllers\ContactoController.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Auxiliar\TimeRequest.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\CuentaB2B.cs" />
     <Compile Include="Models\CuentaB2C.cs" />
@@ -154,6 +156,8 @@
     <Compile Include="Models\Telefono.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ConfigAccess.cs" />
+    <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\FileIO.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

@@ -23,23 +23,21 @@ namespace Expertia.Estructura.Filters
         {
             if (actionContext.Request.Headers.Authorization != null)
             {
-                var authToken = actionContext.Request.Headers
-                    .Authorization.Parameter;
-
-                // decoding authToken we get decode value in 'Username:Password' format  
-                var decodeAuthToken = System.Text.Encoding.UTF8.GetString(
-                    Convert.FromBase64String(authToken));                
-
-                // at 0th postion of array we get username and at 1st we get password  
-                if (IsAuthorizedUser(decodeAuthToken))
+                try
                 {
-                    // setting current principle  
-                    //Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(decodeAuthToken), null);
+                    var authToken = actionContext.Request.Headers.Authorization.Parameter;
+                    string decodeAuthToken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
+                                    
+                    if (!IsAuthorizedUser(decodeAuthToken))
+                    {
+                        actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    }                    
                 }
-                else
+                catch
                 {
-                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.BadRequest);
                 }
+                
             }
             else
             {
