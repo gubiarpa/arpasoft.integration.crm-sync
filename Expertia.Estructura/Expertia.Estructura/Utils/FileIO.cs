@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Expertia.Estructura.Utils.Behavior;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,36 +7,41 @@ using System.Web;
 
 namespace Expertia.Estructura.Utils
 {
-    public class FileIO
+    public class FileIO : IFileIO
     {
-        protected string _path { get; set; }
-        protected string _name { get; set; }
+        private string _path;
+        private string _name;
+        private string _logFormat;
 
-        protected string FullName
-        {
-            get { return _path + _name; }
-        }
+        public string FullName => _path + _name;
+
+        public string LogFormat { get => _path + _name; set => _logFormat = value; }
 
         public FileIO(string path, string name)
         {
             _path = path; _name = name;
         }
 
-        public void WriteContent(string content)
-        {
-            File.AppendAllText(FullName, content);                       
-        }
-
         public string ReadContent()
         {
-            return File.ReadAllText(FullName);
+            return ReadContent(FullName);
+        }
+
+        public void WriteContent(string content)
+        {
+            WriteContent(FullName, content + "\n");
         }
 
         #region StaticMethods
+        public static string ReadContent(string fullName)
+        {
+            return File.ReadAllText(fullName);
+        }
+
         public static void WriteContent(string fullName, string content)
         {
             File.AppendAllText(fullName, content);
-        }
+        }        
         #endregion
     }
 }

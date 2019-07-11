@@ -1,10 +1,8 @@
 ﻿using Expertia.Estructura.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Expertia.Estructura
 {
@@ -21,6 +19,11 @@ namespace Expertia.Estructura
             var settings = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings;
             settings.Formatting = Formatting.Indented; // Indentado
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver(); // Camelcase
+            #endregion
+
+            #region Cors
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
             #endregion
 
             #region WebApiRoutes

@@ -1,10 +1,7 @@
-﻿using Expertia.Estructura.Models;
+﻿using Expertia.Estructura.Controllers.Base;
+using Expertia.Estructura.Models;
 using Expertia.Estructura.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -12,33 +9,25 @@ namespace Expertia.Estructura.Controllers
     /// <summary>
     /// Mantenimiento para Contactos B2C
     /// </summary>
-    [AllowAnonymous]
-    [RoutePrefix(ApiRoutePrefix.CuentaB2C)]
-    public class CuentaB2CController : ApiController
+    [RoutePrefix(RoutePrefix.CuentaB2C)]
+    public class CuentaB2CController : BaseController<CuentaB2C>
     {
         /// <summary>
-        /// Ingresa un contacto B2C
+        /// Crea un
         /// </summary>
-        /// <param name="contacto">Datos del nuevo contacto</param>
-        /// <returns>Status de transacción</returns>
-        [HttpPost]
-        [Route(ApiAction.Create)]
-        public IHttpActionResult Create(CuentaB2C contacto)
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [Route(HttpAction.Create)]
+        public override IHttpActionResult Create(CuentaB2C entity)
         {
-            contacto.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
-            contacto.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
-            contacto.ID = (new Random()).Next(0, 1000);
-            return Ok(new { contacto.ID });
+            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
+            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
+            entity.ID = (new Random()).Next(0, 1000);
+            return Ok(new { entity.ID });            
         }
 
-        /// <summary>
-        /// Actualiza un contacto
-        /// </summary>
-        /// <param name="contacto">Datos del contacto afectado</param>
-        /// <returns>Status de transacción</returns>
-        [HttpPost]
-        [Route(ApiAction.Update)]
-        public IHttpActionResult Update(CuentaB2C contacto)
+        [Route(HttpAction.Update)]
+        public override IHttpActionResult Update(CuentaB2C entity)
         {
             return Ok();
         }
