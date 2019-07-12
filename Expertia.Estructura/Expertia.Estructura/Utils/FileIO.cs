@@ -32,15 +32,36 @@ namespace Expertia.Estructura.Utils
             WriteContent(FullName, content + "\n");
         }
 
+        public void WriteContent(string[] contents)
+        {
+            foreach (var content in contents)
+            {
+                WriteContent(content);
+            }
+        }
+
         #region StaticMethods
         public static string ReadContent(string fullName)
         {
-            return File.ReadAllText(fullName);
+            try
+            {
+                return File.ReadAllText(fullName);
+            }
+            catch
+            {
+                return null;
+            }            
         }
 
         public static void WriteContent(string fullName, string content)
         {
-            File.AppendAllText(fullName, content);
+            try
+            {
+                File.AppendAllText(fullName, content);
+            }
+            catch (Exception ex)
+            {
+            }
         }        
         #endregion
     }

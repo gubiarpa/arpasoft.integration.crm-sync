@@ -10,7 +10,7 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.Contacto)]
     public class ContactoController : BaseController<Contacto>
     {
-        [Route(HttpAction.Create)]
+        [Route(RouteAction.Create)]
         public override IHttpActionResult Create(Contacto entity)
         {
             var startReq = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
@@ -26,7 +26,7 @@ namespace Expertia.Estructura.Controllers
                 });
         }
 
-        [Route(HttpAction.Update)]
+        [Route(RouteAction.Update)]
         public override IHttpActionResult Update(Contacto entity)
         {
             var startReq = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");

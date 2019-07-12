@@ -12,7 +12,7 @@ namespace Expertia.Estructura.Utils
         public const string CuentaB2C = "api/cuentab2c";        
     }
 
-    public static class HttpAction
+    public static class RouteAction
     {
         public const string Create = "create";
         public const string Read   = "read";

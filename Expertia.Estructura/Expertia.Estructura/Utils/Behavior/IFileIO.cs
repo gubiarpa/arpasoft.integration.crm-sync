@@ -11,6 +11,7 @@ namespace Expertia.Estructura.Utils.Behavior
         string FullName { get; }
         string LogFormat { get; set; }
         void WriteContent(string content);
+        void WriteContent(string[] contents);
         string ReadContent();
     }
 }

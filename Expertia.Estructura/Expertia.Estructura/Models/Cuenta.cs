@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Expertia.Estructura.Models.Behavior;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,12 +9,16 @@ namespace Expertia.Estructura.Models
     /// <summary>
     /// Cuenta (B2B, B2C)
     /// </summary>
-    public class Cuenta
+    public class Cuenta : ISalesForce
     {
         /// <summary>
         /// ID de la nueva cuenta (B2B, B2C)
         /// </summary>
         public int ID { get; set; }
+        /// <summary>
+        /// ID Proveniente de SalesForce
+        /// </summary>
+        public string IdSalesForce { get; set; }
         /// <summary>
         /// Tipo Persona: Natura o Jurídica
         /// </summary>

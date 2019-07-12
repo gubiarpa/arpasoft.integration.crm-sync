@@ -142,6 +142,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\Behavior\IClientFeatures.cs" />
     <Compile Include="Controllers\CuentaB2BController.cs" />
     <Compile Include="Controllers\CuentaB2CController.cs" />
     <Compile Include="Controllers\ContactoController.cs" />
@@ -150,6 +151,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Auxiliar\TimeRequest.cs" />
+    <Compile Include="Models\Behavior\ISalesForce.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\CuentaB2B.cs" />
     <Compile Include="Models\CuentaB2C.cs" />

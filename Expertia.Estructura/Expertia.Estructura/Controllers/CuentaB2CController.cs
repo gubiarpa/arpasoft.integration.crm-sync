@@ -17,7 +17,7 @@ namespace Expertia.Estructura.Controllers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        [Route(HttpAction.Create)]
+        [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2C entity)
         {
             entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
@@ -26,7 +26,7 @@ namespace Expertia.Estructura.Controllers
             return Ok(new { entity.ID });            
         }
 
-        [Route(HttpAction.Update)]
+        [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2C entity)
         {
             return Ok();
