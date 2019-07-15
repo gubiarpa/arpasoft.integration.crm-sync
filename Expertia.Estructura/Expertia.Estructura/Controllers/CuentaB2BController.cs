@@ -19,10 +19,19 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
-            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
-            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
-            entity.ID = (new Random()).Next(0, 1000);
-
+            try
+            {
+                entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
+                entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
+                entity.ID = (new Random()).Next(0, 1000);
+                _logFileManager.WriteLine(LogType.Info, entity.IdSalesForce);
+            }
+            catch (Exception ex)
+            {
+                _logFileManager.WriteLine(LogType.Fail, ex.Message);
+                throw;
+            }
+            
             //var json 
             return Ok(new { ID = entity.ID });
         }

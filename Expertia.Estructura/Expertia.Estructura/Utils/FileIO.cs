@@ -14,8 +14,7 @@ namespace Expertia.Estructura.Utils
         private string _logFormat;
 
         public string FullName => _path + _name;
-
-        public string LogFormat { get => _path + _name; set => _logFormat = value; }
+        public string LineFormat { get => _path + _name; set => _logFormat = value; }
 
         public FileIO(string path, string name)
         {
@@ -29,7 +28,7 @@ namespace Expertia.Estructura.Utils
 
         public void WriteContent(string content)
         {
-            WriteContent(FullName, content + "\n");
+            WriteContent(FullName, content);
         }
 
         public void WriteContent(string[] contents)

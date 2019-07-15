@@ -13,21 +13,18 @@ namespace Expertia.Estructura.Controllers.Base
     /// Mantenimiento de entidad
     /// </summary>
     /// <typeparam name="T">Entidad Genérica</typeparam>
-    public abstract class BaseController<T> : ApiController, IClientFeatures
+    public abstract class BaseController<T> : ApiController
     {
         #region Properties
-        protected IFileIO logFileMainManager;
-        protected IFileIO logFileExtendManager;
-
-        public string Ip => HttpContext.Current.Request.UserHostAddress;
-        public string Method => HttpContext.Current.Request.HttpMethod;
-        public string Uri => HttpContext.Current.Request.Url.LocalPath;
+        protected ILogFileManager _logFileManager;
+        protected IClientFeatures _clientFeatures;
         #endregion
 
         #region Constructor
         public BaseController()
         {
-            LoadLogSettings();
+            _logFileManager = new LogFileManager("LogPath", "LogName");
+            _clientFeatures = new ClientFeatures();
         }
         #endregion
 
@@ -48,54 +45,7 @@ namespace Expertia.Estructura.Controllers.Base
                 throw ex;
             }
         }
-        #endregion
-
-        #region LogMethods
-        protected void LoadLogSettings()
-        {
-            try
-            {
-                #region LogMainManager
-                var mainFilePath = ConfigAccess.GetValueInAppSettings("LogMainFilePath");
-                var mainFileName = ConfigAccess.GetValueInAppSettings("LogMainFileName");
-                var mainFileDateFormat = ConfigAccess.GetValueInAppSettings("LogMainFileDateFormat");
-
-                var mainLineFormat = ConfigAccess.GetValueInAppSettings("LogMainLineFormat");
-                var mainLineDateFormat = ConfigAccess.GetValueInAppSettings("LogMainLineDateFormat");
-
-                logFileMainManager = new FileIO(mainFilePath, string.Format(mainFileName, DateTime.Now.ToString(mainFileDateFormat))) { LogFormat = mainLineFormat };
-                #endregion
-
-                #region LogExtendManager
-                var extendFilePath = ConfigAccess.GetValueInAppSettings("LogExtendFilePath");
-                var extendFileName = ConfigAccess.GetValueInAppSettings("LogExtendFileName");
-                var extendfileDateFormat = ConfigAccess.GetValueInAppSettings("LogExtendFileDateFormat");
-
-                var extendLineFormat = ConfigAccess.GetValueInAppSettings("LogExtendLineFormat");
-                var extendLineDateFormat = ConfigAccess.GetValueInAppSettings("LogExtendLineDateFormat");
-
-                logFileExtendManager = new FileIO(extendFilePath, string.Format(extendFileName, DateTime.Now.ToString(extendfileDateFormat))) { LogFormat = extendLineFormat };
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        protected void WriteLog()
-        {
-            try
-            {
-
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-        #endregion
+        #endregion        
 
         #region HttpMethods
         /// <summary>
@@ -129,19 +79,17 @@ namespace Expertia.Estructura.Controllers.Base
                 object obj = new
                 {
                     IdOperation = idOperation,
-                    Ip = Ip,
-                    DateResponse = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                    IpClient = _clientFeatures.IP,
+                    DateResponse = DateTime.Now.ToString(FormatTemplate.LongDate),
                     Sender = "Expertia"
                 };
 
-                var request = new string[] { string.Format("Request: {0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")), Stringify(obj, true) };
-                logFileExtendManager.WriteContent(request);
-                logFileMainManager.WriteContent(string.Format("IP: {0} :: Uri: {1} :: Method: {2} ", Ip, Uri, Method));
+                _logFileManager.WriteLine(LogType.Info, idOperation.ToString());
                 return Ok(obj);
             }
             catch (Exception ex)
             {
-                logFileMainManager.WriteContent(ex.Message);
+                _logFileManager.WriteLine(LogType.Fail, ex.Message);
                 return InternalServerError();
             }
         }

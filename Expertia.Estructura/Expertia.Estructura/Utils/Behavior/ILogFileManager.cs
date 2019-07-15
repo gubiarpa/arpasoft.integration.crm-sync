@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Expertia.Estructura.Utils.Behavior
 {
-    public interface IFileIO
+    public interface ILogFileManager
     {
-        string FullName { get; }
-        void WriteContent(string content);
-        void WriteContent(string[] contents);
-        string ReadContent();
+        void WriteLine(LogType logType, string content);
     }
 }

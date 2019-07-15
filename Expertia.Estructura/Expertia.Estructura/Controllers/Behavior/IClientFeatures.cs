@@ -8,7 +8,7 @@ namespace Expertia.Estructura.Controllers.Behavior
 {
     public interface IClientFeatures
     {
-        string Ip { get; }
+        string IP { get; }
         string Method { get; }
         string Uri { get; }
     }
