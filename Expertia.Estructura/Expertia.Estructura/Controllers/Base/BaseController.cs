@@ -23,7 +23,7 @@ namespace Expertia.Estructura.Controllers.Base
         #region Constructor
         public BaseController()
         {
-            _logFileManager = new LogFileManager("LogPath", "LogName");
+            _logFileManager = new LogFileManager(LogKeys.LogPath, LogKeys.LogName);
             _clientFeatures = new ClientFeatures();
         }
         #endregion
@@ -75,7 +75,6 @@ namespace Expertia.Estructura.Controllers.Base
             try
             {
                 Guid idOperation = Guid.NewGuid();
-
                 object obj = new
                 {
                     IdOperation = idOperation,
@@ -84,12 +83,12 @@ namespace Expertia.Estructura.Controllers.Base
                     Sender = "Expertia"
                 };
 
-                _logFileManager.WriteLine(LogType.Info, idOperation.ToString());
+                _logFileManager.WriteLine(LogType.Info, string.Format("Success: {0}", idOperation.ToString()));
                 return Ok(obj);
             }
             catch (Exception ex)
             {
-                _logFileManager.WriteLine(LogType.Fail, ex.Message);
+                _logFileManager.WriteLine(LogType.Fail, string.Format("Fail: {0}", ex.Message));
                 return InternalServerError();
             }
         }
