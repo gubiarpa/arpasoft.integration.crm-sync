@@ -3,15 +3,18 @@ using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
 namespace Expertia.Estructura.Repository
 {
-    public class CuentaB2BRepository : SQLBase<CuentaB2B>
+    public class CuentaB2BRepository : OracleBase<CuentaB2B>
     {
-        public CuentaB2BRepository()
+
+        protected override IEnumerable<CuentaB2B> DataTableToEnumerable(DataTable dt)
         {
+            throw new NotImplementedException();
         }
     }
 }

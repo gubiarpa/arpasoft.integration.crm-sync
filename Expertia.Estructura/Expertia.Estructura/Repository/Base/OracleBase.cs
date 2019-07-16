@@ -6,11 +6,11 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.Base
 {
-    public abstract class SQLBase<T>
+    public abstract class OracleBase<T>
     {
         protected string _connectionString { get; }
 
-        public SQLBase()
+        public OracleBase()
         {
             _connectionString = ConfigAccess.GetValueInConnectionString(DataBaseKeys.ConnectionString);
         }
@@ -33,6 +33,38 @@ namespace Expertia.Estructura.Repository.Base
         {
             return _outResultParameters[name];
         }
+
+        protected IEnumerable<T> ExecuteSPWithResults(string SPName)
+        {
+            try
+            {
+                using (OracleConnection conn = new OracleConnection())
+                {
+                    conn.Open();
+                    using (OracleCommand cmd = new OracleCommand()
+                    {
+                        CommandText = SPName,
+                        CommandType = CommandType.StoredProcedure,
+                        Connection = conn
+                    })
+                    {
+                        foreach (var key in _inParameters.Keys)
+                        {
+                            cmd.Parameters.Add(new OracleParameter(key, _inParameters[key]) { Direction = ParameterDirection.Input });
+                        }
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        protected abstract IEnumerable<T> DataTableToEnumerable(DataTable dt);
 
         protected void ExecuteSPWithoutResults(string SPName)
         {
