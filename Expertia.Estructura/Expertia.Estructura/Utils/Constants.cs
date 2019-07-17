@@ -39,6 +39,7 @@
     public static class LogTypeMessage
     {
         public const string Info = "INFO";
+        public const string Field = "FILD";
         public const string Fail = "FAIL";
         public const string Warning = "WARN";
         public const string Undefined = "Undefined Type";

@@ -20,16 +20,75 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2C entity)
         {
-            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
-            entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
-            entity.ID = (new Random()).Next(0, 1000);
-            return Ok(new { entity.ID });            
+            //entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
+            //entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
+            //entity.ID = (new Random()).Next(0, 1000);
+            _logFileManager.WriteLine(LogType.Info, string.Format("New Entity: {0}", entity.ID));
+            WriteAllFieldsLog(entity);
+            return Ok(new { entity.ID });
         }
 
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2C entity)
         {
             return Ok();
+        }
+
+        protected override void WriteAllFieldsLog(CuentaB2C entity)
+        {
+            #region Cuenta
+            WriteFieldLog("ID", entity.ID);
+            WriteFieldLog("IdSalesForce", entity.IdSalesForce);
+            WriteFieldLog("TipoPersona", entity.TipoPersona);
+            WriteFieldLog("FechaNacimOrAniv", entity.FechaNacimOrAniv);
+            WriteFieldLog("LogoFoto", entity.LogoFoto);
+            WriteFieldLog("Documentos", entity.Documentos);
+            WriteFieldLog("Direcciones", entity.Direcciones);
+            WriteFieldLog("Pais", entity.Pais);
+            WriteFieldLog("Departamento", entity.Departamento);
+            WriteFieldLog("Ciudad", entity.Ciudad);
+            WriteFieldLog("Distrito", entity.Distrito);
+            WriteFieldLog("Telefonos", entity.Telefonos);
+            WriteFieldLog("Sitios", entity.Sitios);
+            WriteFieldLog("Correos", entity.Correos);
+            WriteFieldLog("EmpleadoOrEjecutivoResponsable", entity.EmpleadoOrEjecutivoResponsable);
+            WriteFieldLog("SupervisorKam", entity.SupervisorKam);
+            WriteFieldLog("Gerente", entity.Gerente);
+            WriteFieldLog("UnidadNegocio", entity.UnidadNegocio);
+            WriteFieldLog("GrupoColabEjecRegionBranch", entity.GrupoColabEjecRegionBranch);
+            WriteFieldLog("FlagPrincipal", entity.FlagPrincipal);
+            WriteFieldLog("InteresesProdActiv", entity.InteresesProdActiv);
+            WriteFieldLog("TipoArea", entity.TipoArea);
+            WriteFieldLog("OrigenCuenta", entity.OrigenCuenta);
+            WriteFieldLog("RecibirInformacion", entity.RecibirInformacion);
+            WriteFieldLog("CanalRecibirInfo", entity.CanalRecibirInfo);
+            WriteFieldLog("RegionMercadoBranch", entity.RegionMercadoBranch);
+            WriteFieldLog("IdiomasComunicCliente", entity.IdiomasComunicCliente);
+            WriteFieldLog("NivelImportancia", entity.NivelImportancia);
+            WriteFieldLog("FechaIniRelacionComercial", entity.FechaIniRelacionComercial);
+            WriteFieldLog("Comentarios", entity.Comentarios);
+            WriteFieldLog("TipoCuenta", entity.TipoCuenta);
+            WriteFieldLog("Estado", entity.Estado);
+            WriteFieldLog("PresupEstimadoVenta", entity.PresupEstimadoVenta);
+            WriteFieldLog("EsPotencial", entity.EsPotencial);
+            WriteFieldLog("EsVIP", entity.EsVIP);
+            #endregion
+
+            #region CuentaB2C
+            WriteFieldLog("Nombre", entity.Nombre);
+            WriteFieldLog("ApePaterno", entity.ApePaterno);
+            WriteFieldLog("ApeMaterno", entity.ApeMaterno);
+            WriteFieldLog("EstadoCivil", entity.EstadoCivil);
+            WriteFieldLog("Genero", entity.Genero);
+            WriteFieldLog("Nacionalidad", entity.Nacionalidad);
+            WriteFieldLog("GradoEstudios", entity.GradoEstudios);
+            WriteFieldLog("Profesion", entity.Profesion);
+            WriteFieldLog("PreferenciasGenerales", entity.PreferenciasGenerales);
+            WriteFieldLog("ConsideracionesSalud", entity.ConsideracionesSalud);
+            WriteFieldLog("TipoViaje", entity.TipoViaje);
+            WriteFieldLog("CategoriaViaje", entity.CategoriaViaje);
+            WriteFieldLog("TipoAcompañante", entity.TipoAcompañante);
+            #endregion
         }
     }
 }

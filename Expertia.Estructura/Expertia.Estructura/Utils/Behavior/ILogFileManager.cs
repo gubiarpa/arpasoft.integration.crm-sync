@@ -8,6 +8,6 @@ namespace Expertia.Estructura.Utils.Behavior
 {
     public interface ILogFileManager
     {
-        void WriteLine(LogType logType, string content);
+        void WriteLine(LogType logType, string content, bool indent = true);
     }
 }

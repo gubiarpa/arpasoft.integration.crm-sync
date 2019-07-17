@@ -39,5 +39,40 @@ namespace Expertia.Estructura.Controllers
                     }
                 });
         }
+
+        #region Log
+        protected override void WriteAllFieldsLog(Contacto entity)
+        {
+            WriteFieldLog("IdSalesForce", entity.IdSalesForce);
+            WriteFieldLog("ID", entity.ID);
+            WriteFieldLog("Nombre", entity.Nombre);
+            WriteFieldLog("ApePaterno", entity.ApePaterno);
+            WriteFieldLog("ApeMaterno", entity.ApeMaterno);
+            WriteFieldLog("FechaNacimiento", entity.FechaNacimiento);
+            WriteFieldLog("EstadoCivil", entity.EstadoCivil);
+            WriteFieldLog("Genero", entity.Genero);
+            WriteFieldLog("Nacionalidad", entity.Nacionalidad);
+            WriteFieldLog("Documentos", entity.Documentos);
+            WriteFieldLog("LogoFoto", entity.LogoFoto);
+            WriteFieldLog("Hijos", entity.Hijos);
+            WriteFieldLog("Profesion", entity.Profesion);
+            WriteFieldLog("CargoEmpresa", entity.CargoEmpresa);
+            WriteFieldLog("TiempoEmpresa", entity.TiempoEmpresa);
+            WriteFieldLog("Direcciones", entity.Direcciones);
+            WriteFieldLog("Pais", entity.Pais);
+            WriteFieldLog("Departamento", entity.Departamento);
+            WriteFieldLog("Ciudad", entity.Ciudad);
+            WriteFieldLog("Distrito", entity.Distrito);
+            WriteFieldLog("Telefonos", entity.Telefonos);
+            WriteFieldLog("Sitios", entity.Sitios);
+            WriteFieldLog("Correos", entity.Correos);
+            WriteFieldLog("IdiomasComunicCliente", entity.IdiomasComunicCliente);
+            WriteFieldLog("NivelRiesgo", entity.NivelRiesgo);
+            WriteFieldLog("RegiónMercadoBranch", entity.RegiónMercadoBranch);
+            WriteFieldLog("Estado", entity.Estado);
+            WriteFieldLog("Comentarios", entity.Comentarios);
+            WriteFieldLog("OrigenContacto", entity.OrigenContacto);
+        }
+        #endregion
     }
 }

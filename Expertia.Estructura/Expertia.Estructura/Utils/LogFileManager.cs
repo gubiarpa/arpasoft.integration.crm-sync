@@ -10,6 +10,7 @@ namespace Expertia.Estructura.Utils
     public enum LogType
     {
         Info,
+        Field,
         Fail,
         Warning
     }
@@ -32,23 +33,25 @@ namespace Expertia.Estructura.Utils
             switch (logtype)
             {
                 case LogType.Info: return LogTypeMessage.Info;
+                case LogType.Field: return LogTypeMessage.Field;
                 case LogType.Fail: return LogTypeMessage.Fail;
                 case LogType.Warning: return LogTypeMessage.Warning;
                 default: throw new Exception(LogTypeMessage.Undefined);
             }
         }
 
-        public void WriteLine(LogType logType, string content)
+        public void WriteLine(LogType logType, string content, bool indent = false)
         {
             try
             {
+                string strIndent = indent ? "\t" : string.Empty;
                 _fileIO.WriteContent(string.Format(
-                    FormatTemplate.LogLine, // ◄ formato de línea de log
+                    strIndent + FormatTemplate.LogLine, // ◄ formato de línea de log
                     WriteType(logType), // ◄ INFO, WARN, FAIL
                     DateTime.Now.ToString(FormatTemplate.LongDate), // ◄ 2019-07-15 15:34:20.635
                     _clientFeatures.Method, // ◄ GET, POST
                     _clientFeatures.IP, // ◄ 10.75.109.117
-                    _clientFeatures.Uri, // ◄ /api/cuentab2b/read
+                    _clientFeatures.URL, // ◄ /api/cuentab2b/read
                     content)); // ◄ Mensaje
             }
             catch (Exception ex)

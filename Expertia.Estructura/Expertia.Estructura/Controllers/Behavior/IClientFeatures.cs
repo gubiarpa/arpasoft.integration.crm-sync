@@ -10,6 +10,6 @@ namespace Expertia.Estructura.Controllers.Behavior
     {
         string IP { get; }
         string Method { get; }
-        string Uri { get; }
+        string URL { get; }
     }
 }

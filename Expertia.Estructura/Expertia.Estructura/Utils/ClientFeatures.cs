@@ -7,6 +7,6 @@ namespace Expertia.Estructura.Utils
     {
         public string IP => HttpContext.Current.Request.UserHostAddress;
         public string Method => HttpContext.Current.Request.HttpMethod;
-        public string Uri => HttpContext.Current.Request.Url.LocalPath;
+        public string URL => HttpContext.Current.Request.Url.LocalPath;
     }
 }

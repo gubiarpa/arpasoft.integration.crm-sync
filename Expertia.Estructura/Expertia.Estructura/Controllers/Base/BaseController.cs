@@ -93,5 +93,28 @@ namespace Expertia.Estructura.Controllers.Base
             }
         }
         #endregion
+
+        #region Log
+        protected void WriteEntityLog(T entity)
+        {
+            _logFileManager.WriteLine(LogType.Info, "Start Entity");
+            WriteAllFieldsLog(entity); // Imprime todos los campos
+            _logFileManager.WriteLine(LogType.Info, "End Entity");
+        }
+
+        protected abstract void WriteAllFieldsLog(T entity);
+
+        protected void WriteFieldLog(string fieldName, object value)
+        {            
+            try
+            {
+                _logFileManager.WriteLine(LogType.Field, string.Format("{0} = {1}", fieldName, value), true);                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
     }
 }
