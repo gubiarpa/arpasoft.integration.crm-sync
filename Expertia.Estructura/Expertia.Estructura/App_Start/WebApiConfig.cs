@@ -12,7 +12,7 @@ namespace Expertia.Estructura
         {
             #region Authentication
             // Agrega autenticación básica
-            config.Filters.Add(new BasicAuthenticationAttribute());
+            //config.Filters.Add(new BasicAuthenticationAttribute());
             #endregion
 
             #region CamelCase
@@ -22,7 +22,7 @@ namespace Expertia.Estructura
             #endregion
 
             #region Cors
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var cors = new EnableCorsAttribute("*", "*", "GET,POST");
             config.EnableCors(cors);
             #endregion
 

@@ -21,6 +21,7 @@
     #region ApiRoutes
     public static class RoutePrefix
     {
+        public const string Login = "api/login";
         public const string Contacto  = "api/contacto";
         public const string CuentaB2B = "api/cuentab2b";
         public const string CuentaB2C = "api/cuentab2c";        
@@ -28,6 +29,7 @@
 
     public static class RouteAction
     {
+        public const string Auth = "auth";
         public const string Create = "create";
         public const string Read   = "read";
         public const string Update = "update";
@@ -49,7 +51,7 @@
     #region Formats
     public static class FormatTemplate
     {
-        public const string LogLine = "[{0}]\t[{1}]\t[{2}]\t[{3}]\t[{4}]\t[{5}]\n";
+        public const string LogLine = "{0}[{1}]\t[{2}]\t[{3}]\t[{4}]\t[{5}]\t[{6}]\n";
         public const string FileDate = "yyyyMMdd";
         public const string LongDate = "yyyy-MM-dd HH:mm:ss.fff";
     }

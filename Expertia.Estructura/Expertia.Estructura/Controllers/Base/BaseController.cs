@@ -1,10 +1,10 @@
 ﻿using Expertia.Estructura.Controllers.Behavior;
+using Expertia.Estructura.Filters;
 using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Web;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers.Base
@@ -13,6 +13,7 @@ namespace Expertia.Estructura.Controllers.Base
     /// Mantenimiento de entidad
     /// </summary>
     /// <typeparam name="T">Entidad Genérica</typeparam>
+    [BasicAuthentication]
     public abstract class BaseController<T> : ApiController
     {
         #region Properties

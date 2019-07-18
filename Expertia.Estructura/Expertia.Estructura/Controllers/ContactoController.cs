@@ -15,6 +15,7 @@ namespace Expertia.Estructura.Controllers
         {
             var startReq = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
             entity.ID = (new Random()).Next(0, 1000);
+            WriteAllFieldsLog(entity);
             return Ok(new
                 {
                     ID = entity.ID,
@@ -30,6 +31,7 @@ namespace Expertia.Estructura.Controllers
         public override IHttpActionResult Update(Contacto entity)
         {
             var startReq = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            WriteAllFieldsLog(entity);
             return Ok(new
                 {
                     timeRequest = new

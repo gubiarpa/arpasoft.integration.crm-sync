@@ -151,6 +151,7 @@
     <Compile Include="Controllers\CuentaB2BController.cs" />
     <Compile Include="Controllers\CuentaB2CController.cs" />
     <Compile Include="Controllers\ContactoController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -166,6 +167,7 @@
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\IdiomaComunicCliente.cs" />
     <Compile Include="Models\InteresesProductoActividad.cs" />
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Sitio.cs" />
     <Compile Include="Models\Telefono.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -21,25 +21,31 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
-                entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
-                entity.ID = (new Random()).Next(0, 1000);
-                _logFileManager.WriteLine(LogType.Info, entity.IdSalesForce);
+                entity.ID = (new Random()).Next(0, 1000); // Un ID ficticio
+                /// Aquí va la interacción con BD
+                WriteEntityLog(entity);
+                return Ok(entity);
             }
             catch (Exception ex)
             {
                 _logFileManager.WriteLine(LogType.Fail, ex.Message);
                 throw;
             }
-            
-            //var json 
-            return Ok(new { ID = entity.ID });
         }
 
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2B entity)
         {
-            return Ok();
+            try
+            {
+                WriteEntityLog(entity);
+                /// Aquí va la interacción con BD
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         #region Log
