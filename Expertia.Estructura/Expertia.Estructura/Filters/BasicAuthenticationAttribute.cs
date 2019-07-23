@@ -46,33 +46,32 @@ namespace Expertia.Estructura.Filters
                 try
                 {
                     var authToken = actionContext.Request.Headers.Authorization.Parameter;
-                    string decodeAuthToken = Encoding.UTF8.GetString(Convert.FromBase64String(authToken));
-                                    
-                    if (!IsAuthorizedUser(decodeAuthToken))
+
+                    if (!IsAuthorizedUser(authToken))
                     {
                         actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized, obj);
-                        _logFileManager.WriteLine(LogType.Warning, string.Format("Unauthorized: {0}", idOperation.ToString()));
+                        _logFileManager.WriteLine(LogType.Warning, string.Format("{0}: {1}", LogLineMessage.Unauthorized, idOperation.ToString()));
                     }                    
                 }
                 catch
                 {
                     actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.BadRequest, obj);
-                    _logFileManager.WriteLine(LogType.Fail, string.Format("Bad Request:{0}", idOperation.ToString()));
+                    _logFileManager.WriteLine(LogType.Fail, string.Format("{0}: {1}", LogLineMessage.BadRequest, idOperation.ToString()));
                 }
                 
             }
             else
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized, obj);
-                _logFileManager.WriteLine(LogType.Warning, string.Format("Unauthorized: {0}", idOperation.ToString()));
+                _logFileManager.WriteLine(LogType.Warning, string.Format("{0}: {1}", LogLineMessage.Unauthorized, idOperation.ToString()));
             }
         }
 
-        private static bool IsAuthorizedUser(string decodeAuthToken)
+        private static bool IsAuthorizedUser(string authToken)
         {
             var token = ConfigAccess.GetValueInAppSettings(SecurityKeys.Token);
             // In this method we can handle our database logic here...  
-            return (decodeAuthToken.Equals(token));
+            return (authToken.Equals(token));
         }
     }
 }

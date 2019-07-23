@@ -4,6 +4,8 @@
     public static class SecurityKeys
     {
         public const string Token = "MainToken";
+        public const string SecreKey = "SecretKey";
+        public const string ExpirationInMin = "ExpirationInMin";
     }
 
     public static class DataBaseKeys
@@ -45,6 +47,12 @@
         public const string Fail = "FAIL";
         public const string Warning = "WARN";
         public const string Undefined = "Undefined Type";
+    }
+
+    public static class LogLineMessage
+    {
+        public const string Unauthorized = "Unauthorized";
+        public const string BadRequest = "Bad Request";
     }
     #endregion
 

@@ -2,11 +2,13 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -30,23 +32,17 @@ namespace Expertia.Estructura.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route(RouteAction.Auth)]
-        public IHttpActionResult Auth(Credentials credentials)
+        public IHttpActionResult Auth(LoginRequest credentials)
         {
             string errorDescription = string.Empty;
             try
             {
-                var userName = credentials.UserName;
+                var username = credentials.UserName;
                 var password = credentials.Password;
 
-                if (userName.ToLower().Equals("salesforce") && password.Equals("$4l3$f0rc3*"))
+                if (IsValidCredentials(username, password))
                 {
-                    var token = new Token()
-                    {
-                        Key = Guid.NewGuid(),
-                        Expiry = DateTime.Now.AddMinutes(30) // Agrega media hora por default
-                    };
-
-                    return Ok(token);
+                    return Ok(GenerateToken());
                 }
                 else
                 {
@@ -61,6 +57,34 @@ namespace Expertia.Estructura.Controllers
                 _logFileManager.WriteLine(LogType.Fail, errorDescription);
                 return BadRequest(errorDescription);
             }
+        }
+
+        private bool IsValidCredentials(string userName, string password)
+        {
+            /// Comparación con base de datos
+            return (userName.ToLower().Equals("salesforce") && password.Equals("$4l3$f0rc3*"));
+        }
+
+        private LoginResponse GenerateToken()
+        {
+            var expirationInMinutes = ConfigAccess.GetValueInAppSettings(SecurityKeys.ExpirationInMin);
+            var now = DateTime.Now; var limitTime = now.AddMinutes(Convert.ToInt32(expirationInMinutes));
+            
+            byte[] time = BitConverter.GetBytes(DateTime.UtcNow.ToBinary());
+            byte[] key = Guid.NewGuid().ToByteArray();
+            string tokenGenerated = Convert.ToBase64String(time.Concat(key).ToArray());
+
+            #region TESTING
+            tokenGenerated = "ECPG35cP10iLFqUONN9IRK2VLweBriPx"; // ¡SÓLO PRUEBAS!
+            #endregion
+
+            var token = new LoginResponse()
+            {
+                Token = tokenGenerated,
+                ExpirationInMinutes = limitTime.ToString(FormatTemplate.LongDate) // Agrega media hora por default
+            };
+
+            return token;
         }
     }
 }

@@ -5,15 +5,15 @@ using System.Web;
 
 namespace Expertia.Estructura.Models
 {
-    public class Credentials
+    public class LoginRequest
     {
         public string UserName { get; set; }
         public string Password { get; set; }
     }
 
-    public class Token
+    public class LoginResponse
     {
-        public Guid Key { get; set; }
-        public DateTime Expiry { get; set; }
+        public string Token { get; set; }
+        public string ExpirationInMinutes { get; set; }
     }
 }
