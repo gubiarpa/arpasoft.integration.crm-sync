@@ -158,6 +158,8 @@
     </Compile>
     <Compile Include="Models\Auxiliar\TimeRequest.cs" />
     <Compile Include="Models\Behavior\ISalesForce.cs" />
+    <Compile Include="Models\Branch.cs" />
+    <Compile Include="Models\CanalRecibirInfo.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\CuentaB2B.cs" />
     <Compile Include="Models\CuentaB2C.cs" />
@@ -168,6 +170,7 @@
     <Compile Include="Models\IdiomaComunicCliente.cs" />
     <Compile Include="Models\InteresesProductoActividad.cs" />
     <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Participante.cs" />
     <Compile Include="Models\Sitio.cs" />
     <Compile Include="Models\Telefono.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -12,10 +12,6 @@ namespace Expertia.Estructura.Models
     public class Cuenta : ISalesForce
     {
         /// <summary>
-        /// ID de la nueva cuenta (B2B, B2C)
-        /// </summary>
-        public int ID { get; set; }
-        /// <summary>
         /// ID Proveniente de SalesForce
         /// </summary>
         public string IdSalesForce { get; set; }
@@ -38,23 +34,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Lista de Direcciones
         /// </summary>
-        public IEnumerable<Direccion> Direcciones { get; set; }
-        /// <summary>
-        /// País
-        /// </summary>
-        public string Pais { get; set; }
-        /// <summary>
-        /// Departamento
-        /// </summary>
-        public string Departamento { get; set; }
-        /// <summary>
-        /// Ciudad
-        /// </summary>
-        public string Ciudad { get; set; }
-        /// <summary>
-        /// Distrito
-        /// </summary>
-        public string Distrito { get; set; }
+        public IEnumerable<Direccion> Direcciones { get; set; }        
         /// <summary>
         /// Lista de Teléfonos
         /// </summary>
@@ -68,41 +48,17 @@ namespace Expertia.Estructura.Models
         /// </summary>
         public IEnumerable<Correo> Correos { get; set; }
         /// <summary>
-        /// Empleado Responsable / Ejecutivo Responsable
+        /// Lista de Participantes
         /// </summary>
-        public string EmpleadoOrEjecutivoResponsable { get; set; }
-        /// <summary>
-        /// Supervisor / Kam
-        /// </summary>
-        public string SupervisorKam { get; set; }
-        /// <summary>
-        /// Gerente
-        /// </summary>
-        public string Gerente { get; set; }
-        /// <summary>
-        /// Unidad de Negocio
-        /// </summary>
-        public string UnidadNegocio { get; set; }
-        /// <summary>
-        /// Grupo de Colaboración / Grupo de ejecutivos dedicados a una región - Branch
-        /// </summary>
-        public string GrupoColabEjecRegionBranch { get; set; }
-        /// <summary>
-        /// Flag Principal
-        /// </summary>
-        public string FlagPrincipal { get; set; }
+        public IEnumerable<Participante> Participantes { get; set; }       
         /// <summary>
         /// Intereses en Productos o Actividad
         /// </summary>
         public IEnumerable<InteresProdActiv> InteresesProdActiv { get; set; }
         /// <summary>
-        /// Tipo de Área
-        /// </summary>
-        public string TipoArea { get; set; }
-        /// <summary>
         /// Origen de la Cuenta
         /// </summary>
-        public string OrigenCuenta { get; set; }
+        public string PuntoContacto { get; set; }
         /// <summary>
         /// ¿Recibir Información?
         /// </summary>
@@ -110,11 +66,11 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Canal por recibir la información
         /// </summary>
-        public string CanalRecibirInfo { get; set; }
+        public IEnumerable<CanalInformacion> CanalesRecibirInfo { get; set; }
         /// <summary>
         /// Región / Mercado - Branch
         /// </summary>
-        public string RegionMercadoBranch { get; set; }
+        public IEnumerable<Branch> Branches { get; set; }
         /// <summary>
         /// Idiomas de Comunicación del Cliente
         /// </summary>
@@ -140,16 +96,8 @@ namespace Expertia.Estructura.Models
         /// </summary>
         public string Estado { get; set; }
         /// <summary>
-        /// Presupuesto Estimado de Venta
+        /// País de Procedencia
         /// </summary>
-        public string PresupEstimadoVenta { get; set; }
-        /// <summary>
-        /// ¿Es Potencial?
-        /// </summary>
-        public bool EsPotencial { get; set; }
-        /// <summary>
-        /// ¿Es VIP?
-        /// </summary>
-        public bool EsVIP { get; set; }
+        public string PaisProcedencia { get; set; }
     }
 }

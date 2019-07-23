@@ -23,9 +23,9 @@ namespace Expertia.Estructura.Controllers
             //entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
             //entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
             //entity.ID = (new Random()).Next(0, 1000);
-            _logFileManager.WriteLine(LogType.Info, string.Format("New Entity: {0}", entity.ID));
+            //_logFileManager.WriteLine(LogType.Info, string.Format("New Entity: {0}", entity.ID));
             WriteAllFieldsLog(entity);
-            return Ok(new { entity.ID });
+            return Ok();
         }
 
         [Route(RouteAction.Update)]
@@ -37,41 +37,32 @@ namespace Expertia.Estructura.Controllers
         protected override void WriteAllFieldsLog(CuentaB2C entity)
         {
             #region Cuenta
-            WriteFieldLog("ID", entity.ID);
             WriteFieldLog("IdSalesForce", entity.IdSalesForce);
             WriteFieldLog("TipoPersona", entity.TipoPersona);
             WriteFieldLog("FechaNacimOrAniv", entity.FechaNacimOrAniv);
             WriteFieldLog("LogoFoto", entity.LogoFoto);
             WriteFieldLog("Documentos", entity.Documentos);
-            WriteFieldLog("Direcciones", entity.Direcciones);
-            WriteFieldLog("Pais", entity.Pais);
-            WriteFieldLog("Departamento", entity.Departamento);
-            WriteFieldLog("Ciudad", entity.Ciudad);
-            WriteFieldLog("Distrito", entity.Distrito);
+            //WriteFieldLog("Direcciones", entity.Direcciones);
+            //WriteFieldLog("Pais", entity.Pais);
+            //WriteFieldLog("Departamento", entity.Departamento);
+            //WriteFieldLog("Ciudad", entity.Ciudad);
+            //WriteFieldLog("Distrito", entity.Distrito);
             WriteFieldLog("Telefonos", entity.Telefonos);
             WriteFieldLog("Sitios", entity.Sitios);
             WriteFieldLog("Correos", entity.Correos);
-            WriteFieldLog("EmpleadoOrEjecutivoResponsable", entity.EmpleadoOrEjecutivoResponsable);
-            WriteFieldLog("SupervisorKam", entity.SupervisorKam);
-            WriteFieldLog("Gerente", entity.Gerente);
-            WriteFieldLog("UnidadNegocio", entity.UnidadNegocio);
-            WriteFieldLog("GrupoColabEjecRegionBranch", entity.GrupoColabEjecRegionBranch);
-            WriteFieldLog("FlagPrincipal", entity.FlagPrincipal);
+            WriteFieldLog("Participantes", entity.Participantes);
             WriteFieldLog("InteresesProdActiv", entity.InteresesProdActiv);
-            WriteFieldLog("TipoArea", entity.TipoArea);
-            WriteFieldLog("OrigenCuenta", entity.OrigenCuenta);
+            WriteFieldLog("OrigenCuenta", entity.PuntoContacto);
             WriteFieldLog("RecibirInformacion", entity.RecibirInformacion);
-            WriteFieldLog("CanalRecibirInfo", entity.CanalRecibirInfo);
-            WriteFieldLog("RegionMercadoBranch", entity.RegionMercadoBranch);
+            WriteFieldLog("CanalRecibirInfo", entity.CanalesRecibirInfo);
+            WriteFieldLog("RegionMercadoBranch", entity.Branches);
             WriteFieldLog("IdiomasComunicCliente", entity.IdiomasComunicCliente);
             WriteFieldLog("NivelImportancia", entity.NivelImportancia);
             WriteFieldLog("FechaIniRelacionComercial", entity.FechaIniRelacionComercial);
             WriteFieldLog("Comentarios", entity.Comentarios);
             WriteFieldLog("TipoCuenta", entity.TipoCuenta);
             WriteFieldLog("Estado", entity.Estado);
-            WriteFieldLog("PresupEstimadoVenta", entity.PresupEstimadoVenta);
-            WriteFieldLog("EsPotencial", entity.EsPotencial);
-            WriteFieldLog("EsVIP", entity.EsVIP);
+            WriteFieldLog("EsVIP", entity.PaisProcedencia);
             #endregion
 
             #region CuentaB2C

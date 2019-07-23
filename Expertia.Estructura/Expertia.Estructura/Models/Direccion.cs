@@ -18,5 +18,21 @@ namespace Expertia.Estructura.Models
         /// Descripción de la Dirección
         /// </summary>
         public string Descripcion { get; set; }
+        /// <summary>
+        /// País
+        /// </summary>
+        public string Pais { get; set; }
+        /// <summary>
+        /// Departamento
+        /// </summary>
+        public string Departamento { get; set; }
+        /// <summary>
+        /// Ciudad
+        /// </summary>
+        public string Ciudad { get; set; }
+        /// <summary>
+        /// Distrito
+        /// </summary>
+        public string Distrito { get; set; }
     }
 }

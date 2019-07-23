@@ -105,7 +105,7 @@ namespace Expertia.Estructura.Controllers.Base
 
         protected abstract void WriteAllFieldsLog(T entity);
 
-        protected void WriteFieldLog(string fieldName, object value)
+        protected void WriteFieldLog(string fieldName, object value = null)
         {            
             try
             {
@@ -115,6 +115,11 @@ namespace Expertia.Estructura.Controllers.Base
             {
                 throw ex;
             }
+        }
+
+        protected void WriteFieldLog(string fieldName, int position, object value)
+        {
+            WriteFieldLog(string.Format(fieldName, position), value);
         }
         #endregion
     }

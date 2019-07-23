@@ -16,10 +16,6 @@ namespace Expertia.Estructura.Models
         /// </summary>
         public string IdSalesForce { get; set; }
         /// <summary>
-        /// ID
-        /// </summary>
-        public int ID { get; set; }
-        /// <summary>
         /// Nombre
         /// </summary>
         public string Nombre { get; set; }
@@ -58,7 +54,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Hijos
         /// </summary>
-        public string Hijos { get; set; }
+        public int Hijos { get; set; }
         /// <summary>
         /// Profesión
         /// </summary>
@@ -70,27 +66,11 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Tiempo en La Empresa (Años)
         /// </summary>
-        public string TiempoEmpresa { get; set; }
+        public int TiempoEmpresa { get; set; }
         /// <summary>
         /// Lista de Direcciones
         /// </summary>
         public IEnumerable<Direccion> Direcciones { get; set; }
-        /// <summary>
-        /// País
-        /// </summary>
-        public string Pais { get; set; }
-        /// <summary>
-        /// Departamento
-        /// </summary>
-        public string Departamento { get; set; }
-        /// <summary>
-        /// Ciudad
-        /// </summary>
-        public string Ciudad { get; set; }
-        /// <summary>
-        /// Distrito
-        /// </summary>
-        public string Distrito { get; set; }
         /// <summary>
         /// Lista de Teléfonos
         /// </summary>

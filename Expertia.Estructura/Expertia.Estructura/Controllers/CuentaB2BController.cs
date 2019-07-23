@@ -21,10 +21,9 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                entity.ID = (new Random()).Next(0, 1000); // Un ID ficticio
-                /// Aquí va la interacción con BD
                 WriteEntityLog(entity);
-                return Ok(entity);
+                /// Aquí va la interacción con BD
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -51,42 +50,144 @@ namespace Expertia.Estructura.Controllers
         #region Log
         protected override void WriteAllFieldsLog(CuentaB2B entity)
         {
+            int i = 0;
             #region Cuenta
-            WriteFieldLog("ID", entity.ID);
             WriteFieldLog("IdSalesForce", entity.IdSalesForce);
             WriteFieldLog("TipoPersona", entity.TipoPersona);
             WriteFieldLog("FechaNacimOrAniv", entity.FechaNacimOrAniv);
             WriteFieldLog("LogoFoto", entity.LogoFoto);
-            WriteFieldLog("Documentos", entity.Documentos);
-            WriteFieldLog("Direcciones", entity.Direcciones);
-            WriteFieldLog("Pais", entity.Pais);
-            WriteFieldLog("Departamento", entity.Departamento);
-            WriteFieldLog("Ciudad", entity.Ciudad);
-            WriteFieldLog("Distrito", entity.Distrito);
-            WriteFieldLog("Telefonos", entity.Telefonos);
-            WriteFieldLog("Sitios", entity.Sitios);
-            WriteFieldLog("Correos", entity.Correos);
-            WriteFieldLog("EmpleadoOrEjecutivoResponsable", entity.EmpleadoOrEjecutivoResponsable);
-            WriteFieldLog("SupervisorKam", entity.SupervisorKam);
-            WriteFieldLog("Gerente", entity.Gerente);
-            WriteFieldLog("UnidadNegocio", entity.UnidadNegocio);
-            WriteFieldLog("GrupoColabEjecRegionBranch", entity.GrupoColabEjecRegionBranch);
-            WriteFieldLog("FlagPrincipal", entity.FlagPrincipal);
-            WriteFieldLog("InteresesProdActiv", entity.InteresesProdActiv);
-            WriteFieldLog("TipoArea", entity.TipoArea);
-            WriteFieldLog("OrigenCuenta", entity.OrigenCuenta);
+            #region WriteFieldLog("Documentos", entity.Documentos);
+            i = 0;
+            if (entity.Documentos != null)
+                foreach (var documento in entity.Documentos)
+                {
+                    WriteFieldLog("Documento[{0}].Tipo", i, documento.Tipo);
+                    WriteFieldLog("Documento[{0}].Numero", i, documento.Numero);
+                    i++;
+                }
+            else
+                WriteFieldLog("Documentos");
+            #endregion
+            #region WriteFieldLog("Direcciones", entity.Direcciones);
+            i = 0;
+            if (entity.Direcciones != null)
+                foreach (var direccion in entity.Direcciones)
+                {
+                    WriteFieldLog("Direccion[{0}].Tipo", i, direccion.Tipo);
+                    WriteFieldLog("Direccion[{0}].Descripción", i, direccion.Descripcion);
+                    WriteFieldLog("Direccion[{0}].Pais", i, direccion.Pais);
+                    WriteFieldLog("Direccion[{0}].Departamento", i, direccion.Departamento);
+                    WriteFieldLog("Direccion[{0}].Ciudad", i, direccion.Ciudad);
+                    WriteFieldLog("Direccion[{0}].Distrito", i, direccion.Distrito);
+                    i++;
+                }
+            else
+                WriteFieldLog("Direcciones");
+            #endregion
+            #region WriteFieldLog("Telefonos", entity.Telefonos);
+            i = 0;
+            if (entity.Telefonos != null)
+                foreach (var telefono in entity.Telefonos)
+                {
+                    WriteFieldLog("Telefono[{0}].Tipo", i, telefono.Tipo);
+                    WriteFieldLog("Telefono[{0}].Numero", i, telefono.Numero);
+                    i++;
+                }
+            else
+                WriteFieldLog("Telefonos");
+            #endregion
+            #region WriteFieldLog("Sitios", entity.Sitios);
+            i = 0;
+            if (entity.Sitios != null)
+                foreach (var sitio in entity.Sitios)
+                {
+                    WriteFieldLog("Sitio[{0}].Tipo", i, sitio.Tipo);
+                    WriteFieldLog("Sitio[{0}].Descripcion", i, sitio.Descripcion);
+                    i++;
+                }
+            else
+                WriteFieldLog("Sitios");
+            #endregion
+            #region WriteFieldLog("Correos", entity.Correos);
+            i = 0;
+            if (entity.Correos != null)
+                foreach (var correo in entity.Correos)
+                {
+                    WriteFieldLog("Correo[{0}].Tipo", i, correo.Tipo);
+                    WriteFieldLog("Correo[{0}].Descripcion", i, correo.Descripcion);
+                    i++;
+                }
+            else
+                WriteFieldLog("Correos");
+            #endregion
+            #region WriteFieldLog("Participantes", entity.Participantes);
+            i = 0;
+            if (entity.Participantes != null)
+                foreach (var participante in entity.Participantes)
+                {
+                    WriteFieldLog("Participante[{0}].EmpleadoOrEjecutivoResponsable", i, participante.EmpleadoOrEjecutivoResponsable);
+                    WriteFieldLog("Participante[{0}].SupervisorKam", i, participante.SupervisorKam);
+                    WriteFieldLog("Participante[{0}].Gerente", i, participante.Gerente);
+                    WriteFieldLog("Participante[{0}].UnidadNegocio", i, participante.UnidadNegocio);
+                    WriteFieldLog("Participante[{0}].GrupoColabEjecRegionBranch", i, participante.GrupoColabEjecRegionBranch);
+                    WriteFieldLog("Participante[{0}].FlagPrincipal", i, participante.FlagPrincipal);
+                    i++;
+                }
+            else
+                WriteFieldLog("Participantes");
+            #endregion
+            #region WriteFieldLog("InteresesProdActiv", entity.InteresesProdActiv);
+            i = 0;
+            if (entity.InteresesProdActiv != null)
+                foreach (var interes in entity.InteresesProdActiv)
+                {
+                    WriteFieldLog("Interes[{0}].Tipo", i, interes.Tipo);
+                    i++;
+                }
+            else
+                WriteFieldLog("Intereses");
+            #endregion
+            WriteFieldLog("OrigenCuenta", entity.PuntoContacto);
             WriteFieldLog("RecibirInformacion", entity.RecibirInformacion);
-            WriteFieldLog("CanalRecibirInfo", entity.CanalRecibirInfo);
-            WriteFieldLog("RegionMercadoBranch", entity.RegionMercadoBranch);
-            WriteFieldLog("IdiomasComunicCliente", entity.IdiomasComunicCliente);
+            #region WriteFieldLog("CanalRecibirInfo", entity.CanalesRecibirInfo);
+            i = 0;
+            if (entity.CanalesRecibirInfo != null)
+                foreach (var canalInfo in entity.CanalesRecibirInfo)
+                {
+                    WriteFieldLog("CanalInfo[{0}].Descriocion", i, canalInfo.Descripcion);
+                    i++;
+                }
+            else
+                WriteFieldLog("CanalesInfo");
+            #endregion
+            #region WriteFieldLog("RegionMercadoBranch", entity.Branches);
+            i = 0;
+            if (entity.Branches != null)
+                foreach (var branch in entity.Branches)
+                {
+                    WriteFieldLog("RegionMercadoBranch[{0}].RegionMercadoBranch", i, branch.RegionMercadoBranch);
+                    i++;
+                }
+            else
+                WriteFieldLog("RegionMercadoBranch");
+            #endregion
+            #region WriteFieldLog("IdiomasComunicCliente", entity.IdiomasComunicCliente);
+            i = 0;
+            if (entity.IdiomasComunicCliente != null)
+                foreach (var idioma in entity.IdiomasComunicCliente)
+                {
+                    WriteFieldLog("Idioma[{0}].ID", i, idioma.ID);
+                    i++;
+                }
+            else
+                WriteFieldLog("Idiomas");
+            #endregion 
             WriteFieldLog("NivelImportancia", entity.NivelImportancia);
             WriteFieldLog("FechaIniRelacionComercial", entity.FechaIniRelacionComercial);
             WriteFieldLog("Comentarios", entity.Comentarios);
             WriteFieldLog("TipoCuenta", entity.TipoCuenta);
             WriteFieldLog("Estado", entity.Estado);
-            WriteFieldLog("PresupEstimadoVenta", entity.PresupEstimadoVenta);
-            WriteFieldLog("EsPotencial", entity.EsPotencial);
-            WriteFieldLog("EsVIP", entity.EsVIP);
+            WriteFieldLog("PaisProcedencia", entity.PaisProcedencia);
             #endregion
 
             #region CuentaB2B
@@ -95,7 +196,6 @@ namespace Expertia.Estructura.Controllers
             WriteFieldLog("CondicionPago", entity.CondicionPago);
             WriteFieldLog("TipoMonedaDeLineaCredito", entity.TipoMonedaDeLineaCredito);
             WriteFieldLog("MontoLineaCredito", entity.MontoLineaCredito);
-            WriteFieldLog("FechaMaximaPagoLDC", entity.FechaMaximaPagoLDC);
             #endregion
         }
         #endregion

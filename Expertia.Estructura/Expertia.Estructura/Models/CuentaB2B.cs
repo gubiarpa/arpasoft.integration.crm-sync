@@ -29,10 +29,6 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Monto de Línea de Crédito
         /// </summary>
-        public decimal MontoLineaCredito { get; set; } // Monto de Línea de Crédito
-        /// <summary>
-        /// Fecha Máxima de Pago de Línea de Crédito
-        /// </summary>
-        public DateTime? FechaMaximaPagoLDC { get; set; } // Fecha Máxima de Pago de LDC
+        public decimal? MontoLineaCredito { get; set; } // Monto de Línea de Crédito        
     }
 }
