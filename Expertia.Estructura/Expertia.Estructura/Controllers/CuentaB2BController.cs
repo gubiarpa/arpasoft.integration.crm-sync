@@ -52,7 +52,7 @@ namespace Expertia.Estructura.Controllers
         {
             int i = 0;
             #region Cuenta
-            WriteFieldLog("IdSalesForce", entity.IdSalesForce);
+            WriteFieldLog("IdSalesforce", entity.IdSalesForce);
             WriteFieldLog("TipoPersona", entity.TipoPersona);
             WriteFieldLog("FechaNacimOrAniv", entity.FechaNacimOrAniv);
             WriteFieldLog("LogoFoto", entity.LogoFoto);

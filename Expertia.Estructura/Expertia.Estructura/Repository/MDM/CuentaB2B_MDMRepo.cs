@@ -5,31 +5,19 @@ using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 
-namespace Expertia.Estructura.Repository
+namespace Expertia.Estructura.Repository.MDM
 {
-    public class CuentaB2BRepository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
+    public class CuentaB2B_MDMRepo : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
     {
+        public CuentaB2B_MDMRepo() : base(ConnectionKeys.MDMConnKey)
+        {
+        }
+
         public OperationResult Create(CuentaB2B entity)
         {
-            /*
-             * P_TIPO_DOCUMENTO VARCHAR2,
-    P_DOCUMENTO VARCHAR2,
-    P_NOMBRE VARCHAR2,
-    P_AP_PATERNO VARCHAR2,
-    P_AP_MATERNO VARCHAR2,
-    P_GENERO VARCHAR2,
-    P_ESTADO_CIVIL VARCHAR2,
-    P_DIRECCION VARCHAR2
-             */
 
-
-            AddInParameter("IDSalesForce", entity.IdSalesForce);
-            ExecuteSPWithoutResults("CONDOR.USP_CREAR_CLIENTE");
-
-            throw new NotImplementedException();
+            return new OperationResult();
         }
 
         public OperationResult Delete(CuentaB2B entity)

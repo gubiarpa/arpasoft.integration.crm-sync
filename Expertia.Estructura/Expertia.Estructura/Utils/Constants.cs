@@ -8,9 +8,10 @@
         public const string ExpirationInMin = "ExpirationInMin";
     }
 
-    public static class DataBaseKeys
+    public static class ConnectionKeys
     {
-        public const string ConnectionString = "";
+        public const string MDMConnKey = "";
+        public const string CondorConnKey = "";
     }
 
     public static class LogKeys

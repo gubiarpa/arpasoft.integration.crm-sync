@@ -16,6 +16,10 @@ namespace Expertia.Estructura.Models
         /// </summary>
         public string IdSalesForce { get; set; }
         /// <summary>
+        /// IDSalesForce de la Cuenta asociada
+        /// </summary>
+        public string IdCuentaSalesForce { get; set; }
+        /// <summary>
         /// Nombre
         /// </summary>
         public string Nombre { get; set; }

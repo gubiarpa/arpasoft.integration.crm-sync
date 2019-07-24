@@ -47,6 +47,7 @@ namespace Expertia.Estructura.Controllers
         {
             int i = 0;
             WriteFieldLog("IdSalesForce", entity.IdSalesForce);
+            WriteFieldLog("IdClienteSalesforce", entity.IdCuentaSalesForce);
             WriteFieldLog("Nombre", entity.Nombre);
             WriteFieldLog("ApePaterno", entity.ApePaterno);
             WriteFieldLog("ApeMaterno", entity.ApeMaterno);

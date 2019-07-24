@@ -10,9 +10,9 @@ namespace Expertia.Estructura.Repository.Base
     {
         protected string _connectionString { get; }
 
-        public OracleBase()
+        public OracleBase(string connKey)
         {
-            _connectionString = ConfigAccess.GetValueInConnectionString(DataBaseKeys.ConnectionString);
+            _connectionString = ConfigAccess.GetValueInConnectionString(connKey);
         }
 
         private Dictionary<string, object> _inParameters = new Dictionary<string, object>();
