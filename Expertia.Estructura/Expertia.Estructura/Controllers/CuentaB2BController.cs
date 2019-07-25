@@ -28,7 +28,7 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 _logFileManager.WriteLine(LogType.Fail, ex.Message);
-                throw;
+                return InternalServerError(ex);
             }
         }
 
@@ -43,7 +43,8 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                _logFileManager.WriteLine(LogType.Fail, ex.Message);
+                return InternalServerError(ex);
             }
         }
 

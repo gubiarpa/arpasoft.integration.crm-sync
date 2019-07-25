@@ -20,18 +20,31 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2C entity)
         {
-            //entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Inglés" });
-            //entity.IdiomasComunicCliente.Add(new IdiomaComunicCliente() { ID = "Español" });
-            //entity.ID = (new Random()).Next(0, 1000);
-            //_logFileManager.WriteLine(LogType.Info, string.Format("New Entity: {0}", entity.ID));
-            WriteAllFieldsLog(entity);
-            return Ok();
+            try
+            {
+                WriteAllFieldsLog(entity);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logFileManager.WriteLine(LogType.Fail, ex.Message);
+                return InternalServerError(ex);
+            }            
         }
 
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2C entity)
         {
-            return Ok();
+            try
+            {
+                WriteAllFieldsLog(entity);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logFileManager.WriteLine(LogType.Fail, ex.Message);
+                return InternalServerError(ex);
+            }
         }
 
         protected override void WriteAllFieldsLog(CuentaB2C entity)
