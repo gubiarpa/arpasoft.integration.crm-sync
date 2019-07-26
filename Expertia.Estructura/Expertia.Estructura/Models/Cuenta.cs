@@ -74,7 +74,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Idiomas de Comunicación del Cliente
         /// </summary>
-        public List<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
+        public IEnumerable<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
         /// <summary>
         /// Nivel de Importancia
         /// </summary>

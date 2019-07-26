@@ -8,9 +8,9 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.MDM
 {
-    public class CuentaB2B_MDMRepo : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
+    public class CuentaB2B_MdmRepository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
     {
-        public CuentaB2B_MDMRepo() : base(ConnectionKeys.MDMConnKey)
+        public CuentaB2B_MdmRepository() : base(ConnectionKeys.MDMConnKey)
         {
         }
 

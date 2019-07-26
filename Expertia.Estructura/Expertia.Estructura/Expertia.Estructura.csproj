@@ -180,10 +180,13 @@
     <Compile Include="Models\Sitio.cs" />
     <Compile Include="Models\Telefono.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Base\MdmBase.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
-    <Compile Include="Repository\Condor\CuentaB2B_CondorRepo.cs" />
-    <Compile Include="Repository\MDM\CuentaB2B_MDMRepo.cs" />
+    <Compile Include="Repository\Behavior\ILookupId.cs" />
+    <Compile Include="Repository\Condor\CuentaB2B_RbRepository.cs" />
+    <Compile Include="Repository\MDM\CuentaB2B_MdmRepository.cs" />
+    <Compile Include="Repository\MDM\CuentaB2B_FK_MdmRepository.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
     <Compile Include="Utils\Behavior\ILogFileManager.cs" />
     <Compile Include="Utils\ClientFeatures.cs" />

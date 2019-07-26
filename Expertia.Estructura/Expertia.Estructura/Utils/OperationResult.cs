@@ -7,17 +7,17 @@ namespace Expertia.Estructura.Utils
 {
     public class OperationResult
     {
-        private Dictionary<string, object> values = new Dictionary<string, object>();
+        private Dictionary<string, object> _values = new Dictionary<string, object>();
 
-        public new object this[string key]
+        public object this[string key]
         {
             get
             {
-                return this.values[key];
+                return _values[key];
             }
             set
             {
-                this.values.Add(key, value);
+                _values.Add(key, value);
             }
         }
     }
