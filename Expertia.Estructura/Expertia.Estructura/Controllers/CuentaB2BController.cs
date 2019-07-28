@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Repository.MDM;
 using Expertia.Estructura.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -21,8 +22,8 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                WriteEntityLog(entity);
-                /// Aquí va la interacción con BD
+                (new CuentaB2B_MdmRepository()).Create(entity);
+                WriteEntityLog(entity);                
                 return Ok();
             }
             catch (Exception ex)

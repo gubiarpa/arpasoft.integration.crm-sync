@@ -1,4 +1,5 @@
-﻿using Expertia.Estructura.Utils;
+﻿using Expertia.Estructura.Repository.MDM;
+using Expertia.Estructura.Utils;
 using Oracle.DataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace Expertia.Estructura.Repository.Base
     public abstract class OracleBase<T>
     {
         protected string _connectionString { get; }
+        protected CuentaB2B_FK_MdmRepository _fkMdm;
 
         public OracleBase(string connKey)
         {
@@ -22,6 +24,11 @@ namespace Expertia.Estructura.Repository.Base
         protected void AddInParameter(string name, object value)
         {
             _inParameters.Add(name, value);
+        }
+
+        protected void AddInParameter(string name, object value, CuentaB2B_FK foreignKey)
+        {
+            AddInParameter(name, _fkMdm.LookUpByDescription(foreignKey, value));
         }
 
         protected void AddOutParameter(string name, object value)
@@ -46,6 +53,7 @@ namespace Expertia.Estructura.Repository.Base
                         CommandText = SPName,
                         CommandType = CommandType.StoredProcedure,
                         Connection = conn
+                        //Transaction = conn.CreateCommand().begin
                     })
                     {
                         foreach (var key in _inParameters.Keys)

@@ -65,4 +65,18 @@
         public const string LongDate = "yyyy-MM-dd HH:mm:ss.fff";
     }
     #endregion
+
+    #region OperationResult
+    public static class OperationDescription
+    {
+        public const string Operation = "OperationResult";
+        public const string ErrorMessage = "ErrorMessage";
+    }
+
+    public enum Operation
+    {
+        Success,
+        Fail
+    }
+    #endregion
 }

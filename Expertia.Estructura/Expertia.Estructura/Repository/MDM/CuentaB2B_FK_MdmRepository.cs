@@ -13,6 +13,7 @@ namespace Expertia.Estructura.Repository.MDM
     #region ForeignKeys
     public enum CuentaB2B_FK
     {
+        // Cuenta
         TipoPersona,
         PuntoContacto,
         RecibirInformacion,
@@ -20,39 +21,51 @@ namespace Expertia.Estructura.Repository.MDM
         TipoCuenta,
         Estado,
         PaisProcedencia,
-        Documento,
-        Direccion,
-        Distrito,
-        Ciudad,
-        Departamento,
-        País,
-        Teléfono,
-        Sitio,
-        Correo,
+        TipoDocumento,
+            // Direcciones
+            TipoDireccion,
+            Distrito,
+            Ciudad,
+            Departamento,
+            Pais,
+            // Teléfono
+            TipoTelefono,
+        TipoSitio,
+        TipoCorreo,
         EmpleadoEjecResponsable,
         SupervisorKam,
         Gerente,
         UnidadNegocio,
         GrupoColabEjecRegionBranch,
         FlagPrincipal,
-        InteresProdActividad,
+        TipoInteresProdActiv,
         CanalInformación,
-        Branch,
-        IdiomaCliente
+        RegionMercadoBranch,
+        IdiomaComunicCliente,
+        // Cuenta B2B
+        CondicionPago,
+        TipoMonedaDeLineaCredito
     }
     #endregion
 
     public class CuentaB2B_FK_MdmRepository : MdmBase<CuentaB2B>, ILookupId
-    {        
+    {
+        #region Constants
         private const string ID_PARAMETER_NAME = "P_ID";
         private const string DESC_PARAMETER_NAME = "P_DESCRIPCION";
-        
+        #endregion
+
+        #region Properties
         private object _description;
+        #endregion
+
+        #region MainMethod
         public object LookUpByDescription(CuentaB2B_FK foreignKey, object description)
         {
             try
             {
                 _description = description;
+
                 if (description == null)
                     throw new Exception("Description field is null. Invalid searching.");
 
@@ -66,6 +79,7 @@ namespace Expertia.Estructura.Repository.MDM
                 throw ex;
             }
         }
+        #endregion
 
         #region ExecuteForID
         private object ExecuteAndGetID(CuentaB2B_FK foreignKey)
@@ -101,9 +115,9 @@ namespace Expertia.Estructura.Repository.MDM
                     return "SP_BUSCAR_ESTADO";
                 case CuentaB2B_FK.PaisProcedencia:
                     return "SP_BUSCAR_PAISPROCEDENCIA";
-                case CuentaB2B_FK.Documento:
+                case CuentaB2B_FK.TipoDocumento:
                     return "SP_BUSCAR_DOCUMENTO";
-                case CuentaB2B_FK.Direccion:
+                case CuentaB2B_FK.TipoDireccion:
                     return "SP_BUSCAR_DIRECCION";
                 case CuentaB2B_FK.Distrito:
                     return "SP_BUSCAR_DISTRITO";
@@ -111,13 +125,13 @@ namespace Expertia.Estructura.Repository.MDM
                     return "SP_BUSCAR_CIUDAD";
                 case CuentaB2B_FK.Departamento:
                     return "SP_BUSCAR_DEPARTAMENTO";
-                case CuentaB2B_FK.País:
+                case CuentaB2B_FK.Pais:
                     return "SP_BUSCAR_PAÍS";
-                case CuentaB2B_FK.Teléfono:
+                case CuentaB2B_FK.TipoTelefono:
                     return "SP_BUSCAR_TELÉFONO";
-                case CuentaB2B_FK.Sitio:
+                case CuentaB2B_FK.TipoSitio:
                     return "SP_BUSCAR_SITIO";
-                case CuentaB2B_FK.Correo:
+                case CuentaB2B_FK.TipoCorreo:
                     return "SP_BUSCAR_CORREO";
                 case CuentaB2B_FK.EmpleadoEjecResponsable:
                     return "SP_BUSCAR_EMPLEADOEJECRESPONSABLE";
@@ -131,14 +145,18 @@ namespace Expertia.Estructura.Repository.MDM
                     return "SP_BUSCAR_GRUPOCOLABEJECREGIONBRANCH";
                 case CuentaB2B_FK.FlagPrincipal:
                     return "SP_BUSCAR_FLAGPRINCIPAL";
-                case CuentaB2B_FK.InteresProdActividad:
+                case CuentaB2B_FK.TipoInteresProdActiv:
                     return "SP_BUSCAR_INTERESPRODACTIVIDAD";
                 case CuentaB2B_FK.CanalInformación:
                     return "SP_BUSCAR_CANALINFORMACIÓN";
-                case CuentaB2B_FK.Branch:
+                case CuentaB2B_FK.RegionMercadoBranch:
                     return "SP_BUSCAR_BRANCH";
-                case CuentaB2B_FK.IdiomaCliente:
+                case CuentaB2B_FK.IdiomaComunicCliente:
                     return "SP_BUSCAR_IDIOMACLIENTE";
+                case CuentaB2B_FK.CondicionPago:
+                    return "SP_BUSCAR_CONDICIONPAGO";
+                case CuentaB2B_FK.TipoMonedaDeLineaCredito:
+                    return "SP_BUSCAR_TIPOMONEDADELINEACREDITO";
                 default:
                     throw new Exception("SPName parameter is null. Invalid searching.");
             }
