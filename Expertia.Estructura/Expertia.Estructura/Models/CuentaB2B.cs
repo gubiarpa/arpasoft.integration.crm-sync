@@ -10,6 +10,7 @@ namespace Expertia.Estructura.Models
     /// </summary>
     public class CuentaB2B : Cuenta
     {
+        #region Properties
         /// <summary>
         /// Razón Social
         /// </summary>
@@ -19,16 +20,20 @@ namespace Expertia.Estructura.Models
         /// </summary>
         public string Alias { get; set; } // Alias
         /// <summary>
-        /// Condición de Pago
-        /// </summary>
-        public string CondicionPago { get; set; } // Condición de Pago
-        /// <summary>
-        /// Tipo de Moneda
-        /// </summary>
-        public string TipoMonedaDeLineaCredito { get; set; } // Tipo de moneda de Linea de credito
-        /// <summary>
         /// Monto de Línea de Crédito
         /// </summary>
         public decimal? MontoLineaCredito { get; set; } // Monto de Línea de Crédito        
+        #endregion
+
+        #region ForeignKey
+        /// <summary>
+        /// Condición de Pago
+        /// </summary>
+        public CondicionPago CondicionPago { get; set; } // Condición de Pago
+        /// <summary>
+        /// Tipo de Moneda
+        /// </summary>
+        public TipoMoneda TipoMonedaDeLineaCredito { get; set; } // Tipo de moneda de Linea de credito
+        #endregion
     }
 }

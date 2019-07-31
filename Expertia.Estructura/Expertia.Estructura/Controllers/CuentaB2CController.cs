@@ -91,7 +91,7 @@ namespace Expertia.Estructura.Controllers
             WriteFieldLog("ConsideracionesSalud", entity.ConsideracionesSalud);
             WriteFieldLog("TipoViaje", entity.TipoViaje);
             WriteFieldLog("CategoriaViaje", entity.CategoriaViaje);
-            WriteFieldLog("TipoAcompañante", entity.TipoAcompañante);
+            WriteFieldLog("TipoAcompañante", entity.TipoAcompanante);
             #endregion
         }
     }

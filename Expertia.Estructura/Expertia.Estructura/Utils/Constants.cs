@@ -10,7 +10,7 @@
 
     public static class ConnectionKeys
     {
-        public const string MDMConnKey = "";
+        public const string MDMConnKey = "MdmConnKey";
         public const string CondorConnKey = "";
     }
 
@@ -57,6 +57,13 @@
     }
     #endregion
 
+    #region DataBaseKeys
+    public static class DataBaseKeys
+    {
+        public const string MdmPkg = "MdmPkg";
+    }
+    #endregion
+
     #region Formats
     public static class FormatTemplate
     {
@@ -67,12 +74,6 @@
     #endregion
 
     #region OperationResult
-    public static class OperationDescription
-    {
-        public const string Operation = "OperationResult";
-        public const string ErrorMessage = "ErrorMessage";
-    }
-
     public enum Operation
     {
         Success,

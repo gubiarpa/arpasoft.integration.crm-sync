@@ -10,25 +10,31 @@ namespace Expertia.Estructura.Repository.MDM
 {
     public class CuentaB2B_MdmRepository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
     {
+        #region Properties
+        protected CuentaB2B_FK_MdmRepository _fkMdm;
+        #endregion
+
+        #region Constructor
         public CuentaB2B_MdmRepository() : base(ConnectionKeys.MDMConnKey)
         {
+            _fkMdm = new CuentaB2B_FK_MdmRepository();
         }
+        #endregion
 
+        #region ICrud
         public OperationResult Create(CuentaB2B entity)
         {
             OperationResult operationResult = new OperationResult();
-
             try
             {
                 #region Simples
-
                 #region Cuenta
                 AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
                 AddInParameter("P_TIPOPERSONA", entity.TipoPersona, CuentaB2B_FK.TipoPersona);
                 AddInParameter("P_FECHANACIMORANIV", entity.FechaNacimOrAniv);
                 AddInParameter("P_LOGOFOTO", entity.LogoFoto);
                 AddInParameter("P_PUNTOCONTACTO", entity.PuntoContacto, CuentaB2B_FK.PuntoContacto);
-                AddInParameter("P_RECIBIRINFORMACION", entity.RecibirInformacion, CuentaB2B_FK.RecibirInformacion);
+                AddInParameter("P_RECIBIRINFORMACION", entity.RecibirInformacion);
                 AddInParameter("P_NIVELIMPORTANCIA", entity.NivelImportancia, CuentaB2B_FK.NivelImportancia);
                 AddInParameter("P_FECHAINIRELACIONCOMERCIAL", entity.FechaIniRelacionComercial);
                 AddInParameter("P_COMENTARIOS", entity.FechaIniRelacionComercial);
@@ -45,7 +51,9 @@ namespace Expertia.Estructura.Repository.MDM
                 AddInParameter("P_MONTOLINEACREDITO", entity.MontoLineaCredito);
                 #endregion
 
+                #region Ejecución
                 ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B");
+                #endregion
                 #endregion
                 
                 #region Multiples
@@ -106,8 +114,7 @@ namespace Expertia.Estructura.Repository.MDM
                         try
                         {
                             AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
-                            AddInParameter("P_TIPO", sitio.Tipo, CuentaB2B_FK.TipoSitio
-                                );
+                            AddInParameter("P_TIPO", sitio.Tipo, CuentaB2B_FK.TipoSitio);
                             AddInParameter("P_DESCRIPCION", sitio.Descripcion);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_SITIO");
@@ -215,12 +222,11 @@ namespace Expertia.Estructura.Repository.MDM
                     }
                 #endregion
 
-                operationResult[OperationDescription.Operation] = Operation.Success;
+                operationResult[OperationResult.Operation] = Operation.Success;
             }
             catch (Exception ex)
             {
-                operationResult[OperationDescription.Operation] = Operation.Fail;
-                operationResult[OperationDescription.ErrorMessage] = ex.Message;
+                throw ex;
             }
             return operationResult;
         }
@@ -228,7 +234,7 @@ namespace Expertia.Estructura.Repository.MDM
         public OperationResult Delete(CuentaB2B entity)
         {
             throw new NotImplementedException();
-        }
+        }        
 
         public OperationResult Read(CuentaB2B entity)
         {
@@ -239,10 +245,29 @@ namespace Expertia.Estructura.Repository.MDM
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        #region SQLMethod
+        private void AddInParameter(string paramName, dynamic description, CuentaB2B_FK foreignKey)
+        {
+            AddInParameter(paramName, _fkMdm.LookUpByDescription(foreignKey, description));
+            /*
+                try
+                {
+                    dynamicField.ID = _fkMdm.LookUpByDescription(foreignKey, dynamicField.Descripcion).ToString();
+                    AddInParameter(name, dynamicField.ID);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            */
+        }
 
         protected override IEnumerable<CuentaB2B> DataTableToEnumerable(DataTable dt)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

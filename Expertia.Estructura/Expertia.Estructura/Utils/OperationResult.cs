@@ -7,6 +7,9 @@ namespace Expertia.Estructura.Utils
 {
     public class OperationResult
     {
+        public const string Operation = "OperationResult";
+        public const string ErrorMessage = "ErrorMessage";
+
         private Dictionary<string, object> _values = new Dictionary<string, object>();
 
         public object this[string key]

@@ -11,14 +11,15 @@ namespace Expertia.Estructura.Models
     /// </summary>
     public class Cuenta : ISalesForce
     {
+        #region Properties
+        /// <summary>
+        /// ID Interno
+        /// </summary>                                                                                                                                                                                                                        
+        public string ID { get; set; }
         /// <summary>
         /// ID Proveniente de SalesForce
         /// </summary>
         public string IdSalesForce { get; set; }
-        /// <summary>
-        /// Tipo Persona: Natura o Jurídica
-        /// </summary>
-        public string TipoPersona { get; set; }
         /// <summary>
         /// Fecha de Nacimiento / Aniversario
         /// </summary>
@@ -27,6 +28,48 @@ namespace Expertia.Estructura.Models
         /// Logo / Foto
         /// </summary>
         public string LogoFoto { get; set; }
+        /// <summary>
+        /// ¿Recibir Información?
+        /// </summary>
+        public bool RecibirInformacion { get; set; }          
+        /// <summary>
+        /// Fecha de Inicio de Relación Comercial
+        /// </summary>
+        public DateTime? FechaIniRelacionComercial { get; set; }
+        /// <summary>
+        /// Comentarios
+        /// </summary>
+        public string Comentarios { get; set; }
+        #endregion
+
+        #region ForeignKey
+        /// <summary>
+        /// [FK] Tipo Persona: Natura o Jurídica
+        /// </summary>
+        public /*TipoPersona*/ string TipoPersona { get; set; }
+        /// <summary>
+        /// [FK] Origen de la Cuenta
+        /// </summary>
+        public /*PuntoContacto*/ string  PuntoContacto { get; set; }
+        /// <summary>
+        /// [FK] Nivel de Importancia
+        /// </summary>
+        public /*NivelImportancia*/ string NivelImportancia { get; set; } // ♫ Es un número
+        /// <summary>
+        /// [FK] Tipo cuenta
+        /// </summary>
+        public /*TipoCuenta*/ string TipoCuenta { get; set; }
+        /// <summary>
+        /// Estado
+        /// </summary>
+        public /*Estado*/ string Estado { get; set; }
+        /// <summary>
+        /// País de Procedencia
+        /// </summary>
+        public /*PaisProcedencia*/ string PaisProcedencia { get; set; }
+        #endregion
+
+        #region MultipleKey
         /// <summary>
         /// Lista de Documentos
         /// </summary>
@@ -56,14 +99,6 @@ namespace Expertia.Estructura.Models
         /// </summary>
         public IEnumerable<InteresProdActiv> InteresesProdActiv { get; set; }
         /// <summary>
-        /// Origen de la Cuenta
-        /// </summary>
-        public string PuntoContacto { get; set; }
-        /// <summary>
-        /// ¿Recibir Información?
-        /// </summary>
-        public bool RecibirInformacion { get; set; }
-        /// <summary>
         /// Canal por recibir la información
         /// </summary>
         public IEnumerable<CanalInformacion> CanalesRecibirInfo { get; set; }
@@ -75,29 +110,6 @@ namespace Expertia.Estructura.Models
         /// Idiomas de Comunicación del Cliente
         /// </summary>
         public IEnumerable<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
-        /// <summary>
-        /// Nivel de Importancia
-        /// </summary>
-        public string NivelImportancia { get; set; } // ♫ Es un número
-        /// <summary>
-        /// Fecha de Inicio de Relación Comercial
-        /// </summary>
-        public DateTime? FechaIniRelacionComercial { get; set; }
-        /// <summary>
-        /// Comentarios
-        /// </summary>
-        public string Comentarios { get; set; }
-        /// <summary>
-        /// Tipo cuenta
-        /// </summary>
-        public string TipoCuenta { get; set; }
-        /// <summary>
-        /// Estado
-        /// </summary>
-        public string Estado { get; set; }
-        /// <summary>
-        /// País de Procedencia
-        /// </summary>
-        public string PaisProcedencia { get; set; }
+        #endregion
     }
 }

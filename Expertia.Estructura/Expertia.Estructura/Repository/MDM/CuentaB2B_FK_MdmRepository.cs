@@ -16,20 +16,19 @@ namespace Expertia.Estructura.Repository.MDM
         // Cuenta
         TipoPersona,
         PuntoContacto,
-        RecibirInformacion,
         NivelImportancia,
         TipoCuenta,
         Estado,
         PaisProcedencia,
         TipoDocumento,
-            // Direcciones
-            TipoDireccion,
-            Distrito,
-            Ciudad,
-            Departamento,
-            Pais,
-            // Teléfono
-            TipoTelefono,
+        // Direcciones
+        TipoDireccion,
+        Distrito,
+        Ciudad,
+        Departamento,
+        Pais,
+        // Teléfono
+        TipoTelefono,
         TipoSitio,
         TipoCorreo,
         EmpleadoEjecResponsable,
@@ -99,68 +98,95 @@ namespace Expertia.Estructura.Repository.MDM
 
         private string GetSPName(CuentaB2B_FK foreignKey)
         {
+            string pkgName = DataBaseKeys.MdmPkg, spName = string.Empty;
             switch (foreignKey)
             {
                 case CuentaB2B_FK.TipoPersona:
-                    return "SP_BUSCAR_TIPOPERSONA";
+                    spName = "SP_BUSCAR_TIPOPERSONA";
+                    break;
                 case CuentaB2B_FK.PuntoContacto:
-                    return "SP_BUSCAR_PUNTOCONTACTO";
-                case CuentaB2B_FK.RecibirInformacion:
-                    return "SP_BUSCAR_RECIBIRINFORMACION";
+                    spName = "SP_BUSCAR_PUNTOCONTACTO";
+                    break;                
                 case CuentaB2B_FK.NivelImportancia:
-                    return "SP_BUSCAR_NIVELIMPORTANCIA";
+                    spName = "SP_BUSCAR_NIVELIMPORTANCIA";
+                    break;
                 case CuentaB2B_FK.TipoCuenta:
-                    return "SP_BUSCAR_TIPOCUENTA";
+                    spName = "SP_BUSCAR_TIPOCUENTA";
+                    break;
                 case CuentaB2B_FK.Estado:
-                    return "SP_BUSCAR_ESTADO";
+                    spName = "SP_BUSCAR_ESTADO";
+                    break;
                 case CuentaB2B_FK.PaisProcedencia:
-                    return "SP_BUSCAR_PAISPROCEDENCIA";
+                    spName = "SP_BUSCAR_PAISPROCEDENCIA";
+                    break;
                 case CuentaB2B_FK.TipoDocumento:
-                    return "SP_BUSCAR_DOCUMENTO";
+                    spName = "SP_BUSCAR_DOCUMENTO";
+                    break;
                 case CuentaB2B_FK.TipoDireccion:
-                    return "SP_BUSCAR_DIRECCION";
+                    spName = "SP_BUSCAR_DIRECCION";
+                    break;
                 case CuentaB2B_FK.Distrito:
-                    return "SP_BUSCAR_DISTRITO";
+                    spName = "SP_BUSCAR_DISTRITO";
+                    break;
                 case CuentaB2B_FK.Ciudad:
-                    return "SP_BUSCAR_CIUDAD";
+                    spName = "SP_BUSCAR_CIUDAD";
+                    break;
                 case CuentaB2B_FK.Departamento:
-                    return "SP_BUSCAR_DEPARTAMENTO";
+                    spName = "SP_BUSCAR_DEPARTAMENTO";
+                    break;
                 case CuentaB2B_FK.Pais:
-                    return "SP_BUSCAR_PAÍS";
+                    spName = "SP_BUSCAR_PAÍS";
+                    break;
                 case CuentaB2B_FK.TipoTelefono:
-                    return "SP_BUSCAR_TELÉFONO";
+                    spName = "SP_BUSCAR_TELÉFONO";
+                    break;
                 case CuentaB2B_FK.TipoSitio:
-                    return "SP_BUSCAR_SITIO";
+                    spName = "SP_BUSCAR_SITIO";
+                    break;
                 case CuentaB2B_FK.TipoCorreo:
-                    return "SP_BUSCAR_CORREO";
+                    spName = "SP_BUSCAR_CORREO";
+                    break;
                 case CuentaB2B_FK.EmpleadoEjecResponsable:
-                    return "SP_BUSCAR_EMPLEADOEJECRESPONSABLE";
+                    spName = "SP_BUSCAR_EMPLEADOEJECRESPONSABLE";
+                    break;
                 case CuentaB2B_FK.SupervisorKam:
-                    return "SP_BUSCAR_SUPERVISORKAM";
+                    spName = "SP_BUSCAR_SUPERVISORKAM";
+                    break;
                 case CuentaB2B_FK.Gerente:
-                    return "SP_BUSCAR_GERENTE";
+                    spName = "SP_BUSCAR_GERENTE";
+                    break;
                 case CuentaB2B_FK.UnidadNegocio:
-                    return "SP_BUSCAR_UNIDADNEGOCIO";
+                    spName = "SP_BUSCAR_UNIDADNEGOCIO";
+                    break;
                 case CuentaB2B_FK.GrupoColabEjecRegionBranch:
-                    return "SP_BUSCAR_GRUPOCOLABEJECREGIONBRANCH";
+                    spName = "SP_BUSCAR_GRUPOCOLABEJECREGIONBRANCH";
+                    break;
                 case CuentaB2B_FK.FlagPrincipal:
-                    return "SP_BUSCAR_FLAGPRINCIPAL";
+                    spName = "SP_BUSCAR_FLAGPRINCIPAL";
+                    break;
                 case CuentaB2B_FK.TipoInteresProdActiv:
-                    return "SP_BUSCAR_INTERESPRODACTIVIDAD";
+                    spName = "SP_BUSCAR_INTERESPRODACTIVIDAD";
+                    break;
                 case CuentaB2B_FK.CanalInformación:
-                    return "SP_BUSCAR_CANALINFORMACIÓN";
+                    spName = "SP_BUSCAR_CANALINFORMACIÓN";
+                    break;
                 case CuentaB2B_FK.RegionMercadoBranch:
-                    return "SP_BUSCAR_BRANCH";
+                    spName = "SP_BUSCAR_BRANCH";
+                    break;
                 case CuentaB2B_FK.IdiomaComunicCliente:
-                    return "SP_BUSCAR_IDIOMACLIENTE";
+                    spName = "SP_BUSCAR_IDIOMACLIENTE";
+                    break;
                 case CuentaB2B_FK.CondicionPago:
-                    return "SP_BUSCAR_CONDICIONPAGO";
+                    spName = "SP_BUSCAR_CONDICIONPAGO";
+                    break;
                 case CuentaB2B_FK.TipoMonedaDeLineaCredito:
-                    return "SP_BUSCAR_TIPOMONEDADELINEACREDITO";
+                    spName = "SP_BUSCAR_TIPOMONEDADELINEACREDITO";
+                    break;
                 default:
                     throw new Exception("SPName parameter is null. Invalid searching.");
             }
-        }        
+            return string.Format("{0}.{1}", pkgName, spName);
+        }
         #endregion
     }
 }

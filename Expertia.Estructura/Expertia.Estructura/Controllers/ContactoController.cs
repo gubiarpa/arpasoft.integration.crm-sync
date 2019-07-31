@@ -1,6 +1,5 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
-using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Utils;
 using System;
 using System.Web.Http;

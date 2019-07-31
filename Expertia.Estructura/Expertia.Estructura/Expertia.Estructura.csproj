@@ -161,7 +161,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Auxiliar\TimeRequest.cs" />
     <Compile Include="Models\Behavior\ISalesForce.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\CanalRecibirInfo.cs" />
@@ -170,6 +169,7 @@
     <Compile Include="Models\CuentaB2C.cs" />
     <Compile Include="Models\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
+    <Compile Include="Models\CuentaForeignKey.cs" />
     <Compile Include="Models\Direccion.cs" />
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\IdiomaComunicCliente.cs" />
@@ -197,6 +197,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="OracleScripts\Objects\CRM_Package %28Body%29.sql" />
+    <Content Include="OracleScripts\Objects\CRM_Package %28Header%29.sql" />
+    <Content Include="OracleScripts\Objects\CRM_Tables %28Clear%29.sql" />
+    <Content Include="OracleScripts\Objects\CRM_Tables %28Create%29.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

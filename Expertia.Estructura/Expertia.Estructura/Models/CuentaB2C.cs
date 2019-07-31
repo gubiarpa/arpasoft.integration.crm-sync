@@ -10,6 +10,7 @@ namespace Expertia.Estructura.Models
     /// </summary>
     public class CuentaB2C : Cuenta
     {
+        #region Properties
         /// <summary>
         /// Nombre
         /// </summary>
@@ -23,26 +24,6 @@ namespace Expertia.Estructura.Models
         /// </summary>
         public string ApeMaterno { get; set; }
         /// <summary>
-        /// Estado Civil
-        /// </summary>
-        public string EstadoCivil { get; set; }
-        /// <summary>
-        /// Género
-        /// </summary>
-        public string Genero { get; set; }
-        /// <summary>
-        /// Nacionalidad
-        /// </summary>
-        public string Nacionalidad { get; set; }
-        /// <summary>
-        /// Grado de Estudios
-        /// </summary>
-        public string GradoEstudios { get; set; }
-        /// <summary>
-        /// Profesión
-        /// </summary>
-        public string Profesion { get; set; }
-        /// <summary>
         /// Preferencias Generales
         /// </summary>
         public string PreferenciasGenerales { get; set; }
@@ -50,17 +31,41 @@ namespace Expertia.Estructura.Models
         /// Consideraciones de Salud
         /// </summary>
         public string ConsideracionesSalud { get; set; }
+        #endregion
+
+        #region ForeignKey
+        /// <summary>
+        /// Estado Civil
+        /// </summary>
+        public EstadoCivil EstadoCivil { get; set; }
+        /// <summary>
+        /// Género
+        /// </summary>
+        public Genero Genero { get; set; }
+        /// <summary>
+        /// Nacionalidad
+        /// </summary>
+        public Nacionalidad Nacionalidad { get; set; }
+        /// <summary>
+        /// Grado de Estudios
+        /// </summary>
+        public GradoEstudios GradoEstudios { get; set; }
+        /// <summary>
+        /// Profesión
+        /// </summary>
+        public Profesion Profesion { get; set; }
         /// <summary>
         /// Tipo de viaje
         /// </summary>
-        public string TipoViaje { get; set; }
+        public TipoViaje TipoViaje { get; set; }
         /// <summary>
         /// Categoría de viaje
         /// </summary>
-        public string CategoriaViaje { get; set; }
+        public CategoriaViaje CategoriaViaje { get; set; }
         /// <summary>
         /// Tipo de Acompañante(antes "Compañía")
         /// </summary>
-        public string TipoAcompañante { get; set; }
+        public TipoAcompanante TipoAcompanante { get; set; }
+        #endregion
     }
 }
