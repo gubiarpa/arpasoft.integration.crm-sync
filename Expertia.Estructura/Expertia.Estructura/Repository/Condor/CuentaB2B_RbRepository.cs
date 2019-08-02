@@ -16,23 +16,23 @@ namespace Expertia.Estructura.Repository.Condor
         {
         }
 
-        public OperationResult Create(CuentaB2B entity)
+        public Operation Create(CuentaB2B entity)
         {
             AddInParameter("PX_ID_CUENTA", entity.IdSalesForce);
             throw new NotImplementedException();
         }
 
-        public OperationResult Delete(CuentaB2B entity)
+        public Operation Delete(CuentaB2B entity)
         {
             throw new NotImplementedException();
         }
 
-        public OperationResult Read(CuentaB2B entity)
+        public Operation Read(CuentaB2B entity)
         {
             throw new NotImplementedException();
         }
 
-        public OperationResult Update(CuentaB2B entity)
+        public Operation Update(CuentaB2B entity)
         {
             throw new NotImplementedException();
         }

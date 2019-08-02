@@ -40,7 +40,19 @@ namespace Expertia.Estructura.Utils
             }
         }
 
-        public void WriteLine(LogType logType, string content, bool indent = false)
+        public void WriteText(string text)
+        {
+            try
+            {
+                _fileIO.WriteContent(text);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void WriteLine(LogType logType, string content, bool indent)
         {
             try
             {

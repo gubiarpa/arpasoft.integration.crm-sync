@@ -9,9 +9,9 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface ICrud<T>
     {
-        OperationResult Create(T entity);
-        OperationResult Read(T entity);
-        OperationResult Update(T entity);
-        OperationResult Delete(T entity);
+        Operation Create(T entity);
+        Operation Read(T entity);
+        Operation Update(T entity);
+        Operation Delete(T entity);
     }
 }

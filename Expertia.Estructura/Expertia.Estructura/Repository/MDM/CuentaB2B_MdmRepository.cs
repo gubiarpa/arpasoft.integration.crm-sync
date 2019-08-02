@@ -22,9 +22,9 @@ namespace Expertia.Estructura.Repository.MDM
         #endregion
 
         #region ICrud
-        public OperationResult Create(CuentaB2B entity)
+        public Operation Create(CuentaB2B entity)
         {
-            OperationResult operationResult = new OperationResult();
+            Operation operationResult = new Operation();
             try
             {
                 #region Simples
@@ -222,7 +222,7 @@ namespace Expertia.Estructura.Repository.MDM
                     }
                 #endregion
 
-                operationResult[OperationResult.Operation] = Operation.Success;
+                operationResult[Operation.Result] = ResultType.Success;
             }
             catch (Exception ex)
             {
@@ -231,17 +231,17 @@ namespace Expertia.Estructura.Repository.MDM
             return operationResult;
         }
 
-        public OperationResult Delete(CuentaB2B entity)
+        public Operation Delete(CuentaB2B entity)
         {
             throw new NotImplementedException();
         }        
 
-        public OperationResult Read(CuentaB2B entity)
+        public Operation Read(CuentaB2B entity)
         {
             throw new NotImplementedException();
         }
 
-        public OperationResult Update(CuentaB2B entity)
+        public Operation Update(CuentaB2B entity)
         {
             throw new NotImplementedException();
         }

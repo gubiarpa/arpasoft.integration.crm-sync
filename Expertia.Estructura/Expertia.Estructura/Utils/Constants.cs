@@ -74,7 +74,7 @@
     #endregion
 
     #region OperationResult
-    public enum Operation
+    public enum ResultType
     {
         Success,
         Fail

@@ -98,12 +98,12 @@ namespace Expertia.Estructura.Controllers.Base
         #region Log
         protected void WriteEntityLog(T entity)
         {
-            _logFileManager.WriteLine(LogType.Info, "Start Entity");
+            //_logFileManager.WriteLine(LogType.Info, "Start Entity");
             WriteAllFieldsLog(entity); // Imprime todos los campos
-            _logFileManager.WriteLine(LogType.Info, "End Entity");
+            //_logFileManager.WriteLine(LogType.Info, "End Entity");
         }
 
-        protected abstract void WriteAllFieldsLog(T entity);
+        //protected abstract void WriteAllFieldsLog(T entity);
 
         protected void WriteFieldLog(string fieldName, object value = null)
         {            
@@ -120,6 +120,17 @@ namespace Expertia.Estructura.Controllers.Base
         protected void WriteFieldLog(string fieldName, int position, object value)
         {
             WriteFieldLog(string.Format(fieldName, position), value);
+        }
+
+        protected void WriteAllFieldsLog(T entity)
+        {
+            _logFileManager.WriteText(Stringify(
+                new
+                {
+                    Type = new { Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), Log = LogType.Info.ToString() },
+                    Client = new ClientFeatures(),
+                    Entity = entity
+                }, true) + "\n");
         }
         #endregion
     }

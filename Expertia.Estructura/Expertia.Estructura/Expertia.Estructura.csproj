@@ -34,7 +34,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Expertia.Estructura.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -193,7 +194,7 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\FileIO.cs" />
     <Compile Include="Utils\LogFileManager.cs" />
-    <Compile Include="Utils\OperationResult.cs" />
+    <Compile Include="Utils\Operation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
