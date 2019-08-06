@@ -9,33 +9,18 @@ namespace Expertia.Estructura.Repository.Base
 {
     public abstract class OracleBase<T>
     {
+        private Dictionary<string, OracleParameter> _parameters;
         protected string _connectionString { get; }
 
         public OracleBase(string connKey)
         {
+            _parameters = new Dictionary<string, OracleParameter>();
             _connectionString = ConfigAccess.GetValueInConnectionString(connKey);
-        }
+        }        
 
-        private Dictionary<string, object> _inParameters = new Dictionary<string, object>();
-        private Dictionary<string, object> _outParameters = new Dictionary<string, object>();
-        private Dictionary<string, object> _outResultParameters = new Dictionary<string, object>();
-
-        protected void AddParameter(string name, object value = null, ParameterDirection parameterDirection = ParameterDirection.Input)
+        protected void AddParameter(string parameterName, OracleDbType type, object value = null, ParameterDirection parameterDirection = ParameterDirection.Input)
         {
-            switch (parameterDirection)
-            {
-                case ParameterDirection.Input:
-                    _inParameters.Add(name, value);
-                    break;
-                case ParameterDirection.Output:
-                    _outParameters.Add(name, value);
-                    break;
-            }
-        }
-
-        protected object GetOutParameter(string name)
-        {
-            return _outResultParameters[name];
+            _parameters.Add(parameterName, new OracleParameter(parameterName, type, value, parameterDirection));
         }
 
         protected IEnumerable<T> ExecuteSPWithResults(string SPName)
@@ -52,14 +37,13 @@ namespace Expertia.Estructura.Repository.Base
                         Connection = conn
                     })
                     {
-                        foreach (var key in _inParameters.Keys)
+                        foreach (var key in _parameters.Keys)
                         {
-                            cmd.Parameters.Add(new OracleParameter(key, _inParameters[key]) { Direction = ParameterDirection.Input });
+                            cmd.Parameters.Add(_parameters[key]);
                         }
                         cmd.ExecuteNonQuery();
                     }
                 }
-
                 return null;
             }
             catch (Exception ex)
@@ -87,13 +71,9 @@ namespace Expertia.Estructura.Repository.Base
                         Connection = conn
                     })
                     {
-                        foreach (var key in _inParameters.Keys)
+                        foreach (var key in _parameters.Keys)
                         {
-                            cmd.Parameters.Add(new OracleParameter(key, _inParameters[key]) { Direction = ParameterDirection.Input });
-                        }
-                        foreach (var key in _outParameters.Keys)
-                        {
-                            cmd.Parameters.Add(new OracleParameter(key, _outParameters[key]) { Direction = ParameterDirection.Output});
+                            cmd.Parameters.Add(new OracleParameter(key, _parameters[key].OracleDbType, _parameters[key].Value, _parameters[key].Direction) { });
                         }
                         cmd.ExecuteNonQuery();
                     }
@@ -105,8 +85,7 @@ namespace Expertia.Estructura.Repository.Base
             }
             finally
             {
-                _inParameters.Clear();
-                _outParameters.Clear();
+                _parameters.Clear();
             }
         }
     }
