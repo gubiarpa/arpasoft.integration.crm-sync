@@ -29,26 +29,26 @@ namespace Expertia.Estructura.Repository.MDM
             {
                 #region Simples
                 #region Cuenta
-                AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                 AddInParameter("P_TIPOPERSONA", entity.TipoPersona, CuentaB2B_FK.TipoPersona);
-                AddInParameter("P_FECHANACIMORANIV", entity.FechaNacimOrAniv);
-                AddInParameter("P_LOGOFOTO", entity.LogoFoto);
+                AddParameter("P_FECHANACIMORANIV", entity.FechaNacimOrAniv);
+                AddParameter("P_LOGOFOTO", entity.LogoFoto);
                 AddInParameter("P_PUNTOCONTACTO", entity.PuntoContacto, CuentaB2B_FK.PuntoContacto);
-                AddInParameter("P_RECIBIRINFORMACION", entity.RecibirInformacion);
+                AddParameter("P_RECIBIRINFORMACION", entity.RecibirInformacion);
                 AddInParameter("P_NIVELIMPORTANCIA", entity.NivelImportancia, CuentaB2B_FK.NivelImportancia);
-                AddInParameter("P_FECHAINIRELACIONCOMERCIAL", entity.FechaIniRelacionComercial);
-                AddInParameter("P_COMENTARIOS", entity.FechaIniRelacionComercial);
+                AddParameter("P_FECHAINIRELACIONCOMERCIAL", entity.FechaIniRelacionComercial);
+                AddParameter("P_COMENTARIOS", entity.FechaIniRelacionComercial);
                 AddInParameter("P_TIPOCUENTA", entity.TipoCuenta, CuentaB2B_FK.TipoCuenta);
                 AddInParameter("P_ESTADO", entity.Estado, CuentaB2B_FK.Estado);
                 AddInParameter("P_PAISPROCEDENCIA", entity.PaisProcedencia, CuentaB2B_FK.PaisProcedencia);
                 #endregion
 
                 #region CuentaB2B
-                AddInParameter("P_RAZONSOCIAL", entity.RazonSocial);
-                AddInParameter("P_ALIAS", entity.Alias);
+                AddParameter("P_RAZONSOCIAL", entity.RazonSocial);
+                AddParameter("P_ALIAS", entity.Alias);
                 AddInParameter("P_CONDICIONPAGO", entity.CondicionPago, CuentaB2B_FK.CondicionPago);
                 AddInParameter("P_TIPOMONEDADELINEACREDITO", entity.TipoMonedaDeLineaCredito, CuentaB2B_FK.TipoMonedaDeLineaCredito);
-                AddInParameter("P_MONTOLINEACREDITO", entity.MontoLineaCredito);
+                AddParameter("P_MONTOLINEACREDITO", entity.MontoLineaCredito);
                 #endregion
 
                 #region Ejecución
@@ -62,9 +62,9 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_TIPO", documento.Tipo, CuentaB2B_FK.TipoDocumento);
-                            AddInParameter("P_NUMERO", documento.Numero);
+                            AddParameter("P_NUMERO", documento.Numero);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_DOCUMENTO");
                         }
@@ -78,9 +78,9 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_TIPO", direccion.Tipo, CuentaB2B_FK.TipoDireccion);
-                            AddInParameter("P_DIRECCION", direccion.Descripcion);
+                            AddParameter("P_DIRECCION", direccion.Descripcion);
                             AddInParameter("P_CIUDAD", direccion.Ciudad, CuentaB2B_FK.Ciudad);
                             AddInParameter("P_DEPARTAMENTO", direccion.Departamento, CuentaB2B_FK.Departamento);
                             AddInParameter("P_PAIS", direccion.Pais, CuentaB2B_FK.Pais);
@@ -97,9 +97,9 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_TIPO", telefono.Tipo, CuentaB2B_FK.TipoTelefono);
-                            AddInParameter("P_NUMERO", telefono.Numero);
+                            AddParameter("P_NUMERO", telefono.Numero);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_TELEFONO");
                         }
@@ -113,9 +113,9 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_TIPO", sitio.Tipo, CuentaB2B_FK.TipoSitio);
-                            AddInParameter("P_DESCRIPCION", sitio.Descripcion);
+                            AddParameter("P_DESCRIPCION", sitio.Descripcion);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_SITIO");
                         }
@@ -129,9 +129,9 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_TIPO", correo.Tipo, CuentaB2B_FK.TipoCorreo);
-                            AddInParameter("P_DESCRIPCION", correo.Descripcion);
+                            AddParameter("P_DESCRIPCION", correo.Descripcion);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_CORREO");
                         }
@@ -145,13 +145,13 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_EMPLOREJECRESPONS", participante.EmpleadoOrEjecutivoResponsable, CuentaB2B_FK.EmpleadoEjecResponsable);
                             AddInParameter("P_SUPERVISORKAM", participante.SupervisorKam, CuentaB2B_FK.SupervisorKam);
                             AddInParameter("P_GERENTE", participante.Gerente, CuentaB2B_FK.Gerente);
                             AddInParameter("P_UNIDADNEGOCIO", participante.UnidadNegocio, CuentaB2B_FK.UnidadNegocio);
                             AddInParameter("P_GRUPOCOLABBEJECREGIONBRANCH", participante.GrupoColabEjecRegionBranch, CuentaB2B_FK.GrupoColabEjecRegionBranch);
-                            AddInParameter("P_FLAGPRINCIPAL", participante.FlagPrincipal);
+                            AddParameter("P_FLAGPRINCIPAL", participante.FlagPrincipal);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_PARTICIPANTE");
                         }
@@ -165,7 +165,7 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_TIPO", interes.Tipo, CuentaB2B_FK.TipoInteresProdActiv);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_INTERESPRODACTIV");
@@ -180,8 +180,8 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
-                            AddInParameter("P_DESCRIPCION", canalInfo.Descripcion);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_DESCRIPCION", canalInfo.Descripcion);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_CANALESRECIBIRINFO");
                         }
@@ -195,7 +195,7 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_DESCRIPCION", branch.RegionMercadoBranch, CuentaB2B_FK.RegionMercadoBranch);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_BRANCH");
@@ -210,7 +210,7 @@ namespace Expertia.Estructura.Repository.MDM
                     {
                         try
                         {
-                            AddInParameter("P_IDSALESFORCE", entity.IdSalesForce);
+                            AddParameter("P_IDSALESFORCE", entity.IdSalesForce);
                             AddInParameter("P_ID", idioma.ID, CuentaB2B_FK.IdiomaComunicCliente);
 
                             ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B_IDIOMACOMUNICCLIENTE");
@@ -250,7 +250,7 @@ namespace Expertia.Estructura.Repository.MDM
         #region SQLMethod
         private void AddInParameter(string paramName, dynamic description, CuentaB2B_FK foreignKey)
         {
-            AddInParameter(paramName, _fkMdm.LookUpByDescription(foreignKey, description));
+            AddParameter(paramName, _fkMdm.LookUpByDescription(foreignKey, description));
             /*
                 try
                 {

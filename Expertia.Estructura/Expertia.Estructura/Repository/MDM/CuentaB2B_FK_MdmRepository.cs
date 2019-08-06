@@ -85,8 +85,8 @@ namespace Expertia.Estructura.Repository.MDM
         {
             try
             {
-                AddInParameter(DESC_PARAMETER_NAME, _description); // Param: Descripción (IN)
-                AddOutParameter(ID_PARAMETER_NAME, null); // Param: ID (OUT)
+                AddParameter(DESC_PARAMETER_NAME, _description); // Param: Descripción (IN)
+                AddParameter(ID_PARAMETER_NAME, null, ParameterDirection.Output); // Param: ID (OUT)
                 ExecuteSPWithoutResults(GetSPName(foreignKey)); // Ejecutamos SP
                 return GetOutParameter(ID_PARAMETER_NAME); // Recuperamos ID
             }

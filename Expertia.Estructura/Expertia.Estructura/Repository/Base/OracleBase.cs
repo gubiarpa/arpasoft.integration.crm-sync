@@ -20,14 +20,17 @@ namespace Expertia.Estructura.Repository.Base
         private Dictionary<string, object> _outParameters = new Dictionary<string, object>();
         private Dictionary<string, object> _outResultParameters = new Dictionary<string, object>();
 
-        protected void AddInParameter(string name, object value)
+        protected void AddParameter(string name, object value = null, ParameterDirection parameterDirection = ParameterDirection.Input)
         {
-            _inParameters.Add(name, value);
-        }        
-
-        protected void AddOutParameter(string name, object value)
-        {
-            _outParameters.Add(name, value);
+            switch (parameterDirection)
+            {
+                case ParameterDirection.Input:
+                    _inParameters.Add(name, value);
+                    break;
+                case ParameterDirection.Output:
+                    _outParameters.Add(name, value);
+                    break;
+            }
         }
 
         protected object GetOutParameter(string name)
@@ -47,7 +50,6 @@ namespace Expertia.Estructura.Repository.Base
                         CommandText = SPName,
                         CommandType = CommandType.StoredProcedure,
                         Connection = conn
-                        //Transaction = conn.CreateCommand().begin
                     })
                     {
                         foreach (var key in _inParameters.Keys)
@@ -88,6 +90,10 @@ namespace Expertia.Estructura.Repository.Base
                         foreach (var key in _inParameters.Keys)
                         {
                             cmd.Parameters.Add(new OracleParameter(key, _inParameters[key]) { Direction = ParameterDirection.Input });
+                        }
+                        foreach (var key in _outParameters.Keys)
+                        {
+                            cmd.Parameters.Add(new OracleParameter(key, _outParameters[key]) { Direction = ParameterDirection.Output});
                         }
                         cmd.ExecuteNonQuery();
                     }

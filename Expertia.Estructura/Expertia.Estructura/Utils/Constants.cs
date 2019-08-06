@@ -11,7 +11,7 @@
     public static class ConnectionKeys
     {
         public const string MDMConnKey = "MdmConnKey";
-        public const string CondorConnKey = "";
+        public const string CondorConnKey = "RbConnKey";
     }
 
     public static class LogKeys

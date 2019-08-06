@@ -1,6 +1,7 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.Behavior;
+using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.MDM;
 using Expertia.Estructura.Utils;
 using Newtonsoft.Json;
@@ -19,10 +20,12 @@ namespace Expertia.Estructura.Controllers
     public class CuentaB2BController : BaseController<CuentaB2B>
     {
         private ICrud<CuentaB2B> _mdmRepository;
+        private ICrud<CuentaB2B> _rbRepository;
 
         public CuentaB2BController() : base()
         {
             _mdmRepository = new CuentaB2B_MdmRepository();
+            _rbRepository = new CuentaB2B_RbRepository();
         }
 
         [Route(RouteAction.Create)]
@@ -32,7 +35,7 @@ namespace Expertia.Estructura.Controllers
             {
                 var operationResult = new Operation();
                 operationResult[Operation.Result] = ResultType.Success;
-                //_mdmRepository.Create(entity);
+                _rbRepository.Create(entity);
                 WriteEntityLog(entity);                
                 return Ok(operationResult);
             }
