@@ -111,7 +111,7 @@ namespace Expertia.Estructura.Repository.Condor
                 /* (25) P_NOTAS */
                 AddParameter("P_NOTAS", entity.Comentarios);
 
-                ExecuteSPWithoutResults("CRM_PKG.SP_CREAR_CLIENTE");
+                ExecuteSPWithoutResults("CONDOR.CRM_PKG.SP_CREAR_CLIENTE");
 
                 operation[Operation.Result] = ResultType.Success;
             }
