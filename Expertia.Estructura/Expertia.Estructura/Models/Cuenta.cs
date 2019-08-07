@@ -15,7 +15,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// ID Interno
         /// </summary>                                                                                                                                                                                                                        
-        public int ID { get; set; }
+        public string ID { get; set; }
         /// <summary>
         /// ID Proveniente de SalesForce
         /// </summary>

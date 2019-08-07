@@ -33,11 +33,18 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                var operationResult = new Operation();
-                operationResult[Operation.Result] = ResultType.Success;
-                _rbRepository.Create(entity);
-                WriteEntityLog(entity);                
-                return Ok(operationResult);
+                var operationResult = _rbRepository.Create(entity);
+                WriteEntityLog(entity);
+                return Ok(new
+                {
+                    Result = new
+                    {
+                        Type = ResultType.Success,
+                        CodError = operationResult["P_CODIGO_ERROR"],
+                        MensajeError = operationResult["P_MENSAJE_ERROR"]
+                    },
+                    Entity = entity
+                });
             }
             catch (Exception ex)
             {
@@ -51,11 +58,18 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                var operationResult = new Operation();
-                operationResult[Operation.Result] = ResultType.Success;
-                //_mdmRepository.Update(entity);
+                var operationResult = _rbRepository.Update(entity);
                 WriteEntityLog(entity);
-                return Ok();
+                return Ok(new
+                {
+                    Result = new
+                    {
+                        Type = ResultType.Success,
+                        CodError = operationResult["P_CODIGO_ERROR"],
+                        MensajeError = operationResult["P_MENSAJE_ERROR"]
+                    },
+                    Entity = entity
+                });
             }
             catch (Exception ex)
             {

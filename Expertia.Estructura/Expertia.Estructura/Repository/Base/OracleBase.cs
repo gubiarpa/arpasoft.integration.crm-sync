@@ -10,17 +10,22 @@ namespace Expertia.Estructura.Repository.Base
     public abstract class OracleBase<T>
     {
         private Dictionary<string, OracleParameter> _parameters;
+        private Dictionary<string, OracleParameter> _resultParameters;
         protected string _connectionString { get; }
 
         public OracleBase(string connKey)
         {
             _parameters = new Dictionary<string, OracleParameter>();
+            _resultParameters = new Dictionary<string, OracleParameter>();
             _connectionString = ConfigAccess.GetValueInConnectionString(connKey);
         }        
 
-        protected void AddParameter(string parameterName, OracleDbType type, object value = null, ParameterDirection parameterDirection = ParameterDirection.Input)
+        protected void AddParameter(string parameterName, OracleDbType type, object value = null, ParameterDirection parameterDirection = ParameterDirection.Input, int size = 0)
         {
-            _parameters.Add(parameterName, new OracleParameter(parameterName, type, value, parameterDirection));
+            _resultParameters.Clear();
+            var parameter = new OracleParameter(parameterName, type, value.Coalesce(), parameterDirection);
+            if (size > 0) parameter.Size = size;
+            _parameters.Add(parameterName, parameter);
         }
 
         protected IEnumerable<T> ExecuteSPWithResults(string SPName)
@@ -63,7 +68,6 @@ namespace Expertia.Estructura.Repository.Base
                     ConnectionString = _connectionString
                 })
                 {
-                    conn.Open();
                     using (OracleCommand cmd = new OracleCommand()
                     {
                         CommandText = SPName,
@@ -71,11 +75,23 @@ namespace Expertia.Estructura.Repository.Base
                         Connection = conn
                     })
                     {
+                        conn.Open();
+
+                        // Agregamos parámetros
                         foreach (var key in _parameters.Keys)
                         {
-                            cmd.Parameters.Add(new OracleParameter(key, _parameters[key].OracleDbType, _parameters[key].Value, _parameters[key].Direction) { });
+                            cmd.Parameters.Add(_parameters[key]);
                         }
+
+                        // Ejecutamos el SP
                         cmd.ExecuteNonQuery();
+
+                        // Volcamos en parámetros resultantes
+                        foreach (var key in _parameters.Keys)
+                        {
+                            if (_parameters[key].Direction == ParameterDirection.Output)
+                                _resultParameters[key] = _parameters[key];
+                        }
                     }
                 }
             }
@@ -86,6 +102,18 @@ namespace Expertia.Estructura.Repository.Base
             finally
             {
                 _parameters.Clear();
+            }
+        }
+
+        protected object GetOutParameter(string parameterName)
+        {
+            try
+            {
+                return _resultParameters[parameterName].Value;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

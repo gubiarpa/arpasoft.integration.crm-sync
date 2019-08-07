@@ -98,9 +98,7 @@ namespace Expertia.Estructura.Controllers.Base
         #region Log
         protected void WriteEntityLog(T entity)
         {
-            //_logFileManager.WriteLine(LogType.Info, "Start Entity");
             WriteAllFieldsLog(entity); // Imprime todos los campos
-            //_logFileManager.WriteLine(LogType.Info, "End Entity");
         }
 
         //protected abstract void WriteAllFieldsLog(T entity);
@@ -124,11 +122,18 @@ namespace Expertia.Estructura.Controllers.Base
 
         protected void WriteAllFieldsLog(T entity)
         {
+            var clientFeatures = new ClientFeatures();
             _logFileManager.WriteText(Stringify(
                 new
                 {
-                    Type = new { Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), Log = LogType.Info.ToString() },
-                    Client = new ClientFeatures(),
+                    Client = new
+                    {
+                        IP = clientFeatures.IP,
+                        Method = clientFeatures.Method,
+                        Url = clientFeatures.URL,
+                        Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                        Log = LogType.Info.ToString()
+                    },
                     Entity = entity
                 }, true) + "\n");
         }

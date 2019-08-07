@@ -183,6 +183,7 @@
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\ILookupId.cs" />
+    <Compile Include="Repository\Condor\Contacto_RbRepository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_RbRepository.cs" />
     <Compile Include="Repository\MDM\CuentaB2B_MdmRepository.cs" />
     <Compile Include="Repository\MDM\CuentaB2B_FK_MdmRepository.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\FileIO.cs" />
     <Compile Include="Utils\LogFileManager.cs" />
+    <Compile Include="Utils\MyExtension.cs" />
     <Compile Include="Utils\Operation.cs" />
   </ItemGroup>
   <ItemGroup>
