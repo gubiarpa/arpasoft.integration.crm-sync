@@ -96,35 +96,39 @@ namespace Expertia.Estructura.Controllers.Base
         #endregion
 
         #region Log
-        protected void WriteEntityLog(T entity)
+        //protected void WriteFieldLog(string fieldName, object value = null)
+        //{            
+        //    try
+        //    {
+        //        _logFileManager.WriteLine(LogType.Field, string.Format("{0} = {1}", fieldName, value), true);                
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+
+        //protected void WriteFieldLog(string fieldName, int position, object value)
+        //{
+        //    WriteFieldLog(string.Format(fieldName, position), value);
+        //}
+
+        protected void WriteEntityInLog(T entity)
         {
-            WriteAllFieldsLog(entity); // Imprime todos los campos
+            WriteObjectInLog(entity);
         }
 
-        //protected abstract void WriteAllFieldsLog(T entity);
+        protected void WriteObjectInLog(object obj)
+        {
+            _logFileManager.WriteText(Stringify(BuildObject(obj), true) + "\n");
+        }
 
-        protected void WriteFieldLog(string fieldName, object value = null)
-        {            
+        private object BuildObject(object obj)
+        {
             try
             {
-                _logFileManager.WriteLine(LogType.Field, string.Format("{0} = {1}", fieldName, value), true);                
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        protected void WriteFieldLog(string fieldName, int position, object value)
-        {
-            WriteFieldLog(string.Format(fieldName, position), value);
-        }
-
-        protected void WriteAllFieldsLog(T entity)
-        {
-            var clientFeatures = new ClientFeatures();
-            _logFileManager.WriteText(Stringify(
-                new
+                var clientFeatures = new ClientFeatures();
+                return new
                 {
                     Client = new
                     {
@@ -134,8 +138,13 @@ namespace Expertia.Estructura.Controllers.Base
                         Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                         Log = LogType.Info.ToString()
                     },
-                    Entity = entity
-                }, true) + "\n");
+                    Entity = obj
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
     }

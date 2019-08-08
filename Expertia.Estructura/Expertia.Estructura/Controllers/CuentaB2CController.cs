@@ -22,7 +22,7 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                WriteAllFieldsLog(entity);
+                WriteEntityInLog(entity);
                 return Ok();
             }
             catch (Exception ex)
@@ -37,7 +37,7 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                WriteAllFieldsLog(entity);
+                WriteEntityInLog(entity);
                 return Ok();
             }
             catch (Exception ex)

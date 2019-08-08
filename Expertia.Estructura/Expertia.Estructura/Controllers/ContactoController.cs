@@ -25,7 +25,7 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 var operationResult = _rbRepository.Create(entity);
-                WriteEntityLog(entity);
+                WriteEntityInLog(entity);
                 return Ok(new
                 {
                     Result = new
@@ -50,7 +50,7 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 var operationResult = _rbRepository.Update(entity);
-                WriteEntityLog(entity);
+                WriteEntityInLog(entity);
                 return Ok(new
                 {
                     Result = new

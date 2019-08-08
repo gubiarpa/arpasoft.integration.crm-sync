@@ -1,6 +1,5 @@
-﻿using Expertia.Estructura.Repository.MDM;
-using Expertia.Estructura.Utils;
-using Oracle.DataAccess.Client;
+﻿using Expertia.Estructura.Utils;
+using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
