@@ -1,8 +1,6 @@
 ﻿using Expertia.Estructura.Models.Behavior;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Models
 {
@@ -31,7 +29,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// ¿Recibir Información?
         /// </summary>
-        public bool RecibirInformacion { get; set; }          
+        public bool RecibirInformacion { get; set; }
         /// <summary>
         /// Fecha de Inicio de Relación Comercial
         /// </summary>
@@ -50,7 +48,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// [FK] Origen de la Cuenta
         /// </summary>
-        public /*PuntoContacto*/ string  PuntoContacto { get; set; }
+        public /*PuntoContacto*/ string PuntoContacto { get; set; }
         /// <summary>
         /// [FK] Nivel de Importancia
         /// </summary>
@@ -73,11 +71,11 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Lista de Documentos
         /// </summary>
-        public IEnumerable<Documento> Documentos { get; set; }        
+        public IEnumerable<Documento> Documentos { get; set; }
         /// <summary>
         /// Lista de Direcciones
         /// </summary>
-        public IEnumerable<Direccion> Direcciones { get; set; }        
+        public IEnumerable<Direccion> Direcciones { get; set; }
         /// <summary>
         /// Lista de Teléfonos
         /// </summary>
@@ -93,7 +91,7 @@ namespace Expertia.Estructura.Models
         /// <summary>
         /// Lista de Participantes
         /// </summary>
-        public IEnumerable<Participante> Participantes { get; set; }       
+        public IEnumerable<Participante> Participantes { get; set; }
         /// <summary>
         /// Intereses en Productos o Actividad
         /// </summary>

@@ -1,9 +1,6 @@
 ﻿using Expertia.Estructura.Utils.Behavior;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Utils
 {
@@ -49,7 +46,7 @@ namespace Expertia.Estructura.Utils
             catch
             {
                 return null;
-            }            
+            }
         }
 
         public static void WriteContent(string fullName, string content)
@@ -60,8 +57,9 @@ namespace Expertia.Estructura.Utils
             }
             catch (Exception ex)
             {
+                throw ex;
             }
-        }        
+        }
         #endregion
     }
 }

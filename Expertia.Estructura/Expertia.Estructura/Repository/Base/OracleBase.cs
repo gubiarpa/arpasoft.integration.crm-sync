@@ -17,7 +17,7 @@ namespace Expertia.Estructura.Repository.Base
             _parameters = new Dictionary<string, OracleParameter>();
             _resultParameters = new Dictionary<string, OracleParameter>();
             _connectionString = ConfigAccess.GetValueInConnectionString(connKey);
-        }        
+        }
 
         protected void AddParameter(string parameterName, OracleDbType type, object value = null, ParameterDirection parameterDirection = ParameterDirection.Input, int size = 0)
         {

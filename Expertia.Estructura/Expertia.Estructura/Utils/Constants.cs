@@ -25,16 +25,16 @@
     public static class RoutePrefix
     {
         public const string Login = "api/login";
-        public const string Contacto  = "api/contacto";
+        public const string Contacto = "api/contacto";
         public const string CuentaB2B = "api/cuentab2b";
-        public const string CuentaB2C = "api/cuentab2c";        
+        public const string CuentaB2C = "api/cuentab2c";
     }
 
     public static class RouteAction
     {
         public const string Auth = "auth";
         public const string Create = "create";
-        public const string Read   = "read";
+        public const string Read = "read";
         public const string Update = "update";
         public const string Delete = "delete";
     }

@@ -22,14 +22,14 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                WriteEntityInLog(entity);
+                //WriteLogObject(entity);
                 return Ok();
             }
             catch (Exception ex)
             {
-                WriteObjectInLog(ex, LogType.Fail);
+                //WriteLogObject(ex, LogType.Fail);
                 return InternalServerError(ex);
-            }            
+            }
         }
 
         [Route(RouteAction.Update)]
@@ -37,12 +37,12 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                WriteEntityInLog(entity);
+                //WriteLogObject(entity);
                 return Ok();
             }
             catch (Exception ex)
             {
-                WriteObjectInLog(ex, LogType.Fail);
+                //WriteLogObject(ex, LogType.Fail);
                 return InternalServerError(ex);
             }
         }

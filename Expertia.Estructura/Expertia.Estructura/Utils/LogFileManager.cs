@@ -1,9 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Behavior;
 using Expertia.Estructura.Utils.Behavior;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Utils
 {
@@ -69,7 +66,7 @@ namespace Expertia.Estructura.Utils
             catch (Exception ex)
             {
                 throw ex;
-            }            
+            }
         }
     }
 }

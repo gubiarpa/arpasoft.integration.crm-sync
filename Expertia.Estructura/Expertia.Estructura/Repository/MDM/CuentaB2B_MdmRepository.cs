@@ -55,7 +55,7 @@ namespace Expertia.Estructura.Repository.MDM
                 //ExecuteSPWithoutResults("SP_CREAR_CLIENTE_B2B");
                 #endregion
                 #endregion
-                
+
                 #region Multiples
                 //if (entity.Documentos != null)
                 //    foreach (var documento in entity.Documentos)
@@ -234,7 +234,7 @@ namespace Expertia.Estructura.Repository.MDM
         public Operation Delete(CuentaB2B entity)
         {
             throw new NotImplementedException();
-        }        
+        }
 
         public Operation Read(CuentaB2B entity)
         {

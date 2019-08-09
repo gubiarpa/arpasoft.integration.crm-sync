@@ -11,7 +11,6 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.Contacto)]
     public class ContactoController : BaseController<Contacto>
     {
-        private ICrud<Contacto> _mdmRepository;
         private ICrud<Contacto> _rbRepository;
 
         public ContactoController() : base()
@@ -25,7 +24,7 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 var operationResult = _rbRepository.Create(entity);
-                WriteEntityInLog(entity);
+                entity.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
                     Result = new
@@ -39,9 +38,9 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                WriteObjectInLog(ex, LogType.Fail);
+                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
-            }            
+            }
         }
 
         [Route(RouteAction.Update)]
@@ -50,7 +49,7 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 var operationResult = _rbRepository.Update(entity);
-                WriteEntityInLog(entity);
+                entity.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
                     Result = new
@@ -64,7 +63,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                WriteObjectInLog(ex, LogType.Fail);
+                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
         }

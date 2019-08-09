@@ -1,10 +1,7 @@
-﻿using Expertia.Estructura.Models;
-using Expertia.Estructura.Utils;
+﻿using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Repository.Base
 {

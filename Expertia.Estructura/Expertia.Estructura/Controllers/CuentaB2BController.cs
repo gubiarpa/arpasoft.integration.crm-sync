@@ -2,14 +2,9 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.Condor;
-using Expertia.Estructura.Repository.MDM;
 using Expertia.Estructura.Utils;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
-using System.Web;
 using System.Web.Http;
-using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -19,7 +14,6 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.CuentaB2B)]
     public class CuentaB2BController : BaseController<CuentaB2B>
     {
-        private ICrud<CuentaB2B> _mdmRepository;
         private ICrud<CuentaB2B> _rbRepository;
 
         public CuentaB2BController() : base()
@@ -33,7 +27,7 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 var operationResult = _rbRepository.Create(entity);
-                WriteEntityInLog(entity);
+                entity.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
                     Result = new
@@ -47,7 +41,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                WriteObjectInLog(ex, LogType.Fail);
+                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
         }
@@ -58,7 +52,7 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 var operationResult = _rbRepository.Update(entity);
-                WriteEntityInLog(entity);
+                entity.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
                     Result = new
@@ -72,7 +66,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                WriteObjectInLog(ex, LogType.Fail);
+                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
         }

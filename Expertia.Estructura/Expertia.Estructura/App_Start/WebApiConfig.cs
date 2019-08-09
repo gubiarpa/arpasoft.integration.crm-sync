@@ -1,5 +1,4 @@
-﻿using Expertia.Estructura.Filters;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -10,11 +9,6 @@ namespace Expertia.Estructura
     {
         public static void Register(HttpConfiguration config)
         {
-            #region Authentication
-            // Agrega autenticación básica
-            //config.Filters.Add(new BasicAuthenticationAttribute());
-            #endregion
-
             #region CamelCase
             var settings = GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings;
             settings.Formatting = Formatting.Indented; // Indentado

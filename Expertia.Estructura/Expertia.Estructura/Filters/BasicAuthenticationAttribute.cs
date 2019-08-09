@@ -4,14 +4,13 @@ using Expertia.Estructura.Utils.Behavior;
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
 namespace Expertia.Estructura.Filters
 {
     public class BasicAuthenticationAttribute : AuthorizationFilterAttribute
-    {        
+    {
         #region Log
         protected ILogFileManager _logFileManager;
         private IClientFeatures _clientFeatures;
@@ -25,22 +24,8 @@ namespace Expertia.Estructura.Filters
         }
         #endregion
 
-        /// <summary>
-        /// Método de Validación
-        /// </summary>
-        /// <param name="actionContext"></param>
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            Guid idOperation = Guid.NewGuid();
-
-            object obj = new
-            {
-                IdOperation = idOperation,
-                IpClient = _clientFeatures.IP,
-                DateResponse = DateTime.Now.ToString(FormatTemplate.LongDate),
-                Sender = "Expertia"
-            };
-
             if (actionContext.Request.Headers.Authorization != null)
             {
                 try
@@ -49,21 +34,20 @@ namespace Expertia.Estructura.Filters
 
                     if (!IsAuthorizedUser(authToken))
                     {
-                        actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized, obj);
-                        _logFileManager.WriteLine(LogType.Warning, string.Format("{0}: {1}", LogLineMessage.Unauthorized, idOperation.ToString()));
-                    }                    
+                        actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                        LogLineMessage.Unauthorized.WriteLogObject(_logFileManager, _clientFeatures, LogType.Warning);
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.BadRequest, obj);
-                    _logFileManager.WriteLine(LogType.Fail, string.Format("{0}: {1}", LogLineMessage.BadRequest, idOperation.ToString()));
+                    actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.BadRequest, ex);
+                    LogLineMessage.BadRequest.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 }
-                
             }
             else
             {
-                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized, obj);
-                _logFileManager.WriteLine(LogType.Warning, string.Format("{0}: {1}", LogLineMessage.Unauthorized, idOperation.ToString()));
+                actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
+                LogLineMessage.Unauthorized.WriteLogObject(_logFileManager, _clientFeatures, LogType.Warning);
             }
         }
 

@@ -3,13 +3,9 @@ using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Repository.MDM
-{    
+{
     #region ForeignKeys
     public enum CuentaB2B_FK
     {
@@ -68,7 +64,7 @@ namespace Expertia.Estructura.Repository.MDM
                 if (description == null)
                     throw new Exception("Description field is null. Invalid searching.");
 
-                var idParameterValue = ExecuteAndGetID(foreignKey);                
+                var idParameterValue = ExecuteAndGetID(foreignKey);
                 _description = null;
 
                 return idParameterValue;
@@ -107,7 +103,7 @@ namespace Expertia.Estructura.Repository.MDM
                     break;
                 case CuentaB2B_FK.PuntoContacto:
                     spName = "SP_BUSCAR_PUNTOCONTACTO";
-                    break;                
+                    break;
                 case CuentaB2B_FK.NivelImportancia:
                     spName = "SP_BUSCAR_NIVELIMPORTANCIA";
                     break;
