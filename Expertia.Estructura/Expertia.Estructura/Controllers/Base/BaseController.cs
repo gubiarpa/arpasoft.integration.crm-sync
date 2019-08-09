@@ -2,8 +2,6 @@
 using Expertia.Estructura.Filters;
 using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Web.Http;
 
