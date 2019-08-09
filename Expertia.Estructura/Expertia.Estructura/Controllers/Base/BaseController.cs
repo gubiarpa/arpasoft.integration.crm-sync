@@ -117,10 +117,9 @@ namespace Expertia.Estructura.Controllers.Base
                     {
                         IP = clientFeatures.IP,
                         Method = clientFeatures.Method,
-                        LogType = logType,
+                        Log = logType,
                         Url = clientFeatures.URL,
-                        Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                        Log = LogType.Info.ToString()
+                        Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
                     },
                     Entity = obj
                 };
