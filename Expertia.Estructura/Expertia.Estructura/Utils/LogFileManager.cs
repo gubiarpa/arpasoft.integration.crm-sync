@@ -57,14 +57,14 @@ namespace Expertia.Estructura.Utils
             try
             {
                 _fileIO.WriteContent(string.Format(
-                    FormatTemplate.LogLine, // ◄ formato de línea de log
-                    indent ? "\t" : string.Empty, // ◄ Tab o Empty
-                    WriteType(logType), // ◄ INFO, WARN, FAIL
-                    DateTime.Now.ToString(FormatTemplate.LongDate), // ◄ 2019-07-15 15:34:20.635
-                    _clientFeatures.Method, // ◄ GET, POST
-                    _clientFeatures.IP, // ◄ 10.75.109.117
-                    _clientFeatures.URL, // ◄ /api/cuentab2b/read
-                    content)); // ◄ Mensaje
+                    FormatTemplate.LogLine,                             // ◄ formato de línea de log
+                    indent ? "\t" : string.Empty,                       // ◄ Tab o Empty
+                    WriteType(logType),                                 // ◄ INFO, WARN, FAIL
+                    DateTime.Now.ToString(FormatTemplate.LongDate),     // ◄ 2019-07-15 15:34:20.635
+                    _clientFeatures.Method,                             // ◄ GET, POST
+                    _clientFeatures.IP,                                 // ◄ 10.75.109.117
+                    _clientFeatures.URL,                                // ◄ /api/cuentab2b/read
+                    content));                                          // ◄ Mensaje
             }
             catch (Exception ex)
             {

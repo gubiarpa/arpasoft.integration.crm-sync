@@ -17,7 +17,7 @@ namespace Expertia.Estructura.Controllers.Base
     public abstract class BaseController<T> : ApiController
     {
         #region Properties
-        protected ILogFileManager _logFileManager;
+        private ILogFileManager _logFileManager;
         protected IClientFeatures _clientFeatures;
         #endregion
 
@@ -96,34 +96,17 @@ namespace Expertia.Estructura.Controllers.Base
         #endregion
 
         #region Log
-        //protected void WriteFieldLog(string fieldName, object value = null)
-        //{            
-        //    try
-        //    {
-        //        _logFileManager.WriteLine(LogType.Field, string.Format("{0} = {1}", fieldName, value), true);                
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
-
-        //protected void WriteFieldLog(string fieldName, int position, object value)
-        //{
-        //    WriteFieldLog(string.Format(fieldName, position), value);
-        //}
-
         protected void WriteEntityInLog(T entity)
         {
             WriteObjectInLog(entity);
         }
 
-        protected void WriteObjectInLog(object obj)
+        protected void WriteObjectInLog(object obj, LogType logType = LogType.Info)
         {
-            _logFileManager.WriteText(Stringify(BuildObject(obj), true) + "\n");
+            _logFileManager.WriteText(Stringify(BuildObject(obj, logType), true) + "\n");
         }
 
-        private object BuildObject(object obj)
+        private object BuildObject(object obj, LogType logType = LogType.Info)
         {
             try
             {
@@ -134,6 +117,7 @@ namespace Expertia.Estructura.Controllers.Base
                     {
                         IP = clientFeatures.IP,
                         Method = clientFeatures.Method,
+                        LogType = logType,
                         Url = clientFeatures.URL,
                         Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
                         Log = LogType.Info.ToString()

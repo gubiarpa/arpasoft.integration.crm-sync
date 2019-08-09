@@ -24,14 +24,12 @@ namespace Expertia.Estructura.Controllers
 
         public CuentaB2BController() : base()
         {
-            _mdmRepository = new CuentaB2B_MdmRepository();
             _rbRepository = new CuentaB2B_RbRepository();
         }
 
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
-            WriteObjectInLog("gubiarpa ::  Se llegó a esta instrucción");
             try
             {
                 var operationResult = _rbRepository.Create(entity);
@@ -49,7 +47,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                _logFileManager.WriteLine(LogType.Fail, ex.Message);
+                WriteObjectInLog(ex, LogType.Fail);
                 return InternalServerError(ex);
             }
         }
@@ -74,7 +72,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                _logFileManager.WriteLine(LogType.Fail, ex.Message);
+                WriteObjectInLog(ex, LogType.Fail);
                 return InternalServerError(ex);
             }
         }
