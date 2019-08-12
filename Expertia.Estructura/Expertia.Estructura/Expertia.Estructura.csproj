@@ -166,12 +166,11 @@
     <Compile Include="Models\CuentaB2C.cs" />
     <Compile Include="Models\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
-    <Compile Include="Models\CuentaForeignKey.cs" />
+    <Compile Include="Models\ForeignKey.cs" />
     <Compile Include="Models\Direccion.cs" />
     <Compile Include="Models\Documento.cs" />
     <Compile Include="Models\IdiomaComunicCliente.cs" />
     <Compile Include="Models\InteresesProductoActividad.cs" />
-    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Participante.cs" />
     <Compile Include="Models\Sitio.cs" />
     <Compile Include="Models\Telefono.cs" />
