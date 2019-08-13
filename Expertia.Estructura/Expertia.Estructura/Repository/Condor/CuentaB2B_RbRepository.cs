@@ -39,7 +39,7 @@ namespace Expertia.Estructura.Repository.Condor
                 // (04) P_NOMBRE_EMPRESA
                 AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, nombre_empresa); // ◄ Especificar el nombre
                 // (05) P_BRANCH
-                AddParameter("P_BRANCH", OracleDbType.Varchar2, entity.Branches.ToList()[0].RegionMercadoBranch); // ◄ No se tiene ID, sino descripción                
+                AddParameter("P_BRANCH", OracleDbType.Varchar2, entity.Branches.ToList()[0].Descripcion); // ◄ No se tiene ID, sino descripción                
                 // (06) P_COD_CLIENTE_MDM
                 AddParameter("P_COD_CLIENTE_MDM", OracleDbType.Varchar2, entity.ID);
                 // (07) P_COD_CLIENTE_CRM
@@ -135,7 +135,7 @@ namespace Expertia.Estructura.Repository.Condor
                 // (04) P_NOMBRE_EMPRESA
                 AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, nombre_empresa); // ◄ Especificar el nombre
                 // (05) P_BRANCH
-                AddParameter("P_BRANCH", OracleDbType.Varchar2, entity.Branches.ToList()[0].RegionMercadoBranch); // ◄ No se tiene ID, sino descripción                
+                AddParameter("P_BRANCH", OracleDbType.Varchar2, entity.Branches.ToList()[0].Descripcion); // ◄ No se tiene ID, sino descripción                
                 // (06) P_COD_CLIENTE_MDM
                 AddParameter("P_COD_CLIENTE_MDM", OracleDbType.Varchar2, entity.ID);
                 // (07) P_COD_CLIENTE_CRM

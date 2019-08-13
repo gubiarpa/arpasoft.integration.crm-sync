@@ -1,7 +1,8 @@
-﻿namespace Expertia.Estructura.Models
+﻿using Expertia.Estructura.Models.Behavior;
+
+namespace Expertia.Estructura.Models
 {
-    public class Branch
+    public class Branch : SimpleDesc
     {
-        public string RegionMercadoBranch { get; set; }
     }
 }

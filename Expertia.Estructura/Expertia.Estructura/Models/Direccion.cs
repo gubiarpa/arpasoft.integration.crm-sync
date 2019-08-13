@@ -1,12 +1,14 @@
-﻿namespace Expertia.Estructura.Models
+﻿using Expertia.Estructura.Models.Behavior;
+
+namespace Expertia.Estructura.Models
 {
-    public class Direccion
+    public class Direccion : UniqueBase
     {
-        public string Tipo { get; set; }
+        public TipoDireccion Tipo { get; set; }
         public string Descripcion { get; set; }
-        public string Pais { get; set; }
-        public string Departamento { get; set; }
-        public string Ciudad { get; set; }
-        public string Distrito { get; set; }
+        public Pais Pais { get; set; }
+        public Departamento Departamento { get; set; }
+        public Ciudad Ciudad { get; set; }
+        public Distrito Distrito { get; set; }
     }
 }

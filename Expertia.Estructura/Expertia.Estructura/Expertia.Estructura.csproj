@@ -159,6 +159,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Behavior\ISalesForce.cs" />
+    <Compile Include="Models\Behavior\SimpleDesc.cs" />
+    <Compile Include="Models\Behavior\UniqueBase.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\CanalRecibirInfo.cs" />
     <Compile Include="Models\Contacto.cs" />
@@ -214,6 +216,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DevPublishing.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\QAPublising.pubxml" />
   </ItemGroup>
   <PropertyGroup>

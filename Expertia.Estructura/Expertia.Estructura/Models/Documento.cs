@@ -1,8 +1,10 @@
-﻿namespace Expertia.Estructura.Models
+﻿using Expertia.Estructura.Models.Behavior;
+
+namespace Expertia.Estructura.Models
 {
-    public class Documento
+    public class Documento : UniqueBase
     {
-        public string Tipo { get; set; }
+        public TipoDocumento Tipo { get; set; }
         public string Numero { get; set; }
     }
 }

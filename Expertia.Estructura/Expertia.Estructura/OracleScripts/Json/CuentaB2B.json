@@ -1,0 +1,205 @@
+{
+    /* Properties */
+        // Cuenta
+    "id": "",
+    "idSalesForce": "0016300000euki4GBA", // 18 carácteres fijo
+    "fechaNacimOrAniv": "2019-08-13",
+    "logoFoto": "",
+    "recibirInformacion": false,
+    "fechaIniRelacionComercial": null,
+    "comentarios": "Agencia de clientes exigentes.", // 2000 carácteres
+        // B2B
+    "razonSocial": "Clientes Exigentes S.A.C.",
+    "alias": "CustExig",
+    "montoLineaCredito": 8000,
+
+    /* Foreign Key */
+        // Cuenta
+    "tipoPersona":
+        {
+            "id": "",
+            "descripcion": "Jurídica"
+        },
+    "puntoContacto":
+        {
+            "id": "",
+            "descripcion": "DOOR TO DOOR"
+        },
+    "nivelImportancia":
+        {
+            "id": "",
+            "descripcion": "MUY IMPORTANTE"
+        },
+    "tipoCuenta":
+        {
+            "id": "",
+            "descripcion": "Agencia Mayorista"
+        },
+    "estado":
+        {
+            "id": "",
+            "descripcion": "Potencial"
+        },
+    "paisProcedencia":
+        {
+            "id": "",
+            "descripcion": "Bélgica"
+        },
+    "condicionPago": // Podría cambiarse a múltiple, según las empresas
+        {
+            "id": "",
+            "descripcion": "60 DAYS RECEPTION DOCUMENT"
+        },
+    "tipoMonedaDeLineaCredito":
+        {
+            "id": "",
+            "descripcion": null
+        },
+
+    /* Multiple Key */
+        // Cuenta
+    "documentos": [
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "RUC"
+            },
+            "numero": "20201254521"
+        }
+    ],
+    "direcciones": [
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Oficina"
+            },
+            "descripcion": "Av. Brasil 3040 - Magdalena",
+            "pais": {
+                "id": "",
+                "descripcion": "Perú"
+            },
+            "departamento": {
+                "id": "",
+                "descripcion": ""
+            },
+            "ciudad": {
+                "id": "",
+                "descripcion": "LIMA"
+            },
+            "distrito": {
+                "id": "",
+                "descripcion": ""
+            }
+        }
+    ],
+    "telefonos": [
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Fijo"
+            },
+            "numero": "+51 (01) 465-2676"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Emergencia"
+            },
+            "numero": "+51 (01) 498-4242"
+        }
+    ],
+    "sitios": [
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "web"
+            },
+            "descripcion": "www.clientes-exigentes.com"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "facebook"
+            },
+            "descripcion": "www.facebook.com/clientesexigentes"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "twitter"
+            },
+            "descripcion": "www.twitter.com/clientesexigentes"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "instagram"
+            },
+            "descripcion": "www.instagram.com/custexig"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "linkedin"
+            },
+            "descripcion": "www.linkedin.com/in/custexig"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Corporative"
+            },
+            "descripcion": "www.clientes-exigentes.com"
+        }
+    ],
+    "correos": [
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Personal"
+            },
+            "descripcion": "pepefuentes@gmail.com"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Corporativo"
+            },
+            "descripcion": "jose.fuentes@clientes-exigentes.com"
+        }
+    ],
+    "participantes": [
+        {
+            "empleadoOrEjecutivoResponsable": "string",
+            "supervisorKam": "string",
+            "gerente": "string",
+            "unidadNegocio": "string",
+            "grupoColabEjecRegionBranch": "string",
+            "flagPrincipal": true
+        }
+    ],
+    "interesesProdActiv": [
+        {
+            "id": "",
+            "descripcion": "Familias"
+        }
+    ],
+    "canalesRecibirInfo": [
+        {
+            "id": "",
+            "descripcion": "Internet"
+        }
+    ],
+    "branches": [
+        {
+            "id": "",
+            "descripcion": "EUROPA 1"
+        }
+    ],
+    "idiomasComunicCliente": [
+        {
+            "id": "",
+            "descripcion": "Español"
+        }
+    ]
+}

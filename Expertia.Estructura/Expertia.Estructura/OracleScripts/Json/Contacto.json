@@ -1,0 +1,159 @@
+{
+    "id" : "",
+    "idSalesForce": "0029700000euki4XYZ",
+    "idCuentaSalesForce": "0016300000euki4GBA",
+    "nombre": "Guillermo Billy",
+    "apePaterno": "Arredondo",
+    "apeMaterno": "Palomino",
+    "fechaNacimiento": "1988-07-29",
+    "estadoCivil": {
+        "id": "",
+        "descripcion": "Casado"
+    },
+    "genero": {
+        "id": "",
+        "descripcion": "Masculino"
+    },
+    "nacionalidad": {
+        "id": "",
+        "descripcion": ""
+    },
+    "documentos": [
+        {
+            "id": "",
+            "tipo": {
+                "id": "",
+                "descripcion": "dni"
+            },
+            "numero": "47707540"
+        }
+    ],
+    "logoFoto": "",
+    "hijos": 2,
+    "profesion": {
+        "id": "",
+        "descripcion": "Ingeniería Informática"
+    },
+    "cargoEmpresa": {
+        "id": "",
+        "descripcion": "Analista Programador"
+    },
+    "tiempoEmpresa": 3,
+    "direcciones": [
+        {
+            "id": "",
+            "tipo": {
+                "id": "",
+                "descripcion": "Principal"
+            },
+            "descripcion": "Av. Javier Prado Oeste 1890",
+            "pais": {
+                "id": "",
+                "descripcion": "Perú"
+            },
+            "departamento": {
+                "id": "",
+                "descripcion": "Lima"
+            },
+            "ciudad": {
+                "id": "",
+                "descripcion": "Lima"
+            },
+            "distrito": {
+                "id": "",
+                "descripcion": "San Isidro"
+            }
+        }
+    ],
+    "telefonos": [
+        {
+            "id": "",
+            "tipo": {
+                "id": "",
+                "descripcion": "Móvil"
+            },
+            "numero": "+51935598917"
+        },
+        {
+            "id": "",
+            "tipo": {
+                "id": "",
+                "descripcion": "Emergencia"
+            },
+            "numero": "(01) 462-8256"
+        }
+    ],
+    "sitios": [
+        {
+            "id": "",
+            "tipo" :
+                {
+                    "id" : "",
+                    "descripcion" : "Facebook"
+                },
+            "numero" : "www.facebook.com/billyarredondo"
+        },
+        {
+            "id": "",
+            "tipo" :
+                {
+                    "id" : "",
+                    "descripcion" : "Instagram"
+                },
+            "numero" : "www.instagram.com/gubiarpa"
+        },
+        {
+            "id": "",
+            "tipo" :
+                {
+                    "id" : "",
+                    "descripcion" : "Twitter"
+                },
+            "numero" : "www.twitter.com/billy.arredondo"
+        }
+    ],
+    "correos": [
+        {
+            "id": "string",
+            "tipo" :
+                {
+                    "id" : "",
+                    "descripcion" : "Personal"
+                },
+            "numero" : "billy.arredondo@pucp.pe"
+        },
+        {
+            "id": "string",
+            "tipo" :
+                {
+                    "id" : "",
+                    "descripcion" : "Corporativo"
+                },
+            "numero" : "guillermo.arredondo@tiexpertia.com"
+        }
+    ],
+    "idiomasComunicCliente": [
+        {
+            "id" : "",
+            "descripcion" : "Inglés"
+        },
+        {
+            "id" : "",
+            "descripcion" : "Español"
+        }
+    ],
+    "nivelRiesgo": {
+        "id": "",
+        "descripcion": "Alto"
+    },
+    "regionMercadoBranch": {
+        "id": "",
+        "descripcion": ""
+    },
+    "estado": {
+        "id": "",
+        "descripcion": "Activo"
+    },
+    "comentarios": "Trabaja en Tecnologías de Información",
+    "origenContacto": ""
+}

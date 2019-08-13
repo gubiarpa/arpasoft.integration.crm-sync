@@ -1,7 +1,8 @@
-﻿namespace Expertia.Estructura.Models
+﻿using Expertia.Estructura.Models.Behavior;
+
+namespace Expertia.Estructura.Models
 {
-    public class CanalInformacion
+    public class CanalInformacion : SimpleDesc
     {
-        public string Descripcion { get; set; }
     }
 }

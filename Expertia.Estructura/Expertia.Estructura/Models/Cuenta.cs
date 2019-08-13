@@ -19,10 +19,10 @@ namespace Expertia.Estructura.Models
         #region ForeignKey
         public TipoPersona TipoPersona { get; set; }
         public PuntoContacto PuntoContacto { get; set; }
-        public NivelImportancia NivelImportancia { get; set; } // ♫ Es un número
+        public NivelImportancia NivelImportancia { get; set; }
         public TipoCuenta TipoCuenta { get; set; }
         public Estado Estado { get; set; }
-        public PaisProcedencia PaisProcedencia { get; set; }
+        public Pais PaisProcedencia { get; set; }
         #endregion
 
         #region MultipleKey
