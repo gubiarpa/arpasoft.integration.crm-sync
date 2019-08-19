@@ -4,10 +4,9 @@ using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class Cuenta : ISalesForce
+    public class Cuenta : UniqueBase, ISalesForce
     {
         #region Properties
-        public string ID { get; set; }
         public string IdSalesForce { get; set; }
         public DateTime? FechaNacimOrAniv { get; set; }
         public string LogoFoto { get; set; }

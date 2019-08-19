@@ -1,6 +1,11 @@
 {
     /* Properties */
         // Cuenta
+    "unidadNegocio" :
+        {
+            "id" : "",
+            "descripcion" : "CONDOR TRAVEL"
+        },
     "id": "",
     "idSalesForce": "0016300000euki4GBA", // 18 carácteres fijo
     "fechaNacimOrAniv": "2019-08-13",
@@ -45,15 +50,33 @@
             "id": "",
             "descripcion": "Bélgica"
         },
-    "condicionPago": // Podría cambiarse a múltiple, según las empresas
+    "condicionPago": [ 
+        // Podría cambiarse a múltiple, según las empresas
         {
-            "id": "",
-            "descripcion": "60 DAYS RECEPTION DOCUMENT"
+            "empresa" : {
+                "id" : "",
+                "descripcion" : "INTERAGENCIAS"
+            },
+            "tipo" : {
+                "id": "",
+                "descripcion": "60 DAYS RECEPTION DOCUMENT"
+            }
         },
+        {
+            "empresa" : {
+                "id" : "",
+                "descripcion" : "DESTINOS MUNDIALES"
+            },
+            "tipo" : {
+                "id": "",
+                "descripcion": "30 DAYS PRE PAYMENT/PAX'S ARRIVAL"
+            }
+        }
+    ],
     "tipoMonedaDeLineaCredito":
         {
             "id": "",
-            "descripcion": null
+            "descripcion": ""
         },
 
     /* Multiple Key */
@@ -106,6 +129,20 @@
                 "descripcion": "Emergencia"
             },
             "numero": "+51 (01) 498-4242"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Corporativo"
+            },
+            "numero": "+51 (01) 465-5000"
+        },
+        {
+            "tipo": {
+                "id": "",
+                "descripcion": "Auxiliar"
+            },
+            "numero": "+51 (01) 498-7456"
         }
     ],
     "sitios": [
@@ -170,11 +207,31 @@
     ],
     "participantes": [
         {
-            "empleadoOrEjecutivoResponsable": "string",
-            "supervisorKam": "string",
-            "gerente": "string",
-            "unidadNegocio": "string",
-            "grupoColabEjecRegionBranch": "string",
+			"empleadoOrEjecutivoResponsable":
+				{
+					"id": "",
+					"descripcion": "Edwin Terreros"
+				},
+			"supervisorKam":
+				{
+					"id": "",
+					"descripcion": "string"
+				},
+			"gerente":
+				{
+					"id": "",
+					"descripcion": "string"
+				},
+			"unidadNegocio":
+				{
+					"id": "",
+					"descripcion": "string"
+				},
+			"grupoColabEjecRegionBranch":
+				{
+					"id": "",
+					"descripcion": "string"
+				},
             "flagPrincipal": true
         }
     ],
@@ -201,5 +258,30 @@
             "id": "",
             "descripcion": "Español"
         }
-    ]
+    ],
+	"categoriaValor" :
+		{
+			"id" : "",
+			"description" : "SILVER"
+		},
+    "categoriaPerfilActitudTecnologica" :
+		{
+			"id" : "",
+			"description" : "SMART"
+		},
+    "categoriaPerfilFidelidad" :
+		{
+			"id" : "",
+			"description" : "FIEL"
+		},
+    "incentivo" :
+		{
+			"id" : "",
+			"description" : "INCENTIVO CON FACTURA"
+		},
+    "motivoEstado" : 
+		{
+			"id" : "",
+			"description" : "BAJA SUNAT"
+		}
 }

@@ -40,7 +40,7 @@ namespace Expertia.Estructura.Controllers.Base
         {
             try
             {
-                var testMessage = "Test Ok!";
+                var testMessage = DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss.fff");
                 testMessage.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {

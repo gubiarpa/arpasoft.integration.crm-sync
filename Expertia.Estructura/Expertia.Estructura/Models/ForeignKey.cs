@@ -8,7 +8,7 @@ namespace Expertia.Estructura.Models
     public class Estado : SimpleDesc { }
     // Tipos
     public class TipoCorreo : SimpleDesc { }
-    public class TipoCuenta : SimpleDesc { }    
+    public class TipoCuenta : SimpleDesc { }
     public class TipoDocumento : SimpleDesc { }
     public class TipoDireccion : SimpleDesc { }
     public class TipoPersona : SimpleDesc { }
@@ -38,9 +38,5 @@ namespace Expertia.Estructura.Models
     public class TipoViaje : SimpleDesc { }
     public class CategoriaViaje : SimpleDesc { }
     public class TipoAcompanante : SimpleDesc { }
-    #endregion
-
-    #region Contacto
-
     #endregion
 }
