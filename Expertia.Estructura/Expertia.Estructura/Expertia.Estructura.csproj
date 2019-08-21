@@ -158,26 +158,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Auditoria.cs" />
+    <Compile Include="Models\Auxiliar\Auditoria.cs" />
     <Compile Include="Models\Behavior\IAuditable.cs" />
     <Compile Include="Models\Behavior\ISalesForce.cs" />
     <Compile Include="Models\Behavior\IUnique.cs" />
     <Compile Include="Models\Behavior\SimpleDesc.cs" />
-    <Compile Include="Models\Branch.cs" />
-    <Compile Include="Models\CanalRecibirInfo.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\CuentaB2B.cs" />
     <Compile Include="Models\CuentaB2C.cs" />
-    <Compile Include="Models\Correo.cs" />
+    <Compile Include="Models\Auxiliar\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
-    <Compile Include="Models\ForeignKey.cs" />
-    <Compile Include="Models\Direccion.cs" />
-    <Compile Include="Models\Documento.cs" />
-    <Compile Include="Models\IdiomaComunicCliente.cs" />
-    <Compile Include="Models\InteresesProductoActividad.cs" />
-    <Compile Include="Models\Participante.cs" />
-    <Compile Include="Models\Sitio.cs" />
-    <Compile Include="Models\Telefono.cs" />
+    <Compile Include="Models\Foreign\ForeignKey.cs" />
+    <Compile Include="Models\Auxiliar\Direccion.cs" />
+    <Compile Include="Models\Auxiliar\Documento.cs" />
+    <Compile Include="Models\Auxiliar\Participante.cs" />
+    <Compile Include="Models\Auxiliar\Sitio.cs" />
+    <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Base\MdmBase.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />

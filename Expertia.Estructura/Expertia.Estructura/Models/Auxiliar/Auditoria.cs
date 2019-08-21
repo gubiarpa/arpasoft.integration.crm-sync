@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Expertia.Estructura.Models.Foreign;
+using System;
 
-namespace Expertia.Estructura.Models
+namespace Expertia.Estructura.Models.Auxiliar
 {
     public class Auditoria
     {

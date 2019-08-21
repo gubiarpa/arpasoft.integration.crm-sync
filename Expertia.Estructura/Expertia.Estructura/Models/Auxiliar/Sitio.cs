@@ -1,6 +1,7 @@
 ﻿using Expertia.Estructura.Models.Behavior;
+using Expertia.Estructura.Models.Foreign;
 
-namespace Expertia.Estructura.Models
+namespace Expertia.Estructura.Models.Auxiliar
 {
     public class Sitio : IUnique
     {

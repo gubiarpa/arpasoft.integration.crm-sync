@@ -1,4 +1,6 @@
-﻿namespace Expertia.Estructura.Models
+﻿using Expertia.Estructura.Models.Foreign;
+
+namespace Expertia.Estructura.Models
 {
     public class CuentaB2C : Cuenta
     {

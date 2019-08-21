@@ -1,12 +1,16 @@
 ﻿using Expertia.Estructura.Models.Behavior;
 
-namespace Expertia.Estructura.Models
+namespace Expertia.Estructura.Models.Foreign
 {
     #region Auditoria
     public class SystemUser : SimpleDesc { }
     #endregion
 
     #region Cuenta
+    public class CanalInformacion : SimpleDesc { }
+    public class Branch : SimpleDesc { }
+    public class IdiomaComunicCliente : SimpleDesc { }
+    public class InteresProdActiv : SimpleDesc { }
     public class UnidadNegocio : SimpleDesc { }
     public class PuntoContacto : SimpleDesc { }
     public class NivelImportancia : SimpleDesc { }

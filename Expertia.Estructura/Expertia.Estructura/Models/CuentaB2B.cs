@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Expertia.Estructura.Models.Foreign;
+using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {

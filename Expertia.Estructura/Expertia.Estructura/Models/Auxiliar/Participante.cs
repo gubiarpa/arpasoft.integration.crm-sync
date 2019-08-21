@@ -1,4 +1,4 @@
-﻿namespace Expertia.Estructura.Models
+﻿namespace Expertia.Estructura.Models.Auxiliar
 {
     public class Participante
     {

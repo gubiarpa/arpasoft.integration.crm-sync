@@ -1,4 +1,6 @@
-﻿using Expertia.Estructura.Models.Behavior;
+﻿using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Models.Behavior;
+using Expertia.Estructura.Models.Foreign;
 using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models

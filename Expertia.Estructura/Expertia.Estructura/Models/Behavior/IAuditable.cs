@@ -1,4 +1,6 @@
-﻿namespace Expertia.Estructura.Models.Behavior
+﻿using Expertia.Estructura.Models.Auxiliar;
+
+namespace Expertia.Estructura.Models.Behavior
 {
     public interface IAuditable
     {
