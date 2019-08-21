@@ -2,7 +2,12 @@
 
 namespace Expertia.Estructura.Models
 {
+    #region Auditoria
+    public class SystemUser : SimpleDesc { }
+    #endregion
+
     #region Cuenta
+    public class UnidadNegocio : SimpleDesc { }
     public class PuntoContacto : SimpleDesc { }
     public class NivelImportancia : SimpleDesc { }
     public class Estado : SimpleDesc { }

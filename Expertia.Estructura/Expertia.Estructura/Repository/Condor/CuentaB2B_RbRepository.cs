@@ -21,13 +21,6 @@ namespace Expertia.Estructura.Repository.Condor
             Operation operation = new Operation();
             object value;
 
-            #region Testing
-            entity.ID = "290788";
-            var nombre_usuario = "nsanchez";
-            var nombre_empresa = "CONDOR TRAVEL";
-            var nombre_tipo_persona = "Jurídica";
-            #endregion
-
             try
             {
                 // (01) P_CODIGO_ERROR
@@ -35,9 +28,9 @@ namespace Expertia.Estructura.Repository.Condor
                 // (02) P_MENSAJE_ERROR
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (03) P_NOMBRE_USUARIO
-                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, nombre_usuario); // ◄ No hay campos de auditoría
+                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, entity.Auditoria.CreateUser.Descripcion); // ◄ No hay campos de auditoría
                 // (04) P_NOMBRE_EMPRESA
-                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, nombre_empresa); // ◄ Especificar el nombre
+                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, entity.UnidadNegocio.Descripcion); // ◄ Especificar el nombre
                 // (05) P_BRANCH
                 AddParameter("P_BRANCH", OracleDbType.Varchar2, entity.Branches.ToList()[0].Descripcion); // ◄ No se tiene ID, sino descripción                
                 // (06) P_COD_CLIENTE_MDM
@@ -53,9 +46,10 @@ namespace Expertia.Estructura.Repository.Condor
                 // (11) P_ESTADO_CLIENTE
                 AddParameter("P_ESTADO_CLIENTE", OracleDbType.Varchar2, entity.Estado);
                 // (12) P_NOMBRE_CONDICION_PAGO
-                AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, entity.CondicionPago.Descripcion);
+                if ((entity.CondicionPago != null) && (entity.CondicionPago.ToList().Count > 0)) value = entity.CondicionPago.ToList()[0].Descripcion; else value = DBNull.Value;
+                AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
                 // (13) P_NOMBRE_TIPO_PERSONA
-                AddParameter("P_NOMBRE_TIPO_PERSONA", OracleDbType.Varchar2, nombre_tipo_persona);
+                AddParameter("P_NOMBRE_TIPO_PERSONA", OracleDbType.Varchar2, entity.TipoPersona.Descripcion);
                 // (14) P_NOMBRE_PAIS
                 AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Pais);
                 // (15) P_NOMBRE_CIUDAD
@@ -117,13 +111,6 @@ namespace Expertia.Estructura.Repository.Condor
             Operation operation = new Operation();
             object value;
 
-            #region Testing
-            entity.ID = "290788";
-            var nombre_usuario = "nsanchez";
-            var nombre_empresa = "CONDOR TRAVEL";
-            var nombre_tipo_persona = "Jurídica";
-            #endregion
-
             try
             {
                 // (01) P_CODIGO_ERROR
@@ -131,9 +118,9 @@ namespace Expertia.Estructura.Repository.Condor
                 // (02) P_MENSAJE_ERROR
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (03) P_NOMBRE_USUARIO
-                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, nombre_usuario); // ◄ No hay campos de auditoría
+                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, entity.Auditoria.ModifyUser.Descripcion); // ◄ No hay campos de auditoría
                 // (04) P_NOMBRE_EMPRESA
-                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, nombre_empresa); // ◄ Especificar el nombre
+                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, entity.UnidadNegocio.Descripcion); // ◄ Especificar el nombre
                 // (05) P_BRANCH
                 AddParameter("P_BRANCH", OracleDbType.Varchar2, entity.Branches.ToList()[0].Descripcion); // ◄ No se tiene ID, sino descripción                
                 // (06) P_COD_CLIENTE_MDM
@@ -149,9 +136,10 @@ namespace Expertia.Estructura.Repository.Condor
                 // (11) P_ESTADO_CLIENTE
                 AddParameter("P_ESTADO_CLIENTE", OracleDbType.Varchar2, entity.Estado);
                 // (12) P_NOMBRE_CONDICION_PAGO
-                AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, entity.CondicionPago.Descripcion);
+                if ((entity.CondicionPago != null) && (entity.CondicionPago.ToList().Count > 0)) value = entity.CondicionPago.ToList()[0].Descripcion; else value = DBNull.Value;
+                AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
                 // (13) P_NOMBRE_TIPO_PERSONA
-                AddParameter("P_NOMBRE_TIPO_PERSONA", OracleDbType.Varchar2, nombre_tipo_persona);
+                AddParameter("P_NOMBRE_TIPO_PERSONA", OracleDbType.Varchar2, entity.TipoPersona.Descripcion);
                 // (14) P_NOMBRE_PAIS
                 AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Pais);
                 // (15) P_NOMBRE_CIUDAD

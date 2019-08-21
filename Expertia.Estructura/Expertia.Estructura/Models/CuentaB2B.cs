@@ -1,4 +1,6 @@
-﻿namespace Expertia.Estructura.Models
+﻿using System.Collections.Generic;
+
+namespace Expertia.Estructura.Models
 {
     public class CuentaB2B : Cuenta
     {
@@ -9,8 +11,11 @@
         #endregion
 
         #region ForeignKey
-        public CondicionPago CondicionPago { get; set; } // Condición de Pago
         public TipoMoneda TipoMonedaDeLineaCredito { get; set; } // Tipo de moneda de Linea de credito
+        #endregion
+
+        #region MultipleKey
+        public IEnumerable<CondicionPago> CondicionPago { get; set; } // Condición de Pago
         #endregion
     }
 }

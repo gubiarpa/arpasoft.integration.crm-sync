@@ -2,8 +2,9 @@
 
 namespace Expertia.Estructura.Models
 {
-    public class Direccion : UniqueBase
+    public class Direccion : IUnique
     {
+        public string ID { get; set; }
         public TipoDireccion Tipo { get; set; }
         public string Descripcion { get; set; }
         public Pais Pais { get; set; }

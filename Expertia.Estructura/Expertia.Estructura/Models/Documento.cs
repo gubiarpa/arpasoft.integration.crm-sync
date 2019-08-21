@@ -2,8 +2,9 @@
 
 namespace Expertia.Estructura.Models
 {
-    public class Documento : UniqueBase
+    public class Documento : IUnique
     {
+        public string ID { get; set; }
         public TipoDocumento Tipo { get; set; }
         public string Numero { get; set; }
     }

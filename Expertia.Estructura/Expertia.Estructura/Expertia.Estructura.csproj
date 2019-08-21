@@ -158,9 +158,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Auditoria.cs" />
+    <Compile Include="Models\Behavior\IAuditable.cs" />
     <Compile Include="Models\Behavior\ISalesForce.cs" />
+    <Compile Include="Models\Behavior\IUnique.cs" />
     <Compile Include="Models\Behavior\SimpleDesc.cs" />
-    <Compile Include="Models\Behavior\UniqueBase.cs" />
     <Compile Include="Models\Branch.cs" />
     <Compile Include="Models\CanalRecibirInfo.cs" />
     <Compile Include="Models\Contacto.cs" />
@@ -179,7 +181,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Base\MdmBase.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
-    <Compile Include="Repository\Base\OracleDbType.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\ILookupId.cs" />
     <Compile Include="Repository\Condor\Contacto_RbRepository.cs" />

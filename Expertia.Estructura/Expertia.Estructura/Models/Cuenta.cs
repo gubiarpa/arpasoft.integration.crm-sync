@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class Cuenta : UniqueBase, ISalesForce
+    public class Cuenta : IUnique, ISalesForce, IAuditable
     {
         #region Properties
+        public string ID { get; set; }
         public string IdSalesForce { get; set; }
         public DateTime? FechaNacimOrAniv { get; set; }
         public string LogoFoto { get; set; }
@@ -16,6 +17,7 @@ namespace Expertia.Estructura.Models
         #endregion
 
         #region ForeignKey
+        public UnidadNegocio UnidadNegocio { get; set; }
         public TipoPersona TipoPersona { get; set; }
         public PuntoContacto PuntoContacto { get; set; }
         public NivelImportancia NivelImportancia { get; set; }
@@ -35,6 +37,10 @@ namespace Expertia.Estructura.Models
         public IEnumerable<CanalInformacion> CanalesRecibirInfo { get; set; }
         public IEnumerable<Branch> Branches { get; set; }
         public IEnumerable<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
+        #endregion
+
+        #region Auditoria
+        public Auditoria Auditoria { get; set; }
         #endregion
     }
 }
