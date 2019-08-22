@@ -48,4 +48,8 @@ namespace Expertia.Estructura.Models.Foreign
     public class CategoriaViaje : SimpleDesc { }
     public class TipoAcompanante : SimpleDesc { }
     #endregion
+
+    #region Pago
+    public class FormaPago : SimpleDesc { }
+    #endregion
 }
