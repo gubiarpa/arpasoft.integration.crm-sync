@@ -42,20 +42,20 @@ namespace Expertia.Estructura.Repository.Condor
                 // (09) P_ALIAS_CLIENTE
                 AddParameter("P_ALIAS_CLIENTE", OracleDbType.Varchar2, entity.Alias.Coalesce());
                 // (10) P_NOMBRE_TIPO_CLIENTE
-                AddParameter("P_NOMBRE_TIPO_CLIENTE", OracleDbType.Varchar2, entity.TipoCuenta); // ◄ No se tiene ID, sino descripción
+                AddParameter("P_NOMBRE_TIPO_CLIENTE", OracleDbType.Varchar2, entity.TipoCuenta.Descripcion); // ◄ No se tiene ID, sino descripción
                 // (11) P_ESTADO_CLIENTE
-                AddParameter("P_ESTADO_CLIENTE", OracleDbType.Varchar2, entity.Estado);
+                AddParameter("P_ESTADO_CLIENTE", OracleDbType.Varchar2, entity.Estado.Descripcion);
                 // (12) P_NOMBRE_CONDICION_PAGO
                 if ((entity.CondicionesPago != null) && (entity.CondicionesPago.ToList().Count > 0)) value = entity.CondicionesPago.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
                 // (13) P_NOMBRE_TIPO_PERSONA
                 AddParameter("P_NOMBRE_TIPO_PERSONA", OracleDbType.Varchar2, entity.TipoPersona.Descripcion);
                 // (14) P_NOMBRE_PAIS
-                AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Pais);
+                AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Pais.Descripcion);
                 // (15) P_NOMBRE_CIUDAD
-                AddParameter("P_NOMBRE_CIUDAD", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Ciudad);
+                AddParameter("P_NOMBRE_CIUDAD", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Ciudad.Descripcion);
                 // (16) P_NOMBRE_IDIOMA
-                AddParameter("P_NOMBRE_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.ToList()[0].ID);
+                AddParameter("P_NOMBRE_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.ToList()[0].Descripcion);
                 // (17) P_EMAIL1
                 if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_EMAIL1", OracleDbType.Varchar2, value);
