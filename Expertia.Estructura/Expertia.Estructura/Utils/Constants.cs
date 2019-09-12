@@ -74,12 +74,12 @@
     #endregion
 
     #region UnidadNegocio
-    public static class UnidadNegocioKeys
+    public enum UnidadNegocioKeys
     {
-        public const string CondorTravel = "CondorTravel";
-        public const string DestinosMundiales = "DestinosMundiales";
-        public const string NuevoMundo = "NuevoMundo";
-        public const string InterAgencias = "InterAgencias";
+        CondorTravel,
+        DestinosMundiales,
+        NuevoMundo,
+        InterAgencias
     }
     #endregion
 

@@ -7,7 +7,7 @@ namespace Expertia.Estructura.Models.Foreign
     #endregion
 
     #region Cuenta
-    public class UnidadNegocio : SimpleDesc { }
+    //public class UnidadNegocio : SimpleDesc { }
     public class CanalInformacion : SimpleDesc { }
     public class Branch : SimpleDesc { }
     public class IdiomaComunicCliente : SimpleDesc { }

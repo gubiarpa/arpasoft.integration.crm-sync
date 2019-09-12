@@ -1,4 +1,4 @@
-﻿using Expertia.Estructura.Models.Foreign;
+﻿using Expertia.Estructura.Models.Auxiliar;
 
 namespace Expertia.Estructura.Models.Behavior
 {

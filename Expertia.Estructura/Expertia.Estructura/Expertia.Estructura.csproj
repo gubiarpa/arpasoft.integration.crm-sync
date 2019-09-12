@@ -159,6 +159,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Auxiliar\Auditoria.cs" />
+    <Compile Include="Models\Auxiliar\UnidadNegocio.cs" />
     <Compile Include="Models\Behavior\IAuditable.cs" />
     <Compile Include="Models\Behavior\ISalesForce.cs" />
     <Compile Include="Models\Behavior\IUnidadNegocio.cs" />

@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Behavior;
 using Expertia.Estructura.Filters;
+using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
 using System;
@@ -56,6 +57,31 @@ namespace Expertia.Estructura.Controllers.Base
                 ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError();
             }
+        }
+        #endregion
+
+        #region Auxiliar
+        protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName) // Ejm. "CONDOR TRAVEL"
+        {
+            UnidadNegocioKeys unidadNegocioId;
+
+            if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetName())))
+            {
+                return UnidadNegocioKeys.CondorTravel;
+            }
+            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetName())))
+            {
+                return UnidadNegocioKeys.DestinosMundiales;
+            }
+            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetName())))
+            {
+                return UnidadNegocioKeys.InterAgencias;
+            }
+            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetName())))
+            {
+                return UnidadNegocioKeys.NuevoMundo;
+            }
+            return null;
         }
         #endregion
     }

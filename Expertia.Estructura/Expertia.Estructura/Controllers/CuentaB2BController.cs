@@ -14,20 +14,38 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.CuentaB2B)]
     public class CuentaB2BController : BaseController<CuentaB2B>
     {
-        private ICrud<CuentaB2B> _rbRepository;
-
-        public CuentaB2BController() : base()
-        {
-            _rbRepository = new CuentaB2B_RbRepository();
-        }
+        private ICrud<CuentaB2B> _crmRepository;
 
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
             try
             {
-                var operationResult = _rbRepository.Create(entity);
+                #region UnidadNegocio
+                // 1. Conversión
+                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
+
+                // 2. Selección
+                switch (entity.UnidadNegocio.ID)
+                {
+                    case UnidadNegocioKeys.CondorTravel:
+                        _crmRepository = new CuentaB2B_RbRepository();
+                        break;
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        break;
+                    case UnidadNegocioKeys.NuevoMundo:
+                        break;
+                    case UnidadNegocioKeys.InterAgencias:
+                        break;
+                    default:
+                        break;
+                }
+                #endregion
+
+                var operationResult = _crmRepository.Create(entity);
+
                 entity.WriteLogObject(_logFileManager, _clientFeatures);
+
                 return Ok(new
                 {
                     Result = new
@@ -51,7 +69,7 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                var operationResult = _rbRepository.Update(entity);
+                var operationResult = _crmRepository.Update(entity);
                 entity.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
