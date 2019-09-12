@@ -15,6 +15,10 @@ namespace Expertia.Estructura.Models.Foreign
     public class PuntoContacto : SimpleDesc { }
     public class NivelImportancia : SimpleDesc { }
     public class Estado : SimpleDesc { }
+    // Participantes
+    public class Empleado : SimpleDesc { }    
+    public class GrupoColaborador : SimpleDesc { }
+    public class FlagPrincipal : SimpleDesc { }
     // Tipos
     public class TipoCorreo : SimpleDesc { }
     public class TipoCuenta : SimpleDesc { }
