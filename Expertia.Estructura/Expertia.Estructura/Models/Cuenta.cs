@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class Cuenta : IUnique, ISalesForce, IAuditable
+    public class Cuenta : IUnique, ISalesForce, IAuditable, IUnidadNegocio
     {
         #region Properties
         public string ID { get; set; }

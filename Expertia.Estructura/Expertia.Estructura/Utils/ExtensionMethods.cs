@@ -44,7 +44,20 @@ namespace Expertia.Estructura.Utils
         #region Log
         public static void WriteLogObject(this object obj, ILogFileManager logFileManager, IClientFeatures clientFeatures, LogType logType = LogType.Info, bool indented = true)
         {
-            logFileManager.WriteText(obj.BuildLogObject(clientFeatures, logType).Stringify(indented) + "\n");
+            try
+            {
+                logFileManager.WriteText(obj.BuildLogObject(clientFeatures, logType).Stringify(indented) + "\n");
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    logFileManager.WriteText(ex.BuildLogObject(clientFeatures, logType).Stringify(indented) + "\n");
+                }
+                catch
+                {
+                }
+            }
         }
 
         private static object BuildLogObject(this object obj, IClientFeatures clientFeatures, LogType logType = LogType.Info)
@@ -55,8 +68,8 @@ namespace Expertia.Estructura.Utils
                 {
                     Client = new
                     {
-                        IP = clientFeatures.IP,
-                        Method = clientFeatures.Method,
+                        clientFeatures.IP,
+                        clientFeatures.Method,
                         Log = logType,
                         Url = clientFeatures.URL,
                         Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")

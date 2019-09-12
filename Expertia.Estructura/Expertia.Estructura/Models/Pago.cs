@@ -2,9 +2,6 @@
 using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Models.Foreign;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Models
 {

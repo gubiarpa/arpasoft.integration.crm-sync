@@ -23,6 +23,7 @@ namespace Expertia.Estructura.Repository.Condor
 
             try
             {
+                #region Parameters
                 // (01) P_CODIGO_ERROR
                 AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (02) P_MENSAJE_ERROR
@@ -80,20 +81,27 @@ namespace Expertia.Estructura.Repository.Condor
                 AddParameter("P_DIRECCION", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Descripcion.Coalesce(DBNull.Value));
                 // (25) P_NOTAS */
                 AddParameter("P_NOTAS", OracleDbType.Varchar2, entity.Comentarios);
+                #endregion
 
+                #region Invoke
                 ExecuteSPWithoutResults("CONDOR.CRM_PKG.SP_CREAR_CLIENTE");
 
                 operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
                 operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");
                 operation[Operation.Result] = ResultType.Success;
+                #endregion
+
+                return operation;
             }
             catch (Exception ex)
             {
+                #region ErrorOut
                 operation[Operation.Result] = ResultType.Fail;
                 operation[Operation.ErrorMessage] = ex.Message;
+                #endregion
+
                 throw ex;
             }
-            return operation;
         }
 
         public Operation Delete(CuentaB2B entity)
@@ -113,6 +121,7 @@ namespace Expertia.Estructura.Repository.Condor
 
             try
             {
+                #region Parameters
                 // (01) P_CODIGO_ERROR
                 AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (02) P_MENSAJE_ERROR
@@ -170,20 +179,27 @@ namespace Expertia.Estructura.Repository.Condor
                 AddParameter("P_DIRECCION", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Descripcion.Coalesce(DBNull.Value));
                 // (25) P_NOTAS */
                 AddParameter("P_NOTAS", OracleDbType.Varchar2, entity.Comentarios);
+                #endregion
 
+                #region Invoke
                 ExecuteSPWithoutResults("CONDOR.CRM_PKG.SP_ACTUALIZAR_CLIENTE");
 
                 operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
                 operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");
                 operation[Operation.Result] = ResultType.Success;
+                #endregion
+
+                return operation;
             }
             catch (Exception ex)
             {
+                #region ErrorOut
                 operation[Operation.Result] = ResultType.Fail;
                 operation[Operation.ErrorMessage] = ex.Message;
+                #endregion
+
                 throw ex;
             }
-            return operation;
         }
 
         protected override IEnumerable<CuentaB2B> DataTableToEnumerable(DataTable dt)

@@ -16,7 +16,7 @@ namespace Expertia.Estructura.Models.Foreign
     public class NivelImportancia : SimpleDesc { }
     public class Estado : SimpleDesc { }
     // Participantes
-    public class Empleado : SimpleDesc { }    
+    public class Empleado : SimpleDesc { }
     public class GrupoColaborador : SimpleDesc { }
     public class FlagPrincipal : SimpleDesc { }
     // Tipos
