@@ -15,7 +15,7 @@ namespace Expertia.Estructura.Controllers
 
         public ContactoController() : base()
         {
-            _rbRepository = new Contacto_RbRepository();
+            _rbRepository = new Contacto_CT_Repository();
         }
 
         [Route(RouteAction.Create)]

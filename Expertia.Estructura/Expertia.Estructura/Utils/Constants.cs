@@ -12,6 +12,8 @@
     {
         public const string MDMConnKey = "MdmConnKey";
         public const string CondorConnKey = "RbConnKey";
+        public const string DestinosMundiales = "DestinosMundiales";
+        public const string NuevoMundoConnKey = "NuevoMundoConnKey";
     }
 
     public static class LogKeys

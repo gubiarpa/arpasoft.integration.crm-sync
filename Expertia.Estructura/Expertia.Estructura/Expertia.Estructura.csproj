@@ -181,11 +181,9 @@
     <Compile Include="Repository\Base\MdmBase.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
-    <Compile Include="Repository\Behavior\ILookupId.cs" />
-    <Compile Include="Repository\Condor\Contacto_RbRepository.cs" />
-    <Compile Include="Repository\Condor\CuentaB2B_RbRepository.cs" />
-    <Compile Include="Repository\MDM\CuentaB2B_MdmRepository.cs" />
-    <Compile Include="Repository\MDM\CuentaB2B_FK_MdmRepository.cs" />
+    <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
+    <Compile Include="Repository\Condor\CuentaB2B_CT_Repository.cs" />
+    <Compile Include="Repository\NuevoMundo\CuentaB2B_NM_Repository.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
     <Compile Include="Utils\Behavior\ILogFileManager.cs" />
     <Compile Include="Utils\ClientFeatures.cs" />
@@ -214,6 +212,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Repository\DestinosMundiales\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

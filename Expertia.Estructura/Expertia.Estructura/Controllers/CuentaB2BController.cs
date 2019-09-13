@@ -29,7 +29,7 @@ namespace Expertia.Estructura.Controllers
                 switch (entity.UnidadNegocio.ID)
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _crmRepository = new CuentaB2B_RbRepository();
+                        _crmRepository = new CuentaB2B_CT_Repository();
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                         break;

@@ -10,9 +10,9 @@ using System.Linq;
 
 namespace Expertia.Estructura.Repository.Condor
 {
-    public class CuentaB2B_RbRepository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
+    public class CuentaB2B_CT_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
     {
-        public CuentaB2B_RbRepository() : base(ConnectionKeys.CondorConnKey)
+        public CuentaB2B_CT_Repository() : base(ConnectionKeys.CondorConnKey)
         {
         }
 

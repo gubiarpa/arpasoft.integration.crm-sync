@@ -1,6 +1,5 @@
 ﻿using Expertia.Estructura.Controllers.Behavior;
 using Expertia.Estructura.Filters;
-using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
 using System;
@@ -63,8 +62,6 @@ namespace Expertia.Estructura.Controllers.Base
         #region Auxiliar
         protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName) // Ejm. "CONDOR TRAVEL"
         {
-            UnidadNegocioKeys unidadNegocioId;
-
             if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetName())))
             {
                 return UnidadNegocioKeys.CondorTravel;
