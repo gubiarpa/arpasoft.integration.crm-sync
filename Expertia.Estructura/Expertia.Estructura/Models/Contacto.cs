@@ -1,11 +1,12 @@
 ﻿using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Models.Foreign;
+using System;
 using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class Contacto : IUnique, ISalesForce, IAuditable
+    public class Contacto : IUnique, ISalesForce, IAuditable, IUnidadNegocio
     {
         #region Properties
         public string ID { get; set; }
@@ -14,7 +15,7 @@ namespace Expertia.Estructura.Models
         public string Nombre { get; set; }
         public string ApePaterno { get; set; }
         public string ApeMaterno { get; set; }
-        public string FechaNacimiento { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
         public string LogoFoto { get; set; }
         public int Hijos { get; set; }
         public int TiempoEmpresa { get; set; }
@@ -23,6 +24,7 @@ namespace Expertia.Estructura.Models
         #endregion
 
         #region ForeignKey
+        public UnidadNegocio UnidadNegocio { get; set; }
         public EstadoCivil EstadoCivil { get; set; }
         public Genero Genero { get; set; }
         public Nacionalidad Nacionalidad { get; set; }

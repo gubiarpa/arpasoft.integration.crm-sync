@@ -18,11 +18,11 @@ namespace Expertia.Estructura.Repository.Condor
 
         public Operation Create(CuentaB2B entity)
         {
-            Operation operation = new Operation();
-            object value;
-
             try
             {
+                Operation operation = new Operation();
+                object value;
+
                 #region Parameters
                 // (01) P_CODIGO_ERROR
                 AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
@@ -95,11 +95,6 @@ namespace Expertia.Estructura.Repository.Condor
             }
             catch (Exception ex)
             {
-                #region ErrorOut
-                operation[Operation.Result] = ResultType.Fail;
-                operation[Operation.ErrorMessage] = ex.Message;
-                #endregion
-
                 throw ex;
             }
         }
@@ -116,11 +111,11 @@ namespace Expertia.Estructura.Repository.Condor
 
         public Operation Update(CuentaB2B entity)
         {
-            Operation operation = new Operation();
-            object value;
-
             try
             {
+                Operation operation = new Operation();
+                object value;
+
                 #region Parameters
                 // (01) P_CODIGO_ERROR
                 AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
@@ -193,11 +188,6 @@ namespace Expertia.Estructura.Repository.Condor
             }
             catch (Exception ex)
             {
-                #region ErrorOut
-                operation[Operation.Result] = ResultType.Fail;
-                operation[Operation.ErrorMessage] = ex.Message;
-                #endregion
-
                 throw ex;
             }
         }

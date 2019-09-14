@@ -18,65 +18,59 @@ namespace Expertia.Estructura.Repository.Condor
 
         public Operation Create(Contacto entity)
         {
-            Operation operation = new Operation();
-            object value;
-
-            #region Testing
-            //entity.ID = "290788";
-            var nombre_usuario = "nsanchez";
-            var nombre_empresa = "CONDOR TRAVEL";
-            #endregion
-
             try
             {
+                Operation operation = new Operation();
+                object value;
+
                 #region Parameters
                 // (01) P_CODIGO_ERROR
                 AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (02) P_MENSAJE_ERROR
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (03) P_NOMBRE_USUARIO
-                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, nombre_usuario); // ◄ No hay campos de auditoría
+                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, entity.Auditoria.CreateUser.Descripcion);
                 // (04) P_NOMBRE_EMPRESA
-                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, nombre_empresa); // ◄ Especificar el nombre
-                // (00) P_COD_CLIENTE_MDM
+                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, entity.UnidadNegocio.Descripcion);
+                // (05) P_COD_CLIENTE_MDM
                 AddParameter("P_COD_CLIENTE_MDM", OracleDbType.Varchar2, null);
-                // (00) P_COD_CLIENTE_CRM
+                // (06) P_COD_CLIENTE_CRM
                 AddParameter("P_COD_CLIENTE_CRM", OracleDbType.Varchar2, entity.IdCuentaSalesForce);
-                // (00) P_COD_CONTACTO_MDM
+                // (07) P_COD_CONTACTO_MDM
                 AddParameter("P_COD_CONTACTO_MDM", OracleDbType.Varchar2, null);
-                // (00) P_COD_CONTACTO_CRM
+                // (08) P_COD_CONTACTO_CRM
                 AddParameter("P_COD_CONTACTO_CRM", OracleDbType.Varchar2, entity.IdSalesForce);
-                // (00) P_NOMBRES
+                // (09) P_NOMBRES
                 AddParameter("P_NOMBRES", OracleDbType.Varchar2, entity.Nombre);
-                // (00) P_APELLIDO_PATERNO
+                // (10) P_APELLIDO_PATERNO
                 AddParameter("P_APELLIDO_PATERNO", OracleDbType.Varchar2, entity.ApePaterno);
-                // (00) P_APELLIDO_MATERNO
+                // (10) P_APELLIDO_MATERNO
                 AddParameter("P_APELLIDO_MATERNO", OracleDbType.Varchar2, entity.ApeMaterno);
-                // (00) P_ESTADO_CIVIL
-                AddParameter("P_ESTADO_CIVIL", OracleDbType.Varchar2, entity.EstadoCivil);
-                // (00) P_GENERO
-                AddParameter("P_GENERO", OracleDbType.Varchar2, entity.Genero);
-                // (00) P_FECHA_NACIMIENTO
+                // (11) P_ESTADO_CIVIL
+                AddParameter("P_ESTADO_CIVIL", OracleDbType.Varchar2, entity.EstadoCivil.Descripcion);
+                // (12) P_GENERO
+                AddParameter("P_GENERO", OracleDbType.Varchar2, entity.Genero.Descripcion);
+                // (13) P_FECHA_NACIMIENTO
                 AddParameter("P_FECHA_NACIMIENTO", OracleDbType.Varchar2, entity.FechaNacimiento);
-                // (00) P_EMAIL1
+                // (14) P_EMAIL1
                 if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_EMAIL1", OracleDbType.Varchar2, value);
-                // (00) P_EMAIL2
+                // (15) P_EMAIL2
                 if ((entity.Correos != null) && (entity.Correos.ToList().Count > 1)) value = entity.Correos.ToList()[1].Descripcion; else value = DBNull.Value;
                 AddParameter("P_EMAIL2", OracleDbType.Varchar2, value);
-                // (00) P_TELEFONO1
+                // (16) P_TELEFONO1
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 0)) value = entity.Telefonos.ToList()[0].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO1", OracleDbType.Varchar2, value);
-                // (00) P_TELEFONO2
+                // (17) P_TELEFONO2
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 1)) value = entity.Telefonos.ToList()[1].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO2", OracleDbType.Varchar2, value);
-                // (00) P_IDIOMA
+                // (18) P_IDIOMA
                 AddParameter("P_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.ToList()[0].ID);
-                // (00) P_CARGO
-                AddParameter("P_CARGO", OracleDbType.Varchar2, entity.CargoEmpresa);
-                // (00) P_ACTIVO
-                AddParameter("P_ACTIVO", OracleDbType.Varchar2, entity.Estado);
-                // (25) P_NOTAS
+                // (19) P_CARGO
+                AddParameter("P_CARGO", OracleDbType.Varchar2, entity.CargoEmpresa.Descripcion);
+                // (20) P_ACTIVO → ¿Éste es el campo?
+                AddParameter("P_ACTIVO", OracleDbType.Varchar2, entity.Estado.Descripcion);
+                // (21) P_NOTAS
                 AddParameter("P_NOTAS", OracleDbType.Varchar2, entity.Comentarios);
                 #endregion
 
@@ -92,11 +86,6 @@ namespace Expertia.Estructura.Repository.Condor
             }
             catch (Exception ex)
             {
-                #region ErrorOut
-                operation[Operation.Result] = ResultType.Fail;
-                operation[Operation.ErrorMessage] = ex.Message;
-                #endregion
-
                 throw ex;
             }
         }
@@ -113,26 +102,20 @@ namespace Expertia.Estructura.Repository.Condor
 
         public Operation Update(Contacto entity)
         {
-            Operation operation = new Operation();
-            object value;
-
-            #region Testing
-            //entity.ID = "290788";
-            var nombre_usuario = "nsanchez";
-            var nombre_empresa = "CONDOR TRAVEL";
-            #endregion
-
             try
             {
+                Operation operation = new Operation();
+                object value;
+
                 #region Parameters
                 // (01) P_CODIGO_ERROR
                 AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (02) P_MENSAJE_ERROR
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (03) P_NOMBRE_USUARIO
-                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, nombre_usuario); // ◄ No hay campos de auditoría
+                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, entity.Auditoria.CreateUser.Descripcion);
                 // (04) P_NOMBRE_EMPRESA
-                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, nombre_empresa); // ◄ Especificar el nombre
+                AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, entity.UnidadNegocio.Descripcion);
                 // (00) P_COD_CLIENTE_MDM
                 AddParameter("P_COD_CLIENTE_MDM", OracleDbType.Varchar2, null);
                 // (00) P_COD_CLIENTE_CRM
@@ -148,9 +131,9 @@ namespace Expertia.Estructura.Repository.Condor
                 // (00) P_APELLIDO_MATERNO
                 AddParameter("P_APELLIDO_MATERNO", OracleDbType.Varchar2, entity.ApeMaterno);
                 // (00) P_ESTADO_CIVIL
-                AddParameter("P_ESTADO_CIVIL", OracleDbType.Varchar2, entity.EstadoCivil);
+                AddParameter("P_ESTADO_CIVIL", OracleDbType.Varchar2, entity.EstadoCivil.Descripcion);
                 // (00) P_GENERO
-                AddParameter("P_GENERO", OracleDbType.Varchar2, entity.Genero);
+                AddParameter("P_GENERO", OracleDbType.Varchar2, entity.Genero.Descripcion);
                 // (00) P_FECHA_NACIMIENTO
                 AddParameter("P_FECHA_NACIMIENTO", OracleDbType.Varchar2, entity.FechaNacimiento);
                 // (00) P_EMAIL1
@@ -168,9 +151,9 @@ namespace Expertia.Estructura.Repository.Condor
                 // (00) P_IDIOMA
                 AddParameter("P_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.ToList()[0].ID);
                 // (00) P_CARGO
-                AddParameter("P_CARGO", OracleDbType.Varchar2, entity.CargoEmpresa);
-                // (00) P_ACTIVO
-                AddParameter("P_ACTIVO", OracleDbType.Varchar2, entity.Estado);
+                AddParameter("P_CARGO", OracleDbType.Varchar2, entity.CargoEmpresa.Descripcion);
+                // (00) P_ACTIVO → ¿Éste es el campo?
+                AddParameter("P_ACTIVO", OracleDbType.Varchar2, entity.Estado.Descripcion);
                 // (25) P_NOTAS
                 AddParameter("P_NOTAS", OracleDbType.Varchar2, entity.Comentarios);
                 #endregion
@@ -187,11 +170,6 @@ namespace Expertia.Estructura.Repository.Condor
             }
             catch (Exception ex)
             {
-                #region ErrorOut
-                operation[Operation.Result] = ResultType.Fail;
-                operation[Operation.ErrorMessage] = ex.Message;
-                #endregion
-
                 throw ex;
             }
         }
