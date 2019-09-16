@@ -11,19 +11,17 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.Contacto)]
     public class ContactoController : BaseController<Contacto>
     {
-        private ICrud<Contacto> _rbRepository;
-
-        public ContactoController() : base()
-        {
-            _rbRepository = new Contacto_CT_Repository();
-        }
-
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(Contacto entity)
         {
             try
             {
-                var operationResult = _rbRepository.Create(entity);
+                #region UnidadNegocio
+                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
+                _crmRepository = GetRepository(entity.UnidadNegocio.ID);
+                #endregion
+
+                var operationResult = _crmRepository.Create(entity);
                 entity.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
@@ -48,7 +46,12 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                var operationResult = _rbRepository.Update(entity);
+                #region UnidadNegocio
+                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
+                _crmRepository = GetRepository(entity.UnidadNegocio.ID);
+                #endregion
+
+                var operationResult = _crmRepository.Update(entity);
                 entity.WriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
@@ -66,6 +69,24 @@ namespace Expertia.Estructura.Controllers
                 ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
+        }
+
+        protected override ICrud<Contacto> GetRepository(UnidadNegocioKeys? unidadNegocioKey)
+        {
+            switch (unidadNegocioKey)
+            {
+                case UnidadNegocioKeys.CondorTravel:
+                    return new Contacto_CT_Repository();
+                case UnidadNegocioKeys.DestinosMundiales:
+                    break;
+                case UnidadNegocioKeys.NuevoMundo:
+                    break;
+                case UnidadNegocioKeys.InterAgencias:
+                    break;
+                default:
+                    break;
+            }
+            return null;
         }
     }
 }

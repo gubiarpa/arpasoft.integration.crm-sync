@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using System;
 using System.Web.Http;
@@ -22,7 +23,6 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                //WriteLogObject(entity);
                 return Ok();
             }
             catch (Exception ex)
@@ -45,6 +45,11 @@ namespace Expertia.Estructura.Controllers
                 //WriteLogObject(ex, LogType.Fail);
                 return InternalServerError(ex);
             }
+        }
+
+        protected override ICrud<CuentaB2C> GetRepository(UnidadNegocioKeys? unidadNegocioKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }

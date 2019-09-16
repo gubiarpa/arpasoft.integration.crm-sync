@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Behavior;
 using Expertia.Estructura.Filters;
+using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
 using System;
@@ -17,6 +18,7 @@ namespace Expertia.Estructura.Controllers.Base
         #region Properties
         protected ILogFileManager _logFileManager;
         protected IClientFeatures _clientFeatures;
+        protected ICrud<T> _crmRepository;
         #endregion
 
         #region Constructor
@@ -80,6 +82,8 @@ namespace Expertia.Estructura.Controllers.Base
             }
             return null;
         }
+
+        protected abstract ICrud<T> GetRepository(UnidadNegocioKeys? unidadNegocioKey);
         #endregion
     }
 }

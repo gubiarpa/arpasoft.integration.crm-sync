@@ -183,6 +183,7 @@
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_CT_Repository.cs" />
+    <Compile Include="Repository\Destinos Mundiales\CuentaB2B_DM_Repository.cs" />
     <Compile Include="Repository\NuevoMundo\CuentaB2B_NM_Repository.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
     <Compile Include="Utils\Behavior\ILogFileManager.cs" />

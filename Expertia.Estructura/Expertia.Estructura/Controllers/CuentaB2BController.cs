@@ -2,6 +2,7 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.Condor;
+using Expertia.Estructura.Repository.NuevoMundo;
 using Expertia.Estructura.Utils;
 using System;
 using System.Web.Http;
@@ -14,32 +15,14 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.CuentaB2B)]
     public class CuentaB2BController : BaseController<CuentaB2B>
     {
-        private ICrud<CuentaB2B> _crmRepository;
-
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
             try
             {
                 #region UnidadNegocio
-                // 1. Conversión
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
-
-                // 2. Selección
-                switch (entity.UnidadNegocio.ID)
-                {
-                    case UnidadNegocioKeys.CondorTravel:
-                        _crmRepository = new CuentaB2B_CT_Repository();
-                        break;
-                    case UnidadNegocioKeys.DestinosMundiales:
-                        break;
-                    case UnidadNegocioKeys.NuevoMundo:
-                        break;
-                    case UnidadNegocioKeys.InterAgencias:
-                        break;
-                    default:
-                        break;
-                }
+                _crmRepository = GetRepository(entity.UnidadNegocio.ID);
                 #endregion
 
                 var operationResult = _crmRepository.Create(entity);
@@ -87,6 +70,24 @@ namespace Expertia.Estructura.Controllers
                 ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
+        }
+
+        protected override ICrud<CuentaB2B> GetRepository(UnidadNegocioKeys? unidadNegocioKey)
+        {
+            switch (unidadNegocioKey)
+            {
+                case UnidadNegocioKeys.CondorTravel:
+                    return new CuentaB2B_CT_Repository();
+                case UnidadNegocioKeys.DestinosMundiales:
+                    break;
+                case UnidadNegocioKeys.NuevoMundo:
+                    return new CuentaB2B_NM_Repository();
+                case UnidadNegocioKeys.InterAgencias:
+                    break;
+                default:
+                    break;
+            }
+            return null;
         }
     }
 }
