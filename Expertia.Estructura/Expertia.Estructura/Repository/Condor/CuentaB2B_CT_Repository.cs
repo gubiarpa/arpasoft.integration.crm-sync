@@ -46,7 +46,7 @@ namespace Expertia.Estructura.Repository.Condor
                 // (11) P_ESTADO_CLIENTE
                 AddParameter("P_ESTADO_CLIENTE", OracleDbType.Varchar2, entity.Estado.Descripcion);
                 // (12) P_NOMBRE_CONDICION_PAGO
-                if ((entity.CondicionesPago != null) && (entity.CondicionesPago.ToList().Count > 0)) value = entity.CondicionesPago.ToList()[0].TipoCondicionPago.Descripcion; else value = DBNull.Value;
+                if ((entity.CondicionesPago != null) && (entity.CondicionesPago.ToList().Count > 0)) value = entity.CondicionesPago.ToList()[0].Tipo.Descripcion; else value = DBNull.Value;
                 AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
                 // (13) P_NOMBRE_TIPO_PERSONA
                 AddParameter("P_NOMBRE_TIPO_PERSONA", OracleDbType.Varchar2, entity.TipoPersona.Descripcion);
@@ -139,7 +139,7 @@ namespace Expertia.Estructura.Repository.Condor
                 // (11) P_ESTADO_CLIENTE
                 AddParameter("P_ESTADO_CLIENTE", OracleDbType.Varchar2, entity.Estado);
                 // (12) P_NOMBRE_CONDICION_PAGO
-                if ((entity.CondicionesPago != null) && (entity.CondicionesPago.ToList().Count > 0)) value = entity.CondicionesPago.ToList()[0].TipoCondicionPago.Descripcion; else value = DBNull.Value;
+                if ((entity.CondicionesPago != null) && (entity.CondicionesPago.ToList().Count > 0)) value = entity.CondicionesPago.ToList()[0].Tipo.Descripcion; else value = DBNull.Value;
                 AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
                 // (13) P_NOMBRE_TIPO_PERSONA
                 AddParameter("P_NOMBRE_TIPO_PERSONA", OracleDbType.Varchar2, entity.TipoPersona.Descripcion);

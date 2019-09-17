@@ -28,7 +28,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (02) P_MENSAJE_ERROR
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
                 // (03) P_NOMBRE_USUARIO
-                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, entity.Auditoria.CreateUser.Descripcion); // ◄ No hay campos de auditoría
+                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, entity.Auditoria.CreateUser.Descripcion);
                 // (04) P_RAZON_SOCIAL
                 AddParameter("P_RAZON_SOCIAL", OracleDbType.Varchar2, entity.RazonSocial);
                 // (05) P_FE_ANIVERSARIO
@@ -42,15 +42,20 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0)) value = entity.Documentos.ToList()[0].Numero; else value = DBNull.Value;
                 AddParameter("P_NUMERO_DOCUMENTO", OracleDbType.Varchar2, value);
                 // (09) P_TIPO_DIRECCION
-                if ((entity.Direcciones != null) && (entity.Direcciones.ToList().Count > 0)) value = entity.Documentos.ToList()[0].Tipo.Descripcion; else value = DBNull.Value;
+                if ((entity.Direcciones != null) && (entity.Direcciones.ToList().Count > 0)) value = entity.Direcciones.ToList()[0].Tipo.Descripcion; else value = DBNull.Value;
                 AddParameter("P_TIPO_DIRECCION", OracleDbType.Varchar2, value);
                 // (10) P_DIRECCION
                 if ((entity.Direcciones != null) && (entity.Direcciones.ToList().Count > 0)) value = entity.Direcciones.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_DIRECCION", OracleDbType.Varchar2, value);
                 // (11) P_NOMBRE_PAIS
-                AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Pais.Descripcion);
+                if ((entity.Direcciones != null) && (entity.Direcciones.ToList().Count > 0)) value = entity.Direcciones.ToList()[0].Pais.Descripcion; else value = DBNull.Value;
+                AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, value);
                 // (12) P_DISTRITO
+                if ((entity.Direcciones != null) && (entity.Direcciones.ToList().Count > 0)) value = entity.Direcciones.ToList()[0].Distrito.Descripcion; else value = DBNull.Value;
+                AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, value);
                 // (13) P_DIRECCION_FISCAL
+                if ((entity.Direcciones != null) && (entity.Direcciones.ToList().Count > 1)) value = entity.Direcciones.ToList()[1].Descripcion; else value = DBNull.Value;
+                AddParameter("P_DISTRITO", OracleDbType.Varchar2, value);
                 // (14) P_TIPO_TELEFONO
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 0)) value = entity.Telefonos.ToList()[0].Tipo.Descripcion; else value = DBNull.Value;
                 AddParameter("P_TIPO_TELEFONO", OracleDbType.Varchar2, value);
@@ -70,32 +75,41 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 2)) value = entity.Telefonos.ToList()[2].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_2", OracleDbType.Varchar2, value);
                 // (20) P_SITIO_WEB
-                if ((entity.Sitios != null) && (entity.Sitios.ToList().Count > 0)) value = entity.Telefonos.ToList()[0].Numero; else value = DBNull.Value;
+                if ((entity.Sitios != null) && (entity.Sitios.ToList().Count > 0)) value = entity.Sitios.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_SITIO_WEB", OracleDbType.Varchar2, value);
                 // (21) P_CORREO
                 if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_CORREO", OracleDbType.Varchar2, value);
                 // (22) P_PROPIETARIO
-                // (23) P_NOMBRE_CONDICION_PAGO → ¿Se envía sólo el 1er elemento?
-                // (24) P_COMENTARIO
+                // (23) P_PUNTO_CONTACTO
+                AddParameter("P_PUNTO_CONTACTO", OracleDbType.Varchar2, entity.PuntoContacto.Descripcion);
+                // (24) P_NOMBRE_CONDICION_PAGO
+                #region CondicionPago
+                value = entity.CondicionesPago.ToList().SingleOrDefault(x => x.Empresa.GetUnidadNegocioKey().Equals(UnidadNegocioKeys.DestinosMundiales)).Tipo.Descripcion;
+                AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
+                #endregion
+                // (25) P_COMENTARIO
                 AddParameter("P_COMENTARIO", OracleDbType.Varchar2, entity.Comentarios);
-                // (25) P_TIPO_CUENTA → ¿Si es B2B o B2C? ¿Qué valor debería ingresar?
-                // (26) P_CATEG_VALOR
+                // (26) P_TIPO_CUENTA → ¿Si es B2B o B2C? ¿Qué valor debería ingresar?
+                AddParameter("P_TIPO_CUENTA", OracleDbType.Varchar2, entity.TipoCuenta.Descripcion);
+                // (27) P_CATEG_VALOR
                 AddParameter("P_CATEG_VALOR", OracleDbType.Varchar2, entity.CategoriaValor.Descripcion);
-                // (27) P_CATEG_PERFIL_ACTITUD_TEC
+                // (28) P_CATEG_PERFIL_ACTITUD_TEC
                 AddParameter("P_CATEG_PERFIL_ACTITUD_TEC", OracleDbType.Varchar2, entity.CategoriaPerfilActitudTecnologica.Descripcion);
-                // (28) P_CATEG_PERFIL_FIDELIDAD
+                // (29) P_CATEG_PERFIL_FIDELIDAD
                 AddParameter("P_CATEG_PERFIL_FIDELIDAD", OracleDbType.Varchar2, entity.CategoriaPerfilFidelidad.Descripcion);
-                // (29) P_INCENTIVO
-                AddParameter("P_INCENTIVO", OracleDbType.Varchar2, entity.CategoriaPerfilFidelidad.Descripcion);
-                // (30) P_ESTADO_ACTIVACION → Confirmar si es la propiedad
+                // (30) P_INCENTIVO
+                AddParameter("P_INCENTIVO", OracleDbType.Varchar2, entity.Incentivo.Descripcion);
+                // (31) P_ESTADO_ACTIVACION → Confirmar si es la propiedad
                 AddParameter("P_ESTADO_ACTIVACION", OracleDbType.Varchar2, entity.Estado.Descripcion);
-                // (31) P_REFE_EXTERENA_2 → ¿Qué campo es éste?
-                // (32) P_REFE_EXTERENA_3 → ¿Qué campo es éste?
+                // (32) P_REFE_EXTERNA_2 → ¿Qué campo es éste?
+                AddParameter("P_REFE_EXTERNA_2", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 1000);
+                // (33) P_REFE_EXTERNA_3 → ¿Qué campo es éste?
+                AddParameter("P_REFE_EXTERNA_3", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 1000);
                 #endregion
 
                 #region Invoke
-                ExecuteSPWithoutResults("NUEVOMUNDO.CRM_PKG.SP_CREAR_CLIENTE");
+                ExecuteSPWithoutResults("DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE");
 
                 operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
                 operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");

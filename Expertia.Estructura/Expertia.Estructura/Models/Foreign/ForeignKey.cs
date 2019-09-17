@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models.Behavior;
+using Expertia.Estructura.Utils;
 
 namespace Expertia.Estructura.Models.Foreign
 {
@@ -35,7 +36,32 @@ namespace Expertia.Estructura.Models.Foreign
     #endregion
 
     #region CuentaB2B
-    public class EmpresaCondicionPago : SimpleDesc { }
+    public class EmpresaCondicionPago : SimpleDesc
+    {
+        public UnidadNegocioKeys? GetUnidadNegocioKey()
+        {
+            string unidadNegocioName = Descripcion; // Ejm. "CONDOR TRAVEL"
+            {
+                if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetName())))
+                {
+                    return UnidadNegocioKeys.CondorTravel;
+                }
+                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetName())))
+                {
+                    return UnidadNegocioKeys.DestinosMundiales;
+                }
+                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetName())))
+                {
+                    return UnidadNegocioKeys.InterAgencias;
+                }
+                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetName())))
+                {
+                    return UnidadNegocioKeys.NuevoMundo;
+                }
+                return null;
+            }
+        }
+    }
     public class TipoCondicionPago : SimpleDesc { }
     public class TipoMoneda : SimpleDesc { }
     public class CategoriaValor : SimpleDesc { }
