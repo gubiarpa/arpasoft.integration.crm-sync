@@ -1,7 +1,8 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
-using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.Condor;
+using Expertia.Estructura.Repository.DestinosMundiales;
+using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Repository.NuevoMundo;
 using Expertia.Estructura.Utils;
 using System;
@@ -15,6 +16,15 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.CuentaB2B)]
     public class CuentaB2BController : BaseController<CuentaB2B>
     {
+        public CuentaB2BController() : base()
+        {
+            #region BuildRepository
+            _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new CuentaB2B_CT_Repository());
+            _crmCollection.Add(UnidadNegocioKeys.NuevoMundo, new CuentaB2B_NM_Repository());
+            _crmCollection.Add(UnidadNegocioKeys.InterAgencias, new CuentaB2B_IA_Repository());
+            #endregion
+        }
+
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
@@ -22,11 +32,24 @@ namespace Expertia.Estructura.Controllers
             {
                 #region UnidadNegocio
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
-                _crmRepository = GetRepository(entity.UnidadNegocio.ID);
+                switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
+                {
+                    case UnidadNegocioKeys.CondorTravel:
+                        _operation[UnidadNegocioNames.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
+                        break;
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        break;
+                    case UnidadNegocioKeys.NuevoMundo:
+                    case UnidadNegocioKeys.InterAgencias:
+                        _operation[UnidadNegocioNames.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Create(entity);
+                        _operation[UnidadNegocioNames.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
+                        break;
+                    default:
+                        break;
+                }
                 #endregion
 
-                var operationResult = _crmRepository.Create(entity);
-
+                #region Response
                 entity.WriteLogObject(_logFileManager, _clientFeatures);
 
                 return Ok(new
@@ -34,11 +57,11 @@ namespace Expertia.Estructura.Controllers
                     Result = new
                     {
                         Type = ResultType.Success,
-                        CodError = operationResult["P_CODIGO_ERROR"],
-                        MensajeError = operationResult["P_MENSAJE_ERROR"]
+                        Operation = _operation
                     },
                     Entity = entity
                 });
+                #endregion
             }
             catch (Exception ex)
             {
@@ -52,18 +75,38 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                var operationResult = _crmRepository.Update(entity);
+                #region UnidadNegocio
+                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
+                switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
+                {
+                    case UnidadNegocioKeys.CondorTravel:
+                        _operation[UnidadNegocioNames.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
+                        break;
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        break;
+                    case UnidadNegocioKeys.NuevoMundo:
+                    case UnidadNegocioKeys.InterAgencias:
+                        _operation[UnidadNegocioNames.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
+                        _operation[UnidadNegocioNames.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
+                        break;
+                    default:
+                        break;
+                }
+                #endregion
+
+                #region Response
                 entity.WriteLogObject(_logFileManager, _clientFeatures);
+
                 return Ok(new
                 {
                     Result = new
                     {
                         Type = ResultType.Success,
-                        CodError = operationResult["P_CODIGO_ERROR"],
-                        MensajeError = operationResult["P_MENSAJE_ERROR"]
+                        Operation = _operation
                     },
                     Entity = entity
                 });
+                #endregion
             }
             catch (Exception ex)
             {
@@ -72,22 +115,25 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        protected override ICrud<CuentaB2B> GetRepository(UnidadNegocioKeys? unidadNegocioKey)
+        protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.CondorTravel:
-                    return new CuentaB2B_CT_Repository();
+                    _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new CuentaB2B_CT_Repository());
+                    break;
                 case UnidadNegocioKeys.DestinosMundiales:
+                case UnidadNegocioKeys.InterAgencias:
+                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new CuentaB2B_DM_Repository());
+                    _crmCollection.Add(UnidadNegocioKeys.InterAgencias, new CuentaB2B_IA_Repository());
                     break;
                 case UnidadNegocioKeys.NuevoMundo:
-                    return new CuentaB2B_NM_Repository();
-                case UnidadNegocioKeys.InterAgencias:
+                    _crmCollection.Add(UnidadNegocioKeys.NuevoMundo, new CuentaB2B_NM_Repository());
                     break;
                 default:
                     break;
             }
-            return null;
+            return unidadNegocioKey;
         }
     }
 }

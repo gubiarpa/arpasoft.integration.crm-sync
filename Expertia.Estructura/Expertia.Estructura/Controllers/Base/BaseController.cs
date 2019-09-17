@@ -4,6 +4,7 @@ using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers.Base
@@ -18,7 +19,8 @@ namespace Expertia.Estructura.Controllers.Base
         #region Properties
         protected ILogFileManager _logFileManager;
         protected IClientFeatures _clientFeatures;
-        protected ICrud<T> _crmRepository;
+        protected IDictionary<UnidadNegocioKeys?, ICrud<T>> _crmCollection;
+        protected Operation _operation;
         #endregion
 
         #region Constructor
@@ -26,6 +28,8 @@ namespace Expertia.Estructura.Controllers.Base
         {
             _logFileManager = new LogFileManager(LogKeys.LogPath, LogKeys.LogName);
             _clientFeatures = new ClientFeatures();
+            _crmCollection = new Dictionary<UnidadNegocioKeys?, ICrud<T>>();
+            _operation = new Operation();
         }
         #endregion
 
@@ -83,7 +87,24 @@ namespace Expertia.Estructura.Controllers.Base
             return null;
         }
 
-        protected abstract ICrud<T> GetRepository(UnidadNegocioKeys? unidadNegocioKey);
+        protected string GetUnidadNegocio(UnidadNegocioKeys? unidadNegocioKey)
+        {
+            switch (unidadNegocioKey)
+            {
+                case UnidadNegocioKeys.CondorTravel:
+                    return UnidadNegocioNames.CondorTravel;
+                case UnidadNegocioKeys.DestinosMundiales:
+                    return UnidadNegocioNames.DestinosMundiales;
+                case UnidadNegocioKeys.NuevoMundo:
+                    return UnidadNegocioNames.NuevoMundo;
+                case UnidadNegocioKeys.InterAgencias:
+                    return UnidadNegocioNames.InterAgencias;
+                default:
+                    return null;
+            }
+        }
+
+        protected abstract UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey);
         #endregion
     }
 }

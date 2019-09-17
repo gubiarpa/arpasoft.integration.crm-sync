@@ -10,10 +10,10 @@
 
     public static class ConnectionKeys
     {
-        public const string MDMConnKey = "MdmConnKey";
         public const string CondorConnKey = "CTConnKey";
         public const string DMConnKey = "DMConnKey";
         public const string NMConnKey = "NMConnKey";
+        public const string IAConnKey = "IAConnKey";
     }
 
     public static class LogKeys
@@ -82,6 +82,14 @@
         DestinosMundiales,
         NuevoMundo,
         InterAgencias
+    }
+
+    public static class UnidadNegocioNames
+    {
+        public const string CondorTravel = "Condor Travel";
+        public const string DestinosMundiales = "Destinos Mundiales";
+        public const string NuevoMundo = "Nuevo Mundo";
+        public const string InterAgencias = "InterAgencias";
     }
     #endregion
 

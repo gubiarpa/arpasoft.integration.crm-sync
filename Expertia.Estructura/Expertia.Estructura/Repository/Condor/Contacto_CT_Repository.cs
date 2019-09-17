@@ -4,7 +4,6 @@ using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -172,11 +171,6 @@ namespace Expertia.Estructura.Repository.Condor
             {
                 throw ex;
             }
-        }
-
-        protected override IEnumerable<Contacto> DataTableToEnumerable(DataTable dt)
-        {
-            throw new NotImplementedException();
         }
     }
 }

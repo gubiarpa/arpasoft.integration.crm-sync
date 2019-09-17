@@ -7,11 +7,11 @@ using System;
 using System.Data;
 using System.Linq;
 
-namespace Expertia.Estructura.Repository.NuevoMundo
+namespace Expertia.Estructura.Repository.DestinosMundiales
 {
-    public class CuentaB2B_NM_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
+    public class CuentaB2B_DM_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>
     {
-        public CuentaB2B_NM_Repository() : base(ConnectionKeys.NMConnKey)
+        public CuentaB2B_DM_Repository() : base(ConnectionKeys.DMConnKey)
         {
         }
 
@@ -112,17 +112,17 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
         public Operation Delete(CuentaB2B entity)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         public Operation Read(CuentaB2B entity)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
         public Operation Update(CuentaB2B entity)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

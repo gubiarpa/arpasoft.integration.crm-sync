@@ -56,8 +56,6 @@ namespace Expertia.Estructura.Repository.Base
             }
         }
 
-        protected abstract IEnumerable<T> DataTableToEnumerable(DataTable dt);
-
         protected void ExecuteSPWithoutResults(string SPName)
         {
             try
