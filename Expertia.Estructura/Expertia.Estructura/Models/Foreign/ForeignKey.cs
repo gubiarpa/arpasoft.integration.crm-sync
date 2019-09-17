@@ -35,7 +35,8 @@ namespace Expertia.Estructura.Models.Foreign
     #endregion
 
     #region CuentaB2B
-    public class CondicionPago : SimpleDesc { }
+    public class EmpresaCondicionPago : SimpleDesc { }
+    public class TipoCondicionPago : SimpleDesc { }
     public class TipoMoneda : SimpleDesc { }
     public class CategoriaValor : SimpleDesc { }
     public class CategoriaPerfilActitudTecnologica : SimpleDesc { }
