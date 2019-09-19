@@ -181,6 +181,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
+    <Compile Include="Repository\Behavior\ISameSPName.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_CT_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Contacto_DM_Repository.cs" />

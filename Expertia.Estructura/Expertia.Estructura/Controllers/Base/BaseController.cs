@@ -68,41 +68,41 @@ namespace Expertia.Estructura.Controllers.Base
         #region Auxiliar
         protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName) // Ejm. "CONDOR TRAVEL"
         {
-            if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetName())))
+            if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyName())))
             {
                 return UnidadNegocioKeys.CondorTravel;
             }
-            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetName())))
+            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetKeyName())))
             {
                 return UnidadNegocioKeys.DestinosMundiales;
             }
-            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetName())))
+            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetKeyName())))
             {
                 return UnidadNegocioKeys.InterAgencias;
             }
-            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetName())))
+            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetKeyName())))
             {
                 return UnidadNegocioKeys.NuevoMundo;
             }
             return null;
         }
 
-        protected string GetUnidadNegocio(UnidadNegocioKeys? unidadNegocioKey)
-        {
-            switch (unidadNegocioKey)
-            {
-                case UnidadNegocioKeys.CondorTravel:
-                    return UnidadNegocioNames.CondorTravel;
-                case UnidadNegocioKeys.DestinosMundiales:
-                    return UnidadNegocioNames.DestinosMundiales;
-                case UnidadNegocioKeys.NuevoMundo:
-                    return UnidadNegocioNames.NuevoMundo;
-                case UnidadNegocioKeys.InterAgencias:
-                    return UnidadNegocioNames.InterAgencias;
-                default:
-                    return null;
-            }
-        }
+        //protected string GetUnidadNegocio(UnidadNegocioKeys? unidadNegocioKey)
+        //{
+        //    switch (unidadNegocioKey)
+        //    {
+        //        case UnidadNegocioKeys.CondorTravel:
+        //            return UnidadNegocioNames.CondorTravel;
+        //        case UnidadNegocioKeys.DestinosMundiales:
+        //            return UnidadNegocioNames.DestinosMundiales;
+        //        case UnidadNegocioKeys.NuevoMundo:
+        //            return UnidadNegocioNames.NuevoMundo;
+        //        case UnidadNegocioKeys.InterAgencias:
+        //            return UnidadNegocioNames.InterAgencias;
+        //        default:
+        //            return null;
+        //    }
+        //}
 
         protected abstract UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey);
         #endregion

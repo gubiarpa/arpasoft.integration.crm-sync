@@ -84,6 +84,14 @@
         InterAgencias
     }
 
+    public static class UnidadNegocioShortNames
+    {
+        public const string CondorTravel = "CT";
+        public const string DestinosMundiales = "DM";
+        public const string NuevoMundo = "NM";
+        public const string InterAgencias = "IA";
+    }
+
     public static class UnidadNegocioNames
     {
         public const string CondorTravel = "Condor Travel";

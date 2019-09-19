@@ -85,15 +85,41 @@ namespace Expertia.Estructura.Utils
         #endregion
 
         #region Keys
-        public static string GetName(this UnidadNegocioKeys unidadNegocioKey)
+        public static string GetFullName(this UnidadNegocioKeys unidadNegocioKey)
         {
-            switch (unidadNegocioKey)
+            try
             {
-                case UnidadNegocioKeys.CondorTravel: return "CT";
-                case UnidadNegocioKeys.DestinosMundiales: return "DM";
-                case UnidadNegocioKeys.NuevoMundo: return "NM";
-                case UnidadNegocioKeys.InterAgencias: return "IA";
-                default: return null;
+                switch (unidadNegocioKey)
+                {
+                    case UnidadNegocioKeys.CondorTravel: return UnidadNegocioNames.CondorTravel;
+                    case UnidadNegocioKeys.DestinosMundiales: return UnidadNegocioNames.DestinosMundiales;
+                    case UnidadNegocioKeys.NuevoMundo: return UnidadNegocioNames.NuevoMundo;
+                    case UnidadNegocioKeys.InterAgencias: return UnidadNegocioNames.InterAgencias;
+                    default: return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static string GetKeyName(this UnidadNegocioKeys unidadNegocioKey)
+        {
+            try
+            {
+                switch (unidadNegocioKey)
+                {
+                    case UnidadNegocioKeys.CondorTravel: return UnidadNegocioShortNames.CondorTravel;
+                    case UnidadNegocioKeys.DestinosMundiales: return UnidadNegocioShortNames.DestinosMundiales;
+                    case UnidadNegocioKeys.NuevoMundo: return UnidadNegocioShortNames.NuevoMundo;
+                    case UnidadNegocioKeys.InterAgencias: return UnidadNegocioShortNames.InterAgencias;
+                    default: return null;
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
         #endregion

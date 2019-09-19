@@ -81,15 +81,15 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operation[UnidadNegocioNames.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
+                        _operation[UnidadNegocioKeys.CondorTravel.GetFullName()] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
                         break;
                     case UnidadNegocioKeys.NuevoMundo:
-                        _operation[UnidadNegocioNames.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
+                        _operation[UnidadNegocioKeys.NuevoMundo.GetFullName()] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operation[UnidadNegocioNames.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
-                        _operation[UnidadNegocioNames.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
+                        _operation[UnidadNegocioKeys.DestinosMundiales.GetFullName()] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
+                        _operation[UnidadNegocioKeys.InterAgencias.GetFullName()] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
                         break;
                     default:
                         break;

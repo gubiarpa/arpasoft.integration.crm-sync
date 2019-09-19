@@ -24,11 +24,12 @@ namespace Expertia.Estructura.Controllers
                     case UnidadNegocioKeys.CondorTravel:
                         _operation[UnidadNegocioNames.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
                         break;
-                    case UnidadNegocioKeys.DestinosMundiales:
-                        break;
                     case UnidadNegocioKeys.NuevoMundo:
-                    case UnidadNegocioKeys.InterAgencias:
                         _operation[UnidadNegocioNames.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Create(entity);
+                        break;
+                    case UnidadNegocioKeys.DestinosMundiales:
+                    case UnidadNegocioKeys.InterAgencias:
+                        _operation[UnidadNegocioNames.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
                         _operation[UnidadNegocioNames.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
                         break;
                     default:

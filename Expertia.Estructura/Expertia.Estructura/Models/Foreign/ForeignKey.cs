@@ -42,19 +42,19 @@ namespace Expertia.Estructura.Models.Foreign
         {
             string unidadNegocioName = Descripcion; // Ejm. "CONDOR TRAVEL"
             {
-                if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetName())))
+                if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyName())))
                 {
                     return UnidadNegocioKeys.CondorTravel;
                 }
-                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetName())))
+                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetKeyName())))
                 {
                     return UnidadNegocioKeys.DestinosMundiales;
                 }
-                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetName())))
+                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetKeyName())))
                 {
                     return UnidadNegocioKeys.InterAgencias;
                 }
-                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetName())))
+                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetKeyName())))
                 {
                     return UnidadNegocioKeys.NuevoMundo;
                 }
