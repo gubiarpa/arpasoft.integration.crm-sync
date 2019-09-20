@@ -165,6 +165,7 @@
     <Compile Include="Models\Behavior\ISalesForce.cs" />
     <Compile Include="Models\Behavior\IUnidadNegocio.cs" />
     <Compile Include="Models\Behavior\IUnique.cs" />
+    <Compile Include="Models\Behavior\MultipleDesc.cs" />
     <Compile Include="Models\Behavior\SimpleDesc.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\CuentaB2B.cs" />

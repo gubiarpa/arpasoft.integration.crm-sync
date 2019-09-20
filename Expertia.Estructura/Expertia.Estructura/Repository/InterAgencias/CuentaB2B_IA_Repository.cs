@@ -25,7 +25,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #endregion
 
         #region Auxiliar
-        public Operation ExecuteOperation(CuentaB2B entity, string SPName)
+        public Operation ExecuteOperation(CuentaB2B entity, string SPName, string userName)
         {
             throw new NotImplementedException();
         }
@@ -43,6 +43,5 @@ namespace Expertia.Estructura.Repository.InterAgencias
             throw new NotImplementedException();
         }
         #endregion
-
     }
 }

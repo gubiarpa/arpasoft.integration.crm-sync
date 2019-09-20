@@ -18,17 +18,17 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         #region PublicMethods
         public Operation Create(CuentaB2B entity)
         {
-            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE");
+            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE", entity.Auditoria.CreateUser.Descripcion);
         }
 
         public Operation Update(CuentaB2B entity)
         {
-            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CLIENTE");
+            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CLIENTE", entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
 
         #region Auxiliar
-        public Operation ExecuteOperation(CuentaB2B entity, string SPName)
+        public Operation ExecuteOperation(CuentaB2B entity, string SPName, string userName)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = DBNull.Value;
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, 4000);
                 // (03) P_NOMBRE_USUARIO
-                value = entity.Auditoria.CreateUser.Descripcion;
+                value = userName;
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
                 // (04) P_ID_CUENTA_SALESFORCE
                 value = entity.IdSalesForce;
@@ -140,7 +140,13 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (34) P_ESTADO_ACTIVACION
                 value = entity.Estado.Descripcion;
                 AddParameter("P_ESTADO_ACTIVACION", OracleDbType.Varchar2, value);
-                // (34) P_ID_CUENTA
+                // (35) P_GDS
+                value = entity.GDS.Array;
+                AddParameter("P_GDS", OracleDbType.Varchar2, value);
+                // (36) P_HERRAMIENTAS
+                value = entity.Herramientas.Array;
+                AddParameter("P_HERRAMIENTAS", OracleDbType.Varchar2, value);
+                // (37) P_ID_CUENTA
                 value = DBNull.Value;
                 AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, 1000);
                 #endregion

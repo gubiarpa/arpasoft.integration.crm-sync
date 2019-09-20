@@ -27,7 +27,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         #endregion
 
         #region Auxiliar
-        public Operation ExecuteOperation(Contacto entity, string SPName)
+        public Operation ExecuteOperation(Contacto entity, string SPName, string userName)
         {
             try
             {

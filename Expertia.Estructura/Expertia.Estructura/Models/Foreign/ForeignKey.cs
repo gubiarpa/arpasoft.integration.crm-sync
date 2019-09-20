@@ -8,11 +8,10 @@ namespace Expertia.Estructura.Models.Foreign
     #endregion
 
     #region Cuenta
-    //public class UnidadNegocio : SimpleDesc { }
-    public class CanalInformacion : SimpleDesc { }
-    public class Branch : SimpleDesc { }
-    public class IdiomaComunicCliente : SimpleDesc { }
-    public class InteresProdActiv : SimpleDesc { }
+    public class CanalInformacion : MultipleDesc { }
+    public class Branch : MultipleDesc { }
+    public class IdiomaComunicCliente : MultipleDesc { }
+    public class InteresProdActiv : MultipleDesc { }
     public class PuntoContacto : SimpleDesc { }
     public class NivelImportancia : SimpleDesc { }
     public class Estado : SimpleDesc { }
@@ -69,9 +68,9 @@ namespace Expertia.Estructura.Models.Foreign
     public class CategoriaPerfilFidelidad : SimpleDesc { }
     public class Incentivo : SimpleDesc { }
     public class MotivoEstado : SimpleDesc { }
-    public class Herramientas : SimpleDesc { }
-    public class GDS : SimpleDesc { }
-    public class GrupoComunicacion : SimpleDesc { }
+    public class Herramientas : MultipleDesc { }
+    public class GDS : MultipleDesc { }
+    public class GrupoComunicacion : MultipleDesc { }
     #endregion
 
     #region CuentaB2C

@@ -23,9 +23,9 @@ namespace Expertia.Estructura.Models
 
         #region MultipleKey
         public IEnumerable<CondicionPago> CondicionesPago { get; set; } // Condición de Pago
-        public IEnumerable<Herramientas> Herramientas { get; set; }
-        public IEnumerable<GDS> GDS { get; set; }
-        public IEnumerable<GrupoComunicacion> GruposComunicacion { get; set; } // Grupos de Comunicación (ejm. Skype)
+        public Herramientas Herramientas { get; set; }
+        public GDS GDS { get; set; }
+        public GrupoComunicacion GruposComunicacion { get; set; } // Grupos de Comunicación (ejm. Skype)
         #endregion
     }
 }

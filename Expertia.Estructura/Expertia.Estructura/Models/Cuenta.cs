@@ -35,10 +35,10 @@ namespace Expertia.Estructura.Models
         public IEnumerable<Sitio> Sitios { get; set; }
         public IEnumerable<Correo> Correos { get; set; }
         public IEnumerable<Participante> Participantes { get; set; }
-        public IEnumerable<InteresProdActiv> InteresesProdActiv { get; set; }
-        public IEnumerable<CanalInformacion> CanalesRecibirInfo { get; set; }
-        public IEnumerable<Branch> Branches { get; set; }
-        public IEnumerable<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
+        public InteresProdActiv InteresesProdActiv { get; set; }
+        public CanalInformacion CanalesRecibirInfo { get; set; }
+        public Branch Branches { get; set; }
+        public IdiomaComunicCliente IdiomasComunicCliente { get; set; }
         #endregion
 
         #region Auditoria

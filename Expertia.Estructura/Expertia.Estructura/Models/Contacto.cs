@@ -41,7 +41,7 @@ namespace Expertia.Estructura.Models
         public IEnumerable<Telefono> Telefonos { get; set; }
         public IEnumerable<Sitio> Sitios { get; set; }
         public IEnumerable<Correo> Correos { get; set; }
-        public IEnumerable<IdiomaComunicCliente> IdiomasComunicCliente { get; set; }
+        public IdiomaComunicCliente IdiomasComunicCliente { get; set; }
         #endregion
 
         #region Auditoria

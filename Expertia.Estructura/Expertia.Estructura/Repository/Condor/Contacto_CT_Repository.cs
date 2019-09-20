@@ -64,7 +64,7 @@ namespace Expertia.Estructura.Repository.Condor
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 1)) value = entity.Telefonos.ToList()[1].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO2", OracleDbType.Varchar2, value);
                 // (18) P_IDIOMA
-                AddParameter("P_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.ToList()[0].ID);
+                AddParameter("P_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.Array);
                 // (19) P_CARGO
                 AddParameter("P_CARGO", OracleDbType.Varchar2, entity.CargoEmpresa.Descripcion);
                 // (20) P_ACTIVO → ¿Éste es el campo?
@@ -148,7 +148,7 @@ namespace Expertia.Estructura.Repository.Condor
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 1)) value = entity.Telefonos.ToList()[1].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO2", OracleDbType.Varchar2, value);
                 // (00) P_IDIOMA
-                AddParameter("P_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.ToList()[0].ID);
+                AddParameter("P_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.Array);
                 // (00) P_CARGO
                 AddParameter("P_CARGO", OracleDbType.Varchar2, entity.CargoEmpresa.Descripcion);
                 // (00) P_ACTIVO → ¿Éste es el campo?
