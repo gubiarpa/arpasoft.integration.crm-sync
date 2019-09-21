@@ -156,7 +156,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
                 operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
                 operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");
-                operation["P_ID_CUENTA"] = GetOutParameter("P_ID_CUENTA");
+                operation["P_ID_CUENTA"] = entity.ID = GetOutParameter("P_ID_CUENTA").ToString();
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 

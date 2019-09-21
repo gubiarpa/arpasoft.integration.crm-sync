@@ -5,6 +5,7 @@ using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Data;
+using System.Linq;
 
 namespace Expertia.Estructura.Repository.DestinosMundiales
 {
@@ -17,12 +18,12 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         #region PublicMethods
         public Operation Create(Contacto entity)
         {
-            throw new NotImplementedException();
+            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_CREAR_CONTACTO", entity.Auditoria.CreateUser.Descripcion);
         }
 
         public Operation Update(Contacto entity)
         {
-            throw new NotImplementedException();
+            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CONTACTO", entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
 
@@ -41,32 +42,57 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (02) P_MENSAJE_ERROR
                 value = DBNull.Value;
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, 4000);
-                // (03) P_ID_CARGO
+                // (03) P_NOMBRE_USUARIO
+                value = userName;
+                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
+                // (04) P_ID_CUENTA_SALESFORCE
+                value = entity.IdCuentaSalesForce;
+                AddParameter("P_ID_CUENTA_SALESFORCE", OracleDbType.Varchar2, value);
+                // (05) P_ID_CONTACTO_SALESFORCE
+                value = entity.IdSalesForce;
+                AddParameter("P_ID_CONTACTO_SALESFORCE", OracleDbType.Varchar2, value);
+                // (06) P_CARGO
                 value = entity.CargoEmpresa.Descripcion;
-                AddParameter("P_ID_CARGO", OracleDbType.Varchar2, value);
-                // (04) P_NOMBRES
+                AddParameter("P_CARGO", OracleDbType.Varchar2, value);
+                // (07) P_NOMBRES
                 value = entity.Nombre;
                 AddParameter("P_NOMBRES", OracleDbType.Varchar2, value);
-                // (05) P_APELLIDOPATERNO
+                // (08) P_APELLIDOPATERNO
                 value = entity.ApePaterno;
                 AddParameter("P_APELLIDOPATERNO", OracleDbType.Varchar2, value);
-                // (06) P_APELLIDOMATERNO
+                // (09) P_APELLIDOMATERNO
                 value = entity.ApeMaterno;
                 AddParameter("P_APELLIDOMATERNO", OracleDbType.Varchar2, value);
-                // (07) P_ID_TIPO_DOCUMENTO_IDENTIDAD
-                //value = 
-                // (08) P_DOCUMENTO
-                // (09) P_DIRECCION
-                // (10) P_TELEFONO
-                // (11) P_TELEFONO_CELULAR
-                // (12) P_EMAIL
-                // (13) P_EN_DESUSO
-                // (15) P_FECHA_CUMPLE
-                // (16) P_ANEXO
-                // (17) P_ID_TIPO_DOCU_IDENTIDAD_CLIENTE
-                // (18) P_DOCUMENTO_CLIENTE
-                // (19) P_ID_CLIENTE
-                // (20) P_CORRELATIVO
+                // (10) P_TIPO_DOCUMENTO_IDENTIDAD
+                if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0)) value = entity.Documentos.ToList()[0].Tipo.Descripcion; else value = DBNull.Value;
+                AddParameter("P_TIPO_DOCUMENTO_IDENTIDAD", OracleDbType.Varchar2, value);
+                // (11) P_NUMERO_DOCUMENTO
+                if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0)) value = entity.Documentos.ToList()[0].Numero; else value = DBNull.Value;
+                AddParameter("P_NUMERO_DOCUMENTO", OracleDbType.Varchar2, value);
+                // (12) P_DIRECCION
+                if ((entity.Direcciones != null) && (entity.Direcciones.ToList().Count > 0)) value = entity.Direcciones.ToList()[0].Descripcion; else value = DBNull.Value;
+                AddParameter("P_DIRECCION", OracleDbType.Varchar2, value);
+                // (13) P_TELEFONO
+                if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 0)) value = entity.Telefonos.ToList()[0].Numero; else value = DBNull.Value;
+                AddParameter("P_TELEFONO", OracleDbType.Varchar2, value);
+                // (14) P_TELEFONO_CELULAR
+                if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 1)) value = entity.Telefonos.ToList()[1].Numero; else value = DBNull.Value;
+                AddParameter("P_TELEFONO_CELULAR", OracleDbType.Varchar2, value);
+                // (15) P_CORREO
+                if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion; else value = DBNull.Value;
+                AddParameter("P_CORREO", OracleDbType.Varchar2, value);
+                // (16) P_ESTADO
+                value = entity.Estado.Descripcion;
+                AddParameter("P_ESTADO", OracleDbType.Varchar2, value);
+                // (17) P_FECHA_CUMPLE
+                value = entity.FechaNacimiento;
+                AddParameter("P_FECHA_CUMPLE", OracleDbType.Varchar2, value);
+                // (18) P_ID_CUENTA
+                value = DBNull.Value;
+                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, 1000);
+                // (19) P_ID_CONTACTO
+                value = DBNull.Value;
+                AddParameter("P_ID_CONTACTO", OracleDbType.Varchar2, value, ParameterDirection.Output, 1000);
                 #endregion
 
                 #region Invoke
@@ -74,8 +100,8 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
                 operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
                 operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");
-                operation["P_REFE_EXTERNA_2"] = GetOutParameter("P_REFE_EXTERNA_2");
-                operation["P_REFE_EXTERNA_3"] = GetOutParameter("P_REFE_EXTERNA_3");
+                operation["P_ID_CUENTA"] = entity.IDCuenta = GetOutParameter("P_ID_CUENTA").ToString();
+                operation["P_ID_CONTACTO"] = entity.ID = GetOutParameter("P_ID_CONTACTO").ToString();
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 

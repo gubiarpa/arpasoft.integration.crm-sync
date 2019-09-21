@@ -22,15 +22,15 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operation[UnidadNegocioNames.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
+                        _operation[UnidadNegocioKeys.CondorTravel.GetFullName()] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
                         break;
                     case UnidadNegocioKeys.NuevoMundo:
-                        _operation[UnidadNegocioNames.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Create(entity);
+                        _operation[UnidadNegocioKeys.NuevoMundo.GetFullName()] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Create(entity);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operation[UnidadNegocioNames.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
-                        _operation[UnidadNegocioNames.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
+                        _operation[UnidadNegocioKeys.DestinosMundiales.GetFullName()] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
+                        _operation[UnidadNegocioKeys.InterAgencias.GetFullName()] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
                         break;
                     default:
                         break;
@@ -56,6 +56,10 @@ namespace Expertia.Estructura.Controllers
                 ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
+            finally
+            {
+                _operation = null;
+            }
         }
 
         [Route(RouteAction.Update)]
@@ -68,14 +72,15 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operation[UnidadNegocioNames.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
-                        break;
-                    case UnidadNegocioKeys.DestinosMundiales:
+                        _operation[UnidadNegocioKeys.CondorTravel.GetFullName()] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
                         break;
                     case UnidadNegocioKeys.NuevoMundo:
+                        _operation[UnidadNegocioKeys.NuevoMundo.GetFullName()] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
+                        break;
+                    case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operation[UnidadNegocioNames.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
-                        _operation[UnidadNegocioNames.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
+                        _operation[UnidadNegocioKeys.DestinosMundiales.GetFullName()] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
+                        _operation[UnidadNegocioKeys.InterAgencias.GetFullName()] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
                         break;
                     default:
                         break;
@@ -114,7 +119,7 @@ namespace Expertia.Estructura.Controllers
                     break;
                 case UnidadNegocioKeys.DestinosMundiales:
                 case UnidadNegocioKeys.InterAgencias:
-                    _crmCollection.Add(UnidadNegocioKeys.NuevoMundo, new Contacto_DM_Repository());
+                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository());
                     _crmCollection.Add(UnidadNegocioKeys.InterAgencias, new Contacto_IA_Repository());
                     break;
                 default:
