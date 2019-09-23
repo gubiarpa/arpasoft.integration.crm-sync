@@ -8,11 +8,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers.Base
-{
-    /// <summary>
-    /// Mantenimiento de entidad
-    /// </summary>
-    /// <typeparam name="T">Entidad Genérica</typeparam>
+{    
     [BasicAuthentication]
     public abstract class BaseController<T> : ApiController
     {
@@ -20,7 +16,8 @@ namespace Expertia.Estructura.Controllers.Base
         protected ILogFileManager _logFileManager;
         protected IClientFeatures _clientFeatures;
         protected IDictionary<UnidadNegocioKeys?, ICrud<T>> _crmCollection;
-        protected Operation _operation;
+        protected IDictionary<UnidadNegocioKeys?, Operation> _operCollection;
+        //protected List<Operation> _operResponse;
         #endregion
 
         #region Constructor
@@ -29,7 +26,8 @@ namespace Expertia.Estructura.Controllers.Base
             _logFileManager = new LogFileManager(LogKeys.LogPath, LogKeys.LogName);
             _clientFeatures = new ClientFeatures();
             _crmCollection = new Dictionary<UnidadNegocioKeys?, ICrud<T>>();
-            _operation = new Operation();
+            _operCollection = new Dictionary<UnidadNegocioKeys?, Operation>();
+            //_operResponse = new List<Operation>();
         }
         #endregion
 
@@ -47,7 +45,7 @@ namespace Expertia.Estructura.Controllers.Base
             try
             {
                 var testMessage = DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss.fff");
-                testMessage.WriteLogObject(_logFileManager, _clientFeatures);
+                testMessage.TryWriteLogObject(_logFileManager, _clientFeatures);
                 return Ok(new
                 {
                     Result = new
@@ -59,7 +57,7 @@ namespace Expertia.Estructura.Controllers.Base
             }
             catch (Exception ex)
             {
-                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError();
             }
         }
@@ -86,23 +84,6 @@ namespace Expertia.Estructura.Controllers.Base
             }
             return null;
         }
-
-        //protected string GetUnidadNegocio(UnidadNegocioKeys? unidadNegocioKey)
-        //{
-        //    switch (unidadNegocioKey)
-        //    {
-        //        case UnidadNegocioKeys.CondorTravel:
-        //            return UnidadNegocioNames.CondorTravel;
-        //        case UnidadNegocioKeys.DestinosMundiales:
-        //            return UnidadNegocioNames.DestinosMundiales;
-        //        case UnidadNegocioKeys.NuevoMundo:
-        //            return UnidadNegocioNames.NuevoMundo;
-        //        case UnidadNegocioKeys.InterAgencias:
-        //            return UnidadNegocioNames.InterAgencias;
-        //        default:
-        //            return null;
-        //    }
-        //}
 
         protected abstract UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey);
         #endregion

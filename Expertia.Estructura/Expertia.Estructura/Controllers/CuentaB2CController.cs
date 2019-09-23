@@ -2,6 +2,7 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Utils;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -18,7 +19,6 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                //WriteLogObject(ex, LogType.Fail);
                 return InternalServerError(ex);
             }
         }
@@ -28,12 +28,10 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                //WriteLogObject(entity);
                 return Ok();
             }
             catch (Exception ex)
             {
-                //WriteLogObject(ex, LogType.Fail);
                 return InternalServerError(ex);
             }
         }

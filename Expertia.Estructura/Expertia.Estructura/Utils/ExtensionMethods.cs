@@ -42,7 +42,7 @@ namespace Expertia.Estructura.Utils
         #endregion
 
         #region Log
-        public static void WriteLogObject(this object obj, ILogFileManager logFileManager, IClientFeatures clientFeatures, LogType logType = LogType.Info, bool indented = true)
+        public static void TryWriteLogObject(this object obj, ILogFileManager logFileManager, IClientFeatures clientFeatures, LogType logType = LogType.Info, bool indented = true)
         {
             try
             {

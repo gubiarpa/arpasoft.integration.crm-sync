@@ -5,6 +5,7 @@ using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -22,15 +23,15 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operation[UnidadNegocioKeys.CondorTravel.GetFullName()] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
+                        _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
                         break;
                     case UnidadNegocioKeys.NuevoMundo:
-                        _operation[UnidadNegocioKeys.NuevoMundo.GetFullName()] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Create(entity);
+                        _operCollection[UnidadNegocioKeys.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Create(entity);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operation[UnidadNegocioKeys.DestinosMundiales.GetFullName()] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
-                        _operation[UnidadNegocioKeys.InterAgencias.GetFullName()] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
+                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
+                        _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
                         break;
                     default:
                         break;
@@ -38,14 +39,14 @@ namespace Expertia.Estructura.Controllers
                 #endregion
 
                 #region Response
-                entity.WriteLogObject(_logFileManager, _clientFeatures);
+                entity.TryWriteLogObject(_logFileManager, _clientFeatures);
 
                 return Ok(new
                 {
                     Result = new
                     {
                         Type = ResultType.Success,
-                        Operation = _operation
+                        Operation = _operCollection
                     },
                     Entity = entity
                 });
@@ -53,12 +54,12 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
             finally
             {
-                _operation = null;
+                //_operation = null;
             }
         }
 
@@ -72,15 +73,15 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operation[UnidadNegocioKeys.CondorTravel.GetFullName()] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
+                        _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
                         break;
                     case UnidadNegocioKeys.NuevoMundo:
-                        _operation[UnidadNegocioKeys.NuevoMundo.GetFullName()] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
+                        _operCollection[UnidadNegocioKeys.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operation[UnidadNegocioKeys.DestinosMundiales.GetFullName()] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
-                        _operation[UnidadNegocioKeys.InterAgencias.GetFullName()] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
+                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
+                        _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
                         break;
                     default:
                         break;
@@ -88,14 +89,14 @@ namespace Expertia.Estructura.Controllers
                 #endregion
 
                 #region Response
-                entity.WriteLogObject(_logFileManager, _clientFeatures);
+                entity.TryWriteLogObject(_logFileManager, _clientFeatures);
 
                 return Ok(new
                 {
                     Result = new
                     {
                         Type = ResultType.Success,
-                        Operation = _operation
+                        Operation = _operCollection
                     },
                     Entity = entity
                 });
@@ -103,7 +104,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
             }
         }

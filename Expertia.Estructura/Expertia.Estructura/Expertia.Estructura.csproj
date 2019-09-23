@@ -204,10 +204,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="OracleScripts\Objects\CRM_Package %28Body%29.sql" />
-    <Content Include="OracleScripts\Objects\CRM_Package %28Header%29.sql" />
-    <Content Include="OracleScripts\Objects\CRM_Tables %28Clear%29.sql" />
-    <Content Include="OracleScripts\Objects\CRM_Tables %28Create%29.sql" />
     <Content Include="View\Index.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

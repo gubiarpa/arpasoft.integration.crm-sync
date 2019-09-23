@@ -35,19 +35,19 @@ namespace Expertia.Estructura.Filters
                     if (!IsAuthorizedUser(authToken))
                     {
                         actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
-                        LogLineMessage.Unauthorized.WriteLogObject(_logFileManager, _clientFeatures, LogType.Warning);
+                        LogLineMessage.Unauthorized.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Warning);
                     }
                 }
                 catch (Exception ex)
                 {
                     actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.BadRequest, ex);
-                    LogLineMessage.BadRequest.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                    LogLineMessage.BadRequest.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 }
             }
             else
             {
                 actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
-                LogLineMessage.Unauthorized.WriteLogObject(_logFileManager, _clientFeatures, LogType.Warning);
+                LogLineMessage.Unauthorized.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Warning);
             }
         }
 

@@ -59,19 +59,22 @@
     }
     #endregion
 
-    #region DataBaseKeys
-    public static class DataBaseKeys
-    {
-        public const string MdmPkg = "MdmPkg";
-    }
-    #endregion
-
     #region Formats
     public static class FormatTemplate
     {
         public const string LogLine = "{0}[{1}]\t[{2}]\t[{3}]\t[{4}]\t[{5}]\t[{6}]\n";
         public const string FileDate = "yyyyMMdd";
         public const string LongDate = "yyyy-MM-dd HH:mm:ss.fff";
+    }
+    #endregion
+
+    #region OutParameters
+    public static class OutParameter
+    {
+        public const string CodigoError = "P_CODIGO_ERROR";
+        public const string MensajeError = "P_MENSAJE_ERROR";
+        public const string IdCuenta = "P_ID_CUENTA";
+        public const string IdContacto = "P_ID_CONTACTO";
     }
     #endregion
 

@@ -53,7 +53,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 AddParameter("P_RAZON_SOCIAL", OracleDbType.Varchar2, value);
                 // (06) P_FECHA_ANIVERSARIO
                 value = entity.FechaNacimOrAniv;
-                AddParameter("P_FECHA_ANIVERSARIO", OracleDbType.Varchar2, value);
+                AddParameter("P_FECHA_ANIVERSARIO", OracleDbType.Date, value);
                 // (07) P_NOMBRE_PAIS_PROCEDENCIA
                 value = entity.PaisProcedencia.Descripcion;
                 AddParameter("P_NOMBRE_PAIS_PROCEDENCIA", OracleDbType.Varchar2, value);
@@ -154,9 +154,9 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 #region Invoke
                 ExecuteSPWithoutResults(SPName);
 
-                operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
-                operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");
-                operation["P_ID_CUENTA"] = entity.ID = GetOutParameter("P_ID_CUENTA").ToString();
+                operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+                operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                operation[OutParameter.IdCuenta] = entity.ID = GetOutParameter(OutParameter.IdCuenta).ToString();
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 

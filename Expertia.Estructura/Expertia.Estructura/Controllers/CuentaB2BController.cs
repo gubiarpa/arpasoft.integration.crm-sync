@@ -6,6 +6,7 @@ using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Repository.NuevoMundo;
 using Expertia.Estructura.Utils;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -35,39 +36,56 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operation[UnidadNegocioNames.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
-                        break;
+                        _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
+                        return Ok(new
+                        {
+                            Result = new
+                            {
+                                CondorTravel = new
+                                {
+                                    CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
+                                }
+                            }
+                        });
                     case UnidadNegocioKeys.NuevoMundo:
-                        _operation[UnidadNegocioNames.NuevoMundo] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Create(entity);
-                        break;
+                        return NotFound();
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operation[UnidadNegocioNames.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
-                        _operation[UnidadNegocioNames.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
-                        break;
+                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
+                        /*_operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);*/
+                        return Ok(new
+                        {
+                            Result = new
+                            {
+                                DestinosMundiales = new
+                                {
+                                    CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
+                                }/*,
+                                InterAgencias = new
+                                {
+                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString()
+                                }*/
+                            }
+                        });
                     default:
-                        break;
+                        return NotFound();
                 }
-                #endregion
-
-                #region Response
-                entity.WriteLogObject(_logFileManager, _clientFeatures);
-
-                return Ok(new
-                {
-                    Result = new
-                    {
-                        Type = ResultType.Success,
-                        Operation = _operation
-                    },
-                    Entity = entity
-                });
                 #endregion
             }
             catch (Exception ex)
             {
-                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
+            }
+            finally
+            {
+                entity.TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
 
@@ -81,39 +99,56 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operation[UnidadNegocioKeys.CondorTravel.GetFullName()] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
-                        break;
+                        _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
+                        return Ok(new
+                        {
+                            Result = new
+                            {
+                                CondorTravel = new
+                                {
+                                    CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
+                                }
+                            }
+                        });
                     case UnidadNegocioKeys.NuevoMundo:
-                        _operation[UnidadNegocioKeys.NuevoMundo.GetFullName()] = _crmCollection[UnidadNegocioKeys.NuevoMundo].Update(entity);
-                        break;
+                        return NotFound();
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operation[UnidadNegocioKeys.DestinosMundiales.GetFullName()] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
-                        _operation[UnidadNegocioKeys.InterAgencias.GetFullName()] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
-                        break;
+                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
+                        /*_operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);*/
+                        return Ok(new
+                        {
+                            Result = new
+                            {
+                                DestinosMundiales = new
+                                {
+                                    CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
+                                }/*,
+                                InterAgencias = new
+                                {
+                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString()
+                                }*/
+                            }
+                        });
                     default:
-                        break;
+                        return NotFound();
                 }
-                #endregion
-
-                #region Response
-                entity.WriteLogObject(_logFileManager, _clientFeatures);
-
-                return Ok(new
-                {
-                    Result = new
-                    {
-                        Type = ResultType.Success,
-                        Operation = _operation
-                    },
-                    Entity = entity
-                });
                 #endregion
             }
             catch (Exception ex)
             {
-                ex.WriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
                 return InternalServerError(ex);
+            }
+            finally
+            {
+                entity.TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
 
