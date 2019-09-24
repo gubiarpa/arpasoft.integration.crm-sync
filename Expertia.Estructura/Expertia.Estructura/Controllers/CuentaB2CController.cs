@@ -2,7 +2,6 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Utils;
 using System;
-using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers

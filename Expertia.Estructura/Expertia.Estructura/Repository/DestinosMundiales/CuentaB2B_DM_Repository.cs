@@ -43,22 +43,23 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = DBNull.Value;
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, 4000);
                 // (03) P_NOMBRE_USUARIO
-                value = userName;
+                value = userName.Coalesce();
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
                 // (04) P_ID_CUENTA_SALESFORCE
-                value = entity.IdSalesForce;
+                value = entity.IdSalesForce.Coalesce();
                 AddParameter("P_ID_CUENTA_SALESFORCE", OracleDbType.Varchar2, value);
                 // (05) P_RAZON_SOCIAL
-                value = entity.RazonSocial;
+                value = entity.RazonSocial.Coalesce();
                 AddParameter("P_RAZON_SOCIAL", OracleDbType.Varchar2, value);
                 // (06) P_FECHA_ANIVERSARIO
-                value = entity.FechaNacimOrAniv;
+                value = entity.FechaNacimOrAniv.Coalesce();
                 AddParameter("P_FECHA_ANIVERSARIO", OracleDbType.Date, value);
                 // (07) P_NOMBRE_PAIS_PROCEDENCIA
-                value = entity.PaisProcedencia.Descripcion;
+                if (entity.PaisProcedencia == null) value = DBNull.Value; else value = entity.PaisProcedencia.Descripcion.Coalesce();
                 AddParameter("P_NOMBRE_PAIS_PROCEDENCIA", OracleDbType.Varchar2, value);
                 // (08) P_TIPO_DOCUMENTO_IDENTIDAD
-                if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0)) value = entity.Documentos.ToList()[0].Tipo.Descripcion; else value = DBNull.Value;
+                if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0) && (entity.Documentos.ToList()[0].Tipo != null))
+                    value = entity.Documentos.ToList()[0].Tipo.Descripcion.Coalesce();
                 AddParameter("P_TIPO_DOCUMENTO_IDENTIDAD", OracleDbType.Varchar2, value);
                 // (09) P_NUMERO_DOCUMENTO
                 if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0)) value = entity.Documentos.ToList()[0].Numero; else value = DBNull.Value;
@@ -103,20 +104,23 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 2)) value = entity.Telefonos.ToList()[2].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_2", OracleDbType.Varchar2, value);
                 // (23) P_SITIO_WEB
-                if ((entity.Sitios != null) && (entity.Sitios.ToList().Count > 0)) value = entity.Sitios.ToList()[0].Descripcion; else value = DBNull.Value;
+                if ((entity.Sitios != null) && (entity.Sitios.ToList().Count > 0)) value = entity.Sitios.ToList()[0].Descripcion.Coalesce();
                 AddParameter("P_SITIO_WEB", OracleDbType.Varchar2, value);
                 // (24) P_CORREO
-                if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion; else value = DBNull.Value;
+                if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion.Coalesce();
                 AddParameter("P_CORREO", OracleDbType.Varchar2, value);
                 // (25) P_PROPIETARIO
                 if ((entity.Participantes != null) && (entity.Participantes.ToList().Count > 0)) value = entity.Participantes.ToList()[0].EmpleadoOrEjecutivoResponsable.Descripcion; else value = DBNull.Value;
                 AddParameter("P_PROPIETARIO", OracleDbType.Varchar2, value);
                 // (26) P_PUNTO_CONTACTO
-                value = entity.PuntoContacto.Descripcion;
+                if (entity.PuntoContacto == null) value = DBNull.Value; else value = entity.PuntoContacto.Descripcion.Coalesce();
                 AddParameter("P_PUNTO_CONTACTO", OracleDbType.Varchar2, value);
                 // (27) P_NOMBRE_CONDICION_PAGO
                 #region CondicionPago
-                value = entity.CondicionesPago.ToList().SingleOrDefault(x => x.Empresa.GetUnidadNegocioKey().Equals(UnidadNegocioKeys.DestinosMundiales)).Tipo.Descripcion;
+                if (entity.CondicionesPago == null)
+                    value = DBNull.Value;
+                else
+                    value = entity.CondicionesPago.ToList().SingleOrDefault(x => x.Empresa.GetUnidadNegocioKey().Equals(UnidadNegocioKeys.DestinosMundiales)).Tipo.Descripcion;
                 AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
                 #endregion
                 // (28) P_COMENTARIO

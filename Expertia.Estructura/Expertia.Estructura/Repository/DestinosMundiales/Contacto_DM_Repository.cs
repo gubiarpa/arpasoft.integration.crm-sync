@@ -11,6 +11,12 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 {
     public class Contacto_DM_Repository : OracleBase<Contacto>, ICrud<Contacto>, ISameSPName<Contacto>
     {
+        #region GenericConstructor
+        public Contacto_DM_Repository(string connKey) : base(connKey)
+        {
+        }
+        #endregion
+
         public Contacto_DM_Repository() : base(ConnectionKeys.DMConnKey)
         {
         }
@@ -86,7 +92,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 AddParameter("P_ESTADO", OracleDbType.Varchar2, value);
                 // (17) P_FECHA_CUMPLE
                 value = entity.FechaNacimiento;
-                AddParameter("P_FECHA_CUMPLE", OracleDbType.Varchar2, value);
+                AddParameter("P_FECHA_CUMPLE", OracleDbType.Date, value);
                 // (18) P_ID_CUENTA
                 value = DBNull.Value;
                 AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, 1000);

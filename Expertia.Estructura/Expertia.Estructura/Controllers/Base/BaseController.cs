@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers.Base
-{    
+{
     [BasicAuthentication]
     public abstract class BaseController<T> : ApiController
     {

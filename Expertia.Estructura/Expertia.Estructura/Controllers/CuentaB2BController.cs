@@ -6,7 +6,6 @@ using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Repository.NuevoMundo;
 using Expertia.Estructura.Utils;
 using System;
-using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers

@@ -1,8 +1,12 @@
 ﻿using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
+using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Utils;
+using Oracle.ManagedDataAccess.Client;
 using System;
+using System.Data;
+using System.Linq;
 
 namespace Expertia.Estructura.Repository.InterAgencias
 {
@@ -27,7 +31,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #region Auxiliar
         public Operation ExecuteOperation(Contacto entity, string SPName, string userName)
         {
-            return (new DestinosMundiales.Contacto_DM_Repository()).ExecuteOperation(entity, SPName, userName);
+            return (new Contacto_DM_Repository(ConnectionKeys.IAConnKey)).ExecuteOperation(entity, SPName, userName);
         }
         #endregion
 
@@ -39,7 +43,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
         public Operation Update(Contacto entity)
         {
-            throw new NotImplementedException();
+            return ExecuteOperation(entity, StoredProcedureName.IA_Update_Contacto, entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
     }
