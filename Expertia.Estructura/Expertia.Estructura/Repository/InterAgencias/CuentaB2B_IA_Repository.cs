@@ -15,19 +15,19 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #region PublicMethods
         public Operation Create(CuentaB2B entity)
         {
-            throw new NotImplementedException();
+            return ExecuteOperation(entity, StoredProcedureName.IA_Create_CuentaB2B, entity.Auditoria.CreateUser.Descripcion);
         }
 
         public Operation Update(CuentaB2B entity)
         {
-            throw new NotImplementedException();
+            return ExecuteOperation(entity, StoredProcedureName.IA_Update_CuentaB2B, entity.Auditoria.CreateUser.Descripcion);
         }
         #endregion
 
         #region Auxiliar
         public Operation ExecuteOperation(CuentaB2B entity, string SPName, string userName)
         {
-            throw new NotImplementedException();
+            return (new DestinosMundiales.CuentaB2B_DM_Repository()).ExecuteOperation(entity, SPName, userName);
         }
         #endregion
 
@@ -36,7 +36,6 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             throw new NotImplementedException();
         }
-
 
         public Operation Read(CuentaB2B entity)
         {

@@ -18,12 +18,12 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         #region PublicMethods
         public Operation Create(CuentaB2B entity)
         {
-            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE", entity.Auditoria.CreateUser.Descripcion);
+            return ExecuteOperation(entity, StoredProcedureName.DM_Create_CuentaB2B, entity.Auditoria.CreateUser.Descripcion);
         }
 
         public Operation Update(CuentaB2B entity)
         {
-            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CLIENTE", entity.Auditoria.ModifyUser.Descripcion);
+            return ExecuteOperation(entity, StoredProcedureName.DM_Update_CuentaB2B, entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
 

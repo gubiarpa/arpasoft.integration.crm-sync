@@ -54,7 +54,7 @@ namespace Expertia.Estructura.Controllers
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
-                        /*_operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);*/
+                        _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
                         return Ok(new
                         {
                             Result = new
@@ -64,13 +64,13 @@ namespace Expertia.Estructura.Controllers
                                     CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
                                     MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
-                                }/*,
+                                },
                                 InterAgencias = new
                                 {
-                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString()
-                                }*/
+                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
+                                }
                             }
                         });
                     default:
@@ -117,7 +117,7 @@ namespace Expertia.Estructura.Controllers
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
-                        /*_operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);*/
+                        _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
                         return Ok(new
                         {
                             Result = new
@@ -127,13 +127,13 @@ namespace Expertia.Estructura.Controllers
                                     CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
                                     MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
-                                }/*,
+                                },
                                 InterAgencias = new
                                 {
-                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString(),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][].ToString()
-                                }*/
+                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
+                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
+                                }
                             }
                         });
                     default:

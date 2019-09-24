@@ -68,13 +68,35 @@
     }
     #endregion
 
-    #region OutParameters
+    #region Database
+    public static class StoredProcedureName
+    {
+        #region DestinosMundiales
+        public const string DM_Create_CuentaB2B = "DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE";
+        public const string DM_Update_CuentaB2B = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
+        public const string DM_Create_Contacto = "DESTINOS_TRP.CRM_PKG.SP_CREAR_CONTACTO";
+        public const string DM_Update_Contacto = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
+        #endregion
+
+        #region Interagencias
+        public const string IA_Create_CuentaB2B = "NUEVOMUNDO.CRM_PKG.SP_CREAR_CLIENTE";
+        public const string IA_Update_CuentaB2B = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
+        public const string IA_Create_Contacto = "NUEVOMUNDO.CRM_PKG.SP_CREAR_CONTACTO";
+        public const string IA_Update_Contacto = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
+        #endregion
+    }
+
     public static class OutParameter
     {
+        #region Error
         public const string CodigoError = "P_CODIGO_ERROR";
         public const string MensajeError = "P_MENSAJE_ERROR";
+        #endregion
+
+        #region Identifier
         public const string IdCuenta = "P_ID_CUENTA";
         public const string IdContacto = "P_ID_CONTACTO";
+        #endregion
     }
     #endregion
 

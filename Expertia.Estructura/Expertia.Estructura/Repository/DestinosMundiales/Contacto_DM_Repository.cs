@@ -18,12 +18,12 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         #region PublicMethods
         public Operation Create(Contacto entity)
         {
-            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_CREAR_CONTACTO", entity.Auditoria.CreateUser.Descripcion);
+            return ExecuteOperation(entity, StoredProcedureName.DM_Create_Contacto, entity.Auditoria.CreateUser.Descripcion);
         }
 
         public Operation Update(Contacto entity)
         {
-            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CONTACTO", entity.Auditoria.ModifyUser.Descripcion);
+            return ExecuteOperation(entity, StoredProcedureName.DM_Update_Contacto, entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
 
@@ -98,10 +98,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 #region Invoke
                 ExecuteSPWithoutResults(SPName);
 
-                operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
-                operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");
-                operation["P_ID_CUENTA"] = entity.IDCuenta = GetOutParameter("P_ID_CUENTA").ToString();
-                operation["P_ID_CONTACTO"] = entity.ID = GetOutParameter("P_ID_CONTACTO").ToString();
+                operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+                operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                operation[OutParameter.IdCuenta] = entity.IDCuenta = GetOutParameter(OutParameter.IdCuenta).ToString();
+                operation[OutParameter.IdContacto] = entity.ID = GetOutParameter(OutParameter.IdContacto).ToString();
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 
