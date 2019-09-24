@@ -5,4 +5,9 @@
         //public string ID { get; set; }
         public string Descripcion { get; set; }
     }
+
+    public class AlterDesc
+    {
+        public string Description { get; set; }
+    }
 }

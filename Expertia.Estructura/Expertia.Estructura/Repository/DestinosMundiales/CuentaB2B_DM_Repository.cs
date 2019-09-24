@@ -130,19 +130,19 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = entity.TipoCuenta.Descripcion;
                 AddParameter("P_TIPO_CUENTA", OracleDbType.Varchar2, value);
                 // (30) P_CATEG_VALOR
-                value = entity.CategoriaValor.Descripcion;
+                value = entity.CategoriaValor.Description.Coalesce();
                 AddParameter("P_CATEG_VALOR", OracleDbType.Varchar2, value);
                 // (31) P_CATEG_PERFIL_ACTITUD_TEC
-                value = entity.CategoriaPerfilActitudTecnologica.Descripcion;
+                value = entity.CategoriaPerfilActitudTecnologica.Description.Coalesce();
                 AddParameter("P_CATEG_PERFIL_ACTITUD_TEC", OracleDbType.Varchar2, value);
                 // (32) P_CATEG_PERFIL_FIDELIDAD
-                value = entity.CategoriaPerfilFidelidad.Descripcion;
+                value = entity.CategoriaPerfilFidelidad.Description.Coalesce();
                 AddParameter("P_CATEG_PERFIL_FIDELIDAD", OracleDbType.Varchar2, value);
                 // (33) P_INCENTIVO
-                value = entity.Incentivo.Descripcion;
+                value = entity.Incentivo.Description.Coalesce();
                 AddParameter("P_INCENTIVO", OracleDbType.Varchar2, value);
                 // (34) P_ESTADO_ACTIVACION
-                value = entity.Estado.Descripcion;
+                value = entity.MotivoEstado.Description.Coalesce();
                 AddParameter("P_ESTADO_ACTIVACION", OracleDbType.Varchar2, value);
                 // (35) P_GDS
                 value = entity.GDS.Array;
