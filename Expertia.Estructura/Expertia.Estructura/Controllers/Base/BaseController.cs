@@ -5,6 +5,7 @@ using Expertia.Estructura.Utils;
 using Expertia.Estructura.Utils.Behavior;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers.Base
@@ -64,23 +65,19 @@ namespace Expertia.Estructura.Controllers.Base
         #endregion
 
         #region Auxiliar
-        protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName) // Ejm. "CONDOR TRAVEL"
+        protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName)
         {
-            if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyName())))
+            if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyValues()).ToUpper().Split(Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
             {
                 return UnidadNegocioKeys.CondorTravel;
             }
-            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetKeyName())))
+            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetKeyValues()).ToUpper().Split(Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
             {
                 return UnidadNegocioKeys.DestinosMundiales;
             }
-            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetKeyName())))
+            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetKeyValues()).ToUpper().Split(Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
             {
                 return UnidadNegocioKeys.InterAgencias;
-            }
-            else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetKeyName())))
-            {
-                return UnidadNegocioKeys.NuevoMundo;
             }
             return null;
         }

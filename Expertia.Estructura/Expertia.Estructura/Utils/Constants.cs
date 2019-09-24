@@ -117,12 +117,9 @@
         public const string InterAgencias = "IA";
     }
 
-    public static class UnidadNegocioNames
+    public static class Auxiliar
     {
-        public const string CondorTravel = "Condor Travel";
-        public const string DestinosMundiales = "Destinos Mundiales";
-        public const string NuevoMundo = "Nuevo Mundo";
-        public const string InterAgencias = "InterAgencias";
+        public const char ListSeparator = ';';
     }
     #endregion
 

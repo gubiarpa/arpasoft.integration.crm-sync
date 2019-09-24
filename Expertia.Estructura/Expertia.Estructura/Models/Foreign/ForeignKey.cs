@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Utils;
+using System.Linq;
 
 namespace Expertia.Estructura.Models.Foreign
 {
@@ -40,25 +41,20 @@ namespace Expertia.Estructura.Models.Foreign
         public UnidadNegocioKeys? GetUnidadNegocioKey()
         {
             string unidadNegocioName = Descripcion; // Ejm. "CONDOR TRAVEL"
+
+            if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyValues()).ToUpper().Split(Utils.Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
             {
-                if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyName())))
-                {
-                    return UnidadNegocioKeys.CondorTravel;
-                }
-                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetKeyName())))
-                {
-                    return UnidadNegocioKeys.DestinosMundiales;
-                }
-                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetKeyName())))
-                {
-                    return UnidadNegocioKeys.InterAgencias;
-                }
-                else if (unidadNegocioName.Equals(ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.NuevoMundo.GetKeyName())))
-                {
-                    return UnidadNegocioKeys.NuevoMundo;
-                }
-                return null;
+                return UnidadNegocioKeys.CondorTravel;
             }
+            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.DestinosMundiales.GetKeyValues()).ToUpper().Split(Utils.Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
+            {
+                return UnidadNegocioKeys.DestinosMundiales;
+            }
+            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetKeyValues()).ToUpper().Split(Utils.Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
+            {
+                return UnidadNegocioKeys.InterAgencias;
+            }
+            return null;
         }
     }
     public class TipoCondicionPago : SimpleDesc { }

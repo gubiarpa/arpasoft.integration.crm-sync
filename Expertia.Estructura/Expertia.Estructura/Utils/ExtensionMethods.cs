@@ -85,26 +85,7 @@ namespace Expertia.Estructura.Utils
         #endregion
 
         #region Keys
-        public static string GetFullName(this UnidadNegocioKeys unidadNegocioKey)
-        {
-            try
-            {
-                switch (unidadNegocioKey)
-                {
-                    case UnidadNegocioKeys.CondorTravel: return UnidadNegocioNames.CondorTravel;
-                    case UnidadNegocioKeys.DestinosMundiales: return UnidadNegocioNames.DestinosMundiales;
-                    case UnidadNegocioKeys.NuevoMundo: return UnidadNegocioNames.NuevoMundo;
-                    case UnidadNegocioKeys.InterAgencias: return UnidadNegocioNames.InterAgencias;
-                    default: return null;
-                }
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public static string GetKeyName(this UnidadNegocioKeys unidadNegocioKey)
+        public static string GetKeyValues(this UnidadNegocioKeys unidadNegocioKey)
         {
             try
             {
