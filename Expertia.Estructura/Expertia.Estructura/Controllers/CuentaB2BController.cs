@@ -28,6 +28,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
+            object result = null;
             try
             {
                 #region UnidadNegocio
@@ -36,7 +37,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
                         _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
-                        return Ok(new
+                        result = new
                         {
                             Result = new
                             {
@@ -46,14 +47,15 @@ namespace Expertia.Estructura.Controllers
                                     MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString()
                                 }
                             }
-                        });
+                        };
+                        break;
                     case UnidadNegocioKeys.NuevoMundo:
                         return NotFound();
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
                         _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
-                        return Ok(new
+                        result = new
                         {
                             Result = new
                             {
@@ -70,10 +72,12 @@ namespace Expertia.Estructura.Controllers
                                     IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
                                 }
                             }
-                        });
+                        };
+                        break;
                     default:
                         return NotFound();
                 }
+                return Ok(result);
                 #endregion
             }
             catch (Exception ex)
@@ -83,13 +87,19 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                entity.TryWriteLogObject(_logFileManager, _clientFeatures);
+                (new
+                {
+                    BusinessUnity = entity.UnidadNegocio.Descripcion,
+                    LegacySystems = result,
+                    Body = entity
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);                
             }
         }
 
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2B entity)
         {
+            object result = null;
             try
             {
                 #region UnidadNegocio
@@ -98,7 +108,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
                         _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
-                        return Ok(new
+                        result = new
                         {
                             Result = new
                             {
@@ -108,14 +118,15 @@ namespace Expertia.Estructura.Controllers
                                     MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString()
                                 }
                             }
-                        });
+                        };
+                        break;
                     case UnidadNegocioKeys.NuevoMundo:
                         return NotFound();
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
                         _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
-                        return Ok(new
+                        result = new
                         {
                             Result = new
                             {
@@ -132,10 +143,12 @@ namespace Expertia.Estructura.Controllers
                                     IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
                                 }
                             }
-                        });
+                        };
+                        break;
                     default:
                         return NotFound();
                 }
+                return Ok(result);
                 #endregion
             }
             catch (Exception ex)
@@ -145,7 +158,12 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                entity.TryWriteLogObject(_logFileManager, _clientFeatures);
+                (new
+                {
+                    UnidadNegocio = entity.UnidadNegocio.Descripcion,
+                    Result = result,
+                    Entity = entity
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
 

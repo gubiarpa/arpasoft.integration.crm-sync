@@ -8,7 +8,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
 {
     public class CuentaB2B_IA_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>, ISameSPName<CuentaB2B>
     {
-        public CuentaB2B_IA_Repository() : base(ConnectionKeys.IAConnKey)
+        public CuentaB2B_IA_Repository() : base(ConnectionKeys.IAConnKey, UnidadNegocioKeys.InterAgencias)
         {
         }
 

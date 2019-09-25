@@ -11,12 +11,14 @@ namespace Expertia.Estructura.Repository.Base
         private Dictionary<string, OracleParameter> _parameters;
         private Dictionary<string, OracleParameter> _resultParameters;
         protected string _connectionString { get; }
+        protected readonly UnidadNegocioKeys? _unidadNegocio;
 
-        public OracleBase(string connKey)
+        public OracleBase(string connKey, UnidadNegocioKeys? unidadNegocio = null)
         {
             _parameters = new Dictionary<string, OracleParameter>();
             _resultParameters = new Dictionary<string, OracleParameter>();
             _connectionString = ConfigAccess.GetValueInConnectionString(connKey);
+            _unidadNegocio = unidadNegocio;
         }
 
         protected void AddParameter(string parameterName, OracleDbType type, object value = null, ParameterDirection parameterDirection = ParameterDirection.Input, int size = 0)

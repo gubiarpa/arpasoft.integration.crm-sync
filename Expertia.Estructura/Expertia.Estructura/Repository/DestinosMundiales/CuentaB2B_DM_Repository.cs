@@ -11,7 +11,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 {
     public class CuentaB2B_DM_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>, ISameSPName<CuentaB2B>
     {
-        public CuentaB2B_DM_Repository() : base(ConnectionKeys.DMConnKey)
+        public CuentaB2B_DM_Repository() : base(ConnectionKeys.DMConnKey, UnidadNegocioKeys.DestinosMundiales)
         {
         }
 
@@ -120,7 +120,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 if (entity.CondicionesPago == null)
                     value = DBNull.Value;
                 else
-                    value = entity.CondicionesPago.ToList().SingleOrDefault(x => x.Empresa.GetUnidadNegocioKey().Equals(UnidadNegocioKeys.DestinosMundiales)).Tipo.Descripcion;
+                    value = entity.CondicionesPago.ToList().SingleOrDefault(x => x.Empresa.GetUnidadNegocioKey().Equals(_unidadNegocio)).Tipo.Descripcion;
                 AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, value);
                 #endregion
                 // (28) P_COMENTARIO
