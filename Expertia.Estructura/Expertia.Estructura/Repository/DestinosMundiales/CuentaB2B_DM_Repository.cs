@@ -11,7 +11,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 {
     public class CuentaB2B_DM_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>, ISameSPName<CuentaB2B>
     {
-        public CuentaB2B_DM_Repository() : base(ConnectionKeys.DMConnKey, UnidadNegocioKeys.DestinosMundiales)
+        public CuentaB2B_DM_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.DestinosMundiales) : base(ConnectionKeys.DMConnKey, unidadNegocio)
         {
         }
 

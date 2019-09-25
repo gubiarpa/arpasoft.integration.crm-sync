@@ -8,7 +8,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
 {
     public class CuentaB2B_IA_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>, ISameSPName<CuentaB2B>
     {
-        public CuentaB2B_IA_Repository() : base(ConnectionKeys.IAConnKey, UnidadNegocioKeys.InterAgencias)
+        public CuentaB2B_IA_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.InterAgencias) : base(ConnectionKeys.IAConnKey, unidadNegocio)
         {
         }
 
@@ -27,7 +27,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #region Auxiliar
         public Operation ExecuteOperation(CuentaB2B entity, string SPName, string userName)
         {
-            return (new DestinosMundiales.CuentaB2B_DM_Repository()).ExecuteOperation(entity, SPName, userName);
+            return (new DestinosMundiales.CuentaB2B_DM_Repository(UnidadNegocioKeys.InterAgencias)).ExecuteOperation(entity, SPName, userName);
         }
         #endregion
 
