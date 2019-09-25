@@ -37,8 +37,8 @@ namespace Expertia.Estructura.Models
         public IEnumerable<Participante> Participantes { get; set; }
         public InteresProdActiv InteresesProdActiv { get; set; }
         public CanalInformacion CanalesRecibirInfo { get; set; }
-        public Branch Branches { get; set; }
-        public IdiomaComunicCliente IdiomasComunicCliente { get; set; }
+        public IEnumerable<SimpleDesc> Branches { get; set; }
+        public IEnumerable<SimpleDesc> IdiomasComunicCliente { get; set; }
         #endregion
 
         #region Auditoria

@@ -18,12 +18,12 @@ namespace Expertia.Estructura.Repository.Condor
         #region PublicMethods
         public Operation Create(CuentaB2B entity)
         {
-            return ExecuteOperation(entity, "DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE", entity.Auditoria.CreateUser.Descripcion);
+            return ExecuteOperation(entity, StoredProcedureName.CT_Create_CuentaB2B, entity.Auditoria.CreateUser.Descripcion);
         }
 
         public Operation Update(CuentaB2B entity)
         {
-            return ExecuteOperation(entity, "CONDOR.CRM_PKG.SP_ACTUALIZAR_CLIENTE", entity.Auditoria.ModifyUser.Descripcion);
+            return ExecuteOperation(entity, StoredProcedureName.CT_Update_CuentaB2B, entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
 
@@ -45,7 +45,8 @@ namespace Expertia.Estructura.Repository.Condor
                 // (04) P_NOMBRE_EMPRESA
                 AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, entity.UnidadNegocio.Descripcion); // ◄ Especificar el nombre
                 // (05) P_BRANCH
-                AddParameter("P_BRANCH", OracleDbType.Varchar2, entity.Branches.Array); // ◄ No se tiene ID, sino descripción                
+                if ((entity.Branches != null) && (entity.Branches.ToList().Count > 0)) value = entity.Branches.ToList()[0].Descripcion; else value = DBNull.Value;
+                AddParameter("P_BRANCH", OracleDbType.Varchar2, value);
                 // (06) P_COD_CLIENTE_MDM
                 AddParameter("P_COD_CLIENTE_MDM", OracleDbType.Varchar2, entity.ID);
                 // (07) P_COD_CLIENTE_CRM
@@ -68,7 +69,8 @@ namespace Expertia.Estructura.Repository.Condor
                 // (15) P_NOMBRE_CIUDAD
                 AddParameter("P_NOMBRE_CIUDAD", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Ciudad.Descripcion);
                 // (16) P_NOMBRE_IDIOMA
-                AddParameter("P_NOMBRE_IDIOMA", OracleDbType.Varchar2, entity.IdiomasComunicCliente.Array);
+                if ((entity.IdiomasComunicCliente != null) && (entity.IdiomasComunicCliente.ToList().Count > 0)) value = entity.IdiomasComunicCliente.ToList()[0].Descripcion; else value = DBNull.Value;
+                AddParameter("P_NOMBRE_IDIOMA", OracleDbType.Varchar2, value);
                 // (17) P_EMAIL1
                 if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_EMAIL1", OracleDbType.Varchar2, value);
@@ -88,18 +90,21 @@ namespace Expertia.Estructura.Repository.Condor
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 3)) value = entity.Telefonos.ToList()[3].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_EMERGENCIA", OracleDbType.Varchar2, value);
                 // (23) P_SITIO_WEB */
-                AddParameter("P_SITIO_WEB", OracleDbType.Varchar2, entity.Sitios.ToList()[0].Descripcion.Coalesce(DBNull.Value));
+                value = entity.Sitios.ToList()[0].Descripcion.Coalesce(DBNull.Value);
+                AddParameter("P_SITIO_WEB", OracleDbType.Varchar2, value);
                 // (24) P_DIRECCION */
-                AddParameter("P_DIRECCION", OracleDbType.Varchar2, entity.Direcciones.ToList()[0].Descripcion.Coalesce(DBNull.Value));
+                value = entity.Direcciones.ToList()[0].Descripcion.Coalesce(DBNull.Value);
+                AddParameter("P_DIRECCION", OracleDbType.Varchar2, value);
                 // (25) P_NOTAS */
-                AddParameter("P_NOTAS", OracleDbType.Varchar2, entity.Comentarios);
+                value = entity.Comentarios.Coalesce();
+                AddParameter("P_NOTAS", OracleDbType.Varchar2, value);
                 #endregion
 
                 #region Invoke
                 ExecuteSPWithoutResults(SPName);
 
-                operation["P_CODIGO_ERROR"] = GetOutParameter("P_CODIGO_ERROR");
-                operation["P_MENSAJE_ERROR"] = GetOutParameter("P_MENSAJE_ERROR");
+                operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+                operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 
@@ -123,12 +128,5 @@ namespace Expertia.Estructura.Repository.Condor
             throw new NotImplementedException();
         }
         #endregion
-
-
-
-
-
-
-
     }
 }
