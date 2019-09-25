@@ -59,11 +59,11 @@ namespace Expertia.Estructura.Models.Foreign
     }
     public class TipoCondicionPago : SimpleDesc { }
     public class TipoMoneda : SimpleDesc { }
-    public class CategoriaValor : SimpleDesc { }
-    public class CategoriaPerfilActitudTecnologica : SimpleDesc { }
-    public class CategoriaPerfilFidelidad : SimpleDesc { }
-    public class Incentivo : SimpleDesc { }
-    public class MotivoEstado : SimpleDesc { }
+    public class CategoriaValor : AlterDesc { }
+    public class CategoriaPerfilActitudTecnologica : AlterDesc { }
+    public class CategoriaPerfilFidelidad : AlterDesc { }
+    public class Incentivo : AlterDesc { }
+    public class MotivoEstado : AlterDesc { }
     public class Herramientas : MultipleDesc { }
     public class GDS : MultipleDesc { }
     public class GrupoComunicacion : MultipleDesc { }
