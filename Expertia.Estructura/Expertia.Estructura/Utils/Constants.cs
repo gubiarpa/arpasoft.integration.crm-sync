@@ -95,6 +95,10 @@
 
     public static class OutParameter
     {
+        #region Size
+        public const int DefaultSize = 1000;
+        #endregion
+
         #region Error
         public const string CodigoError = "P_CODIGO_ERROR";
         public const string MensajeError = "P_MENSAJE_ERROR";

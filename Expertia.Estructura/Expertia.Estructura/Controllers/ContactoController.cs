@@ -15,7 +15,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(Contacto entity)
         {
-            object result = null;
+            object result = null, error = null;
             try
             {
                 #region UnidadNegocio
@@ -31,7 +31,9 @@ namespace Expertia.Estructura.Controllers
                                 CondorTravel = new
                                 {
                                     CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString()
+                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
+                                    IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
                                 }
                             }
                         };
@@ -71,7 +73,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                error = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -80,6 +82,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = result,
+                    Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -88,7 +91,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(Contacto entity)
         {
-            object result = null;
+            object result = null, error = null;
             try
             {
                 #region UnidadNegocio
@@ -104,7 +107,9 @@ namespace Expertia.Estructura.Controllers
                                 CondorTravel = new
                                 {
                                     CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString()
+                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
+                                    IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
                                 }
                             }
                         };
@@ -144,7 +149,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                error = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -153,6 +158,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = result,
+                    Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

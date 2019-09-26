@@ -37,9 +37,9 @@ namespace Expertia.Estructura.Repository.Condor
 
                 #region Parameters
                 // (01) P_CODIGO_ERROR
-                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
+                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (02) P_MENSAJE_ERROR
-                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
+                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (03) P_NOMBRE_USUARIO
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, userName);
                 // (04) P_NOMBRE_EMPRESA
@@ -84,6 +84,12 @@ namespace Expertia.Estructura.Repository.Condor
                 AddParameter("P_ACTIVO", OracleDbType.Varchar2, entity.Estado.Descripcion);
                 // (21) P_NOTAS
                 AddParameter("P_NOTAS", OracleDbType.Varchar2, entity.Comentarios);
+                // (22) P_ID_CUENTA
+                value = DBNull.Value;
+                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+                // (23) P_ID_CUENTA
+                value = DBNull.Value;
+                AddParameter("P_ID_CONTACTO", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
 
                 #region Invoke
@@ -91,6 +97,8 @@ namespace Expertia.Estructura.Repository.Condor
 
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                operation[OutParameter.IdCuenta] = entity.ID = GetOutParameter(OutParameter.IdCuenta).ToString();
+                operation[OutParameter.IdContacto] = entity.IDCuenta = GetOutParameter(OutParameter.IdContacto).ToString();
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 

@@ -37,9 +37,9 @@ namespace Expertia.Estructura.Repository.Condor
 
                 #region Parameters
                 // (01) P_CODIGO_ERROR
-                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
+                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (02) P_MENSAJE_ERROR
-                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, 4000);
+                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (03) P_NOMBRE_USUARIO
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, userName); // ◄ No hay campos de auditoría
                 // (04) P_NOMBRE_EMPRESA
@@ -80,24 +80,27 @@ namespace Expertia.Estructura.Repository.Condor
                 // (19) P_TELEFONO_OFICINA
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 0)) value = entity.Telefonos.ToList()[0].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_OFICINA", OracleDbType.Varchar2, value);
-                // (20) P_TELEFONO_CELULAR */
+                // (20) P_TELEFONO_CELULAR
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 1)) value = entity.Telefonos.ToList()[1].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_CELULAR", OracleDbType.Varchar2, value);
-                // (21) P_TELEFONO_ADICIONAL */
+                // (21) P_TELEFONO_ADICIONAL
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 2)) value = entity.Telefonos.ToList()[2].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_ADICIONAL", OracleDbType.Varchar2, value);
-                // (22) P_TELEFONO_EMERGENCIA */
+                // (22) P_TELEFONO_EMERGENCIA
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 3)) value = entity.Telefonos.ToList()[3].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_EMERGENCIA", OracleDbType.Varchar2, value);
-                // (23) P_SITIO_WEB */
+                // (23) P_SITIO_WEB
                 value = entity.Sitios.ToList()[0].Descripcion.Coalesce(DBNull.Value);
                 AddParameter("P_SITIO_WEB", OracleDbType.Varchar2, value);
-                // (24) P_DIRECCION */
+                // (24) P_DIRECCION
                 value = entity.Direcciones.ToList()[0].Descripcion.Coalesce(DBNull.Value);
                 AddParameter("P_DIRECCION", OracleDbType.Varchar2, value);
-                // (25) P_NOTAS */
+                // (25) P_NOTAS
                 value = entity.Comentarios.Coalesce();
                 AddParameter("P_NOTAS", OracleDbType.Varchar2, value);
+                // (26) P_ID_CUENTA
+                value = DBNull.Value;
+                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
 
                 #region Invoke
@@ -105,6 +108,7 @@ namespace Expertia.Estructura.Repository.Condor
 
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                operation[OutParameter.IdCuenta] = entity.ID = GetOutParameter(OutParameter.IdCuenta).ToString();
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 

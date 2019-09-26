@@ -142,13 +142,13 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = entity.Incentivo.Description.Coalesce();
                 AddParameter("P_INCENTIVO", OracleDbType.Varchar2, value);
                 // (34) P_ESTADO_ACTIVACION
-                value = entity.MotivoEstado.Description.Coalesce();
+                if (entity.Estado == null) value = DBNull.Value; else value = entity.Estado.Descripcion.Coalesce();
                 AddParameter("P_ESTADO_ACTIVACION", OracleDbType.Varchar2, value);
                 // (35) P_GDS
-                value = entity.GDS.Array;
+                if (entity.GDS == null) value = DBNull.Value; else value = entity.GDS.Array.Coalesce();
                 AddParameter("P_GDS", OracleDbType.Varchar2, value);
                 // (36) P_HERRAMIENTAS
-                value = entity.Herramientas.Array;
+                if (entity.Herramientas == null) value = DBNull.Value; else value = entity.Herramientas.Array.Coalesce();
                 AddParameter("P_HERRAMIENTAS", OracleDbType.Varchar2, value);
                 // (37) P_ID_CUENTA
                 value = DBNull.Value;

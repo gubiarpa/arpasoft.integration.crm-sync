@@ -19,7 +19,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
-            object result = null;
+            object result = null, error = null;
             try
             {
                 #region UnidadNegocio
@@ -35,7 +35,8 @@ namespace Expertia.Estructura.Controllers
                                 CondorTravel = new
                                 {
                                     CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString()
+                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
+                                    IdCuenta =  _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
                                 }
                             }
                         };
@@ -73,7 +74,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                error = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -82,15 +83,16 @@ namespace Expertia.Estructura.Controllers
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = result,
+                    Error = error,
                     Body = entity
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);                
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
 
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2B entity)
         {
-            object result = null;
+            object result = null, error = null;
             try
             {
                 #region UnidadNegocio
@@ -106,7 +108,8 @@ namespace Expertia.Estructura.Controllers
                                 CondorTravel = new
                                 {
                                     CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString()
+                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
                                 }
                             }
                         };
@@ -144,16 +147,17 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
+                error = ex.Message;
                 return InternalServerError(ex);
             }
             finally
             {
                 (new
                 {
-                    UnidadNegocio = entity.UnidadNegocio.Descripcion,
-                    Result = result,
-                    Entity = entity
+                    BusinessUnity = entity.UnidadNegocio.Descripcion,
+                    LegacySystems = result,
+                    Error = error,
+                    Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
