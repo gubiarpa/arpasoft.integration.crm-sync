@@ -44,10 +44,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 #region Parameters
                 // (01) P_CODIGO_ERROR
                 value = DBNull.Value;
-                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, 4000);
+                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (02) P_MENSAJE_ERROR
                 value = DBNull.Value;
-                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, 4000);
+                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (03) P_NOMBRE_USUARIO
                 value = userName;
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
@@ -91,14 +91,14 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = entity.Estado.Descripcion;
                 AddParameter("P_ESTADO", OracleDbType.Varchar2, value);
                 // (17) P_FECHA_CUMPLE
-                value = entity.FechaNacimiento;
+                if (entity.FechaNacimiento == null) value = DBNull.Value; else value = entity.FechaNacimiento;
                 AddParameter("P_FECHA_CUMPLE", OracleDbType.Date, value);
                 // (18) P_ID_CUENTA
                 value = DBNull.Value;
-                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, 1000);
+                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (19) P_ID_CONTACTO
                 value = DBNull.Value;
-                AddParameter("P_ID_CONTACTO", OracleDbType.Varchar2, value, ParameterDirection.Output, 1000);
+                AddParameter("P_ID_CONTACTO", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
 
                 #region Invoke

@@ -38,10 +38,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 #region Parameters
                 // (01) P_CODIGO_ERROR
                 value = DBNull.Value;
-                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, 4000);
+                AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (02) P_MENSAJE_ERROR
                 value = DBNull.Value;
-                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, 4000);
+                AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (03) P_NOMBRE_USUARIO
                 value = userName.Coalesce();
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
@@ -52,7 +52,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = entity.RazonSocial.Coalesce();
                 AddParameter("P_RAZON_SOCIAL", OracleDbType.Varchar2, value);
                 // (06) P_FECHA_ANIVERSARIO
-                value = entity.FechaNacimOrAniv.Coalesce();
+                if (entity.FechaNacimOrAniv == null) value = DBNull.Value; else value = entity.FechaNacimOrAniv;
                 AddParameter("P_FECHA_ANIVERSARIO", OracleDbType.Date, value);
                 // (07) P_NOMBRE_PAIS_PROCEDENCIA
                 if (entity.PaisProcedencia == null) value = DBNull.Value; else value = entity.PaisProcedencia.Descripcion.Coalesce();
@@ -152,7 +152,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 AddParameter("P_HERRAMIENTAS", OracleDbType.Varchar2, value);
                 // (37) P_ID_CUENTA
                 value = DBNull.Value;
-                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, 1000);
+                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
 
                 #region Invoke
