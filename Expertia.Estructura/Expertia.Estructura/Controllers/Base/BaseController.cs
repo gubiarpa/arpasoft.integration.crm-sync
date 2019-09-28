@@ -18,7 +18,10 @@ namespace Expertia.Estructura.Controllers.Base
         protected IClientFeatures _clientFeatures;
         protected IDictionary<UnidadNegocioKeys?, ICrud<T>> _crmCollection;
         protected IDictionary<UnidadNegocioKeys?, Operation> _operCollection;
-        //protected List<Operation> _operResponse;
+        #endregion
+
+        #region Error
+        protected string _codigoError;
         #endregion
 
         #region Constructor
@@ -28,7 +31,6 @@ namespace Expertia.Estructura.Controllers.Base
             _clientFeatures = new ClientFeatures();
             _crmCollection = new Dictionary<UnidadNegocioKeys?, ICrud<T>>();
             _operCollection = new Dictionary<UnidadNegocioKeys?, Operation>();
-            //_operResponse = new List<Operation>();
         }
         #endregion
 

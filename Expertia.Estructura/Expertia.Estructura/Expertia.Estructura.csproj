@@ -189,8 +189,6 @@
     <Compile Include="Repository\DestinosMundiales\CuentaB2B_DM_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Contacto_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
-    <Compile Include="Repository\NuevoMundo\Contacto_NM_Repository.cs" />
-    <Compile Include="Repository\NuevoMundo\CuentaB2B_NM_Repository.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
     <Compile Include="Utils\Behavior\ILogFileManager.cs" />
     <Compile Include="Utils\ClientFeatures.cs" />

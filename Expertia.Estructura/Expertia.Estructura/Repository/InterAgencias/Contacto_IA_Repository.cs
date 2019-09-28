@@ -3,10 +3,7 @@ using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Utils;
-using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Data;
-using System.Linq;
 
 namespace Expertia.Estructura.Repository.InterAgencias
 {

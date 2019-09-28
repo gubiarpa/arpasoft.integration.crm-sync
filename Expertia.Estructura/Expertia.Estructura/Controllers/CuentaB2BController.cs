@@ -3,7 +3,6 @@ using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
-using Expertia.Estructura.Repository.NuevoMundo;
 using Expertia.Estructura.Utils;
 using System;
 using System.Web.Http;
@@ -27,7 +26,12 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
+                        #region Try-CondorTravel
                         _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
+                        _codigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString();
+                        #endregion
+
+                        #region Response
                         result = new
                         {
                             Result = new
@@ -36,13 +40,12 @@ namespace Expertia.Estructura.Controllers
                                 {
                                     CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
                                     MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
-                                    IdCuenta =  _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
+                                    IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
                                 }
                             }
                         };
+                        #endregion
                         break;
-                    case UnidadNegocioKeys.NuevoMundo:
-                        return NotFound();
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
@@ -173,9 +176,6 @@ namespace Expertia.Estructura.Controllers
                 case UnidadNegocioKeys.InterAgencias:
                     _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new CuentaB2B_DM_Repository());
                     _crmCollection.Add(UnidadNegocioKeys.InterAgencias, new CuentaB2B_IA_Repository());
-                    break;
-                case UnidadNegocioKeys.NuevoMundo:
-                    _crmCollection.Add(UnidadNegocioKeys.NuevoMundo, new CuentaB2B_NM_Repository());
                     break;
                 default:
                     break;

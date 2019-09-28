@@ -12,7 +12,6 @@
     {
         public const string CondorConnKey = "CTConnKey";
         public const string DMConnKey = "DMConnKey";
-        public const string NMConnKey = "NMConnKey";
         public const string IAConnKey = "IAConnKey";
     }
 
@@ -96,7 +95,7 @@
     public static class OutParameter
     {
         #region Size
-        public const int DefaultSize = 1000;
+        public const int DefaultSize = 4000;
         #endregion
 
         #region Error

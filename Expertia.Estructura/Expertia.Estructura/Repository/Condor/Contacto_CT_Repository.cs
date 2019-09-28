@@ -124,6 +124,6 @@ namespace Expertia.Estructura.Repository.Condor
         }
         #endregion
 
-        
+
     }
 }
