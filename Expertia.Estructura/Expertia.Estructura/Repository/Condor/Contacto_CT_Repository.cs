@@ -45,11 +45,11 @@ namespace Expertia.Estructura.Repository.Condor
                 // (04) P_NOMBRE_EMPRESA
                 AddParameter("P_NOMBRE_EMPRESA", OracleDbType.Varchar2, entity.UnidadNegocio.Descripcion);
                 // (05) P_COD_CLIENTE_MDM
-                AddParameter("P_COD_CLIENTE_MDM", OracleDbType.Varchar2, null);
+                AddParameter("P_COD_CLIENTE_MDM", OracleDbType.Varchar2, DBNull.Value);
                 // (06) P_COD_CLIENTE_CRM
                 AddParameter("P_COD_CLIENTE_CRM", OracleDbType.Varchar2, entity.IdCuentaSalesForce);
                 // (07) P_COD_CONTACTO_MDM
-                AddParameter("P_COD_CONTACTO_MDM", OracleDbType.Varchar2, null);
+                AddParameter("P_COD_CONTACTO_MDM", OracleDbType.Varchar2, DBNull.Value);
                 // (08) P_COD_CONTACTO_CRM
                 AddParameter("P_COD_CONTACTO_CRM", OracleDbType.Varchar2, entity.IdSalesForce);
                 // (09) P_NOMBRES
@@ -63,7 +63,8 @@ namespace Expertia.Estructura.Repository.Condor
                 // (12) P_GENERO
                 AddParameter("P_GENERO", OracleDbType.Varchar2, entity.Genero.Descripcion);
                 // (13) P_FECHA_NACIMIENTO
-                AddParameter("P_FECHA_NACIMIENTO", OracleDbType.Varchar2, entity.FechaNacimiento);
+                if (entity.FechaNacimiento == null) value = DBNull.Value; else value = entity.FechaNacimiento;
+                AddParameter("P_FECHA_NACIMIENTO", OracleDbType.Date, value);
                 // (14) P_EMAIL1
                 if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion; else value = DBNull.Value;
                 AddParameter("P_EMAIL1", OracleDbType.Varchar2, value);
