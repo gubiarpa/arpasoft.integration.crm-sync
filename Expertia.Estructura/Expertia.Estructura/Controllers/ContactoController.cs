@@ -13,15 +13,20 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.Contacto)]
     public class ContactoController : BaseController<Contacto>
     {
+        #region Properties
+        private bool _notAssociated = false;
+        #endregion
+
         #region PublicMethods
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(Contacto entity)
         {
-            object result = null, error = null;
+            object error = null, logResult = null;
             try
             {
                 var codigoError = DbResponseCode.ContactoYaExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
+                object result;
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
@@ -31,18 +36,7 @@ namespace Expertia.Estructura.Controllers
                             Thread.Sleep(_delayTimeRetry);
                             CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         }
-                        result = new
-                        {
-                            Result = new
-                            {
-                                CondorTravel = new
-                                {
-                                    Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
-                                    IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
-                                }
-                            }
-                        };
+                        LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
@@ -58,24 +52,7 @@ namespace Expertia.Estructura.Controllers
                             Thread.Sleep(_delayTimeRetry);
                             CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
                         }
-                        result = new
-                        {
-                            Result = new
-                            {
-                                DestinosMundiales = new
-                                {
-                                    Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
-                                    IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
-                                },
-                                InterAgencias = new
-                                {
-                                    Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
-                                    IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()
-                                }
-                            }
-                        };
+                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
                     default:
                         return NotFound();
@@ -92,7 +69,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
-                    LegacySystems = result,
+                    LegacySystems = logResult,
                     Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
@@ -102,11 +79,12 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(Contacto entity)
         {
-            object result = null, error = null;
+            object error = null, logResult = null;
             try
             {
                 var codigoError = DbResponseCode.ContactoNoExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
+                object result;
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
@@ -116,18 +94,7 @@ namespace Expertia.Estructura.Controllers
                             Thread.Sleep(_delayTimeRetry);
                             UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         }
-                        result = new
-                        {
-                            Result = new
-                            {
-                                CondorTravel = new
-                                {
-                                    Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
-                                    IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
-                                }
-                            }
-                        };
+                        LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
@@ -143,24 +110,7 @@ namespace Expertia.Estructura.Controllers
                             Thread.Sleep(_delayTimeRetry);
                             UpdateOrCreate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
                         }
-                        result = new
-                        {
-                            Result = new
-                            {
-                                DestinosMundiales = new
-                                {
-                                    Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
-                                    IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
-                                },
-                                InterAgencias = new
-                                {
-                                    Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
-                                    IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
-                                    IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()
-                                }
-                            }
-                        };
+                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
                     default:
                         return NotFound();
@@ -177,7 +127,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
-                    LegacySystems = result,
+                    LegacySystems = logResult,
                     Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
@@ -188,7 +138,89 @@ namespace Expertia.Estructura.Controllers
         #region Auxiliar
         private bool CuentaAsociadaNoExiste(UnidadNegocioKeys? unidadNegocio)
         {
-            return (_operCollection[unidadNegocio][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
+            return (_notAssociated =
+                _operCollection[unidadNegocio][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
+        }
+
+        private void LoadResults(UnidadNegocioKeys? unidadNegocio, out object logResult, out object result)
+        {
+            switch (unidadNegocio)
+            {
+                case UnidadNegocioKeys.CondorTravel:
+                    #region Log
+                    logResult = new
+                    {
+                        Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
+                        NotAssociated = _notAssociated,
+                        IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
+                        IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
+                    };
+                    #endregion
+                    #region Client
+                    result = new
+                    {
+                        Result = new
+                        {
+                            CondorTravel = new
+                            {
+                                CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
+                            }
+                        }
+                    };
+                    #endregion
+                    break;
+                case UnidadNegocioKeys.DestinosMundiales:
+                case UnidadNegocioKeys.InterAgencias:
+                    #region Log
+                    logResult = new
+                    {
+                        Result = new
+                        {
+                            DestinosMundiales = new
+                            {
+                                Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
+                            },
+                            InterAgencias = new
+                            {
+                                Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()
+                            }
+                        }
+                    };
+                    #endregion
+                    #region Client
+                    result = new
+                    {
+                        Result = new
+                        {
+                            DestinosMundiales = new
+                            {
+                                CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
+                            },
+                            InterAgencias = new
+                            {
+                                CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()
+                            }
+                        }
+                    };
+                    #endregion
+                    break;
+                default:
+                    logResult = null; result = null;
+                    break;
+            }
         }
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
