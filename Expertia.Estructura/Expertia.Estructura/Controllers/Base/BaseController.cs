@@ -11,13 +11,14 @@ using System.Web.Http;
 namespace Expertia.Estructura.Controllers.Base
 {
     [BasicAuthentication]
-    public abstract class BaseController<T> : ApiController
+    public abstract class BaseController<T> : ApiController, IMethodTryer<T>
     {
         #region Properties
         protected ILogFileManager _logFileManager;
         protected IClientFeatures _clientFeatures;
         protected IDictionary<UnidadNegocioKeys?, ICrud<T>> _crmCollection;
         protected IDictionary<UnidadNegocioKeys?, Operation> _operCollection;
+        protected IDictionary<UnidadNegocioKeys?, bool> _operRetry;
         #endregion
 
         #region DatabaseError
@@ -31,6 +32,7 @@ namespace Expertia.Estructura.Controllers.Base
             _clientFeatures = new ClientFeatures();
             _crmCollection = new Dictionary<UnidadNegocioKeys?, ICrud<T>>();
             _operCollection = new Dictionary<UnidadNegocioKeys?, Operation>();
+            _operRetry = new Dictionary<UnidadNegocioKeys?, bool>();
             _delayTimeRetry = GetDelayRetryTime() * 1000;
         }
         #endregion
@@ -107,6 +109,10 @@ namespace Expertia.Estructura.Controllers.Base
         }
 
         protected abstract UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey);
+
+        public abstract void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity);
+
+        public abstract void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity);
         #endregion
     }
 }

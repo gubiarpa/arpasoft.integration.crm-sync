@@ -27,68 +27,45 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        #region CT-DoubleShot
-                        if ((_operCollection[UnidadNegocioKeys.CondorTravel] =
-                                _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity))
-                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteYaExiste))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity);
-                        }
-                        #endregion
-                        #region Response
+                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity);
                         result = new
                         {
                             Result = new
                             {
                                 CondorTravel = new
                                 {
+                                    Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
                                     CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
                                     MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
                                 }
                             }
                         };
-                        #endregion
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        #region DM-DoubleShot
-                        if ((_operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity))
-                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteYaExiste))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
-                        }
-                        #endregion
-                        #region IA-DoubleShot
-                        if ((_operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity))
-                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteYaExiste))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity);
-                        }
-                        #endregion
-                        #region Response
+                        CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity);
+                        CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity);
                         result = new
                         {
                             Result = new
                             {
                                 DestinosMundiales = new
                                 {
+                                    Retry = _operRetry[UnidadNegocioKeys.DestinosMundiales],
                                     CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
                                     MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                                 },
                                 InterAgencias = new
                                 {
+                                    Retry = _operRetry[UnidadNegocioKeys.InterAgencias],
                                     CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
                                     MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
                                 }
                             }
                         };
-                        #endregion
                         break;
                     default:
                         return NotFound();
@@ -113,6 +90,7 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2B entity)
         {
@@ -125,12 +103,14 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
                         #region CT-DoubleShot
-                        if ((_operCollection[UnidadNegocioKeys.CondorTravel] =
+                        if (_operRetry[UnidadNegocioKeys.CondorTravel] =
+                            ((_operCollection[UnidadNegocioKeys.CondorTravel] =
                                 _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity))
-                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste))
+                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste)))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
+
                         }
                         #endregion
                         #region Response
@@ -210,6 +190,27 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        #region RetryMethods
+        public override void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, CuentaB2B entity)
+        {
+            if (_operRetry[unidadNegocio] =
+                ((_operCollection[unidadNegocio] =
+                    _crmCollection[unidadNegocio].Create(entity))
+                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteYaExiste)))
+                _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Update(entity);
+        }
+
+        public override void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, CuentaB2B entity)
+        {
+            if (_operRetry[unidadNegocio] =
+                ((_operCollection[unidadNegocio] =
+                    _crmCollection[unidadNegocio].Update(entity))
+                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste)))
+                _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Create(entity);
+        }
+        #endregion
+
+        #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             switch (unidadNegocioKey)
@@ -227,5 +228,6 @@ namespace Expertia.Estructura.Controllers
             }
             return unidadNegocioKey;
         }
+        #endregion
     }
 }

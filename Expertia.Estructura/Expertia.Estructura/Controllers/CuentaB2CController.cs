@@ -22,6 +22,11 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        public override void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, CuentaB2C entity)
+        {
+            throw new NotImplementedException();
+        }
+
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2C entity)
         {
@@ -33,6 +38,11 @@ namespace Expertia.Estructura.Controllers
             {
                 return InternalServerError(ex);
             }
+        }
+
+        public override void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, CuentaB2C entity)
+        {
+            throw new NotImplementedException();
         }
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)

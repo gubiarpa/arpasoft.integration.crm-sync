@@ -88,6 +88,11 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        public override void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, Contacto entity)
+        {
+            throw new NotImplementedException();
+        }
+
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(Contacto entity)
         {
@@ -162,6 +167,11 @@ namespace Expertia.Estructura.Controllers
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
+        }
+
+        public override void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, Contacto entity)
+        {
+            throw new NotImplementedException();
         }
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
