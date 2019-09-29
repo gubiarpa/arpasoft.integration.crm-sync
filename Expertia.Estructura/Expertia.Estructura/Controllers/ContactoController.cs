@@ -174,7 +174,7 @@ namespace Expertia.Estructura.Controllers
         #region Auxiliar
         private bool CuentaAsociadaNoExiste()
         {
-            return (_operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste)) ;
+            return (_operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
         }
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
