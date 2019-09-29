@@ -12,6 +12,7 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.Contacto)]
     public class ContactoController : BaseController<Contacto>
     {
+        #region PublicMethods
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(Contacto entity)
         {
@@ -23,7 +24,7 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
+                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity);
                         result = new
                         {
                             Result = new
@@ -38,12 +39,10 @@ namespace Expertia.Estructura.Controllers
                             }
                         };
                         break;
-                    case UnidadNegocioKeys.NuevoMundo:
-                        return NotFound();
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
-                        _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
+                        CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity);
+                        CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity);
                         result = new
                         {
                             Result = new
@@ -88,11 +87,6 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        public override void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, Contacto entity)
-        {
-            throw new NotImplementedException();
-        }
-
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(Contacto entity)
         {
@@ -119,8 +113,6 @@ namespace Expertia.Estructura.Controllers
                             }
                         };
                         break;
-                    case UnidadNegocioKeys.NuevoMundo:
-                        return NotFound();
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity);
@@ -168,20 +160,15 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
+        #endregion
 
-        public override void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, Contacto entity)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.CondorTravel:
                     _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new Contacto_CT_Repository());
-                    break;
-                case UnidadNegocioKeys.NuevoMundo:
                     break;
                 case UnidadNegocioKeys.DestinosMundiales:
                 case UnidadNegocioKeys.InterAgencias:
@@ -193,5 +180,6 @@ namespace Expertia.Estructura.Controllers
             }
             return unidadNegocioKey;
         }
+        #endregion
     }
 }

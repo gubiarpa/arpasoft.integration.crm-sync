@@ -11,7 +11,7 @@ using System.Web.Http;
 namespace Expertia.Estructura.Controllers.Base
 {
     [BasicAuthentication]
-    public abstract class BaseController<T> : ApiController, IMethodTryer<T>
+    public abstract class BaseController<T> : ApiController
     {
         #region Properties
         protected ILogFileManager _logFileManager;
@@ -109,10 +109,26 @@ namespace Expertia.Estructura.Controllers.Base
         }
 
         protected abstract UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey);
+        #endregion
 
-        public abstract void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity);
+        #region RetryMethods
+        protected void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity)
+        {
+            if (_operRetry[unidadNegocio] =
+                ((_operCollection[unidadNegocio] =
+                    _crmCollection[unidadNegocio].Create(entity))
+                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteYaExiste)))
+                _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Update(entity);
+        }
 
-        public abstract void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity);
+        protected void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity)
+        {
+            if (_operRetry[unidadNegocio] =
+                ((_operCollection[unidadNegocio] =
+                    _crmCollection[unidadNegocio].Update(entity))
+                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste)))
+                _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Create(entity);
+        }
         #endregion
     }
 }

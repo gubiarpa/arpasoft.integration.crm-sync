@@ -113,7 +113,6 @@
     {
         CondorTravel,
         DestinosMundiales,
-        NuevoMundo,
         InterAgencias
     }
 
@@ -121,7 +120,6 @@
     {
         public const string CondorTravel = "CT";
         public const string DestinosMundiales = "DM";
-        public const string NuevoMundo = "NM";
         public const string InterAgencias = "IA";
     }
 

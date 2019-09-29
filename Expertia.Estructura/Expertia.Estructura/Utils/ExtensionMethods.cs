@@ -93,7 +93,6 @@ namespace Expertia.Estructura.Utils
                 {
                     case UnidadNegocioKeys.CondorTravel: return UnidadNegocioShortNames.CondorTravel;
                     case UnidadNegocioKeys.DestinosMundiales: return UnidadNegocioShortNames.DestinosMundiales;
-                    case UnidadNegocioKeys.NuevoMundo: return UnidadNegocioShortNames.NuevoMundo;
                     case UnidadNegocioKeys.InterAgencias: return UnidadNegocioShortNames.InterAgencias;
                     default: return null;
                 }

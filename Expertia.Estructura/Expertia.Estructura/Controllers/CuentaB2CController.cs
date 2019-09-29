@@ -9,6 +9,7 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.CuentaB2C)]
     public class CuentaB2CController : BaseController<CuentaB2C>
     {
+        #region PublicMethods
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2C entity)
         {
@@ -20,11 +21,6 @@ namespace Expertia.Estructura.Controllers
             {
                 return InternalServerError(ex);
             }
-        }
-
-        public override void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, CuentaB2C entity)
-        {
-            throw new NotImplementedException();
         }
 
         [Route(RouteAction.Update)]
@@ -39,15 +35,13 @@ namespace Expertia.Estructura.Controllers
                 return InternalServerError(ex);
             }
         }
+        #endregion
 
-        public override void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, CuentaB2C entity)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

@@ -10,12 +10,10 @@ using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
 {
-    /// <summary>
-    /// Mantenimiento para Contactos B2B
-    /// </summary>
     [RoutePrefix(RoutePrefix.CuentaB2B)]
     public class CuentaB2BController : BaseController<CuentaB2B>
     {
+        #region PublicMethods
         [Route(RouteAction.Create)]
         public override IHttpActionResult Create(CuentaB2B entity)
         {
@@ -89,7 +87,6 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
-
 
         [Route(RouteAction.Update)]
         public override IHttpActionResult Update(CuentaB2B entity)
@@ -188,25 +185,6 @@ namespace Expertia.Estructura.Controllers
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
-        }
-
-        #region RetryMethods
-        public override void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, CuentaB2B entity)
-        {
-            if (_operRetry[unidadNegocio] =
-                ((_operCollection[unidadNegocio] =
-                    _crmCollection[unidadNegocio].Create(entity))
-                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteYaExiste)))
-                _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Update(entity);
-        }
-
-        public override void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, CuentaB2B entity)
-        {
-            if (_operRetry[unidadNegocio] =
-                ((_operCollection[unidadNegocio] =
-                    _crmCollection[unidadNegocio].Update(entity))
-                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste)))
-                _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Create(entity);
         }
         #endregion
 
