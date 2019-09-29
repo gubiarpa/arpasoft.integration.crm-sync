@@ -134,9 +134,10 @@
         public const string DelayRetryKey = "DelayTimeInSecs";
         public const int DefaultDelay = 5;
         // Errors
-        public const string ClienteYaExiste = "C1";
-        public const string ClienteNoExiste = "C2";
-        public const string ContactoExiste = "D1";
+        public const string Success = "OK";
+        public const string CuentaYaExiste = "C1";
+        public const string CuentaNoExiste = "C2";
+        public const string ContactoYaExiste = "D1";
         public const string ContactoNoExiste = "D2";
     }
     #endregion

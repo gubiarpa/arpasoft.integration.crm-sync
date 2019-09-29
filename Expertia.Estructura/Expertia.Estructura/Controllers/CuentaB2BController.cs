@@ -5,7 +5,6 @@ using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
-using System.Threading;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -20,12 +19,12 @@ namespace Expertia.Estructura.Controllers
             object result = null, error = null;
             try
             {
-                #region UnidadNegocio
+                var codigoError = DbResponseCode.CuentaYaExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity);
+                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         result = new
                         {
                             Result = new
@@ -42,8 +41,8 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity);
-                        CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity);
+                        CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
                         result = new
                         {
                             Result = new
@@ -69,7 +68,6 @@ namespace Expertia.Estructura.Controllers
                         return NotFound();
                 }
                 return Ok(result);
-                #endregion
             }
             catch (Exception ex)
             {
@@ -94,23 +92,12 @@ namespace Expertia.Estructura.Controllers
             object result = null, error = null;
             try
             {
-                #region UnidadNegocio
+                var codigoError = DbResponseCode.CuentaNoExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        #region CT-DoubleShot
-                        if (_operRetry[UnidadNegocioKeys.CondorTravel] =
-                            ((_operCollection[UnidadNegocioKeys.CondorTravel] =
-                                _crmCollection[UnidadNegocioKeys.CondorTravel].Update(entity))
-                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste)))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Create(entity);
-
-                        }
-                        #endregion
-                        #region Response
+                        UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         result = new
                         {
                             Result = new
@@ -123,27 +110,11 @@ namespace Expertia.Estructura.Controllers
                                 }
                             }
                         };
-                        #endregion
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
-                        #region DM-DoubleShot
-                        if ((_operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Update(entity))
-                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
-                        }
-                        #endregion
-                        #region IA-DoubleShot
-                        if ((_operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Update(entity))
-                                    [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
-                        }
-                        #endregion
-                        #region Response
+                        UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        UpdateOrCreate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
                         result = new
                         {
                             Result = new
@@ -162,13 +133,11 @@ namespace Expertia.Estructura.Controllers
                                 }
                             }
                         };
-                        #endregion
                         break;
                     default:
                         return NotFound();
                 }
                 return Ok(result);
-                #endregion
             }
             catch (Exception ex)
             {

@@ -112,21 +112,21 @@ namespace Expertia.Estructura.Controllers.Base
         #endregion
 
         #region RetryMethods
-        protected void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity)
+        protected void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError)
         {
             if (_operRetry[unidadNegocio] =
                 ((_operCollection[unidadNegocio] =
                     _crmCollection[unidadNegocio].Create(entity))
-                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteYaExiste)))
+                        [OutParameter.CodigoError].ToString().Equals(codigoError)))
                 _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Update(entity);
         }
 
-        protected void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity)
+        protected void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError)
         {
             if (_operRetry[unidadNegocio] =
                 ((_operCollection[unidadNegocio] =
                     _crmCollection[unidadNegocio].Update(entity))
-                        [OutParameter.CodigoError].ToString().Equals(DbResponseCode.ClienteNoExiste)))
+                        [OutParameter.CodigoError].ToString().Equals(codigoError)))
                 _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Create(entity);
         }
         #endregion
