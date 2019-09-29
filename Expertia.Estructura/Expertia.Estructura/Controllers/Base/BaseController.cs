@@ -20,8 +20,8 @@ namespace Expertia.Estructura.Controllers.Base
         protected IDictionary<UnidadNegocioKeys?, Operation> _operCollection;
         #endregion
 
-        #region Error
-        protected string _codigoError;
+        #region DatabaseError
+        protected int _delayTimeRetry;
         #endregion
 
         #region Constructor
@@ -31,6 +31,7 @@ namespace Expertia.Estructura.Controllers.Base
             _clientFeatures = new ClientFeatures();
             _crmCollection = new Dictionary<UnidadNegocioKeys?, ICrud<T>>();
             _operCollection = new Dictionary<UnidadNegocioKeys?, Operation>();
+            _delayTimeRetry = GetDelayRetryTime() * 1000;
         }
         #endregion
 
@@ -67,6 +68,27 @@ namespace Expertia.Estructura.Controllers.Base
         #endregion
 
         #region Auxiliar
+        private int GetDelayRetryTime()
+        {
+            int delayInt;
+            try
+            {
+                // (1) Intentamos leer el tiempo en el config
+                var delayStr = ConfigAccess.GetValueInAppSettings(DbResponseCode.DelayRetryKey);
+
+                // (2) Intentamos parsear a Int el tiempo leído
+                if (!int.TryParse(delayStr, out delayInt)) throw new Exception();
+
+                // (3) Validamos que sea un número no negativo
+                if (delayInt < 0) throw new Exception();
+            }
+            catch
+            {
+                delayInt = DbResponseCode.DefaultDelay;
+            }
+            return delayInt;
+        }
+
         protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName)
         {
             if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyValues()).ToUpper().Split(Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))

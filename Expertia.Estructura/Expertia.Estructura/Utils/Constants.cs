@@ -25,7 +25,6 @@
     #region ApiRoutes
     public static class RoutePrefix
     {
-        public const string Login = "api/login";
         public const string Contacto = "api/contacto";
         public const string CuentaB2B = "api/cuentab2b";
         public const string CuentaB2C = "api/cuentab2c";
@@ -33,7 +32,6 @@
 
     public static class RouteAction
     {
-        public const string Auth = "auth";
         public const string Create = "create";
         public const string Read = "read";
         public const string Update = "update";
@@ -130,6 +128,18 @@
     public static class Auxiliar
     {
         public const char ListSeparator = ';';
+    }
+
+    public static class DbResponseCode
+    {
+        // Response
+        public const string DelayRetryKey = "DelayTimeInSecs";
+        public const int DefaultDelay = 5;
+        // Errors
+        public const string ClienteYaExiste = "C1";
+        public const string ClienteNoExiste = "C2";
+        public const string ContactoExiste = "D1";
+        public const string ContactoNoExiste = "D2";
     }
     #endregion
 
