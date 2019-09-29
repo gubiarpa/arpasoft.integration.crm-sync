@@ -129,6 +129,16 @@ namespace Expertia.Estructura.Controllers.Base
                         [OutParameter.CodigoError].ToString().Equals(codigoError)))
                 _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Create(entity);
         }
+
+        protected object GetErrorResult(UnidadNegocioKeys? unidadNegocio)
+        {
+            return new
+            {
+                Retry = _operRetry[unidadNegocio],
+                CodigoError = _operCollection[unidadNegocio][OutParameter.CodigoError].ToString(),
+                MensajeError = _operCollection[unidadNegocio][OutParameter.MensajeError].ToString()
+            };
+        }
         #endregion
     }
 }

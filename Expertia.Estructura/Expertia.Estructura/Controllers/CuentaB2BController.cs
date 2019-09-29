@@ -31,9 +31,7 @@ namespace Expertia.Estructura.Controllers
                             {
                                 CondorTravel = new
                                 {
-                                    Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
-                                    CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
+                                    Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
                                 }
                             }
@@ -49,16 +47,12 @@ namespace Expertia.Estructura.Controllers
                             {
                                 DestinosMundiales = new
                                 {
-                                    Retry = _operRetry[UnidadNegocioKeys.DestinosMundiales],
-                                    CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                    Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                                 },
                                 InterAgencias = new
                                 {
-                                    Retry = _operRetry[UnidadNegocioKeys.InterAgencias],
-                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
+                                    Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
                                 }
                             }
@@ -104,8 +98,7 @@ namespace Expertia.Estructura.Controllers
                             {
                                 CondorTravel = new
                                 {
-                                    CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
+                                    Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
                                 }
                             }
@@ -121,14 +114,12 @@ namespace Expertia.Estructura.Controllers
                             {
                                 DestinosMundiales = new
                                 {
-                                    CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                    Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                                 },
                                 InterAgencias = new
                                 {
-                                    CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
-                                    MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
+                                    Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
                                     IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
                                 }
                             }
