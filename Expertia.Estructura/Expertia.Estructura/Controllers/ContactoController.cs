@@ -5,6 +5,7 @@ using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Web.Http;
 
@@ -14,7 +15,14 @@ namespace Expertia.Estructura.Controllers
     public class ContactoController : BaseController<Contacto>
     {
         #region Properties
-        private bool _notAssociated = false;
+        protected IDictionary<UnidadNegocioKeys?, bool> _operNotAssociated;
+        #endregion
+
+        #region Constructor
+        public ContactoController()
+        {
+            _operNotAssociated = new Dictionary<UnidadNegocioKeys?, bool>();
+        }
         #endregion
 
         #region PublicMethods
@@ -138,7 +146,7 @@ namespace Expertia.Estructura.Controllers
         #region Auxiliar
         private bool CuentaAsociadaNoExiste(UnidadNegocioKeys? unidadNegocio)
         {
-            return (_notAssociated =
+            return (_operNotAssociated[unidadNegocio] =
                 _operCollection[unidadNegocio][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
         }
 
@@ -151,7 +159,7 @@ namespace Expertia.Estructura.Controllers
                     logResult = new
                     {
                         Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
-                        NotAssociated = _notAssociated,
+                        NotAssociated = _operNotAssociated[UnidadNegocioKeys.CondorTravel],
                         IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
                         IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
                     };
@@ -182,12 +190,14 @@ namespace Expertia.Estructura.Controllers
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
+                                NotAssociated = _operNotAssociated[UnidadNegocioKeys.DestinosMundiales],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
                             },
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
+                                NotAssociated = _operNotAssociated[UnidadNegocioKeys.InterAgencias],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()
                             }
