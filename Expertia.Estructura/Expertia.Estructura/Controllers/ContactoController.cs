@@ -26,7 +26,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
                         CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        if (CuentaAsociadaNoExiste())
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
@@ -48,7 +48,17 @@ namespace Expertia.Estructura.Controllers
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales))
+                        {
+                            Thread.Sleep(_delayTimeRetry);
+                            CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        }
                         CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.InterAgencias))
+                        {
+                            Thread.Sleep(_delayTimeRetry);
+                            CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
+                        }
                         result = new
                         {
                             Result = new
@@ -104,7 +114,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
                         UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        if (CuentaAsociadaNoExiste())
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
@@ -126,7 +136,17 @@ namespace Expertia.Estructura.Controllers
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.InterAgencias:
                         UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales))
+                        {
+                            Thread.Sleep(_delayTimeRetry);
+                            UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        }
                         UpdateOrCreate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.InterAgencias))
+                        {
+                            Thread.Sleep(_delayTimeRetry);
+                            UpdateOrCreate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
+                        }
                         result = new
                         {
                             Result = new
@@ -172,9 +192,9 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region Auxiliar
-        private bool CuentaAsociadaNoExiste()
+        private bool CuentaAsociadaNoExiste(UnidadNegocioKeys? unidadNegocio)
         {
-            return (_operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
+            return (_operCollection[unidadNegocio][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
         }
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
