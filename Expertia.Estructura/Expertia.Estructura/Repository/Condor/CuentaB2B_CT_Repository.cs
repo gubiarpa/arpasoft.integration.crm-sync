@@ -98,7 +98,14 @@ namespace Expertia.Estructura.Repository.Condor
                 // (25) P_NOTAS
                 value = entity.Comentarios.Coalesce();
                 AddParameter("P_NOTAS", OracleDbType.Varchar2, value);
-                // (26) P_ID_CUENTA
+                // (26) P_NOMBRE_TIPO_DOCUMENTO
+                if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0) && (entity.Documentos.ToList()[0].Tipo != null))
+                    value = entity.Documentos.ToList()[0].Tipo.Descripcion.Coalesce();
+                AddParameter("P_NOMBRE_TIPO_DOCUMENTO", OracleDbType.Varchar2, value);
+                // (27) P_DOCUMENTO
+                if ((entity.Documentos != null) && (entity.Documentos.ToList().Count > 0)) value = entity.Documentos.ToList()[0].Numero; else value = DBNull.Value;
+                AddParameter("P_DOCUMENTO", OracleDbType.Varchar2, value);
+                // (28) P_ID_CUENTA
                 value = DBNull.Value;
                 AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
