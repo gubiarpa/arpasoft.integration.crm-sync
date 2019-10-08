@@ -22,6 +22,7 @@ namespace Expertia.Estructura.Controllers
                 var codigoError = DbResponseCode.CuentaYaExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
                 object result;
+                _instants[InstantKey.Salesforce] = DateTime.Now;
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
@@ -37,6 +38,7 @@ namespace Expertia.Estructura.Controllers
                     default:
                         return NotFound();
                 }
+                _instants[InstantKey.Oracle] = DateTime.Now;
                 return Ok(result);
             }
             catch (Exception ex)
@@ -50,6 +52,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
+                    Instants = GetInstants(),
                     Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
@@ -65,6 +68,7 @@ namespace Expertia.Estructura.Controllers
                 var codigoError = DbResponseCode.CuentaNoExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
                 object result;
+                _instants[InstantKey.Salesforce] = DateTime.Now;
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
@@ -80,6 +84,7 @@ namespace Expertia.Estructura.Controllers
                     default:
                         return NotFound();
                 }
+                _instants[InstantKey.Oracle] = DateTime.Now;
                 return Ok(result);
             }
             catch (Exception ex)
@@ -93,6 +98,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
+                    Instants = GetInstants(),
                     Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);

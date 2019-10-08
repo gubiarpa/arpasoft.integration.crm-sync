@@ -19,6 +19,7 @@ namespace Expertia.Estructura.Controllers.Base
         protected IDictionary<UnidadNegocioKeys?, ICrud<T>> _crmCollection;
         protected IDictionary<UnidadNegocioKeys?, Operation> _operCollection;
         protected IDictionary<UnidadNegocioKeys?, bool> _operRetry;
+        protected IDictionary<InstantKey, DateTime> _instants;
         #endregion
 
         #region DatabaseError
@@ -34,6 +35,7 @@ namespace Expertia.Estructura.Controllers.Base
             _operCollection = new Dictionary<UnidadNegocioKeys?, Operation>();
             _operRetry = new Dictionary<UnidadNegocioKeys?, bool>();
             _delayTimeRetry = GetDelayRetryTime() * 1000;
+            _instants = new Dictionary<InstantKey, DateTime>();
         }
         #endregion
 
@@ -43,30 +45,6 @@ namespace Expertia.Estructura.Controllers.Base
 
         [HttpPost]
         public abstract IHttpActionResult Update(T entity);
-
-        [HttpGet]
-        [Route(RouteAction.Read)]
-        public IHttpActionResult Read()
-        {
-            try
-            {
-                var testMessage = DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss.fff");
-                testMessage.TryWriteLogObject(_logFileManager, _clientFeatures);
-                return Ok(new
-                {
-                    Result = new
-                    {
-                        Type = ResultType.Success
-                    },
-                    Entity = testMessage
-                });
-            }
-            catch (Exception ex)
-            {
-                ex.TryWriteLogObject(_logFileManager, _clientFeatures, LogType.Fail);
-                return InternalServerError();
-            }
-        }
         #endregion
 
         #region Auxiliar
@@ -89,6 +67,22 @@ namespace Expertia.Estructura.Controllers.Base
                 delayInt = DbResponseCode.DefaultDelay;
             }
             return delayInt;
+        }
+
+        protected object GetInstants()
+        {
+            try
+            {
+                return new
+                {
+                    Salesforce = _instants[InstantKey.Salesforce].ToString(FormatTemplate.LongDate),
+                    Oracle = _instants[InstantKey.Oracle].ToString(FormatTemplate.LongDate)
+                };
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName)

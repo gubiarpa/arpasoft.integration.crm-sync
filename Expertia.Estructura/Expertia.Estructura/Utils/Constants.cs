@@ -148,5 +148,11 @@
         Success,
         Fail
     }
+
+    public enum InstantKey
+    {
+        Salesforce,
+        Oracle
+    }
     #endregion
 }

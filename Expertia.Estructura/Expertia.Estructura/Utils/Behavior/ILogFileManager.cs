@@ -3,6 +3,5 @@
     public interface ILogFileManager
     {
         void WriteText(string text);
-        void WriteLine(LogType logType, string content, bool indent = false);
     }
 }

@@ -71,10 +71,9 @@ namespace Expertia.Estructura.Utils
                         clientFeatures.IP,
                         clientFeatures.Method,
                         Log = logType,
-                        Url = clientFeatures.URL,
                         Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
                     },
-                    Entity = obj
+                    Result = obj
                 };
             }
             catch (Exception ex)
