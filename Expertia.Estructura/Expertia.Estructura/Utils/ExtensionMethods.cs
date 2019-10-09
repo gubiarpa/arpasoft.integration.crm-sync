@@ -68,7 +68,7 @@ namespace Expertia.Estructura.Utils
                 {
                     Client = new
                     {
-                        clientFeatures.IP,
+                        clientFeatures.URL,
                         clientFeatures.Method,
                         Log = logType,
                         Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
