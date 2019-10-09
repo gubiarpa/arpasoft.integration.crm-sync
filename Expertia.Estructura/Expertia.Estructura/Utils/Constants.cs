@@ -28,6 +28,7 @@
         public const string Contacto = "api/contacto";
         public const string CuentaB2B = "api/cuentab2b";
         public const string CuentaB2C = "api/cuentab2c";
+        public const string Cotizacion = "api/cotizacion";
     }
 
     public static class RouteAction
