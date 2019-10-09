@@ -46,7 +46,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = userName.Coalesce();
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
                 // (04) P_ID_CUENTA_SALESFORCE
-                value = entity.IdSalesForce.Coalesce();
+                value = entity.IdSalesforce.Coalesce();
                 AddParameter("P_ID_CUENTA_SALESFORCE", OracleDbType.Varchar2, value);
                 // (05) P_RAZON_SOCIAL
                 value = entity.RazonSocial.Coalesce();

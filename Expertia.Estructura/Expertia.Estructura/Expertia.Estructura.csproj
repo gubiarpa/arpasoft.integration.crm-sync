@@ -162,12 +162,13 @@
     <Compile Include="Models\Auxiliar\CondicionPago.cs" />
     <Compile Include="Models\Auxiliar\UnidadNegocio.cs" />
     <Compile Include="Models\Behavior\IAuditable.cs" />
-    <Compile Include="Models\Behavior\ISalesForce.cs" />
+    <Compile Include="Models\Behavior\ICrm.cs" />
     <Compile Include="Models\Behavior\IUnidadNegocio.cs" />
     <Compile Include="Models\Behavior\IUnique.cs" />
     <Compile Include="Models\Behavior\MultipleDesc.cs" />
     <Compile Include="Models\Behavior\SimpleDesc.cs" />
     <Compile Include="Models\Contacto.cs" />
+    <Compile Include="Models\Cotizacion.cs" />
     <Compile Include="Models\CuentaB2B.cs" />
     <Compile Include="Models\CuentaB2C.cs" />
     <Compile Include="Models\Auxiliar\Correo.cs" />

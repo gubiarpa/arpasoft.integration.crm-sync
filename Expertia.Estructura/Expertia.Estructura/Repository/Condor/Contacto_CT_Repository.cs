@@ -51,7 +51,7 @@ namespace Expertia.Estructura.Repository.Condor
                 // (07) P_COD_CONTACTO_MDM
                 AddParameter("P_COD_CONTACTO_MDM", OracleDbType.Varchar2, DBNull.Value);
                 // (08) P_COD_CONTACTO_CRM
-                AddParameter("P_COD_CONTACTO_CRM", OracleDbType.Varchar2, entity.IdSalesForce);
+                AddParameter("P_COD_CONTACTO_CRM", OracleDbType.Varchar2, entity.IdSalesforce);
                 // (09) P_NOMBRES
                 AddParameter("P_NOMBRES", OracleDbType.Varchar2, entity.Nombre);
                 // (10) P_APELLIDO_PATERNO

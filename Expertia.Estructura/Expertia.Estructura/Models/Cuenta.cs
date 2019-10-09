@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class Cuenta : IUnique, ISalesForce, IAuditable, IUnidadNegocio
+    public class Cuenta : ICrm, IAuditable, IUnidadNegocio
     {
         #region Properties
         public string ID { get; set; }
-        public string IdSalesForce { get; set; }
+        public string IdSalesforce { get; set; }
         public DateTime? FechaNacimOrAniv { get; set; }
         public string LogoFoto { get; set; }
         public bool RecibirInformacion { get; set; }
@@ -41,7 +41,7 @@ namespace Expertia.Estructura.Models
         public IEnumerable<SimpleDesc> IdiomasComunicCliente { get; set; }
         #endregion
 
-        #region Auditoria
+        #region Audit
         public Auditoria Auditoria { get; set; }
         #endregion
     }

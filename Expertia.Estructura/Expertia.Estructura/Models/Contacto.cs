@@ -6,12 +6,12 @@ using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class Contacto : IUnique, ISalesForce, IAuditable, IUnidadNegocio
+    public class Contacto : ICrm, IAuditable, IUnidadNegocio
     {
         #region Properties
         public string ID { get; set; }
         public string IDCuenta { get; set; }
-        public string IdSalesForce { get; set; }
+        public string IdSalesforce { get; set; }
         public string IdCuentaSalesForce { get; set; }
         public string Nombre { get; set; }
         public string ApePaterno { get; set; }
