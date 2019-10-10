@@ -150,7 +150,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (36) P_HERRAMIENTAS
                 if (entity.Herramientas == null) value = DBNull.Value; else value = entity.Herramientas.Array.Coalesce();
                 AddParameter("P_HERRAMIENTAS", OracleDbType.Varchar2, value);
-                // (37) P_ID_CUENTA
+                // (37) P_LIMITE_CREDITO
+                value = entity.MontoLineaCredito.Coalesce();
+                AddParameter("P_LIMITE_CREDITO", OracleDbType.Decimal, value);
+                // (38) P_ID_CUENTA
                 value = DBNull.Value;
                 AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
