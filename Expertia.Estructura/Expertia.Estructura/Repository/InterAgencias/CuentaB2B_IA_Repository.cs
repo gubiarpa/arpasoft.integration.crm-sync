@@ -30,17 +30,5 @@ namespace Expertia.Estructura.Repository.InterAgencias
             return (new DestinosMundiales.CuentaB2B_DM_Repository(UnidadNegocioKeys.InterAgencias)).ExecuteOperation(entity, SPName, userName);
         }
         #endregion
-
-        #region NonImplemented
-        public Operation Delete(CuentaB2B entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operation Read(CuentaB2B entity)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }

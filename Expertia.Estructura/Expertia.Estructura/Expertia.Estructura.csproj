@@ -188,6 +188,7 @@
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_CT_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Contacto_DM_Repository.cs" />
+    <Compile Include="Repository\DestinosMundiales\Cotizacion_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\CuentaB2B_DM_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Contacto_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />

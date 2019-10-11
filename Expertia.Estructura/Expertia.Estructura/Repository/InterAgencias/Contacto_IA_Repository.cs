@@ -19,7 +19,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             return ExecuteOperation(entity, StoredProcedureName.IA_Create_Contacto, entity.Auditoria.CreateUser.Descripcion);
         }
 
-        public Operation Delete(Contacto entity)
+        public Operation Update(Contacto entity)
         {
             return ExecuteOperation(entity, StoredProcedureName.IA_Update_Contacto, entity.Auditoria.ModifyUser.Descripcion);
         }
@@ -29,18 +29,6 @@ namespace Expertia.Estructura.Repository.InterAgencias
         public Operation ExecuteOperation(Contacto entity, string SPName, string userName)
         {
             return (new Contacto_DM_Repository(ConnectionKeys.IAConnKey)).ExecuteOperation(entity, SPName, userName);
-        }
-        #endregion
-
-        #region NonImplemented
-        public Operation Read(Contacto entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operation Update(Contacto entity)
-        {
-            return ExecuteOperation(entity, StoredProcedureName.IA_Update_Contacto, entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
     }

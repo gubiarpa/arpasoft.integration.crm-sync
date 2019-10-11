@@ -127,17 +127,5 @@ namespace Expertia.Estructura.Repository.Condor
             }
         }
         #endregion
-
-        #region NonImplemented
-        public Operation Delete(CuentaB2B entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operation Read(CuentaB2B entity)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }

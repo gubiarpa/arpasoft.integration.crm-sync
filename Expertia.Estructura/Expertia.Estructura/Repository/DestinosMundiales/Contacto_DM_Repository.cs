@@ -120,17 +120,5 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         }
         #endregion
 
-        #region NonImplemented
-        public Operation Delete(Contacto entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operation Read(Contacto entity)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
     }
 }

@@ -11,9 +11,11 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 {
     public class CuentaB2B_DM_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>, ISameSPName<CuentaB2B>
     {
+        #region Constructor
         public CuentaB2B_DM_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.DestinosMundiales) : base(ConnectionKeys.DMConnKey, unidadNegocio)
         {
         }
+        #endregion
 
         #region PublicMethods
         public Operation Create(CuentaB2B entity)
@@ -170,18 +172,6 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             {
                 throw ex;
             }
-        }
-        #endregion
-
-        #region NonImplemented
-        public Operation Delete(CuentaB2B entity)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Operation Read(CuentaB2B entity)
-        {
-            throw new System.NotImplementedException();
         }
         #endregion
     }

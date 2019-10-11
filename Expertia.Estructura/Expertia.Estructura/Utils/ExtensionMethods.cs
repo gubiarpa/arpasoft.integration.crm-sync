@@ -101,6 +101,19 @@ namespace Expertia.Estructura.Utils
                 return null;
             }
         }
+
+        public static string ToString(this ActionMethod actionMethod)
+        {
+            switch (actionMethod)
+            {
+                case ActionMethod.Create:
+                    return RouteAction.Create;
+                case ActionMethod.Update:
+                    return RouteAction.Update;
+                default:
+                    return null;
+            }
+        }
         #endregion
     }
 }

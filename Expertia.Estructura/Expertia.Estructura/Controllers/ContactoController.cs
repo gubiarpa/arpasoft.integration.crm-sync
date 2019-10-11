@@ -254,7 +254,7 @@ namespace Expertia.Estructura.Controllers
                 default:
                     break;
             }
-            return unidadNegocioKey;
+            return unidadNegocioKey; // Devuelve el mismo parámetro
         }
         #endregion
     }

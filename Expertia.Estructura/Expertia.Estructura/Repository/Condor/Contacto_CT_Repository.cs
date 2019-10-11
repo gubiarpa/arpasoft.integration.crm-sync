@@ -111,19 +111,5 @@ namespace Expertia.Estructura.Repository.Condor
             }
         }
         #endregion
-
-        #region NonImplemented
-        public Operation Read(Contacto entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operation Delete(Contacto entity)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-
     }
 }

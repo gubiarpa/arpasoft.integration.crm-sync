@@ -31,6 +31,12 @@
         public const string Cotizacion = "api/cotizacion";
     }
 
+    public enum ActionMethod
+    {
+        Create,
+        Update
+    }
+
     public static class RouteAction
     {
         public const string Create = "create";
@@ -70,17 +76,23 @@
     public static class StoredProcedureName
     {
         #region CondorTravel
+        // Cuenta B2B
         public const string CT_Create_CuentaB2B = "CONDOR.CRM_PKG.SP_CREAR_CLIENTE";
         public const string CT_Update_CuentaB2B = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
+        // Contacto
         public const string CT_Create_Contacto = "CONDOR.CRM_PKG.SP_CREAR_CONTACTO";
         public const string CT_Update_Contacto = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
         #endregion
 
         #region DestinosMundiales
+        // Cuenta B2B
         public const string DM_Create_CuentaB2B = "DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE";
         public const string DM_Update_CuentaB2B = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
+        // Contacto
         public const string DM_Create_Contacto = "DESTINOS_TRP.CRM_PKG.SP_CREAR_CONTACTO";
         public const string DM_Update_Contacto = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
+        // Cotización
+        public const string DM_Create_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_GENERAR_COTIZACION";
         #endregion
 
         #region Interagencias
