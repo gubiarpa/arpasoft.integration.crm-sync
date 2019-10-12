@@ -21,15 +21,9 @@ namespace Expertia.Estructura.Controllers
 
         #region PublicMethods
         [Route(RouteAction.Create)]
-        public override IHttpActionResult Create(Cotizacion entity)
+        public IHttpActionResult Create(Cotizacion entity)
         {
             return MakeAction(entity, GetUnidadNegocio(entity.UnidadNegocio.Descripcion), ActionMethod.Update);
-        }
-
-        [Route(RouteAction.Update)]
-        public override IHttpActionResult Update(Cotizacion entity)
-        {
-            throw new NotImplementedException();
         }
         #endregion
 

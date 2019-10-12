@@ -14,7 +14,7 @@ namespace Expertia.Estructura.Controllers
     {
         #region PublicMethods
         [Route(RouteAction.Create)]
-        public override IHttpActionResult Create(CuentaB2B entity)
+        public IHttpActionResult Create(CuentaB2B entity)
         {
             object error = null, logResult = null;
             try
@@ -60,7 +60,7 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Update)]
-        public override IHttpActionResult Update(CuentaB2B entity)
+        public IHttpActionResult Update(CuentaB2B entity)
         {
             object error = null, logResult = null;
             try

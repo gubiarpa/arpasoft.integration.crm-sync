@@ -39,14 +39,6 @@ namespace Expertia.Estructura.Controllers.Base
         }
         #endregion
 
-        #region HttpMethods
-        [HttpPost]
-        public abstract IHttpActionResult Create(T entity);
-
-        [HttpPost]
-        public abstract IHttpActionResult Update(T entity);
-        #endregion
-
         #region Auxiliar
         private int GetDelayRetryTime()
         {
