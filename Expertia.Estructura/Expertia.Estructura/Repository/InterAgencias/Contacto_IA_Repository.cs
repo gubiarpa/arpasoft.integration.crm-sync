@@ -29,6 +29,16 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             return (new Contacto_DM_Repository(ConnectionKeys.IAConnKey)).ExecuteOperation(entity, SPName, userName);
         }
+
+        public Operation Generate(Contacto entity)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Operation Asociate(Contacto entity)
+        {
+            throw new System.NotImplementedException();
+        }
         #endregion
     }
 }

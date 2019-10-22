@@ -20,34 +20,25 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region PublicMethods
-        [Route(RouteAction.Create)]
-        public IHttpActionResult Create(Cotizacion entity)
-        {
-            return MakeAction(entity, GetUnidadNegocio(entity.UnidadNegocio.Descripcion), ActionMethod.Update);
-        }
-        #endregion
-
-        #region Auxiliar
-        private IHttpActionResult MakeAction(Cotizacion entity, UnidadNegocioKeys? unidadNegocio, ActionMethod actionMethod)
+        [Route(RouteAction.Generate)]
+        public IHttpActionResult Generate(Cotizacion entity)
         {
             object error = null, logResult = null;
             try
             {
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
                 object result;
-
                 _instants[InstantKey.Salesforce] = DateTime.Now;
-                switch (actionMethod)
+                switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
-                    case ActionMethod.Create:
-                        _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Create(entity);
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Generate(entity);
+                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
                     default:
                         return NotFound();
                 }
-                LoadResults(unidadNegocio, out logResult, out result);
                 _instants[InstantKey.Oracle] = DateTime.Now;
-
                 return Ok(result);
             }
             catch (Exception ex)
@@ -68,37 +59,52 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        [Route(RouteAction.Asociate)]
+        public IHttpActionResult Asociate(Cotizacion entity)
+        {
+            object error = null, logResult = null;
+            try
+            {
+                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
+                object result;
+                _instants[InstantKey.Salesforce] = DateTime.Now;
+                switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
+                {
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Asociate(entity);
+                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
+                        break;
+                    default:
+                        return NotFound();
+                }
+                _instants[InstantKey.Oracle] = DateTime.Now;
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return InternalServerError(ex);
+            }
+            finally
+            {
+                (new
+                {
+                    BusinessUnity = entity.UnidadNegocio.Descripcion,
+                    LegacySystems = logResult,
+                    Instants = GetInstants(),
+                    Error = error,
+                    Body = entity
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+            }
+        }
+        #endregion
+
+        #region Auxiliar
         private void LoadResults(UnidadNegocioKeys? unidadNegocio, out object logResult, out object result)
         {
             switch (unidadNegocio)
             {
-                case UnidadNegocioKeys.CondorTravel:
-                    #region Log
-                    logResult = new
-                    {
-                        Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
-                        IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
-                        IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
-                    };
-                    #endregion
-                    #region Client
-                    result = new
-                    {
-                        Result = new
-                        {
-                            CondorTravel = new
-                            {
-                                CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
-                            }
-                        }
-                    };
-                    #endregion
-                    break;
                 case UnidadNegocioKeys.DestinosMundiales:
-                case UnidadNegocioKeys.InterAgencias:
                     #region Log
                     logResult = new
                     {
@@ -108,13 +114,7 @@ namespace Expertia.Estructura.Controllers
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
-                            },
-                            InterAgencias = new
-                            {
-                                Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()
+                                IdCotizacion = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCotizacion].ToString()
                             }
                         }
                     };
@@ -129,14 +129,7 @@ namespace Expertia.Estructura.Controllers
                                 CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
                                 MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
-                            },
-                            InterAgencias = new
-                            {
-                                CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()
+                                IdCotizacion = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCotizacion].ToString()
                             }
                         }
                     };
@@ -152,9 +145,6 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
-                case UnidadNegocioKeys.CondorTravel:
-                    //_crmCollection.Add(UnidadNegocioKeys.CondorTravel, new Cotizacion_CT_Repository());
-                    break;
                 case UnidadNegocioKeys.DestinosMundiales:
                     _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Cotizacion_DM_Repository());
                     break;

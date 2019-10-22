@@ -173,6 +173,16 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 throw ex;
             }
         }
+
+        public Operation Generate(CuentaB2B entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Operation Asociate(CuentaB2B entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

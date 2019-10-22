@@ -110,6 +110,16 @@ namespace Expertia.Estructura.Repository.Condor
                 throw ex;
             }
         }
+
+        public Operation Generate(Contacto entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Operation Asociate(Contacto entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

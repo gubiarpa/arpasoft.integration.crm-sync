@@ -126,6 +126,16 @@ namespace Expertia.Estructura.Repository.Condor
                 throw ex;
             }
         }
+
+        public Operation Generate(CuentaB2B entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Operation Asociate(CuentaB2B entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

@@ -28,6 +28,16 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             return (new DestinosMundiales.CuentaB2B_DM_Repository(UnidadNegocioKeys.InterAgencias)).ExecuteOperation(entity, SPName, userName);
         }
+
+        public Operation Generate(CuentaB2B entity)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Operation Asociate(CuentaB2B entity)
+        {
+            throw new System.NotImplementedException();
+        }
         #endregion
     }
 }

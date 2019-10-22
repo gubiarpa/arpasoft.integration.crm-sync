@@ -34,7 +34,9 @@
     public enum ActionMethod
     {
         Create,
-        Update
+        Update,
+        Generate,
+        Asociate
     }
 
     public static class RouteAction
@@ -43,6 +45,8 @@
         public const string Read = "read";
         public const string Update = "update";
         public const string Delete = "delete";
+        public const string Generate = "generate";
+        public const string Asociate = "asociate";
     }
     #endregion
 
@@ -92,7 +96,8 @@
         public const string DM_Create_Contacto = "DESTINOS_TRP.CRM_PKG.SP_CREAR_CONTACTO";
         public const string DM_Update_Contacto = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
         // Cotización
-        public const string DM_Create_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_GENERAR_COTIZACION";
+        public const string DM_Generate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_GENERAR_COTIZACION";
+        public const string DM_Asociate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ASOCIAR_COTIZACION";
         #endregion
 
         #region Interagencias
@@ -117,6 +122,7 @@
         #region Identifier
         public const string IdCuenta = "P_ID_CUENTA";
         public const string IdContacto = "P_ID_CONTACTO";
+        public const string IdCotizacion = "P_ID_COTIZACION";
         #endregion
     }
     #endregion
