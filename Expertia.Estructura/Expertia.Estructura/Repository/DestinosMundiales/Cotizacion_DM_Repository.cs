@@ -78,10 +78,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 AddParameter("P_NOMBRE_VENDEDOR_RESERVA", OracleDbType.Varchar2, value);
                 // (18) P_ID_CUENTA
                 value = entity.IdCuenta.Coalesce();
-                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output);
+                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 // (19) P_ID_COTIZACION
                 value = entity.IdCotizacion.Coalesce();
-                AddParameter("P_ID_COTIZACION", OracleDbType.Varchar2, value, ParameterDirection.Output);
+                AddParameter("P_ID_COTIZACION", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
 
                 #region Invoke
@@ -133,44 +133,44 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             value = entity.IdCotizacionPta;
             AddParameter("P_ID_COTIZACION_PTA", OracleDbType.Int32, value);
             // (09) P_NOMBRE_PUNTO_VENTA
-            value = entity.PuntoVenta.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_PUNTO_VENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (10) P_NUMERO_SUBCODIGO
-            value = entity.Subcodigo;
+            value = DBNull.Value;
             AddParameter("P_NUMERO_SUBCODIGO", OracleDbType.Int32, value, ParameterDirection.Output);
             // (11) P_NOMBRE_GRUPO
-            value = entity.Grupo.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_GRUPO", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (12) P_FECHA_SALIDA
-            value = entity.FechaSalida;
+            value = DBNull.Value;
             AddParameter("P_FECHA_SALIDA", OracleDbType.Date, value, ParameterDirection.Output);
             // (13) P_FECHA_RETORNO
-            value = entity.FechaRetorno;
+            value = DBNull.Value;
             AddParameter("P_FECHA_RETORNO", OracleDbType.Date, value, ParameterDirection.Output);
             // (14) P_NOMBRE_ORIGEN
-            value = entity.Origen.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_ORIGEN", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (15) P_NOMBRE_PAIS
-            value = entity.Pais.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (14) P_NOMBRE_CIUDAD
-            value = entity.Ciudad.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_CIUDAD", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (15) P_NOMBRE_VENDEDOR_COUNTER
-            value = entity.VendedorCounter.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_VENDEDOR_COUNTER", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (16) P_NOMBRE_VENDEDOR_COTIZADOR
-            value = entity.VendedorCotizador.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_VENDEDOR_COTIZADOR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (17) P_NOMBRE_VENDEDOR_RESERVA
-            value = entity.VendedorReserva.Descripcion.Coalesce();
+            value = DBNull.Value;
             AddParameter("P_NOMBRE_VENDEDOR_RESERVA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (18) P_ID_CUENTA
-            value = entity.IdCuenta.Coalesce();
-            AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output);
+            value = DBNull.Value;
+            AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (19) P_ID_COTIZACION
-            value = entity.IdCotizacion.Coalesce();
-            AddParameter("P_ID_COTIZACION", OracleDbType.Varchar2, value, ParameterDirection.Output);
+            value = DBNull.Value;
+            AddParameter("P_ID_COTIZACION", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             #endregion
 
             #region Invoke
