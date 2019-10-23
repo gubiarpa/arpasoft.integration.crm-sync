@@ -165,6 +165,7 @@ namespace Expertia.Estructura.Controllers
                     logResult = new
                     {
                         Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
+                        Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
                         NotAssociated = _operNotAssociated[UnidadNegocioKeys.CondorTravel],
                         IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
                         IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
@@ -196,6 +197,7 @@ namespace Expertia.Estructura.Controllers
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
+                                Retry = _operRetry[UnidadNegocioKeys.DestinosMundiales],
                                 NotAssociated = _operNotAssociated[UnidadNegocioKeys.DestinosMundiales],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
@@ -203,6 +205,7 @@ namespace Expertia.Estructura.Controllers
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
+                                Retry = _operRetry[UnidadNegocioKeys.InterAgencias],
                                 NotAssociated = _operNotAssociated[UnidadNegocioKeys.InterAgencias],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdContacto].ToString()

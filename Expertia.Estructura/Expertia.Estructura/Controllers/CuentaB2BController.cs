@@ -116,6 +116,7 @@ namespace Expertia.Estructura.Controllers
                     logResult = new
                     {
                         Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel),
+                        Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
                         IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString()
                     };
                     #endregion
@@ -144,11 +145,13 @@ namespace Expertia.Estructura.Controllers
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
+                                Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                             },
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
+                                Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
                             }
                         }
