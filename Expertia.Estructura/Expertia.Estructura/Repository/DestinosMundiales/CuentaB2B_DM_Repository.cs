@@ -105,6 +105,9 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (22) P_TELEFONO_2
                 if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 2)) value = entity.Telefonos.ToList()[2].Numero; else value = DBNull.Value;
                 AddParameter("P_TELEFONO_2", OracleDbType.Varchar2, value);
+                // (22) P_TELEFONO_EMERGENCIA (no hay tipo, sólo el número)
+                if ((entity.Telefonos != null) && (entity.Telefonos.ToList().Count > 3)) value = entity.Telefonos.ToList()[3].Numero; else value = DBNull.Value;
+                AddParameter("P_TELEFONO_EMERGENCIA", OracleDbType.Varchar2, value);
                 // (23) P_SITIO_WEB
                 if ((entity.Sitios != null) && (entity.Sitios.ToList().Count > 0)) value = entity.Sitios.ToList()[0].Descripcion.Coalesce();
                 AddParameter("P_SITIO_WEB", OracleDbType.Varchar2, value);
@@ -152,7 +155,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (36) P_HERRAMIENTAS
                 if (entity.Herramientas == null) value = DBNull.Value; else value = entity.Herramientas.Array.Coalesce();
                 AddParameter("P_HERRAMIENTAS", OracleDbType.Varchar2, value);
-                // (37) P_ID_CUENTA
+                // (37) P_LIMITE_CREDITO
+                value = entity.MontoLineaCredito.Coalesce();
+                AddParameter("P_LIMITE_CREDITO", OracleDbType.Decimal, value);
+                // (38) P_ID_CUENTA
                 value = DBNull.Value;
                 AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
