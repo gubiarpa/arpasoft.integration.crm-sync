@@ -1,4 +1,6 @@
-﻿namespace Expertia.Estructura.Utils
+﻿using System;
+
+namespace Expertia.Estructura.Utils
 {
     #region ConfigKeys
     public static class SecurityKeys
@@ -116,6 +118,10 @@
         public const int DefaultSize = 4000;
         #endregion
 
+        #region Default
+        public static DateTime MinDate { get { return new DateTime(1900, 1, 1); } }
+        #endregion
+
         #region Error
         public const string CodigoError = "P_CODIGO_ERROR";
         public const string MensajeError = "P_MENSAJE_ERROR";
@@ -127,9 +133,24 @@
         public const string IdCotizacion = "P_ID_COTIZACION";
         #endregion
 
+<<<<<<< Updated upstream
         #region Normal
         public const string CurCotizacion = "P_COTIZACION";
         public const string CurCotizacionDet = "P_COTIZACION_DETALLE";
+=======
+        #region Fields
+        public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";
+        public const string NumeroSubcodigo = "P_NUMERO_SUBCODIGO";
+        public const string NombreGrupo = "P_NOMBRE_GRUPO";
+        public const string FechaSalida = "P_FECHA_SALIDA";
+        public const string FechaRetorno = "P_FECHA_RETORNO";
+        public const string NombreOrigen = "P_NOMBRE_ORIGEN";
+        public const string NombrePais = "P_NOMBRE_PAIS";
+        public const string NombreCiudad = "P_NOMBRE_CIUDAD";
+        public const string NombreVendedorCounter = "P_NOMBRE_VENDEDOR_COUNTER";
+        public const string NombreVendedorCotizador = "P_NOMBRE_VENDEDOR_COTIZADOR";
+        public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
+>>>>>>> Stashed changes
         #endregion
     }
     #endregion

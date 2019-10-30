@@ -110,10 +110,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             #region Parameters
             // (01) P_CODIGO_ERROR
             value = DBNull.Value;
-            AddParameter("P_CODIGO_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (02) P_MENSAJE_ERROR
             value = DBNull.Value;
-            AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (03) P_NOMBRE_USUARIO
             value = entity.Usuario.Descripcion.Coalesce();
             AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
@@ -134,43 +134,43 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             AddParameter("P_ID_COTIZACION_PTA", OracleDbType.Int32, value);
             // (09) P_NOMBRE_PUNTO_VENTA
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_PUNTO_VENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombrePuntoVenta, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (10) P_NUMERO_SUBCODIGO
             value = DBNull.Value;
-            AddParameter("P_NUMERO_SUBCODIGO", OracleDbType.Int32, value, ParameterDirection.Output);
+            AddParameter(OutParameter.NumeroSubcodigo, OracleDbType.Int32, value, ParameterDirection.Output);
             // (11) P_NOMBRE_GRUPO
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_GRUPO", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombreGrupo, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (12) P_FECHA_SALIDA
             value = DBNull.Value;
-            AddParameter("P_FECHA_SALIDA", OracleDbType.Date, value, ParameterDirection.Output);
+            AddParameter(OutParameter.FechaSalida, OracleDbType.Date, value, ParameterDirection.Output);
             // (13) P_FECHA_RETORNO
             value = DBNull.Value;
-            AddParameter("P_FECHA_RETORNO", OracleDbType.Date, value, ParameterDirection.Output);
+            AddParameter(OutParameter.FechaRetorno, OracleDbType.Date, value, ParameterDirection.Output);
             // (14) P_NOMBRE_ORIGEN
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_ORIGEN", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombreOrigen, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (15) P_NOMBRE_PAIS
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombrePais, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (14) P_NOMBRE_CIUDAD
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_CIUDAD", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombreCiudad, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (15) P_NOMBRE_VENDEDOR_COUNTER
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_VENDEDOR_COUNTER", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombreVendedorCounter, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (16) P_NOMBRE_VENDEDOR_COTIZADOR
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_VENDEDOR_COTIZADOR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombreVendedorCotizador, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (17) P_NOMBRE_VENDEDOR_RESERVA
             value = DBNull.Value;
-            AddParameter("P_NOMBRE_VENDEDOR_RESERVA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.NombreVendedorReserva, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (18) P_ID_CUENTA
             value = DBNull.Value;
-            AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.IdCuenta, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (19) P_ID_COTIZACION
             value = DBNull.Value;
-            AddParameter("P_ID_COTIZACION", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.IdCotizacion, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             #endregion
 
             #region Invoke
@@ -180,6 +180,17 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.IdCuenta] = entity.IdCuenta = GetOutParameter(OutParameter.IdCuenta).ToString();
             operation[OutParameter.IdCotizacion] = entity.IdCotizacion = GetOutParameter(OutParameter.IdCotizacion).ToString();
+            operation[OutParameter.NombrePuntoVenta] = GetOutParameter(OutParameter.NombrePuntoVenta).ToString();
+            operation[OutParameter.NumeroSubcodigo] = (int.TryParse(GetOutParameter(OutParameter.NumeroSubcodigo).ToString(), out int subCodigo)) ? subCodigo : 0;
+            operation[OutParameter.NombreGrupo] = GetOutParameter(OutParameter.NombreGrupo).ToString();
+            operation[OutParameter.FechaSalida] = (DateTime.TryParse(GetOutParameter(OutParameter.FechaSalida).ToString(), out DateTime fechaSalida)) ? fechaSalida : OutParameter.MinDate;
+            operation[OutParameter.FechaRetorno] = (DateTime.TryParse(GetOutParameter(OutParameter.FechaRetorno).ToString(), out DateTime fechaRetorno)) ? fechaRetorno : OutParameter.MinDate;
+            operation[OutParameter.NombreOrigen] = GetOutParameter(OutParameter.NombreOrigen).ToString();
+            operation[OutParameter.NombrePais] = GetOutParameter(OutParameter.NombrePais).ToString();
+            operation[OutParameter.NombreCiudad] = GetOutParameter(OutParameter.NombreCiudad).ToString();
+            operation[OutParameter.NombreVendedorCounter] = GetOutParameter(OutParameter.NombreVendedorCounter).ToString();
+            operation[OutParameter.NombreVendedorCotizador] = GetOutParameter(OutParameter.NombreVendedorCotizador).ToString();
+            operation[OutParameter.NombreVendedorReserva] = GetOutParameter(OutParameter.NombreVendedorReserva).ToString();
             operation[Operation.Result] = ResultType.Success;
             #endregion
 

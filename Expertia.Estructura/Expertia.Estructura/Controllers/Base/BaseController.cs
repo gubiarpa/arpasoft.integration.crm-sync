@@ -77,6 +77,8 @@ namespace Expertia.Estructura.Controllers.Base
             }
         }
 
+        protected string GetMethod { get { return Request.RequestUri.Segments[Request.RequestUri.Segments.Length - 1]; } } 
+
         protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName)
         {
             if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel.GetKeyValues()).ToUpper().Split(Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
