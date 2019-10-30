@@ -100,7 +100,6 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Send)]
-<<<<<<< Updated upstream
         public IHttpActionResult Send(object obj)
         {
             try
@@ -108,19 +107,6 @@ namespace Expertia.Estructura.Controllers
                 // var oper = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales).GetAllModified();
                 obj.TryWriteLogObject(_logFileManager, _clientFeatures);
                 return Ok();
-=======
-        public IHttpActionResult Send()
-        {
-            try
-            {
-                Guid guid = Guid.NewGuid();
-                System.IO.File.AppendAllText(
-                    "C:\\IIS\\log\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " :: (1) " + guid.ToString()  + "\n");
-                System.Threading.Thread.Sleep(5000);
-                System.IO.File.AppendAllText(
-                    "C:\\IIS\\log\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".log", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + " :: (2) " + guid.ToString()  + "\n");
-                return Ok(guid);
->>>>>>> Stashed changes
             }
             catch (Exception)
             {

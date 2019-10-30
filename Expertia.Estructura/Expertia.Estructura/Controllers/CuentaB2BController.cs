@@ -145,13 +145,13 @@ namespace Expertia.Estructura.Controllers
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
-                                Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
+                                Retry = _operRetry[UnidadNegocioKeys.DestinosMundiales],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                             },
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
-                                Retry = _operRetry[UnidadNegocioKeys.CondorTravel],
+                                Retry = _operRetry[UnidadNegocioKeys.InterAgencias],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
                             }
                         }

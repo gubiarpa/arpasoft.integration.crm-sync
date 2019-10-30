@@ -133,12 +133,9 @@ namespace Expertia.Estructura.Utils
         public const string IdCotizacion = "P_ID_COTIZACION";
         #endregion
 
-<<<<<<< Updated upstream
-        #region Normal
+        #region Fields
         public const string CurCotizacion = "P_COTIZACION";
         public const string CurCotizacionDet = "P_COTIZACION_DETALLE";
-=======
-        #region Fields
         public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";
         public const string NumeroSubcodigo = "P_NUMERO_SUBCODIGO";
         public const string NombreGrupo = "P_NOMBRE_GRUPO";
@@ -150,7 +147,6 @@ namespace Expertia.Estructura.Utils
         public const string NombreVendedorCounter = "P_NOMBRE_VENDEDOR_COUNTER";
         public const string NombreVendedorCotizador = "P_NOMBRE_VENDEDOR_COTIZADOR";
         public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
->>>>>>> Stashed changes
         #endregion
     }
     #endregion
