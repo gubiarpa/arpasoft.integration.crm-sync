@@ -47,6 +47,7 @@
         public const string Delete = "delete";
         public const string Generate = "generate";
         public const string Asociate = "asociate";
+        public const string Send = "send";
     }
     #endregion
 
@@ -98,6 +99,7 @@
         // Cotización
         public const string DM_Generate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_GENERAR_COTIZACION";
         public const string DM_Asociate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ASOCIAR_COTIZACION";
+        public const string DM_Send_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_COTIZACION";
         #endregion
 
         #region Interagencias
@@ -123,6 +125,11 @@
         public const string IdCuenta = "P_ID_CUENTA";
         public const string IdContacto = "P_ID_CONTACTO";
         public const string IdCotizacion = "P_ID_COTIZACION";
+        #endregion
+
+        #region Normal
+        public const string CurCotizacion = "P_COTIZACION";
+        public const string CurCotizacionDet = "P_COTIZACION_DETALLE";
         #endregion
     }
     #endregion

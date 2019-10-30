@@ -185,6 +185,39 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
             return operation;
         }
+
+        public Operation GetAllModified()
+        {
+            Operation operation = new Operation();
+            object value;
+
+            #region Parameters
+            // (1) P_CODIGO_ERROR
+            value = DBNull.Value;
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (2) P_MENSAJE_ERROR
+            value = DBNull.Value;
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (3) P_COTIZACION
+            value = DBNull.Value;
+            AddParameter(OutParameter.CurCotizacion, OracleDbType.RefCursor, value, ParameterDirection.Output);
+            // (4) P_COTIZACION_DETALLE
+            value = DBNull.Value;
+            AddParameter(OutParameter.CurCotizacionDet, OracleDbType.RefCursor, value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteSPWithoutResults(StoredProcedureName.DM_Send_Cotizacion);
+
+            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            operation[OutParameter.CurCotizacion] = GetOutParameter(OutParameter.CurCotizacion);
+            operation[OutParameter.CurCotizacionDet] = GetOutParameter(OutParameter.CurCotizacionDet);
+            operation[Operation.Result] = ResultType.Success;
+            #endregion
+
+            return operation;
+        }
         #endregion
 
         #region Auxiliar

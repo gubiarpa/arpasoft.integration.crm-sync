@@ -2,6 +2,7 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Utils;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Web.Http;
 
@@ -95,6 +96,21 @@ namespace Expertia.Estructura.Controllers
                     Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
+            }
+        }
+
+        [Route(RouteAction.Send)]
+        public IHttpActionResult Send(object obj)
+        {
+            try
+            {
+                // var oper = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales).GetAllModified();
+                obj.TryWriteLogObject(_logFileManager, _clientFeatures);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         #endregion
