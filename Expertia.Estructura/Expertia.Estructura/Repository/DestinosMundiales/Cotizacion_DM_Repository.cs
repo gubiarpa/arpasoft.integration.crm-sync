@@ -3,6 +3,7 @@ using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Data;
 
@@ -222,9 +223,14 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CurCotizacion] = GetOutParameter(OutParameter.CurCotizacion);
+            //operation[OutParameter.CurCotizacion] = GetOutParameter(OutParameter.CurCotizacion);
             operation[OutParameter.CurCotizacionDet] = GetOutParameter(OutParameter.CurCotizacionDet);
             operation[Operation.Result] = ResultType.Success;
+            #endregion
+
+            #region Cursor
+            var output = GetCursor(OutParameter.CurCotizacion);
+            var reader = ((OracleRefCursor)output.Value).GetDataReader();
             #endregion
 
             return operation;

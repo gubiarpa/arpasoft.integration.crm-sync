@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
+using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -48,6 +49,22 @@ namespace Expertia.Estructura.Repository.Base
                             cmd.Parameters.Add(_parameters[key]);
                         }
                         cmd.ExecuteNonQuery();
+
+                        // Volcamos en parámetros resultantes
+                        foreach (var key in _parameters.Keys)
+                        {
+                            if (_parameters[key].Direction.Equals(ParameterDirection.Output))
+                            {
+                                if (_parameters[key].OracleDbType.Equals(OracleDbType.RefCursor))
+                                {
+                                    var output = _parameters[key];
+                                }
+                                else
+                                {
+                                    _resultParameters[key] = _parameters[key];
+                                }
+                            }
+                        }
                     }
                 }
                 return null;
@@ -88,8 +105,22 @@ namespace Expertia.Estructura.Repository.Base
                         // Volcamos en parámetros resultantes
                         foreach (var key in _parameters.Keys)
                         {
-                            if (_parameters[key].Direction == ParameterDirection.Output)
-                                _resultParameters[key] = _parameters[key];
+                            if (_parameters[key].Direction.Equals(ParameterDirection.Output))
+                            {
+                                if (_parameters[key].OracleDbType.Equals(OracleDbType.RefCursor))
+                                {
+                                    var output = _parameters[key];
+                                    OracleDataReader reader = ((OracleRefCursor)output.Value).GetDataReader();
+                                    while (reader.Read())
+                                    {
+                                        var _ = reader.GetInt32(0);
+                                    }
+                                }
+                                else
+                                {
+                                    _resultParameters[key] = _parameters[key];
+                                }
+                            }
                         }
                     }
                 }
@@ -109,6 +140,18 @@ namespace Expertia.Estructura.Repository.Base
             try
             {
                 return _resultParameters[parameterName].Value;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        protected OracleParameter GetCursor(string parameterName)
+        {
+            try
+            {
+                return ((OracleParameter)_resultParameters[parameterName]);
             }
             catch (Exception ex)
             {

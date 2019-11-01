@@ -104,13 +104,13 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                // var oper = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales).GetAllModified();
+                var oper = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales).GetAllModified();
                 obj.TryWriteLogObject(_logFileManager, _clientFeatures);
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
         #endregion
