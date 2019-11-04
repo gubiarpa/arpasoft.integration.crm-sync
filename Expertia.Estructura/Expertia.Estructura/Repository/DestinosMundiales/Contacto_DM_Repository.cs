@@ -102,7 +102,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 #endregion
 
                 #region Invoke
-                ExecuteSPWithoutResults(SPName);
+                ExecuteStoredProcedure(SPName);
 
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);

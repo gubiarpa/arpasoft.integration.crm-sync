@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.DestinosMundiales
 {
-    public class Cotizacion_DM_Repository : OracleBase<Cotizacion>, ICrud<Cotizacion>, ISameSPName<Cotizacion>
+    public class Cotizacion_DM_Repository : OracleBase<Cotizacion>, ICrud<Cotizacion>
     {
         #region Constructor
         public Cotizacion_DM_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.DestinosMundiales) : base(ConnectionKeys.DMConnKey, unidadNegocio)
@@ -86,7 +86,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 #endregion
 
                 #region Invoke
-                ExecuteSPWithoutResults(StoredProcedureName.DM_Generate_Cotizacion);
+                ExecuteStoredProcedure(StoredProcedureName.DM_Generate_Cotizacion);
 
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
@@ -175,7 +175,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             #endregion
 
             #region Invoke
-            ExecuteSPWithoutResults(StoredProcedureName.DM_Asociate_Cotizacion);
+            ExecuteStoredProcedure(StoredProcedureName.DM_Asociate_Cotizacion);
 
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
@@ -219,18 +219,13 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             #endregion
 
             #region Invoke
-            ExecuteSPWithoutResults(StoredProcedureName.DM_Send_Cotizacion);
+            ExecuteStoredProcedure(StoredProcedureName.DM_Send_Cotizacion);
 
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            //operation[OutParameter.CurCotizacion] = GetOutParameter(OutParameter.CurCotizacion);
-            operation[OutParameter.CurCotizacionDet] = GetOutParameter(OutParameter.CurCotizacionDet);
+            operation[OutParameter.CurCotizacion] = GetDtParameter(OutParameter.CurCotizacion);
+            operation[OutParameter.CurCotizacionDet] = GetDtParameter(OutParameter.CurCotizacionDet);
             operation[Operation.Result] = ResultType.Success;
-            #endregion
-
-            #region Cursor
-            var output = GetCursor(OutParameter.CurCotizacion);
-            var reader = ((OracleRefCursor)output.Value).GetDataReader();
             #endregion
 
             return operation;
