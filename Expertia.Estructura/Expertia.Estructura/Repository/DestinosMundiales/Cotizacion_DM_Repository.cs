@@ -1,10 +1,13 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Expertia.Estructura.Repository.DestinosMundiales
@@ -91,7 +94,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
                 operation[OutParameter.IdCuenta] = entity.IdCuenta = GetOutParameter(OutParameter.IdCuenta).ToString();
-                operation[OutParameter.IdCotizacion] = entity.IdCotizacion = GetOutParameter(OutParameter.IdCotizacion).ToString();
+                operation[OutParameter.IdCotizacion] = entity.IdCotizacion = int.Parse(GetOutParameter(OutParameter.IdCotizacion).ToString());
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 
@@ -180,7 +183,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.IdCuenta] = entity.IdCuenta = GetOutParameter(OutParameter.IdCuenta).ToString();
-            operation[OutParameter.IdCotizacion] = entity.IdCotizacion = GetOutParameter(OutParameter.IdCotizacion).ToString();
+            operation[OutParameter.IdCotizacion] = entity.IdCotizacion = int.Parse(GetOutParameter(OutParameter.IdCotizacion).ToString());
             operation[OutParameter.NombrePuntoVenta] = GetOutParameter(OutParameter.NombrePuntoVenta).ToString();
             operation[OutParameter.NumeroSubcodigo] = (int.TryParse(GetOutParameter(OutParameter.NumeroSubcodigo).ToString(), out int subCodigo)) ? subCodigo : 0;
             operation[OutParameter.NombreGrupo] = GetOutParameter(OutParameter.NombreGrupo).ToString();
@@ -223,7 +226,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CurCotizacion] = GetDtParameter(OutParameter.CurCotizacion);
+            operation[OutParameter.CurCotizacion] = ToCotizacion(GetDtParameter(OutParameter.CurCotizacion));
             operation[OutParameter.CurCotizacionDet] = GetDtParameter(OutParameter.CurCotizacionDet);
             operation[Operation.Result] = ResultType.Success;
             #endregion
@@ -233,9 +236,104 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         #endregion
 
         #region Auxiliar
-        public Operation ExecuteOperation(Cotizacion entity, string SPName, string userName)
+        public IEnumerable<Cotizacion> ToCotizacion(DataTable dt)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cotizaciones = new List<Cotizacion>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    #region Loading
+                    if (!int.TryParse(row["COTIZACION"].ToString(), out int id_cotizacion)) id_cotizacion = 0;
+                    var propietario = (row["PROPIETARIO_CUENTA"] ?? string.Empty).ToString();
+                    var estado = (row["ESTADO"] ?? string.Empty).ToString();
+                    var unidad_negocio = (row["UNIDAD_NEGOCIO"] ?? string.Empty).ToString();
+                    var branch = (row["BRANCH"] ?? string.Empty).ToString();
+                    var referencia = (row["REFERENCIA"] ?? string.Empty).ToString();
+                    if (!int.TryParse((row["NUM_ADULTOS"] ?? "0").ToString(), out var num_adultos)) num_adultos = 0;
+                    if (!int.TryParse((row["NUM_NINOS"] ?? "0").ToString(), out var num_ninos)) num_ninos = 0;
+                    var rango = (row["RANGO"] ?? string.Empty).ToString();
+                    var cliente = (row["CLIENTE"] ?? string.Empty).ToString();
+                    var contacto = (row["CONTACTO"] ?? string.Empty).ToString();
+                    var pais = (row["PAIS"] ?? string.Empty).ToString();
+                    if (!DateTime.TryParse(row["FECHA_COTIZACION"].ToString(), out var fecha_cotizacion)) fecha_cotizacion = DateTime.Today;
+                    if (!DateTime.TryParse(row["FECHA_INI_VIGENCIA"].ToString(), out var fecha_ini_vigencia)) fecha_ini_vigencia = DateTime.Today;
+                    if (!DateTime.TryParse(row["FECHA_FIN_VIGENCIA"].ToString(), out var fecha_fin_vigencia)) fecha_fin_vigencia = DateTime.Today;
+                    if (!DateTime.TryParse(row["FECHA_INI_SERVICIO"].ToString(), out var fecha_ini_servicio)) fecha_ini_servicio = DateTime.Today;
+                    if (!DateTime.TryParse(row["FECHA_FIN_SERVICIO"].ToString(), out var fecha_fin_servicio)) fecha_fin_servicio = DateTime.Today;
+                    if (!DateTime.TryParse(row["FECHA_SOLICITUD"].ToString(), out var fecha_solicitud)) fecha_solicitud = DateTime.Today;
+                    if (!float.TryParse((row["MARKUP_HOTEL"] ?? "0").ToString(), out var markup_hotel)) markup_hotel = 0;
+                    var liberados_venta = (row["LIBERADOS_VENTA"] ?? string.Empty).ToString();
+                    if (!float.TryParse((row["COSTO_FINAL"] ?? "0").ToString(), out var costo_final)) costo_final = 0;
+                    if (!float.TryParse((row["VENTA_FINAL"] ?? "0").ToString(), out var venta_final)) venta_final = 0;
+                    var tipo_vuelo = (row["TIPO_VUELO"] ?? string.Empty).ToString();
+                    var destino = (row["DESTINO"] ?? string.Empty).ToString();
+                    var clase = (row["CLASE"] ?? string.Empty).ToString();
+                    var punto_venta = (row["PUNTO_VENTA"] ?? string.Empty).ToString();
+                    var servicio = (row["SERVICIO"] ?? string.Empty).ToString();
+                    var canal_venta = (row["CANAL_VENTA"] ?? string.Empty).ToString();
+                    var seguimiento = (row["SEGUIMIENTO"] ?? string.Empty).ToString();
+                    var punto_de_contacto = (row["PUNTO_DE_CONTACTO"] ?? string.Empty).ToString();
+                    var counter = (row["COUNTER"] ?? string.Empty).ToString();
+                    var reservado_por = (row["RESERVADO_POR"] ?? string.Empty).ToString();
+                    var registrada_por = (row["REGISTRADA_POR"] ?? string.Empty).ToString();
+                    if (!bool.TryParse((row["ES_BLOQUEO"] ?? "0").ToString(), out var es_bloqueo)) es_bloqueo = false;
+                    if (!bool.TryParse((row["ES_GRUPO"] ?? "0").ToString(), out var es_grupo)) es_grupo = false;
+                    var condicion_pago = (row["CONDICION_PAGO"] ?? string.Empty).ToString();
+                    var motivo_no_venta = (row["MOTIVO_NO_VENTA"] ?? string.Empty).ToString();
+                    var notas = (row["NOTAS"] ?? string.Empty).ToString();
+                    #endregion
+
+                    #region AddingElement
+                    cotizaciones.Add(new Cotizacion()
+                    {
+                        IdCotizacion = id_cotizacion,
+                        Propietario = new SimpleDesc(propietario),
+                        Estado = new SimpleDesc(estado),
+                        UnidadNegocio = new UnidadNegocio() { Descripcion = unidad_negocio },
+                        Branch = new SimpleDesc(branch),
+                        Referencia = referencia,
+                        NumeroAdultos = num_adultos,
+                        NumeroNinos = num_ninos,
+                        Rango = rango,
+                        Cliente = new SimpleDesc(cliente),
+                        Contacto = new SimpleDesc(contacto),
+                        Pais = new SimpleDesc(pais),
+                        FechaCotizacion = fecha_cotizacion,
+                        FechaIniVigencia = fecha_ini_vigencia,
+                        FechaFinVigencia = fecha_fin_vigencia,
+                        FechaIniServicio = fecha_ini_servicio,
+                        FechaFinServicio = fecha_fin_servicio,
+                        FechaSolicitud = fecha_solicitud,
+                        MarkupHotel = markup_hotel,
+                        LiberadosVenta = liberados_venta,
+                        CostoFinal = costo_final,
+                        VentaFinal = venta_final,
+                        TipoVuelo = tipo_vuelo,
+                        Destino = destino,
+                        Clase = new SimpleDesc(clase),
+                        PuntoVenta = new SimpleDesc(punto_venta),
+                        Servicio = new SimpleDesc(servicio),
+                        CanalVenta = new SimpleDesc(canal_venta),
+                        Seguimiento = new SimpleDesc(seguimiento),
+                        PuntoContacto = new SimpleDesc(punto_de_contacto),
+                        Counter = new SimpleDesc(counter),
+                        ReservadoPor = new SimpleDesc(reservado_por),
+                        RegistradaPor = new SimpleDesc(registrada_por),
+                        EsBloqueo = es_bloqueo,
+                        EsGrupo = es_grupo,
+                        CondicionPago = new SimpleDesc(condicion_pago),
+                        MotivoNoVenta = motivo_no_venta,
+                        Notas = notas
+                    });
+                    #endregion
+                }
+                return cotizaciones;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
 

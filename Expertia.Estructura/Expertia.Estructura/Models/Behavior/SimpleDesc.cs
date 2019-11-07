@@ -2,7 +2,11 @@
 {
     public class SimpleDesc //: IUnique
     {
-        //public string ID { get; set; }
+        public SimpleDesc(string descripcion = null)
+        {
+            Descripcion = descripcion;
+        }
+
         public string Descripcion { get; set; }
     }
 
