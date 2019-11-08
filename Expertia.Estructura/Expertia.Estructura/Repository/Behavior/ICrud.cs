@@ -6,6 +6,7 @@ namespace Expertia.Estructura.Repository.Behavior
     {
         // Cuenta, Contacto
         Operation Create(T entity);
+        Operation Read(T entity);
         Operation Update(T entity);
         // Cotizacion
         Operation Generate(T entity);

@@ -136,6 +136,11 @@ namespace Expertia.Estructura.Repository.Condor
         {
             throw new NotImplementedException();
         }
+
+        public Operation Read(CuentaB2B entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

@@ -38,6 +38,11 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             throw new System.NotImplementedException();
         }
+
+        public Operation Read(CuentaB2B entity)
+        {
+            throw new System.NotImplementedException();
+        }
         #endregion
     }
 }

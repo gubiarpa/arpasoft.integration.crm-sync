@@ -347,6 +347,11 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         {
             throw new NotImplementedException();
         }
+
+        public Operation Read(Cotizacion entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

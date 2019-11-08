@@ -189,6 +189,11 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         {
             throw new NotImplementedException();
         }
+
+        public Operation Read(CuentaB2B entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

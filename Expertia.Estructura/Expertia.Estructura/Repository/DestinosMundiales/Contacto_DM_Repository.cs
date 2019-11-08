@@ -128,6 +128,11 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         {
             throw new NotImplementedException();
         }
+
+        public Operation Read(Contacto entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
     }

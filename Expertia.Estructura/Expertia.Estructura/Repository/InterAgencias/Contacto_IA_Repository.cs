@@ -39,6 +39,11 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             throw new System.NotImplementedException();
         }
+
+        public Operation Read(Contacto entity)
+        {
+            throw new System.NotImplementedException();
+        }
         #endregion
     }
 }

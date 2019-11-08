@@ -120,6 +120,11 @@ namespace Expertia.Estructura.Repository.Condor
         {
             throw new NotImplementedException();
         }
+
+        public Operation Read(Contacto entity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

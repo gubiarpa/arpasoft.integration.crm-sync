@@ -40,8 +40,8 @@ namespace Expertia.Estructura.Models
         #endregion
 
         #region ForeignKey
-        public SimpleDesc Estado { get; set; }
         public UnidadNegocio UnidadNegocio { get; set; }
+        public SimpleDesc Estado { get; set; }
         public SimpleDesc Branch { get; set; }
         public SimpleDesc Surcursal { get; set; }
         public SimpleDesc PuntoVenta { get; set; }

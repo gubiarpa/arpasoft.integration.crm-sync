@@ -1,28 +1,27 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
-using Expertia.Estructura.Repository.DestinosMundiales;
+using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
-using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
 {
-    [RoutePrefix(RoutePrefix.Cotizacion)]
-    public class CotizacionController : BaseController<Cotizacion>
+    public class SubcodigoController : BaseController<Subcodigo>
     {
-        #region Properties
-        #endregion
-
         #region Constructor
-        public CotizacionController()
+        public SubcodigoController()
         {
         }
         #endregion
 
         #region PublicMethods
-        [Route(RouteAction.Generate)]
-        public IHttpActionResult Generate(Cotizacion entity)
+        [Route(RouteAction.Read)]
+        public IHttpActionResult Read(Subcodigo entity)
         {
             object error = null, logResult = null;
             try
@@ -32,9 +31,9 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
-                    case UnidadNegocioKeys.DestinosMundiales:
-                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Generate(entity);
-                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
+                    case UnidadNegocioKeys.InterAgencias:
+                        _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Read(entity);
+                        LoadResults(UnidadNegocioKeys.InterAgencias, out logResult, out result);
                         break;
                     default:
                         return NotFound();
@@ -56,73 +55,6 @@ namespace Expertia.Estructura.Controllers
                     Instants = GetInstants(),
                     Error = error,
                     Body = entity
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
-            }
-        }
-
-        [Route(RouteAction.Asociate)]
-        public IHttpActionResult Asociate(Cotizacion entity)
-        {
-            object error = null, logResult = null;
-            try
-            {
-                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
-                object result;
-                _instants[InstantKey.Salesforce] = DateTime.Now;
-                switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
-                {
-                    case UnidadNegocioKeys.DestinosMundiales:
-                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Asociate(entity);
-                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
-                        break;
-                    default:
-                        return NotFound();
-                }
-                _instants[InstantKey.Oracle] = DateTime.Now;
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                error = ex.Message;
-                return InternalServerError(ex);
-            }
-            finally
-            {
-                (new
-                {
-                    BusinessUnity = entity.UnidadNegocio.Descripcion,
-                    LegacySystems = logResult,
-                    Instants = GetInstants(),
-                    Error = error,
-                    Body = entity
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
-            }
-        }
-
-        [Route(RouteAction.Send)]
-        public IHttpActionResult Send(object obj)
-        {
-            object error = null, logResult = null;
-            try
-            {
-                var oper = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales).GetAllModified();
-                obj.TryWriteLogObject(_logFileManager, _clientFeatures);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                error = ex.Message;
-                return InternalServerError(ex);
-            }
-            finally
-            {
-                (new
-                {
-                    /*BusinessUnity = entity.UnidadNegocio.Descripcion,*/
-                    LegacySystems = logResult,
-                    Instants = GetInstants(),
-                    Error = error/*,
-                    Body = entity*/
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
@@ -139,7 +71,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
-                            DestinosMundiales = new
+                            Interagencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
@@ -153,7 +85,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
-                            DestinosMundiales = new
+                            Interagencias = new
                             {
                                 CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
                                 MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
@@ -174,13 +106,13 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
-                case UnidadNegocioKeys.DestinosMundiales:
-                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Cotizacion_DM_Repository());
+                case UnidadNegocioKeys.InterAgencias:
+                    _crmCollection.Add(UnidadNegocioKeys.InterAgencias, new Subcodigo_IA_Repository());
                     break;
                 default:
                     break;
             }
-            return unidadNegocioKey; // Devuelve el mismo parámetro
+            return unidadNegocioKey;
         }
         #endregion
     }
