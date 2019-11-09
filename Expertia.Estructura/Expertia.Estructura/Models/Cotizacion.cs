@@ -1,6 +1,5 @@
 ﻿using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Behavior;
-using Expertia.Estructura.Models.Foreign;
 using System;
 
 namespace Expertia.Estructura.Models
@@ -63,7 +62,7 @@ namespace Expertia.Estructura.Models
         public SimpleDesc PuntoContacto { get; set; }
         public SimpleDesc Counter { get; set; }
         public SimpleDesc ReservadoPor { get; set; }
-        public SimpleDesc RegistradaPor{ get; set; }
+        public SimpleDesc RegistradaPor { get; set; }
         public SimpleDesc CondicionPago { get; set; }
         #endregion
     }

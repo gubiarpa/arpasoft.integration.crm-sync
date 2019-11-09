@@ -31,6 +31,7 @@ namespace Expertia.Estructura.Utils
         public const string CuentaB2B = "api/cuentab2b";
         public const string CuentaB2C = "api/cuentab2c";
         public const string Cotizacion = "api/cotizacion";
+        public const string Subcodigo = "api/subcodigo";
     }
 
     public enum ActionMethod
@@ -102,13 +103,18 @@ namespace Expertia.Estructura.Utils
         public const string DM_Generate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_GENERAR_COTIZACION";
         public const string DM_Asociate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ASOCIAR_COTIZACION";
         public const string DM_Send_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_COTIZACION";
+        public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
         #endregion
 
         #region Interagencias
+        /// Cuenta B2B
         public const string IA_Create_CuentaB2B = "NUEVOMUNDO.CRM_PKG.SP_CREAR_CLIENTE";
         public const string IA_Update_CuentaB2B = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
+        /// Contacto
         public const string IA_Create_Contacto = "NUEVOMUNDO.CRM_PKG.SP_CREAR_CONTACTO";
         public const string IA_Update_Contacto = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
+        /// Subcodigo
+        public const string IA_Create_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_CREAR_SUBCODIGO";
         #endregion
     }
 
@@ -131,11 +137,12 @@ namespace Expertia.Estructura.Utils
         public const string IdCuenta = "P_ID_CUENTA";
         public const string IdContacto = "P_ID_CONTACTO";
         public const string IdCotizacion = "P_ID_COTIZACION";
+        public const string IdSubcodigo = "P_ID_SUBCODIGO";
         #endregion
 
         #region Fields
-        public const string CurCotizacion = "P_COTIZACION";
-        public const string CurCotizacionDet = "P_COTIZACION_DETALLE";
+        public const string CursorCotizacion = "P_COTIZACION";
+        public const string CursorCotizacionDet = "P_COTIZACION_DETALLE";
         public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";
         public const string NumeroSubcodigo = "P_NUMERO_SUBCODIGO";
         public const string NombreGrupo = "P_NOMBRE_GRUPO";
@@ -164,6 +171,13 @@ namespace Expertia.Estructura.Utils
         public const string CondorTravel = "CT";
         public const string DestinosMundiales = "DM";
         public const string InterAgencias = "IA";
+    }
+
+    public static class UnidadNegocioLongName
+    {
+        public const string CondorTravel = "Condor Travel";
+        public const string DestinosMundiales = "Destinos Mundiales";
+        public const string Interagencias = "Interagencias";
     }
 
     public static class Auxiliar

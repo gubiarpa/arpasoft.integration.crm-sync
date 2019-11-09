@@ -169,6 +169,7 @@
     <Compile Include="Models\Behavior\IUnique.cs" />
     <Compile Include="Models\Behavior\MultipleDesc.cs" />
     <Compile Include="Models\Behavior\SimpleDesc.cs" />
+    <Compile Include="Models\Behavior\SimpleNegocioDesc.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\Cotizacion.cs" />
     <Compile Include="Models\CuentaB2B.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Repository\DestinosMundiales\Contacto_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Cotizacion_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\CuentaB2B_DM_Repository.cs" />
+    <Compile Include="Repository\DestinosMundiales\Subcodigo_DM_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Contacto_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />

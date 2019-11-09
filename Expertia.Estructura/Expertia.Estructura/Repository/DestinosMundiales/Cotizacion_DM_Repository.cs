@@ -5,7 +5,6 @@ using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
-using Oracle.ManagedDataAccess.Types;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -215,10 +214,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (3) P_COTIZACION
             value = DBNull.Value;
-            AddParameter(OutParameter.CurCotizacion, OracleDbType.RefCursor, value, ParameterDirection.Output);
+            AddParameter(OutParameter.CursorCotizacion, OracleDbType.RefCursor, value, ParameterDirection.Output);
             // (4) P_COTIZACION_DETALLE
             value = DBNull.Value;
-            AddParameter(OutParameter.CurCotizacionDet, OracleDbType.RefCursor, value, ParameterDirection.Output);
+            AddParameter(OutParameter.CursorCotizacionDet, OracleDbType.RefCursor, value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
@@ -226,8 +225,8 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CurCotizacion] = ToCotizacion(GetDtParameter(OutParameter.CurCotizacion));
-            operation[OutParameter.CurCotizacionDet] = GetDtParameter(OutParameter.CurCotizacionDet);
+            operation[OutParameter.CursorCotizacion] = ToCotizacion(GetDtParameter(OutParameter.CursorCotizacion));
+            operation[OutParameter.CursorCotizacionDet] = GetDtParameter(OutParameter.CursorCotizacionDet);
             operation[Operation.Result] = ResultType.Success;
             #endregion
 

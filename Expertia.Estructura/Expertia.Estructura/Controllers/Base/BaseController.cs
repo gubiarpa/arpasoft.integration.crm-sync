@@ -77,7 +77,7 @@ namespace Expertia.Estructura.Controllers.Base
             }
         }
 
-        protected string GetMethod { get { return Request.RequestUri.Segments[Request.RequestUri.Segments.Length - 1]; } } 
+        protected string GetMethod { get { return Request.RequestUri.Segments[Request.RequestUri.Segments.Length - 1]; } }
 
         protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName)
         {

@@ -102,6 +102,39 @@ namespace Expertia.Estructura.Utils
             }
         }
 
+        public static string ToConnectionKey(this UnidadNegocioKeys? unidadNegocio)
+        {
+            try
+            {
+                switch (unidadNegocio)
+                {
+                    case UnidadNegocioKeys.CondorTravel: return ConnectionKeys.CondorConnKey;
+                    case UnidadNegocioKeys.DestinosMundiales: return ConnectionKeys.DMConnKey;
+                    case UnidadNegocioKeys.InterAgencias: return ConnectionKeys.IAConnKey;
+                    default: return null;
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public static UnidadNegocioKeys? ToUnidadNegocio(this string unidadNegocio)
+        {
+            switch (unidadNegocio)
+            {
+                case UnidadNegocioLongName.CondorTravel:
+                    return UnidadNegocioKeys.CondorTravel;
+                case UnidadNegocioLongName.DestinosMundiales:
+                    return UnidadNegocioKeys.DestinosMundiales;
+                case UnidadNegocioLongName.Interagencias:
+                    return UnidadNegocioKeys.InterAgencias;
+                default:
+                    return null;
+            }
+        }
+
         public static string ToString(this ActionMethod actionMethod)
         {
             switch (actionMethod)

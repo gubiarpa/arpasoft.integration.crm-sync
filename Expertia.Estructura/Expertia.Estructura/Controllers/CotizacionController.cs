@@ -2,7 +2,6 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Utils;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Web.Http;
 
