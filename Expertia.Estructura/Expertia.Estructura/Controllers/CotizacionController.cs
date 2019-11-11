@@ -3,6 +3,7 @@ using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Utils;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -105,8 +106,9 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 var oper = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales).GetAllModified();
+                var cotizaciones = (List<Cotizacion>)oper[OutParameter.CursorCotizacion];
                 obj.TryWriteLogObject(_logFileManager, _clientFeatures);
-                return Ok();
+                return Ok(cotizaciones);
             }
             catch (Exception ex)
             {

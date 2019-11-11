@@ -4,6 +4,7 @@ using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -95,8 +96,9 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                var oper = new Subcodigo_IA_Repository();
-                return Ok();
+                var oper = new Subcodigo_IA_Repository().Read(null);
+                var subcodigos = (List<Subcodigo>)oper[OutParameter.CursorSubcodigo];
+                return Ok(subcodigos);
             }
             catch (Exception)
             {

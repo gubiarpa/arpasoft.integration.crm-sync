@@ -113,7 +113,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.IA_Read_Subcodigo);
 
-            operation[OutParameter.CursorSubcodigo] = GetOutParameter(OutParameter.CursorSubcodigo);
+            operation[OutParameter.CursorSubcodigo] = ToSubcodigo(GetDtParameter(OutParameter.CursorSubcodigo));
             operation[Operation.Result] = ResultType.Success;
             #endregion
 
