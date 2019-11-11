@@ -103,6 +103,7 @@ namespace Expertia.Estructura.Utils
         public const string DM_Generate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_GENERAR_COTIZACION";
         public const string DM_Asociate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ASOCIAR_COTIZACION";
         public const string DM_Send_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_COTIZACION";
+        // Subcodigo
         public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
         #endregion
 
@@ -115,6 +116,7 @@ namespace Expertia.Estructura.Utils
         public const string IA_Update_Contacto = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
         /// Subcodigo
         public const string IA_Create_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_CREAR_SUBCODIGO";
+        public const string IA_Read_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_SUBCODIGO";
         #endregion
     }
 
@@ -141,6 +143,7 @@ namespace Expertia.Estructura.Utils
         #endregion
 
         #region Fields
+        public const string CursorSubcodigo = "P_SUBCODIGO";
         public const string CursorCotizacion = "P_COTIZACION";
         public const string CursorCotizacionDet = "P_COTIZACION_DETALLE";
         public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";

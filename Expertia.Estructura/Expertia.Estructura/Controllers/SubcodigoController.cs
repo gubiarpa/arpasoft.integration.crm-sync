@@ -90,6 +90,20 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
+
+        public IHttpActionResult Send()
+        {
+            try
+            {
+                var oper = new Subcodigo_IA_Repository();
+                return Ok();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         #endregion
 
         #region Auxiliar

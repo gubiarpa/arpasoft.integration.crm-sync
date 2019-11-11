@@ -6,6 +6,7 @@ namespace Expertia.Estructura.Models
     public class Subcodigo
     {
         #region Properties
+        public string IdSubcodigo { get; set; }
         public string NombreSucursal { get; set; }
         public string DireccionSucursal { get; set; }
         #endregion

@@ -1,9 +1,11 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -11,15 +13,13 @@ namespace Expertia.Estructura.Repository.InterAgencias
 {
     public class Subcodigo_IA_Repository : OracleBase<Subcodigo>, ICrud<Subcodigo>
     {
+        #region Constructor
         public Subcodigo_IA_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.InterAgencias) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
+        #endregion
 
-        public Operation Asociate(Subcodigo entity)
-        {
-            throw new NotImplementedException();
-        }
-
+        #region PublicMethods
         public Operation Create(Subcodigo entity)
         {
             try
@@ -93,12 +93,85 @@ namespace Expertia.Estructura.Repository.InterAgencias
             }
         }
 
-        public Operation Generate(Subcodigo entity)
+        public Operation Read(Subcodigo entity)
+        {
+            var operation = new Operation();
+            object value;
+
+            #region Parameters
+            // (1) P_CODIGO_ERROR
+            value = DBNull.Value;
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (2) P_MENSAJE_ERROR
+            value = DBNull.Value;
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (3) P_SUBCODIGO
+            value = DBNull.Value;
+            AddParameter(OutParameter.CursorSubcodigo, OracleDbType.RefCursor, value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.IA_Read_Subcodigo);
+
+            operation[OutParameter.CursorSubcodigo] = GetOutParameter(OutParameter.CursorSubcodigo);
+            operation[Operation.Result] = ResultType.Success;
+            #endregion
+
+            return operation;
+        }
+        #endregion
+
+        #region Auxiliar
+        public IEnumerable<Subcodigo> ToSubcodigo(DataTable dt)
+        {
+            try
+            {
+                var subcodigos = new List<Subcodigo>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    #region Loading
+                    var nombre_usuario = (row["P_NOMBRE_USUARIO"] ?? string.Empty).ToString();
+                    var accion = (row["P_ACCION"] ?? string.Empty).ToString();
+                    if (!int.TryParse(row["P_ID_CUENTA"].ToString(), out int id_cuenta)) id_cuenta = 0;
+                    if (!int.TryParse(row["P_ID_SUBCODIGO"].ToString(), out int id_subcodigo)) id_subcodigo = 0;
+                    var nombre_sucursal = (row["P_NOMBRE_SUCURSAL"] ?? string.Empty).ToString();
+                    var direccion_sucursal = (row["P_DIRECCION_SUCURSAL"] ?? string.Empty).ToString();
+                    var nombre_promotor = (row["P_NOMBRE_PROMOTOR"] ?? string.Empty).ToString();
+                    var nombre_condicion_pago = (row["P_NOMBRE_CONDICION_PAGO"] ?? string.Empty).ToString();
+                    var estado_sucursal = (row["P_ESTADO_SUCURSAL" ?? string.Empty]).ToString();
+                    #endregion
+                     
+                    #region AddingElement
+                    subcodigos.Add(new Subcodigo()
+                    {
+                        Usuario = new SimpleDesc(nombre_usuario),
+                        Accion = new SimpleDesc(accion),
+                        IdCuentas = new List<SimpleNegocioDesc>() { new SimpleNegocioDesc(id_cuenta.ToString())},
+                        IdSubcodigo = id_subcodigo.ToString(),
+                        NombreSucursal = nombre_sucursal,
+                        DireccionSucursal = direccion_sucursal,
+                        Promotores = new List<SimpleNegocioDesc>() { new SimpleNegocioDesc(nombre_promotor) },
+                        CondicionesPago = new List<SimpleNegocioDesc>() { new SimpleNegocioDesc(nombre_condicion_pago) },
+                        EstadoSucursal = new SimpleDesc(estado_sucursal)
+                    });
+                    #endregion
+                }
+                return subcodigos;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region NotImplemented
+        public Operation Asociate(Subcodigo entity)
         {
             throw new NotImplementedException();
         }
 
-        public Operation Read(Subcodigo entity)
+        public Operation Generate(Subcodigo entity)
         {
             throw new NotImplementedException();
         }
@@ -107,5 +180,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+
     }
 }
