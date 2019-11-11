@@ -100,7 +100,9 @@ namespace Expertia.Estructura.Controllers
             {
                 Result = new
                 {
-                    IdCotizacion = _operCollection[unidadNegocio][OutParameter.IdSubcodigo].ToString()
+                    CodigoError = _operCollection[unidadNegocio][OutParameter.CodigoError].ToString(),
+                    MensajeError = _operCollection[unidadNegocio][OutParameter.MensajeError].ToString(),
+                    IdSubcodigo = _operCollection[unidadNegocio][OutParameter.IdSubcodigo].ToString()
                 }
             };
             #endregion
@@ -111,7 +113,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     CodigoError = _operCollection[unidadNegocio][OutParameter.CodigoError].ToString(),
                     MensajeError = _operCollection[unidadNegocio][OutParameter.MensajeError].ToString(),
-                    IdCuenta = _operCollection[unidadNegocio][OutParameter.IdSubcodigo].ToString()
+                    IdSubcodigo = _operCollection[unidadNegocio][OutParameter.IdSubcodigo].ToString()
                 }
             };
             #endregion
