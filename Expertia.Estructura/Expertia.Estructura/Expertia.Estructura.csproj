@@ -158,6 +158,7 @@
     <Compile Include="Controllers\CuentaB2BController.cs" />
     <Compile Include="Controllers\CuentaB2CController.cs" />
     <Compile Include="Controllers\ContactoController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\SubcodigoController.cs" />
     <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -179,6 +180,7 @@
     <Compile Include="Models\CuentaB2C.cs" />
     <Compile Include="Models\Auxiliar\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
+    <Compile Include="Models\File.cs" />
     <Compile Include="Models\Foreign\ForeignKey.cs" />
     <Compile Include="Models\Auxiliar\Direccion.cs" />
     <Compile Include="Models\Auxiliar\Documento.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="Repository\DestinosMundiales\Subcodigo_DM_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Contacto_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
+    <Compile Include="Repository\InterAgencias\File_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Utils\ApiCaller.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />

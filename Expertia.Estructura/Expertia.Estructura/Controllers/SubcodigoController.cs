@@ -93,7 +93,6 @@ namespace Expertia.Estructura.Controllers
             object subcodigos = null;
             try
             {
-                //var oper_dm = new Operation(); var oper_ia = new Operation();
                 Operation oper_dm = null, oper_ia = null;
 
                 Task[] tasks = {

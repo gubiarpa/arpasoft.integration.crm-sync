@@ -32,6 +32,7 @@ namespace Expertia.Estructura.Utils
         public const string CuentaB2C = "api/cuentab2c";
         public const string Cotizacion = "api/cotizacion";
         public const string Subcodigo = "api/subcodigo";
+        public const string File = "api/file";
     }
 
     public enum ActionMethod
@@ -117,6 +118,8 @@ namespace Expertia.Estructura.Utils
         /// Subcodigo
         public const string IA_Create_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string IA_Read_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_SUBCODIGO";
+        /// File
+        public const string IA_Read_File = "NUEVOMUNDO.CRM_PKG.SP_CONSULTAR_FILE_NOVEDAD";
         #endregion
     }
 
@@ -146,6 +149,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorSubcodigo = "P_SUBCODIGO";
         public const string CursorCotizacion = "P_COTIZACION";
         public const string CursorCotizacionDet = "P_COTIZACION_DETALLE";
+        public const string CursorFile = "P_CLIENTE_PNR";
         public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";
         public const string NumeroSubcodigo = "P_NUMERO_SUBCODIGO";
         public const string NombreGrupo = "P_NOMBRE_GRUPO";
