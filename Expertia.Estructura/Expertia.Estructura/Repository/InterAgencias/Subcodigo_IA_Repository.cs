@@ -181,7 +181,5 @@ namespace Expertia.Estructura.Repository.InterAgencias
             throw new NotImplementedException();
         }
         #endregion
-
-
     }
 }

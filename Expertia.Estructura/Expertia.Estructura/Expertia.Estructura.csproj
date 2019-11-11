@@ -60,6 +60,9 @@
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\packages\Oracle.ManagedDataAccess.19.3.1\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.6.10.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.6.10\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
@@ -197,6 +200,7 @@
     <Compile Include="Repository\InterAgencias\Contacto_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
+    <Compile Include="Utils\ApiCaller.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
     <Compile Include="Utils\Behavior\ILogFileManager.cs" />
     <Compile Include="Utils\ClientFeatures.cs" />

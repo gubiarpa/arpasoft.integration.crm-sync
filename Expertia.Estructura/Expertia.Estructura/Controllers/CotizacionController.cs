@@ -19,10 +19,10 @@ namespace Expertia.Estructura.Controllers
         {
         }
         #endregion
-
+        
         #region PublicMethods
         [Route(RouteAction.Generate)]
-        public IHttpActionResult Generate(Cotizacion entity)
+        /*public*/ IHttpActionResult Generate(Cotizacion entity)
         {
             object error = null, logResult = null;
             try
@@ -61,7 +61,7 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Asociate)]
-        public IHttpActionResult Asociate(Cotizacion entity)
+        /*public*/ IHttpActionResult Asociate(Cotizacion entity)
         {
             object error = null, logResult = null;
             try
@@ -100,7 +100,7 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Send)]
-        public IHttpActionResult Send(object obj)
+        /*public*/ IHttpActionResult Send(object obj)
         {
             object error = null, logResult = null;
             try
