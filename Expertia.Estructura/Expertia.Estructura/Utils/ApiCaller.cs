@@ -9,6 +9,14 @@ namespace Expertia.Estructura.Utils
 {
     public class ApiRequest
     {
+        public ApiRequest(string server, string method, bool isAuth = false, string token = "")
+        {
+            Server = server;
+            Method = method;
+            IsAuth = isAuth;
+            Token = token;
+        }
+
         public bool IsAuth { get; set; }
         public string Server { get; set; }
         public string Method { get; set; }

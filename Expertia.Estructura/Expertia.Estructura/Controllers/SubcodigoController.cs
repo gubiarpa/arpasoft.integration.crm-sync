@@ -1,10 +1,12 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -32,7 +34,7 @@ namespace Expertia.Estructura.Controllers
             {
                 object dm_result = null, ia_result = null;
                 _instants[InstantKey.Salesforce] = DateTime.Now;
-                /*
+
                 Task[] tasks = {
                     new Task(() => { /// ▼ Destinos Mundiales
                         try
@@ -59,15 +61,8 @@ namespace Expertia.Estructura.Controllers
                 };
                 foreach (var task in tasks) task.Start();
                 Task.WaitAll(tasks);
-                */
 
-                _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Create(entity);
-                LoadResults(UnidadNegocioKeys.DestinosMundiales, out dm_logResult, out dm_result);
-
-                _operCollection[UnidadNegocioKeys.InterAgencias] = _crmCollection[UnidadNegocioKeys.InterAgencias].Create(entity);
-                LoadResults(UnidadNegocioKeys.InterAgencias, out ia_logResult, out ia_result);
-
-
+                var codeOperation = Guid.NewGuid();
 
                 _instants[InstantKey.Oracle] = DateTime.Now;
                 return Ok(new
@@ -92,18 +87,38 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        [Route(RouteAction.Send)]
         public IHttpActionResult Send()
         {
+            object subcodigos = null;
             try
             {
-                var oper = new Subcodigo_IA_Repository().Read(null);
-                var subcodigos = (List<Subcodigo>)oper[OutParameter.CursorSubcodigo];
+                //var oper_dm = new Operation(); var oper_ia = new Operation();
+                Operation oper_dm = null, oper_ia = null;
+
+                Task[] tasks = {
+                    new Task(() => { try { oper_dm = new Subcodigo_DM_Repository().Read(null); } catch {} }),
+                    new Task(() => { try { oper_ia = new Subcodigo_IA_Repository().Read(null); } catch {} })
+                };
+                foreach (var task in tasks) task.Start();
+                Task.WaitAll(tasks);
+
+                subcodigos = new {
+                    DestinosMundiales = (List<Subcodigo>)oper_dm[OutParameter.CursorSubcodigo],
+                    Interagencias = (List<Subcodigo>)oper_ia[OutParameter.CursorSubcodigo]
+                };
                 return Ok(subcodigos);
             }
             catch (Exception)
             {
-
                 throw;
+            }
+            finally
+            {
+                (new
+                {
+                    LegacySystems = subcodigos
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
