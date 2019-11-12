@@ -40,7 +40,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             operation[OutParameter.CursorFile] = ToFile(GetDtParameter(OutParameter.CursorFile));
             #endregion
 
-            throw new NotImplementedException();
+            return operation;
         }
         #endregion
 
@@ -53,17 +53,21 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 foreach (DataRow row in dt.Rows)
                 {
                     #region Loading
-                    var id_cliente = (row["P_ID_CLIENTE"] ?? string.Empty).ToString();
-                    var id_file = (row["P_ID_FILE"] ?? string.Empty).ToString();
-                    if (!int.TryParse(row["ID_SUCURSAL"].ToString(), out int id_sucursal)) id_sucursal = 0;
-                    if (!int.TryParse(row["COD_RESERVA"].ToString(), out int cod_reserva)) cod_reserva = 0;
+                    var dk_agencia = row.IntParse("DK_AGENCIA");
+                    var pnr = row.StringParse("PNR");
+                    var id_file = row.IntParse("ID_FILE");
+                    var id_sucursal = row.IntParse("ID_SUCURSAL");
+                    var id_oportunidad_crm = row.StringParse("ID_OPORTUNIDAD_CRM");
                     #endregion
 
                     #region AddingElement
                     files.Add(new File()
                     {
+                        DkAgencia = dk_agencia,
+                        PNR = pnr,
+                        IdFile = id_file,
                         IdSucursal = id_sucursal,
-                        CodReserva = cod_reserva
+                        IdOportunidadCrm = id_oportunidad_crm
                     });
                     #endregion
                 }

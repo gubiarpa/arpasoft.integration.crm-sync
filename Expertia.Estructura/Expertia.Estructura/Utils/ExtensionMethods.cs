@@ -3,6 +3,7 @@ using Expertia.Estructura.Utils.Behavior;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Data;
 
 namespace Expertia.Estructura.Utils
 {
@@ -145,6 +146,33 @@ namespace Expertia.Estructura.Utils
                     return RouteAction.Update;
                 default:
                     return null;
+            }
+        }
+        #endregion
+
+        #region Rows
+        public static string StringParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                return (row[fieldName] ?? string.Empty).ToString();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static int IntParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                if (!int.TryParse(row[fieldName].ToString(), out int result)) result = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         #endregion
