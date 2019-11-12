@@ -130,15 +130,15 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 foreach (DataRow row in dt.Rows)
                 {
                     #region Loading
-                    var nombre_usuario = (row["P_NOMBRE_USUARIO"] ?? string.Empty).ToString();
-                    var accion = (row["P_ACCION"] ?? string.Empty).ToString();
-                    if (!int.TryParse(row["P_ID_CUENTA"].ToString(), out int id_cuenta)) id_cuenta = 0;
-                    if (!int.TryParse(row["P_ID_SUBCODIGO"].ToString(), out int id_subcodigo)) id_subcodigo = 0;
-                    var nombre_sucursal = (row["P_NOMBRE_SUCURSAL"] ?? string.Empty).ToString();
-                    var direccion_sucursal = (row["P_DIRECCION_SUCURSAL"] ?? string.Empty).ToString();
-                    var nombre_promotor = (row["P_NOMBRE_PROMOTOR"] ?? string.Empty).ToString();
-                    var nombre_condicion_pago = (row["P_NOMBRE_CONDICION_PAGO"] ?? string.Empty).ToString();
-                    var estado_sucursal = (row["P_ESTADO_SUCURSAL" ?? string.Empty]).ToString();
+                    var nombre_usuario = row.StringParse("P_NOMBRE_USUARIO");
+                    var accion = row.StringParse("P_ACCION");
+                    var id_cuenta = row.IntParse("P_ID_CUENTA");
+                    var id_subcodigo = row.IntParse("P_ID_SUBCODIGO");
+                    var nombre_sucursal = row.StringParse("P_NOMBRE_SUCURSAL");
+                    var direccion_sucursal = row.StringParse("P_DIRECCION_SUCURSAL");
+                    var nombre_promotor = row.StringParse("P_NOMBRE_PROMOTOR");
+                    var nombre_condicion_pago = row.StringParse("P_NOMBRE_CONDICION_PAGO");
+                    var estado_sucursal = row.StringParse("P_ESTADO_SUCURSAL");
                     #endregion
                      
                     #region AddingElement
