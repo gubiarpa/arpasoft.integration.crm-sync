@@ -119,7 +119,8 @@ namespace Expertia.Estructura.Utils
         public const string IA_Create_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string IA_Read_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_SUBCODIGO";
         /// File
-        public const string IA_Read_File = "NUEVOMUNDO.CRM_PKG.SP_CONSULTAR_FILE_NOVEDAD";
+        public const string IA_Read_AgenciaPnr = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_AGENCIA_PNR_NOVEDAD";
+        public const string IA_Read_File = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_FILE_NOVEDAD";
         #endregion
     }
 

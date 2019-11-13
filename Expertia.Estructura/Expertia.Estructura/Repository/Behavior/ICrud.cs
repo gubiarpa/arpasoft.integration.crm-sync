@@ -4,7 +4,7 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface ICrud<T>
     {
-        // Cuenta, Contacto
+        // Cuenta, Contacto, File
         Operation Create(T entity);
         Operation Read(T entity);
         Operation Update(T entity);

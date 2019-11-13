@@ -175,6 +175,19 @@ namespace Expertia.Estructura.Utils
                 throw ex;
             }
         }
+
+        public static DateTime DateTimeParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                if (!DateTime.TryParse(row[fieldName].ToString(), out DateTime result)) result = new DateTime(1900, 01, 01);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
     }
 }

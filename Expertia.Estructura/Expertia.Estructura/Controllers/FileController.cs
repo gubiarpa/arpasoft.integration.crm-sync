@@ -1,6 +1,7 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
@@ -16,11 +17,16 @@ namespace Expertia.Estructura.Controllers
     /// Entidad Exclusiva para Condor Travel e Interagencias
     /// </summary>
     [RoutePrefix(RoutePrefix.File)]
-    public class FileController : BaseController<File>
+    public class FileController : BaseController<AgenciaPnr>
     {
+        #region Properties
+        private IDictionary<UnidadNegocioKeys?, IFileRepository> _fileCollection;
+        #endregion
+
         #region Constructor
         public FileController()
         {
+            _fileCollection = new Dictionary<UnidadNegocioKeys?, IFileRepository>();
         }
         #endregion
 
@@ -33,9 +39,13 @@ namespace Expertia.Estructura.Controllers
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
-                _operCollection[_unidadNegocio] = _crmCollection[_unidadNegocio].Read(null);
+                var agenciasPnrs = (IEnumerable<AgenciaPnr>)(_operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr())[OutParameter.CursorFile];
+                foreach (var agenciaPnr in agenciasPnrs)
+                {
+                    var file = _fileCollection[_unidadNegocio].GetNewFile(agenciaPnr);
+                }
                 _instants[InstantKey.Oracle] = DateTime.Now;
-                files = new { Interagencias = (List<File>)_operCollection[_unidadNegocio][OutParameter.CursorFile] };
+                files = new { Interagencias = agenciasPnrs };
                 return Ok(files);
             }
             catch (Exception ex)
@@ -44,6 +54,7 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
+                files.TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
@@ -56,7 +67,7 @@ namespace Expertia.Estructura.Controllers
                 case UnidadNegocioKeys.CondorTravel:
                     break;
                 case UnidadNegocioKeys.InterAgencias:
-                    _crmCollection.Add(UnidadNegocioKeys.InterAgencias, new File_IA_Repository());
+                    _fileCollection.Add(UnidadNegocioKeys.InterAgencias, new File_IA_Repository());
                     break;
                 default:
                     break;
