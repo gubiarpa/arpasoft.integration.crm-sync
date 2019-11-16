@@ -20,61 +20,63 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #region PublicMethods
         public Operation GetNewAgenciaPnr()
         {
-            var operation = new Operation();
+            using (var operation = new Operation())
+            {
+                #region Parameters
+                // (1) P_CODIGO_ERROR
+                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                // (2) P_MENSAJE_ERROR
+                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                // (3) P_CLIENTE_PNR
+                AddParameter(OutParameter.CursorAgenciaPnr, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+                #endregion
 
-            #region Parameters
-            // (1) P_CODIGO_ERROR
-            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            // (2) P_MENSAJE_ERROR
-            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            // (3) P_CLIENTE_PNR
-            AddParameter(OutParameter.CursorAgenciaPnr, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
-            #endregion
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.IA_Read_AgenciaPnr);
+                operation[OutParameter.CursorAgenciaPnr] = ToAgenciaPnr(GetDtParameter(OutParameter.CursorAgenciaPnr));
+                #endregion
 
-            #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.IA_Read_AgenciaPnr);
-            operation[OutParameter.CursorAgenciaPnr] = ToAgenciaPnr(GetDtParameter(OutParameter.CursorAgenciaPnr));
-            #endregion
-
-            return operation;
+                return operation;
+            }
         }
 
         public Operation GetNewFile(AgenciaPnr entity)
         {
-            var operation = new Operation();
+            using (var operation = new Operation())
+            {
+                #region Loading
+                var pnr = entity.PNR;
+                var id_file = entity.IdFile;
+                var id_sucursal = entity.IdSucursal;
+                var id_oportunidad_crm = entity.IdOportunidadCrm;
+                #endregion
 
-            #region Loading
-            var pnr = entity.PNR;
-            var id_file = entity.IdFile;
-            var id_sucursal = entity.IdSucursal;
-            var id_oportunidad_crm = entity.IdOportunidadCrm;
-            #endregion
+                #region Parameters
+                // (1) P_CODIGO_ERROR
+                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                // (2) P_MENSAJE_ERROR
+                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                // (3) P_PNR
+                AddParameter("P_PNR", OracleDbType.Varchar2, pnr);
+                // (4) P_ID_FILE
+                AddParameter("P_ID_FILE", OracleDbType.Int32, id_file);
+                // (5) P_ID_SUCURSAL
+                AddParameter("P_ID_SUCURSAL", OracleDbType.Int32, id_sucursal);
+                // (6) P_ID_OPORTUNIDAD_CRM
+                AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, id_oportunidad_crm);
+                // (7) P_FILE
+                AddParameter(OutParameter.CursorFile, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+                // (8) P_BOLETO
+                AddParameter(OutParameter.CursorBoleto, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+                #endregion
 
-            #region Parameters
-            // (1) P_CODIGO_ERROR
-            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            // (2) P_MENSAJE_ERROR
-            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            // (3) P_PNR
-            AddParameter("P_PNR", OracleDbType.Varchar2, pnr);
-            // (4) P_ID_FILE
-            AddParameter("P_ID_FILE", OracleDbType.Int32, id_file);
-            // (5) P_ID_SUCURSAL
-            AddParameter("P_ID_SUCURSAL", OracleDbType.Int32, id_sucursal);
-            // (6) P_ID_OPORTUNIDAD_CRM
-            AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, id_oportunidad_crm);
-            // (7) P_FILE
-            AddParameter(OutParameter.CursorFile, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
-            // (8) P_BOLETO
-            AddParameter(OutParameter.CursorBoleto, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
-            #endregion
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.IA_Read_File);
+                operation[OutParameter.CursorFile] = ToAgenciaPnr(GetDtParameter(OutParameter.CursorAgenciaPnr));
+                #endregion
 
-            #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.IA_Read_File);
-            operation[OutParameter.CursorFile] = ToAgenciaPnr(GetDtParameter(OutParameter.CursorAgenciaPnr));
-            #endregion
-
-            return operation;
+                return operation;
+            }
         }
         #endregion
 
@@ -117,31 +119,18 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             try
             {
-                var fileBoletoList = new List<File>();
+                var fileList = new List<File>();
                 foreach (DataRow row in dt.Rows)
                 {
-                    fileBoletoList.Add(new File());
-
-
                     #region Loading
 
                     #endregion
 
                     #region AddingElement
-                    //fileBoletoList.Add(new FileBoleto()
-                    //{
-                    //    IdOportunidad = id_oportunidad,
-                    //    Objeto = objeto,
-                    //    Accion = accion,
-                    //    IdFile = id_file,
-                    //    EstadoFile = estado_file,
-                    //    UnidadNegocio = unidad_negocio,
-                    //    Sucursal = sucursal,
-                    //    EjecutivaCuenta = eje
-                    //});
+                    fileList.Add(new File() { });
                     #endregion
                 }
-                return fileBoletoList;
+                return fileList;
             }
             catch (Exception ex)
             {

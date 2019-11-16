@@ -3,7 +3,9 @@ using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.InterAgencias;
+using Expertia.Estructura.RestManager.Base;
 using Expertia.Estructura.Utils;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
@@ -36,7 +38,19 @@ namespace Expertia.Estructura.Controllers
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
-                var agenciasPnrs = (IEnumerable<AgenciaPnr>)(_operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr())[OutParameter.CursorAgenciaPnr];
+                // Consultar PNRs (Lista)
+                var agenciasPnrs = (IEnumerable<AgenciaPnr>)
+                    (_operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr())[OutParameter.CursorAgenciaPnr];
+                // Consulta Token para invocar un API
+                var server = ConfigAccess.GetValueInAppSettings("AUTH_SERVER");
+                var methodName = ConfigAccess.GetValueInAppSettings("AUTH_METHODNAME");
+                var token = RestBase.GetToken(server, methodName, Method.POST);
+                // Consulta File (1 x 1) al API de Salesforce
+                foreach (var agenciaPnr in agenciasPnrs)
+                {
+                    var file = RestBase.Execute(server, methodName, Method.POST, agenciaPnr, true, token);
+                }
+                // Consultar File (1 x 1)
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
                     var file = _fileCollection[_unidadNegocio].GetNewFile(agenciaPnr);

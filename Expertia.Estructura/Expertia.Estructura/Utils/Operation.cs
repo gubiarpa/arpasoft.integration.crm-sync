@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Expertia.Estructura.Utils
 {
-    public class Operation
+    public class Operation : IDisposable
     {
         public const string Result = "OperationResult";
         public const string ErrorMessage = "ErrorMessage";
@@ -19,6 +20,11 @@ namespace Expertia.Estructura.Utils
             {
                 _values.Add(key, value);
             }
+        }
+
+        public void Dispose()
+        {
+            _values = null;
         }
     }
 }
