@@ -43,22 +43,25 @@ namespace Expertia.Estructura.Repository.InterAgencias
         {
             var operation = new Operation();
 
+            #region Loading
+            var pnr = entity.PNR;
+            var id_file = entity.IdFile;
+            var id_sucursal = entity.IdSucursal;
+            var id_oportunidad_crm = entity.IdOportunidadCrm;
+            #endregion
+
             #region Parameters
             // (1) P_CODIGO_ERROR
             AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             // (3) P_PNR
-            var pnr = entity.PNR;
             AddParameter("P_PNR", OracleDbType.Varchar2, pnr);
             // (4) P_ID_FILE
-            var id_file = entity.IdFile;
             AddParameter("P_ID_FILE", OracleDbType.Int32, id_file);
             // (5) P_ID_SUCURSAL
-            var id_sucursal = entity.IdSucursal;
             AddParameter("P_ID_SUCURSAL", OracleDbType.Int32, id_sucursal);
             // (6) P_ID_OPORTUNIDAD_CRM
-            var id_oportunidad_crm = entity.IdOportunidadCrm;
             AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, id_oportunidad_crm);
             // (7) P_FILE
             AddParameter(OutParameter.CursorFile, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
@@ -87,7 +90,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var dk_agencia = row.IntParse("DK_AGENCIA");
                     var pnr = row.StringParse("PNR");
                     var id_file = row.IntParse("ID_FILE");
-                    var id_sucursal = row.IntParse("ID_SUCURSAL");
+                    var id_sucursal = row.StringParse("NOMBRE_SUCURSAL");
                     var id_oportunidad_crm = row.StringParse("ID_OPORTUNIDAD_CRM");
                     #endregion
 

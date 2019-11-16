@@ -10,7 +10,7 @@ namespace Expertia.Estructura.Models
         public int DkAgencia { get; set; }
         public string PNR { get; set; }
         public int IdFile { get; set; }
-        public int IdSucursal { get; set; }
+        public string IdSucursal { get; set; }
         public string IdOportunidadCrm { get; set; }
     }
 
