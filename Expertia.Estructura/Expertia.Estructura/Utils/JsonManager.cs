@@ -10,7 +10,13 @@ namespace Expertia.Estructura.Utils
     public static class JsonManager
     {
         private static JObject configuration;
-        private static Dictionary<string, string> cache;
+        private static IDictionary<string, string> cache;
+
+        public static void LoadText(string text)
+        {
+            cache = new Dictionary<string, string>();
+            configuration = JObject.Parse(text);
+        }
 
         public static void LoadFile(string path = null)
         {

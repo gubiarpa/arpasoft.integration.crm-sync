@@ -6,9 +6,6 @@ using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -39,7 +36,7 @@ namespace Expertia.Estructura.Controllers
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
-                var agenciasPnrs = (IEnumerable<AgenciaPnr>)(_operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr())[OutParameter.CursorFile];
+                var agenciasPnrs = (IEnumerable<AgenciaPnr>)(_operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr())[OutParameter.CursorAgenciaPnr];
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
                     var file = _fileCollection[_unidadNegocio].GetNewFile(agenciaPnr);

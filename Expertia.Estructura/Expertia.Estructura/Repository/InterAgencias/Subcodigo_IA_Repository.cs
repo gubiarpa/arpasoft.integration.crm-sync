@@ -140,13 +140,13 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var nombre_condicion_pago = row.StringParse("P_NOMBRE_CONDICION_PAGO");
                     var estado_sucursal = row.StringParse("P_ESTADO_SUCURSAL");
                     #endregion
-                     
+
                     #region AddingElement
                     subcodigos.Add(new Subcodigo()
                     {
                         Usuario = new SimpleDesc(nombre_usuario),
                         Accion = new SimpleDesc(accion),
-                        IdCuentas = new List<SimpleNegocioDesc>() { new SimpleNegocioDesc(id_cuenta.ToString())},
+                        IdCuentas = new List<SimpleNegocioDesc>() { new SimpleNegocioDesc(id_cuenta.ToString()) },
                         IdSubcodigo = id_subcodigo.ToString(),
                         NombreSucursal = nombre_sucursal,
                         DireccionSucursal = direccion_sucursal,

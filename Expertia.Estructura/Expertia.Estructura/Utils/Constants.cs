@@ -150,7 +150,9 @@ namespace Expertia.Estructura.Utils
         public const string CursorSubcodigo = "P_SUBCODIGO";
         public const string CursorCotizacion = "P_COTIZACION";
         public const string CursorCotizacionDet = "P_COTIZACION_DETALLE";
-        public const string CursorFile = "P_CLIENTE_PNR";
+        public const string CursorAgenciaPnr = "P_CLIENTE_PNR";
+        public const string CursorFile = "P_FILE";
+        public const string CursorBoleto = "P_BOLETO";
         public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";
         public const string NumeroSubcodigo = "P_NUMERO_SUBCODIGO";
         public const string NombreGrupo = "P_NOMBRE_GRUPO";

@@ -1,8 +1,8 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
-using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
+using Expertia.Estructura.RestManager.Base;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
@@ -94,15 +94,41 @@ namespace Expertia.Estructura.Controllers
             try
             {
                 Operation oper_dm = null, oper_ia = null;
+                IEnumerable<Subcodigo> dmSubcodigoList, iaSubcodigoList;
 
-                Task[] tasks = {
-                    new Task(() => { try { oper_dm = new Subcodigo_DM_Repository().Read(null); } catch {} }),
-                    new Task(() => { try { oper_ia = new Subcodigo_IA_Repository().Read(null); } catch {} })
+                dmSubcodigoList = (IEnumerable<Subcodigo>)(new Subcodigo_DM_Repository().Read(null))[OutParameter.CursorSubcodigo];
+                var token = RestBase.GetToken("https://test.salesforce.com", "services/oauth2/token");
+
+                Task[] bdTasks = {
+                    new Task(() =>
+                    {
+                        try
+                        {
+                            dmSubcodigoList = (IEnumerable<Subcodigo>)(new Subcodigo_DM_Repository().Read(null))[OutParameter.CursorSubcodigo];
+                            foreach (var subcodigo in dmSubcodigoList)
+                            {
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }),
+                    new Task(() =>
+                    {
+                        try
+                        {
+                            iaSubcodigoList = (IEnumerable<Subcodigo>)(new Subcodigo_IA_Repository().Read(null))[OutParameter.CursorSubcodigo];
+                        }
+                        catch
+                        {
+                        }
+                    })
                 };
-                foreach (var task in tasks) task.Start();
-                Task.WaitAll(tasks);
+                foreach (var task in bdTasks) task.Start();
+                Task.WaitAll(bdTasks);
 
-                subcodigos = new {
+                subcodigos = new
+                {
                     DestinosMundiales = (List<Subcodigo>)oper_dm[OutParameter.CursorSubcodigo],
                     Interagencias = (List<Subcodigo>)oper_ia[OutParameter.CursorSubcodigo]
                 };
