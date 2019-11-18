@@ -106,6 +106,7 @@ namespace Expertia.Estructura.Utils
         public const string DM_Send_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_COTIZACION";
         // Subcodigo
         public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
+        public const string DM_Update_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_SUBCODIGO";
         #endregion
 
         #region Interagencias
@@ -118,6 +119,7 @@ namespace Expertia.Estructura.Utils
         /// Subcodigo
         public const string IA_Create_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string IA_Read_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_SUBCODIGO";
+        public const string IA_Update_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_SUBCODIGO";
         /// File
         public const string IA_Read_AgenciaPnr = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_AGENCIA_PNR_NOVEDAD";
         public const string IA_Read_File = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_FILE_NOVEDAD";
@@ -173,7 +175,7 @@ namespace Expertia.Estructura.Utils
     {
         CondorTravel,
         DestinosMundiales,
-        InterAgencias
+        Interagencias
     }
 
     public static class UnidadNegocioShortNames

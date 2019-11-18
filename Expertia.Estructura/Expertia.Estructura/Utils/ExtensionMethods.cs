@@ -93,7 +93,7 @@ namespace Expertia.Estructura.Utils
                 {
                     case UnidadNegocioKeys.CondorTravel: return UnidadNegocioShortNames.CondorTravel;
                     case UnidadNegocioKeys.DestinosMundiales: return UnidadNegocioShortNames.DestinosMundiales;
-                    case UnidadNegocioKeys.InterAgencias: return UnidadNegocioShortNames.InterAgencias;
+                    case UnidadNegocioKeys.Interagencias: return UnidadNegocioShortNames.InterAgencias;
                     default: return null;
                 }
             }
@@ -111,7 +111,7 @@ namespace Expertia.Estructura.Utils
                 {
                     case UnidadNegocioKeys.CondorTravel: return ConnectionKeys.CondorConnKey;
                     case UnidadNegocioKeys.DestinosMundiales: return ConnectionKeys.DMConnKey;
-                    case UnidadNegocioKeys.InterAgencias: return ConnectionKeys.IAConnKey;
+                    case UnidadNegocioKeys.Interagencias: return ConnectionKeys.IAConnKey;
                     default: return null;
                 }
             }
@@ -130,9 +130,24 @@ namespace Expertia.Estructura.Utils
                 case UnidadNegocioLongName.DestinosMundiales:
                     return UnidadNegocioKeys.DestinosMundiales;
                 case UnidadNegocioLongName.Interagencias:
-                    return UnidadNegocioKeys.InterAgencias;
+                    return UnidadNegocioKeys.Interagencias;
                 default:
                     return null;
+            }
+        }
+
+        public static string ToLongName(this UnidadNegocioKeys? unidadNegocio)
+        {
+            switch (unidadNegocio)
+            {
+                case UnidadNegocioKeys.CondorTravel:
+                    return UnidadNegocioLongName.CondorTravel;
+                case UnidadNegocioKeys.DestinosMundiales:
+                    return UnidadNegocioLongName.DestinosMundiales;
+                case UnidadNegocioKeys.Interagencias:
+                    return UnidadNegocioLongName.Interagencias;
+                default:
+                    return string.Empty;
             }
         }
 

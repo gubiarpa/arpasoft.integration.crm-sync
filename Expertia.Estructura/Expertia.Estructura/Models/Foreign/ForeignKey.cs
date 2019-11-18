@@ -50,9 +50,9 @@ namespace Expertia.Estructura.Models.Foreign
             {
                 return UnidadNegocioKeys.DestinosMundiales;
             }
-            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.InterAgencias.GetKeyValues()).ToUpper().Split(Utils.Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
+            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.Interagencias.GetKeyValues()).ToUpper().Split(Utils.Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
             {
-                return UnidadNegocioKeys.InterAgencias;
+                return UnidadNegocioKeys.Interagencias;
             }
             return null;
         }

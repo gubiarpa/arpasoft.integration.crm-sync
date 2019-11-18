@@ -23,7 +23,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
         public Operation Read(Subcodigo entity)
         {
-            return new Subcodigo_IA_Repository(UnidadNegocioKeys.DestinosMundiales).Read(entity);
+            return new Subcodigo_IA_Repository(UnidadNegocioKeys.DestinosMundiales).Read();
         }
         #endregion
 

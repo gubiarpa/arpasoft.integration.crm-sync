@@ -10,7 +10,7 @@ namespace Expertia.Estructura.Models
         public int DkAgencia { get; set; }
         public string PNR { get; set; }
         public int IdFile { get; set; }
-        public string IdSucursal { get; set; }
+        public SimpleDesc Sucursal { get; set; }
         public string IdOportunidadCrm { get; set; }
     }
 
@@ -35,5 +35,25 @@ namespace Expertia.Estructura.Models
         public float Costo { get; set; }
         public float Venta { get; set; }
         public float ComisionAgencia { get; set; }
+    }
+
+    public class FileSalesforce
+    {
+        public string Objeto { get; set; }
+        public string Estado_File { get; set; }
+        public string Unidad_Negocio { get; set; }
+        public string Sucursal { get; set; }
+        public string Nombre_Grupo { get; set; }
+        public string Counter { get; set; }
+        public DateTime Fecha_Apertura { get; set; }
+        public DateTime Fecha_Inicio { get; set; }
+        public DateTime Fecha_Fin { get; set; }
+        public string Cliente { get; set; }
+        public string Subcodigo { get; set; }
+        public string Condicion_Pago { get; set; }
+        public string Num_Pasajeros { get; set; }
+        public string Costo { get; set; }
+        public string Venta { get; set; }
+        public string Comision_Agencia { get; set; }
     }
 }

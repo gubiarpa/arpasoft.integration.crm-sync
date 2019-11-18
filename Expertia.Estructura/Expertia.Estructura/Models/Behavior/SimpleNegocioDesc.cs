@@ -9,6 +9,12 @@ namespace Expertia.Estructura.Models.Behavior
             Descripcion = descripcion;
         }
 
+        public SimpleNegocioDesc(string descripcion = null, UnidadNegocio unidadNegocio = null)
+        {
+            Descripcion = descripcion;
+            UnidadNegocio = unidadNegocio;
+        }
+
         public UnidadNegocio UnidadNegocio { get; set; }
     }
 }

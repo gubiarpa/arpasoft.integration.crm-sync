@@ -30,9 +30,9 @@ namespace Expertia.Estructura.Controllers
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
-                    case UnidadNegocioKeys.InterAgencias:
+                    case UnidadNegocioKeys.Interagencias:
                         CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        CreateOrUpdate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
+                        CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
                     default:
@@ -76,9 +76,9 @@ namespace Expertia.Estructura.Controllers
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
-                    case UnidadNegocioKeys.InterAgencias:
+                    case UnidadNegocioKeys.Interagencias:
                         UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        UpdateOrCreate(UnidadNegocioKeys.InterAgencias, entity, codigoError);
+                        UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
                     default:
@@ -136,7 +136,7 @@ namespace Expertia.Estructura.Controllers
                     #endregion
                     break;
                 case UnidadNegocioKeys.DestinosMundiales:
-                case UnidadNegocioKeys.InterAgencias:
+                case UnidadNegocioKeys.Interagencias:
                     #region Log
                     logResult = new
                     {
@@ -150,9 +150,9 @@ namespace Expertia.Estructura.Controllers
                             },
                             InterAgencias = new
                             {
-                                Codes = GetErrorResult(UnidadNegocioKeys.InterAgencias),
-                                Retry = _operRetry[UnidadNegocioKeys.InterAgencias],
-                                IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
+                                Codes = GetErrorResult(UnidadNegocioKeys.Interagencias),
+                                Retry = _operRetry[UnidadNegocioKeys.Interagencias],
+                                IdCuenta = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString()
                             }
                         }
                     };
@@ -170,9 +170,9 @@ namespace Expertia.Estructura.Controllers
                             },
                             InterAgencias = new
                             {
-                                CodigoError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.InterAgencias][OutParameter.IdCuenta].ToString()
+                                CodigoError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString()
                             }
                         }
                     };
@@ -192,9 +192,9 @@ namespace Expertia.Estructura.Controllers
                     _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new CuentaB2B_CT_Repository());
                     break;
                 case UnidadNegocioKeys.DestinosMundiales:
-                case UnidadNegocioKeys.InterAgencias:
+                case UnidadNegocioKeys.Interagencias:
                     _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new CuentaB2B_DM_Repository());
-                    _crmCollection.Add(UnidadNegocioKeys.InterAgencias, new CuentaB2B_IA_Repository());
+                    _crmCollection.Add(UnidadNegocioKeys.Interagencias, new CuentaB2B_IA_Repository());
                     break;
                 default:
                     break;

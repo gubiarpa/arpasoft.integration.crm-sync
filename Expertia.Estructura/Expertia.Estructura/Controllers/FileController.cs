@@ -38,16 +38,47 @@ namespace Expertia.Estructura.Controllers
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
+
                 // Consultar PNRs (Lista)
                 var agenciasPnrs = (IEnumerable<AgenciaPnr>)
                     (_operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr())[OutParameter.CursorAgenciaPnr];
+
                 // Consulta Token para invocar un API
                 var server = ConfigAccess.GetValueInAppSettings("AUTH_SERVER");
                 var methodName = ConfigAccess.GetValueInAppSettings("AUTH_METHODNAME");
                 var token = RestBase.GetToken(server, methodName, Method.POST);
+
                 // Consulta File (1 x 1) al API de Salesforce
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
+                    var fileFromSalesforce = RestBase.Execute(server, methodName, Method.POST, agenciaPnr, true, token);
+                }
+
+                foreach (var agenciaPnr in agenciasPnrs)
+                {
+                    var fileSalesforce = new
+                    {
+                        Id_Oportunidad_Sf = "00663000008wJpzAAE",
+                        Resumen = new FileSalesforce
+                        {
+                            Objeto = "FILE",
+                            Estado_File = "Anulado",
+                            Unidad_Negocio = agenciaPnr.UnidadNegocio.Descripcion,
+                            Sucursal = "",
+                            Nombre_Grupo = "Philips x 2",
+                            Counter = "Katherine Perez",
+                            Fecha_Apertura = new DateTime(2019, 11, 01),
+                            Fecha_Inicio = new DateTime(2019, 11, 15),
+                            Fecha_Fin = new DateTime(2019 - 11 - 17),
+                            Cliente = "Luciana Travel",
+                            Subcodigo = "PREMIO PUBLICO",
+                            Condicion_Pago = "C30R",
+                            Num_Pasajeros = "2",
+                            Costo = "118",
+                            Venta = "118",
+                            Comision_Agencia = "1"
+                        }
+                    };
                     var file = RestBase.Execute(server, methodName, Method.POST, agenciaPnr, true, token);
                 }
                 // Consultar File (1 x 1)
@@ -77,8 +108,8 @@ namespace Expertia.Estructura.Controllers
             {
                 case UnidadNegocioKeys.CondorTravel:
                     break;
-                case UnidadNegocioKeys.InterAgencias:
-                    _fileCollection.Add(UnidadNegocioKeys.InterAgencias, new File_IA_Repository());
+                case UnidadNegocioKeys.Interagencias:
+                    _fileCollection.Add(UnidadNegocioKeys.Interagencias, new File_IA_Repository());
                     break;
                 default:
                     break;
