@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.DestinosMundiales;
@@ -46,13 +47,13 @@ namespace Expertia.Estructura.Controllers
                 result = new
                 {
                     Result = _response,
-                    Entity = new { 
+                    Response = new { 
                         IdSubcodigo = operResult[OutParameter.IdSubcodigo].ToString()
                     }
                 };
 
                 _instants[InstantKey.Oracle] = DateTime.Now;
-                return Ok(_response);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -70,13 +71,14 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Send)]
-        public IHttpActionResult Send(string unidadNegocioName)
+        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<Subcodigo> subcodigos = null;
             try
             {
+                var unidadNegocioType = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
+
                 /// Consulta de Subcodigos a PTA
-                var subcodigoRepository = new Subcodigo_DM_Repository();
                 subcodigos = (IEnumerable<Subcodigo>)(_subcodigoRepository.Read())[OutParameter.CursorSubcodigo];
 
                 /// Configuraciones
@@ -97,7 +99,7 @@ namespace Expertia.Estructura.Controllers
                     subcodigo.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
 
                     /// Retorno de subcodigo a PTA
-                    subcodigoRepository.Update(subcodigo);
+                    _subcodigoRepository.Update(subcodigo);
                 }
                 return Ok(subcodigos);
             }

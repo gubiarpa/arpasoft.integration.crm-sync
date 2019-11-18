@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #endregion
 
         #region PublicMethods
-        public Operation Create(Subcodigo entity)
+        public Operation Create(Subcodigo subcodigo)
         {
             try
             {
@@ -33,21 +33,21 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 value = DBNull.Value;
                 AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 /// (03) P_NOMBRE_USUARIO
-                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, entity.Usuario);
+                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, subcodigo.Usuario);
                 /// (04) P_ACCION
-                AddParameter("P_ACCION", OracleDbType.Varchar2, entity.Accion);
+                AddParameter("P_ACCION", OracleDbType.Varchar2, subcodigo.Accion);
                 /// (05) P_ID_CUENTA
-                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, entity.DkAgencia);
+                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, subcodigo.DkAgencia);
                 /// (06) P_NOMBRE_SUCURSAL
-                AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, entity.NombreSucursal);
+                AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, subcodigo.NombreSucursal);
                 /// (07) P_DIRECCION_SUCURSAL
-                AddParameter("P_DIRECCION_SUCURSAL", OracleDbType.Varchar2, entity.DireccionSucursal);
+                AddParameter("P_DIRECCION_SUCURSAL", OracleDbType.Varchar2, subcodigo.DireccionSucursal);
                 /// (08) P_NOMBRE_CONDICION_PAGO
-                AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, entity.CondicionPago);
+                AddParameter("P_NOMBRE_CONDICION_PAGO", OracleDbType.Varchar2, subcodigo.CondicionPago);
                 /// (09) P_ESTADO_SUCURSAL
-                AddParameter("P_ESTADO_SUCURSAL", OracleDbType.Varchar2, entity.EstadoSucursal);
+                AddParameter("P_ESTADO_SUCURSAL", OracleDbType.Varchar2, subcodigo.EstadoSucursal);
                 /// (10) P_PROMOTOR
-                AddParameter("P_NOMBRE_PROMOTOR", OracleDbType.Varchar2, entity.Promotor);
+                AddParameter("P_NOMBRE_PROMOTOR", OracleDbType.Varchar2, subcodigo.Promotor);
                 /// (11) CORRELATIVO_SUBCODIGO
                 AddParameter(OutParameter.IdSubcodigo, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
@@ -102,7 +102,20 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.IA_Read_Subcodigo);
+                var spName = string.Empty;
+                switch (_unidadNegocio)
+                {
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        spName = StoredProcedureName.DM_Read_Subcodigo;
+                        break;
+                    case UnidadNegocioKeys.Interagencias:
+                        spName = StoredProcedureName.IA_Read_Subcodigo;
+                        break;
+                    default:
+                        break;
+                }
+
+                ExecuteStoredProcedure(spName);
 
                 operation[OutParameter.CursorSubcodigo] = ToSubcodigo(GetDtParameter(OutParameter.CursorSubcodigo));
                 operation[Operation.Result] = ResultType.Success;
@@ -116,7 +129,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             }
         }
 
-        public Operation Update(Subcodigo entity)
+        public Operation Update(Subcodigo subcodigo)
         {
             try
             {
@@ -128,13 +141,13 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 /// (02) P_MENSAJE_ERROR
                 AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output);
                 /// (03) P_ID_CLIENTE
-                AddParameter("P_ID_CLIENTE", OracleDbType.Int32, entity.DkAgencia);
+                AddParameter("P_ID_CLIENTE", OracleDbType.Int32, subcodigo.DkAgencia);
                 /// (04) P_ID_SUBCODIGO
-                AddParameter("P_ID_SUBCODIGO", OracleDbType.Int32, entity.CorrelativoSubcodigo);
+                AddParameter("P_ID_SUBCODIGO", OracleDbType.Int32, subcodigo.CorrelativoSubcodigo);
                 /// (05) P_ES_ATENCION
-                AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, entity.CodigoError);
+                AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, subcodigo.CodigoError);
                 /// (06) P_DESCRIPCION
-                AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, entity.MensajeError);
+                AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, subcodigo.MensajeError);
                 /// (07) P_ACTUALIZADOS
                 AddParameter("P_ACTUALIZADOS", OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
                 #endregion
@@ -153,7 +166,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #endregion
 
         #region Auxiliar
-        public IEnumerable<Subcodigo> ToSubcodigo(DataTable dt)
+        private IEnumerable<Subcodigo> ToSubcodigo(DataTable dt)
         {
             try
             {
