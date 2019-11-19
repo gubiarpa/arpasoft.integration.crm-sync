@@ -147,6 +147,7 @@ namespace Expertia.Estructura.Utils
         public const string IdContacto = "P_ID_CONTACTO";
         public const string IdCotizacion = "P_ID_COTIZACION";
         public const string IdSubcodigo = "P_ID_SUBCODIGO";
+        public const string IdActualizados = "P_ACTUALIZADOS";
         #endregion
 
         #region Fields

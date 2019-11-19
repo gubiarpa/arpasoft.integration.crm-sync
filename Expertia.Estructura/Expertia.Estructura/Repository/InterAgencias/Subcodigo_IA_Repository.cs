@@ -137,9 +137,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
                 #region Parameters
                 /// (01) P_CODIGO_ERROR
-                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output);
+                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 /// (02) P_MENSAJE_ERROR
-                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output);
+                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 /// (03) P_ID_CLIENTE
                 AddParameter("P_ID_CLIENTE", OracleDbType.Int32, subcodigo.DkAgencia);
                 /// (04) P_ID_SUBCODIGO
@@ -149,7 +149,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 /// (06) P_DESCRIPCION
                 AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, subcodigo.MensajeError);
                 /// (07) P_ACTUALIZADOS
-                AddParameter("P_ACTUALIZADOS", OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+                AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
                 #endregion
 
                 #region Invoke
