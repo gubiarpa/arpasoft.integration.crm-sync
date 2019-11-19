@@ -3,14 +3,12 @@ using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Behavior;
-using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
 using Expertia.Estructura.Utils;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -47,7 +45,8 @@ namespace Expertia.Estructura.Controllers
                 result = new
                 {
                     Result = _response,
-                    Response = new { 
+                    Response = new
+                    {
                         IdSubcodigo = operResult[OutParameter.IdSubcodigo].ToString()
                     }
                 };

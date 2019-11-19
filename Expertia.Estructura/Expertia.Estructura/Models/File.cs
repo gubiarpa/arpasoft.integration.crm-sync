@@ -4,14 +4,16 @@ using System;
 
 namespace Expertia.Estructura.Models
 {
-    public class AgenciaPnr : IUnidadNegocio
+    public class AgenciaPnr : ICrmApiResponse
     {
-        public UnidadNegocio UnidadNegocio { get; set; }
+        public string UnidadNegocio { get; set; }
         public int DkAgencia { get; set; }
         public string PNR { get; set; }
         public int IdFile { get; set; }
         public SimpleDesc Sucursal { get; set; }
-        public string IdOportunidadCrm { get; set; }
+        public string IdOportunidad { get; set; }
+        public string CodigoError { get; set; }
+        public string MensajeError { get; set; }
     }
 
     public class File

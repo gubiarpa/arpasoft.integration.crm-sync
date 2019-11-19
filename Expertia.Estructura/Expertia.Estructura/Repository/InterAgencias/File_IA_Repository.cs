@@ -46,7 +46,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             var pnr = entity.PNR;
             var id_file = entity.IdFile;
             var id_sucursal = entity.Sucursal;
-            var id_oportunidad_crm = entity.IdOportunidadCrm;
+            var id_oportunidad_crm = entity.IdOportunidad;
             #endregion
 
             #region Parameters
@@ -100,7 +100,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         PNR = pnr,
                         IdFile = id_file,
                         Sucursal = new SimpleDesc(nombre_sucursal),
-                        IdOportunidadCrm = id_oportunidad_crm
+                        IdOportunidad = id_oportunidad_crm
                     });
                     #endregion
                 }
