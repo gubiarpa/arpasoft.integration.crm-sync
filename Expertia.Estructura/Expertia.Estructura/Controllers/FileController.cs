@@ -8,6 +8,8 @@ using Expertia.Estructura.Utils;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -30,6 +32,7 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region PublicMethods
+        [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             object files = null;
@@ -41,64 +44,53 @@ namespace Expertia.Estructura.Controllers
 
                 /// Consulta de PNRs a PTA
                 var agenciasPnrs = (IEnumerable<AgenciaPnr>)(_operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr())[OutParameter.CursorAgenciaPnr];
+                if (agenciasPnrs == null || agenciasPnrs.ToList().Count.Equals(0)) return Ok();
 
                 /// Configuraciones
                 var authServer = ConfigAccess.GetValueInAppSettings("AUTH_SERVER");
                 var authMethodName = ConfigAccess.GetValueInAppSettings("AUTH_METHODNAME");
                 var crmServer = ConfigAccess.GetValueInAppSettings("CRM_SERVER");
-                var crmSubcodigoMethod = ConfigAccess.GetValueInAppSettings("FILE_METHODNAME");
+                var crmPnrMethod = ConfigAccess.GetValueInAppSettings("PNR_METHODNAME");
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetToken(authServer, authMethodName, Method.POST);
 
-                // Consulta File (1 x 1) al API de Salesforce
+                /// Consulta File (1 x 1) al API de Salesforce
+                //var taskList = new List<Task>();
+                //taskList.Add(new Task(() => { }));
+                //var tasks = taskList.ToArray();
+                
+                
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
-                    /// Consulta a Salesforce
-                    JsonManager.LoadText(RestBase.Execute(crmServer, crmSubcodigoMethod, Method.POST, agenciaPnr, true, token).Content);
-                    agenciaPnr.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
-                    agenciaPnr.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
-                    agenciaPnr.DkAgencia = int.Parse(JsonManager.GetSetting("ID_CUENTA_SF"));
-                    agenciaPnr.IdOportunidad = JsonManager.GetSetting("ID_OPORTUNIDAD_SF");
-
-                    ///
-
-                }
-
-                foreach (var agenciaPnr in agenciasPnrs)
-                {
-                    var fileSalesforce = new
+                    /// AgencyPnr
+                    try
                     {
-                        Id_Oportunidad_Sf = "00663000008wJpzAAE",
-                        Resumen = new FileSalesforce
+                        agenciaPnr.UnidadNegocio = unidadNegocio.Descripcion;
+                        agenciaPnr.IdOportunidad = agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
+                        var response = RestBase.Execute(crmServer, crmPnrMethod, Method.POST, agenciaPnr, true, token);
+                        JsonManager.LoadText(response.Content);
+                        agenciaPnr.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
+                        agenciaPnr.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
+                        agenciaPnr.DkAgencia = int.Parse(JsonManager.GetSetting("ID_CUENTA_SF"));
+                        agenciaPnr.IdOportunidad = JsonManager.GetSetting("ID_OPORTUNIDAD_SF");
+                    }
+                    catch
+                    {
+                    }
+
+                    /// FileBoleto
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
                         {
-                            Objeto = "FILE",
-                            Estado_File = "Anulado",
-                            Unidad_Negocio = agenciaPnr.UnidadNegocio,
-                            Sucursal = "",
-                            Nombre_Grupo = "Philips x 2",
-                            Counter = "Katherine Perez",
-                            Fecha_Apertura = new DateTime(2019, 11, 01),
-                            Fecha_Inicio = new DateTime(2019, 11, 15),
-                            Fecha_Fin = new DateTime(2019, 11, 17),
-                            Cliente = "Luciana Travel",
-                            Subcodigo = "PREMIO PUBLICO",
-                            Condicion_Pago = "C30R",
-                            Num_Pasajeros = "2",
-                            Costo = "118",
-                            Venta = "118",
-                            Comision_Agencia = "1"
+                            _operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewFileBoleto(agenciaPnr);
                         }
-                    };
-                    var file = RestBase.Execute(authServer, authMethodName, Method.POST, agenciaPnr, true, token);
+                    }
+                    catch
+                    {
+                    }
                 }
-                // Consultar File (1 x 1)
-                foreach (var agenciaPnr in agenciasPnrs)
-                {
-                    var file = _fileCollection[_unidadNegocio].GetNewFile(agenciaPnr);
-                }
-                _instants[InstantKey.Oracle] = DateTime.Now;
-                files = new { Interagencias = agenciasPnrs };
                 return Ok(files);
             }
             catch (Exception ex)

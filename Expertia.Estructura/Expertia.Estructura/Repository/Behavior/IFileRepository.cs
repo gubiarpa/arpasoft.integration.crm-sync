@@ -6,6 +6,6 @@ namespace Expertia.Estructura.Repository.Behavior
     public interface IFileRepository
     {
         Operation GetNewAgenciaPnr();
-        Operation GetNewFile(AgenciaPnr entity);
+        Operation GetNewFileBoleto(AgenciaPnr entity);
     }
 }

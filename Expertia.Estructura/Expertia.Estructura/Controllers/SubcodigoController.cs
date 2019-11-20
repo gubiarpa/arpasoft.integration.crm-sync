@@ -9,6 +9,7 @@ using Expertia.Estructura.Utils;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -79,6 +80,8 @@ namespace Expertia.Estructura.Controllers
 
                 /// Consulta de Subcodigos a PTA
                 subcodigos = (IEnumerable<Subcodigo>)(_subcodigoRepository.Read())[OutParameter.CursorSubcodigo];
+
+                if (subcodigos == null || subcodigos.ToList().Count.Equals(0)) return Ok();
 
                 /// Configuraciones
                 var authServer = ConfigAccess.GetValueInAppSettings("AUTH_SERVER");

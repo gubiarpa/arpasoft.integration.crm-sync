@@ -58,4 +58,37 @@ namespace Expertia.Estructura.Models
         public string Venta { get; set; }
         public string Comision_Agencia { get; set; }
     }
+
+    public class Boleto
+    {
+        public string IdOportunidad { get; set; }
+        public string Accion { get; set; }
+        public int IdFile { get; set; }
+        public string Sucursal { get; set; }
+        public string NumeroBoleto { get; set; }
+        public string EstadoBoleto { get; set; }
+        public string Pnr { get; set; }
+        public string TipoBoleto { get; set; }
+        public string LineaAerea { get; set; }
+        public string Ruta { get; set; }
+        public string TipoRuta { get; set; }
+        public string CiudadDestino { get; set; }
+        public string PuntoEmision { get; set; }
+        public string NombrePasajero { get; set; }
+        public string InfanteAdulto { get; set; }
+        public string FechaEmision { get; set; }
+        public string EmitidoCanje { get; set; }
+        public string AgenteQuienEmite { get; set; }
+        public float MontoTarifa { get; set; }
+        public float MontoComision { get; set; }
+        public float MontoTotal { get; set; }
+        public string FormaPago { get; set; }
+        public string Reembolsado { get; set; }
+        public string PagoConTarjeta { get; set; }
+        public string TieneWaiver { get; set; }
+        public string TipoWaiver { get; set; }
+        public float MontoWaiver { get; set; }
+        public string Pagado { get; set; }
+        public string Comprobante { get; set; }
+    }
 }

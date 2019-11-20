@@ -12,6 +12,10 @@ namespace Expertia.Estructura.Repository.InterAgencias
 {
     public class File_IA_Repository : OracleBase<AgenciaPnr>, IFileRepository
     {
+        #region Properties
+        private IEnumerable<File> _files;
+        #endregion
+
         #region Constructor
         public File_IA_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.Interagencias) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
@@ -39,14 +43,14 @@ namespace Expertia.Estructura.Repository.InterAgencias
             return operation;
         }
 
-        public Operation GetNewFile(AgenciaPnr entity)
+        public Operation GetNewFileBoleto(AgenciaPnr entity)
         {
             var operation = new Operation();
             #region Loading
             var pnr = entity.PNR;
             var id_file = entity.IdFile;
-            var id_sucursal = entity.Sucursal;
-            var id_oportunidad_crm = entity.IdOportunidad;
+            var id_sucursal = entity.Sucursal.Descripcion;
+            var id_oportunidad = entity.IdOportunidad;
             #endregion
 
             #region Parameters
@@ -61,7 +65,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             // (5) P_ID_SUCURSAL
             AddParameter("P_ID_SUCURSAL", OracleDbType.Varchar2, id_sucursal);
             // (6) P_ID_OPORTUNIDAD_CRM
-            AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, id_oportunidad_crm);
+            AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, id_oportunidad);
             // (7) P_FILE
             AddParameter(OutParameter.CursorFile, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             // (8) P_BOLETO
@@ -70,7 +74,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.IA_Read_File);
-            operation[OutParameter.CursorFile] = ToAgenciaPnr(GetDtParameter(OutParameter.CursorAgenciaPnr));
+            operation[OutParameter.CursorFile] = ToFile(GetDtParameter(OutParameter.CursorFile));
+            operation[OutParameter.CursorBoleto] = ToBoleto(GetDtParameter(OutParameter.CursorBoleto));
             #endregion
 
             return operation;
@@ -120,14 +125,75 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 foreach (DataRow row in dt.Rows)
                 {
                     #region Loading
-
+                    var idOportunidad = row.StringParse("ID_OPORTUNIDAD");
+                    var accion = row.StringParse("ACCION");
+                    var idFile = row.IntParse("ID_FILE");
+                    var estadoFile = row.StringParse("ESTADO_FILE");
+                    var unidadNegocio = row.StringParse("UNIDAD_NEGOCIO");
+                    var sucursal = row.StringParse("SUCURSAL");
+                    var nombreGrupo = row.StringParse("NOMBRE_GRUPO");
+                    var counter = row.StringParse("COUNTER");
+                    var fechaApertura = row.DateTimeParse("FECHA_APERTURA");
+                    var fechaInicio = row.DateTimeParse("FECHA_INICIO");
+                    var fechaFin = row.DateTimeParse("FECHA_FIN");
+                    var cliente = row.StringParse("CLIENTE");
+                    var subcodigo = row.StringParse("SUBCODIGO");
+                    var contacto = row.StringParse("CONTACTO");
+                    var condicionPago = row.StringParse("CONDICION_PAGO");
+                    var numPasajeros = row.IntParse("NUM_PASAJEROS");
+                    var costo = row.FloatParse("COSTO");
+                    var venta = row.FloatParse("VENTA");
+                    var comisionAgencia = row.FloatParse("COMISION_AGENCIA");
                     #endregion
 
                     #region AddingElement
-                    fileList.Add(new File() { });
+                    fileList.Add(new File()
+                    {
+                        IdOportunidad = idOportunidad,
+                        Accion = accion,
+                        IdFile = idFile,
+                        EstadoFile = estadoFile,
+                        UnidadNegocio = unidadNegocio,
+                        Sucursal = sucursal,
+                        NombreGrupo = nombreGrupo,
+                        Counter = counter,
+                        FechaApertura = fechaApertura,
+                        FechaInicio = fechaInicio,
+                        FechaFin = fechaFin,
+                        Cliente = cliente,
+                        Subcodigo = subcodigo,
+                        Contacto = contacto,
+                        CondicionPago = condicionPago,
+                        NumPasajeros = numPasajeros,
+                        Costo = costo,
+                        Venta = venta,
+                        ComisionAgencia = comisionAgencia
+                    });
                     #endregion
                 }
                 return fileList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<Boleto> ToBoleto(DataTable dt)
+        {
+            try
+            {
+                var boletoList = new List<Boleto>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    #region Loading
+                    #endregion
+
+                    #region AddingElement
+                    boletoList.Add(new Boleto() { });
+                    #endregion
+                }
+                return boletoList;
             }
             catch (Exception ex)
             {

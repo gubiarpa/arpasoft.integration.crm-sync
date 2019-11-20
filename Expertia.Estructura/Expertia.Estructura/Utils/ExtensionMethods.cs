@@ -191,6 +191,19 @@ namespace Expertia.Estructura.Utils
             }
         }
 
+        public static float FloatParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                if (!float.TryParse(row[fieldName].ToString(), out float result)) result = 0;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static DateTime DateTimeParse(this DataRow row, string fieldName)
         {
             try
