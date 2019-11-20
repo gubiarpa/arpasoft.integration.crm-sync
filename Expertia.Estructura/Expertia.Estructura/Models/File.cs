@@ -10,17 +10,17 @@ namespace Expertia.Estructura.Models
         public int DkAgencia { get; set; }
         public string PNR { get; set; }
         public int IdFile { get; set; }
-        public SimpleDesc Sucursal { get; set; }
+        public string Sucursal { get; set; }
         public string IdOportunidad { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
     }
 
-    public class File
+    public class File : ICrmApiResponse
     {
         public string IdOportunidad { get; set; }
         public string Accion { get; set; }
-        public int IdFile { get; set; }
+        public int NumeroFile { get; set; }
         public string EstadoFile { get; set; }
         public string UnidadNegocio { get; set; }
         public string Sucursal { get; set; }
@@ -37,6 +37,8 @@ namespace Expertia.Estructura.Models
         public float Costo { get; set; }
         public float Venta { get; set; }
         public float ComisionAgencia { get; set; }
+        public string CodigoError { get; set; }
+        public string MensajeError { get; set; }
     }
 
     public class FileSalesforce
@@ -59,11 +61,11 @@ namespace Expertia.Estructura.Models
         public string Comision_Agencia { get; set; }
     }
 
-    public class Boleto
+    public class Boleto : ICrmApiResponse
     {
         public string IdOportunidad { get; set; }
         public string Accion { get; set; }
-        public int IdFile { get; set; }
+        public int NumeroFile { get; set; }
         public string Sucursal { get; set; }
         public string NumeroBoleto { get; set; }
         public string EstadoBoleto { get; set; }
@@ -72,11 +74,12 @@ namespace Expertia.Estructura.Models
         public string LineaAerea { get; set; }
         public string Ruta { get; set; }
         public string TipoRuta { get; set; }
+        public string CiudadOrigen { get; set; }
         public string CiudadDestino { get; set; }
         public string PuntoEmision { get; set; }
         public string NombrePasajero { get; set; }
         public string InfanteAdulto { get; set; }
-        public string FechaEmision { get; set; }
+        public DateTime FechaEmision { get; set; }
         public string EmitidoCanje { get; set; }
         public string AgenteQuienEmite { get; set; }
         public float MontoTarifa { get; set; }
@@ -90,5 +93,7 @@ namespace Expertia.Estructura.Models
         public float MontoWaiver { get; set; }
         public string Pagado { get; set; }
         public string Comprobante { get; set; }
+        public string CodigoError { get; set; }
+        public string MensajeError { get; set; }
     }
 }

@@ -43,14 +43,14 @@ namespace Expertia.Estructura.Repository.InterAgencias
             return operation;
         }
 
-        public Operation GetNewFileBoleto(AgenciaPnr entity)
+        public Operation GetFileAndBoleto(AgenciaPnr agenciaPnr)
         {
             var operation = new Operation();
             #region Loading
-            var pnr = entity.PNR;
-            var id_file = entity.IdFile;
-            var id_sucursal = entity.Sucursal.Descripcion;
-            var id_oportunidad = entity.IdOportunidad;
+            var pnr = agenciaPnr.PNR;
+            var id_file = agenciaPnr.IdFile;
+            var id_sucursal = agenciaPnr.Sucursal;
+            var id_oportunidad = agenciaPnr.IdOportunidad;
             #endregion
 
             #region Parameters
@@ -80,6 +80,79 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
             return operation;
         }
+
+        public Operation UpdateFile(File file)
+        {
+            var operation = new Operation();
+            #region Loading
+            var sucursal = file.Sucursal;
+            var numeroFile = file.NumeroFile;
+            var codigoError = file.CodigoError;
+            var mensajeError = file.MensajeError;
+            #endregion
+
+            #region Parameters
+            // (01) P_CODIGO_ERROR
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (02) P_MENSAJE_ERROR
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (03) P_NOMBRE_SUCURSAL
+            AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, sucursal);
+            // (04) P_ID_FILE
+            AddParameter("P_ID_FILE", OracleDbType.Varchar2, numeroFile);
+            // (05) P_ES_ATENCION
+            AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, codigoError);
+            // (06) P_DESCRIPCION
+            AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, mensajeError);
+            // (07) P_ACTUALIZADOS
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.IA_Update_File);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+            #endregion
+
+            return operation;
+        }
+
+        public Operation UpdateBoleto(Boleto boleto)
+        {
+            var operation = new Operation();
+            #region Loading
+            var sucursal = boleto.Sucursal;
+            var numeroFile = boleto.NumeroFile;
+            var numeroBoleto = boleto.NumeroBoleto;
+            var codigoError = boleto.CodigoError;
+            var mensajeError = boleto.MensajeError;
+            #endregion
+
+            #region Parameters
+            // (01) P_CODIGO_ERROR
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (02) P_MENSAJE_ERROR
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            // (03) P_NOMBRE_SUCURSAL
+            AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, sucursal);
+            // (04) P_ID_FILE
+            AddParameter("P_ID_FILE", OracleDbType.Varchar2, numeroFile);
+            // (05) P_NUMERO_DE_BOLETO
+            AddParameter("P_NUMERO_DE_BOLETO", OracleDbType.Varchar2, numeroBoleto);
+            // (06) P_ES_ATENCION
+            AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, codigoError);
+            // (07) P_DESCRIPCION
+            AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, mensajeError);
+            // (08) P_ACTUALIZADOS
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.IA_Update_Boleto);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+            #endregion
+
+            return operation;
+        }
         #endregion
 
         #region Auxiliar
@@ -95,7 +168,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var pnr = row.StringParse("PNR");
                     var id_file = row.IntParse("ID_FILE");
                     var nombre_sucursal = row.StringParse("NOMBRE_SUCURSAL");
-                    var id_oportunidad_crm = row.StringParse("ID_OPORTUNIDAD_CRM");
+                    var id_oportunidad = row.StringParse("ID_OPORTUNIDAD_CRM");
                     #endregion
 
                     #region AddingElement
@@ -104,8 +177,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         DkAgencia = dk_agencia,
                         PNR = pnr,
                         IdFile = id_file,
-                        Sucursal = new SimpleDesc(nombre_sucursal),
-                        IdOportunidad = id_oportunidad_crm
+                        Sucursal = nombre_sucursal,
+                        IdOportunidad = id_oportunidad
                     });
                     #endregion
                 }
@@ -151,7 +224,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     {
                         IdOportunidad = idOportunidad,
                         Accion = accion,
-                        IdFile = idFile,
+                        NumeroFile = idFile,
                         EstadoFile = estadoFile,
                         UnidadNegocio = unidadNegocio,
                         Sucursal = sucursal,
@@ -187,10 +260,69 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 foreach (DataRow row in dt.Rows)
                 {
                     #region Loading
+                    var idOportunidad = row.StringParse("ID_OPORTUNIDAD");
+                    var accion = row.StringParse("accion");
+                    var idFile = row.IntParse("id_file");
+                    var sucursal = row.StringParse("sucursal");
+                    var numeroBoleto = row.StringParse("boleto");
+                    var estadoBoleto = row.StringParse("estado_boleto");
+                    var pnr = row.StringParse("pnr");
+                    var tipoBoleto = row.StringParse("tipo_boleto");
+                    var lineaAerea = row.StringParse("linea_aerea");
+                    var ruta = row.StringParse("ruta");
+                    var tipoRuta = row.StringParse("tipo_ruta");
+                    var ciudadDestino = row.StringParse("ciudad_destino");
+                    var puntoEmision = row.StringParse("punto_de_emision");
+                    var nombrePasajero = row.StringParse("nombre_pasajero");
+                    var infanteAdulto = row.StringParse("infante_con_adulto");
+                    var fechaEmision = row.DateTimeParse("fecha_emision");
+                    var emitidoCanje = row.StringParse("emitido_canje");
+                    var agenteQuienEmite = row.StringParse("agente_quien_emite");
+                    var montoTarifa = row.FloatParse("monto_tarifa");
+                    var montoComision = row.FloatParse("monto_comision");
+                    var montoTotal = row.FloatParse("monto_total");
+                    var formaPago = row.StringParse("forma_pago");
+                    var reembolsado = row.StringParse("reembolsado");
+                    var pagoConTarjeta = row.StringParse("pago_con_tarjeta");
+                    var tieneWaiver = row.StringParse("tiene_waiver");
+                    var tipoWaiver = row.StringParse("tipo_waiver");
+                    var montoWaiver = row.FloatParse("monto_waiver");
+                    var pagado = row.StringParse("pagado");
+                    var comprobante = row.StringParse("comprobante");
                     #endregion
 
                     #region AddingElement
-                    boletoList.Add(new Boleto() { });
+                    boletoList.Add(new Boleto()
+                    {
+                        IdOportunidad = idOportunidad,
+                        Accion = accion,
+                        NumeroFile = idFile,
+                        Sucursal = sucursal,
+                        NumeroBoleto = numeroBoleto,
+                        EstadoBoleto = estadoBoleto,
+                        Pnr = pnr,
+                        TipoBoleto = tipoBoleto,
+                        LineaAerea = lineaAerea,
+                        Ruta = ruta,
+                        TipoRuta = tipoRuta,
+                        CiudadDestino = ciudadDestino,
+                        PuntoEmision = puntoEmision,
+                        NombrePasajero = nombrePasajero,
+                        InfanteAdulto = infanteAdulto,
+                        FechaEmision = fechaEmision,
+                        EmitidoCanje = emitidoCanje,
+                        AgenteQuienEmite = agenteQuienEmite,
+                        MontoTarifa = montoTarifa,
+                        MontoComision = montoComision,
+                        MontoTotal = montoTotal,
+                        FormaPago = formaPago,
+                        Reembolsado = reembolsado,
+                        PagoConTarjeta = pagoConTarjeta,
+                        TipoWaiver = tipoWaiver,
+                        MontoWaiver = montoWaiver,
+                        Pagado = pagado,
+                        Comprobante = comprobante
+                    });
                     #endregion
                 }
                 return boletoList;
