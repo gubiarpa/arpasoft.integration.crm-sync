@@ -56,7 +56,7 @@ namespace Expertia.Estructura.Controllers
                 var token = RestBase.GetToken(authServer, authMethodName, Method.POST);
 
                 /// Intentando enviar en paralelo
-                var tasks = new List<Task>();
+                var agenciasPnrTasks = new List<Task>();
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
                     /*var task = new Task(() =>
@@ -164,8 +164,11 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-                    Dk_Agencia = agenciaPnr.DkAgencia,
-                    Pnr = agenciaPnr.PNR
+                    Pnr = new
+                    {
+                        Dk_Agencia = agenciaPnr.DkAgencia.ToString(),
+                        Pnr = agenciaPnr.PNR
+                    }
                 };
             }
             catch (Exception ex)
@@ -180,25 +183,26 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-                    Id_Oportunidad = file.IdOportunidad,
-                    Accion = file.Accion,
-                    File = file.NumeroFile,
-                    Estado_File = file.EstadoFile,
-                    Unidad_Negocio = file.UnidadNegocio,
-                    Sucursal = file.Sucursal,
-                    Nombre_Grupo = file.NombreGrupo,
-                    Counter = file.Counter,
-                    Fecha_Apertura = file.FechaApertura,
-                    Fecha_Inicio = file.FechaInicio,
-                    Fecha_Fin = file.FechaFin,
-                    Cliente = file.Cliente,
-                    Subcodigo = file.Subcodigo,
-                    Contacto = file.Contacto,
-                    Condicion_Pago = file.CondicionPago,
-                    Num_Pasajeros = file.NumPasajeros,
-                    Costo = file.Costo,
-                    Venta = file.Venta,
-                    Comision_Agencia = file.ComisionAgencia
+                    Id_Oportunidad_Sf = file.IdOportunidad,
+                    Resumen = new
+                    {
+                        Objeto = "FILE",
+                        Estado_File = file.EstadoFile,
+                        Unidad_Negocio = file.UnidadNegocio,
+                        Sucursal = file.Sucursal,
+                        Nombre_Grupo = file.NombreGrupo,
+                        Counter = file.Counter,
+                        Fecha_Apertura = file.FechaApertura,
+                        Fecha_Inicio = file.FechaInicio,
+                        Fecha_Fin = file.FechaFin,
+                        Cliente = file.Cliente,
+                        Subcodigo = file.Subcodigo,
+                        Condicion_Pago = file.CondicionPago,
+                        Num_Pasajeros = file.NumPasajeros,
+                        Costo = file.Costo,
+                        Venta = file.Venta,
+                        Comision_Agencia = file.ComisionAgencia
+                    }
                 };
             }
             catch (Exception ex)

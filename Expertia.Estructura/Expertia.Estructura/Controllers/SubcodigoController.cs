@@ -90,12 +90,12 @@ namespace Expertia.Estructura.Controllers
                 var crmSubcodigoMethod = ConfigAccess.GetValueInAppSettings("SUBCODIGO_METHODNAME");
 
                 /// Obtiene Token para envío a Salesforce
-                var authToken = RestBase.GetToken(authServer, authMethodName);
+                var token = RestBase.GetToken(authServer, authMethodName);
 
                 foreach (var subcodigo in subcodigos)
                 {
                     /// Envío de subcodigo a Salesforce
-                    var response = RestBase.Execute(crmServer, crmSubcodigoMethod, Method.POST, subcodigo, true, authToken);
+                    var response = RestBase.Execute(crmServer, crmSubcodigoMethod, Method.POST, ToSalesforceEntity(subcodigo), true, token);
                     JsonManager.LoadText(response.Content);
                     subcodigo.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
                     subcodigo.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
@@ -120,7 +120,7 @@ namespace Expertia.Estructura.Controllers
         }
         #endregion
 
-        #region NotImplemented
+        #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             switch (unidadNegocioKey)
@@ -134,6 +134,21 @@ namespace Expertia.Estructura.Controllers
                     break;
             }
             return unidadNegocioKey;
+        }
+
+        private object ToSalesforceEntity(Subcodigo subcodigo)
+        {
+            try
+            {
+                return new
+                {
+
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
     }
