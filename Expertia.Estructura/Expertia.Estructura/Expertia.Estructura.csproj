@@ -159,6 +159,7 @@
     <Compile Include="Controllers\CuentaB2CController.cs" />
     <Compile Include="Controllers\ContactoController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\OportunidadController.cs" />
     <Compile Include="Controllers\SubcodigoController.cs" />
     <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -188,12 +189,14 @@
     <Compile Include="Models\Auxiliar\Participante.cs" />
     <Compile Include="Models\Auxiliar\Sitio.cs" />
     <Compile Include="Models\Auxiliar\Telefono.cs" />
+    <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\Subcodigo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\IFileRepository.cs" />
+    <Compile Include="Repository\Behavior\IOportunidadRepository.cs" />
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
     <Compile Include="Repository\Behavior\ISubcodigoRepository.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
@@ -206,6 +209,7 @@
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\File_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
+    <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="RestManager\Base\RestBase.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
     <Compile Include="Utils\Behavior\ILogFileManager.cs" />

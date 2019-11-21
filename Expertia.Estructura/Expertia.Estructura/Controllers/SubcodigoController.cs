@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Controllers
     /// Entidad exclusiva para Destinos Mundiales e Interagencias
     /// </summary>
     [RoutePrefix(RoutePrefix.Subcodigo)]
-    public class SubcodigoController : BaseController<Subcodigo>
+    public class SubcodigoController : BaseController<object>
     {
         #region Properties
         private ISubcodigoRepository _subcodigoRepository;

@@ -33,6 +33,7 @@ namespace Expertia.Estructura.Utils
         public const string Cotizacion = "api/cotizacion";
         public const string Subcodigo = "api/subcodigo";
         public const string File = "api/file";
+        public const string Oportunidad = "api/oportunidad";
     }
 
     public enum ActionMethod
@@ -126,6 +127,8 @@ namespace Expertia.Estructura.Utils
         public const string IA_Read_File = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_FILE_NOVEDAD";
         public const string IA_Update_File = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_FILE";
         public const string IA_Update_Boleto = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_BOLETO";
+        public const string IA_Read_Oportunidad = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_OPORTUNIDAD";
+        public const string IA_Update_Oportunidad = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_OPOR";
         #endregion
     }
 
@@ -141,6 +144,7 @@ namespace Expertia.Estructura.Utils
         public const string PnrMethod = "PNR_METHODNAME";
         public const string FileMethod = "FILE_METHODNAME";
         public const string BoletoMethod = "BOLETO_METHODNAME";
+        public const string OportunidadMethod = "OPORTUNIDAD_METHODNAME";
         #endregion
     }
 
@@ -174,6 +178,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorAgenciaPnr = "P_CLIENTE_PNR";
         public const string CursorFile = "P_FILE";
         public const string CursorBoleto = "P_BOLETO";
+        public const string CursorOportunidad = "P_OPORTUNIDAD";
         public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";
         public const string NumeroSubcodigo = "P_NUMERO_SUBCODIGO";
         public const string NombreGrupo = "P_NOMBRE_GRUPO";

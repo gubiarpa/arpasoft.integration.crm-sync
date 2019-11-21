@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Controllers
     /// Entidad Exclusiva para Condor Travel e Interagencias
     /// </summary>
     [RoutePrefix(RoutePrefix.File)]
-    public class FileController : BaseController<AgenciaPnr>
+    public class FileController : BaseController<object>
     {
         #region Properties
         private IDictionary<UnidadNegocioKeys?, IFileRepository> _fileCollection;
@@ -150,12 +150,8 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
-                case UnidadNegocioKeys.CondorTravel:
-                    break;
                 case UnidadNegocioKeys.Interagencias:
                     _fileCollection.Add(UnidadNegocioKeys.Interagencias, new File_IA_Repository());
-                    break;
-                default:
                     break;
             }
             return unidadNegocioKey;

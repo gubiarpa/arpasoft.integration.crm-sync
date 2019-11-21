@@ -12,10 +12,6 @@ namespace Expertia.Estructura.Repository.InterAgencias
 {
     public class File_IA_Repository : OracleBase<AgenciaPnr>, IFileRepository
     {
-        #region Properties
-        private IEnumerable<File> _files;
-        #endregion
-
         #region Constructor
         public File_IA_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.Interagencias) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
@@ -26,6 +22,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         public Operation GetNewAgenciaPnr()
         {
             var operation = new Operation();
+            
             #region Parameters
             // (1) P_CODIGO_ERROR
             AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
@@ -156,7 +153,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #endregion
 
         #region Auxiliar
-        public IEnumerable<AgenciaPnr> ToAgenciaPnr(DataTable dt)
+        private IEnumerable<AgenciaPnr> ToAgenciaPnr(DataTable dt)
         {
             try
             {
@@ -190,7 +187,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             }
         }
 
-        public IEnumerable<File> ToFile(DataTable dt)
+        private IEnumerable<File> ToFile(DataTable dt)
         {
             try
             {
@@ -252,7 +249,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             }
         }
 
-        public IEnumerable<Boleto> ToBoleto(DataTable dt)
+        private IEnumerable<Boleto> ToBoleto(DataTable dt)
         {
             try
             {
