@@ -129,6 +129,21 @@ namespace Expertia.Estructura.Utils
         #endregion
     }
 
+    public static class SalesforceKeys
+    {
+        #region SalesforceRest
+        /// Server
+        public const string AuthServer = "AUTH_SERVER";
+        public const string CrmServer = "CRM_SERVER";
+        /// Methods
+        public const string AuthMethod = "AUTH_METHODNAME";
+        public const string SubcodigoMethod = "SUBCODIGO_METHODNAME";
+        public const string PnrMethod = "PNR_METHODNAME";
+        public const string FileMethod = "FILE_METHODNAME";
+        public const string BoletoMethod = "BOLETO_METHODNAME";
+        #endregion
+    }
+
     public static class OutParameter
     {
         #region Size
@@ -170,6 +185,13 @@ namespace Expertia.Estructura.Utils
         public const string NombreVendedorCounter = "P_NOMBRE_VENDEDOR_COUNTER";
         public const string NombreVendedorCotizador = "P_NOMBRE_VENDEDOR_COTIZADOR";
         public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
+        #endregion
+
+        #region SalesforceParameters
+        public const string SF_CodigoError = "CODIGO_ERROR";
+        public const string SF_MensajeError = "MENSAJE_ERROR";
+        public const string SF_IdCuenta = "ID_CUENTA_SF";
+        public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF";
         #endregion
     }
     #endregion

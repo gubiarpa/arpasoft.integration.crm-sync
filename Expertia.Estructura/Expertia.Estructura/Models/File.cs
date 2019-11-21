@@ -11,6 +11,7 @@ namespace Expertia.Estructura.Models
         public string PNR { get; set; }
         public int IdFile { get; set; }
         public string Sucursal { get; set; }
+        public string IdCuenta { get; set; }
         public string IdOportunidad { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }

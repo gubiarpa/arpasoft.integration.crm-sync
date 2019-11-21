@@ -84,24 +84,37 @@ namespace Expertia.Estructura.Controllers
                 if (subcodigos == null || subcodigos.ToList().Count.Equals(0)) return Ok();
 
                 /// Configuraciones
-                var authServer = ConfigAccess.GetValueInAppSettings("AUTH_SERVER");
-                var authMethodName = ConfigAccess.GetValueInAppSettings("AUTH_METHODNAME");
-                var crmServer = ConfigAccess.GetValueInAppSettings("CRM_SERVER");
-                var crmSubcodigoMethod = ConfigAccess.GetValueInAppSettings("SUBCODIGO_METHODNAME");
+                var authServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
+                var authMethodName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthMethod);
+                var crmServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.CrmServer);
+                var crmSubcodigoMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.SubcodigoMethod);
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetToken(authServer, authMethodName);
 
                 foreach (var subcodigo in subcodigos)
                 {
-                    /// Envío de subcodigo a Salesforce
-                    var response = RestBase.Execute(crmServer, crmSubcodigoMethod, Method.POST, ToSalesforceEntity(subcodigo), true, token);
-                    JsonManager.LoadText(response.Content);
-                    subcodigo.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
-                    subcodigo.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
+                    try
+                    {
+                        /// Envío de subcodigo a Salesforce
+                        var subcodigoSf = ToSalesforceEntity(subcodigo);
+                        var response = RestBase.Execute(crmServer, crmSubcodigoMethod, Method.POST, subcodigoSf, true, token);
+                        JsonManager.LoadText(response.Content);
+                        subcodigo.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                        subcodigo.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                    }
+                    catch
+                    {
+                    }
 
-                    /// Retorno de subcodigo a PTA
-                    _subcodigoRepository.Update(subcodigo);
+                    try
+                    {
+                        if (subcodigo.CodigoError.Equals(DbResponseCode.Success))
+                            _subcodigoRepository.Update(subcodigo);
+                    }
+                    catch
+                    {
+                    }
                 }
                 return Ok(subcodigos);
             }
@@ -142,7 +155,18 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-
+                    Sucursal = new
+                    {
+                        Accion = subcodigo.Accion,
+                        Dk_Agencia = subcodigo.DkAgencia,
+                        Correlativo_Subcodigo = subcodigo.CorrelativoSubcodigo,
+                        Nombre_Sucursal = subcodigo.NombreSucursal,
+                        Direccion_Sucursal = subcodigo.DireccionSucursal,
+                        Estado_Sucursal = subcodigo.EstadoSucursal,
+                        Promotor = subcodigo.Promotor,
+                        Condicion_Pago = subcodigo.CondicionPago,
+                        Tipo_Sucursal = "IA"
+                    }
                 };
             }
             catch (Exception ex)

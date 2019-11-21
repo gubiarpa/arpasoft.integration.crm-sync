@@ -23,15 +23,12 @@ namespace Expertia.Estructura.Repository.InterAgencias
             try
             {
                 var operation = new Operation();
-                object value;
 
                 #region Parameter
                 /// (01) P_CODIGO_ERROR
-                value = DBNull.Value;
-                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 /// (02) P_MENSAJE_ERROR
-                value = DBNull.Value;
-                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
+                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 /// (03) P_NOMBRE_USUARIO
                 AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, subcodigo.Usuario);
                 /// (04) P_ACCION

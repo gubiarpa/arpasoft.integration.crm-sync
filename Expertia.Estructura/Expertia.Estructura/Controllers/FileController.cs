@@ -47,10 +47,10 @@ namespace Expertia.Estructura.Controllers
                 if (agenciasPnrs == null || agenciasPnrs.ToList().Count.Equals(0)) return Ok();
 
                 /// Configuraciones
-                var authServer = ConfigAccess.GetValueInAppSettings("AUTH_SERVER");
-                var authMethodName = ConfigAccess.GetValueInAppSettings("AUTH_METHODNAME");
-                var crmServer = ConfigAccess.GetValueInAppSettings("CRM_SERVER");
-                var crmPnrMethod = ConfigAccess.GetValueInAppSettings("PNR_METHODNAME");
+                var authServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
+                var authMethodName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthMethod);
+                var crmServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.CrmServer);
+                var crmPnrMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.PnrMethod);
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetToken(authServer, authMethodName, Method.POST);
@@ -66,12 +66,13 @@ namespace Expertia.Estructura.Controllers
                     {
                         agenciaPnr.UnidadNegocio = unidadNegocio.Descripcion;
                         agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
-                        var responsePnr = RestBase.Execute(crmServer, crmPnrMethod, Method.POST, ToSalesforceEntity(agenciaPnr), true, token);
+                        var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
+                        var responsePnr = RestBase.Execute(crmServer, crmPnrMethod, Method.POST, agenciaPnrSf, true, token);
                         JsonManager.LoadText(responsePnr.Content);
-                        agenciaPnr.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
-                        agenciaPnr.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
-                        agenciaPnr.DkAgencia = int.Parse(JsonManager.GetSetting("ID_CUENTA_SF"));
-                        agenciaPnr.IdOportunidad = JsonManager.GetSetting("ID_OPORTUNIDAD_SF");
+                        agenciaPnr.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                        agenciaPnr.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                        agenciaPnr.IdCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
+                        agenciaPnr.IdOportunidad = JsonManager.GetSetting(OutParameter.SF_IdOportunidad);
                     }
                     catch
                     {
@@ -86,13 +87,14 @@ namespace Expertia.Estructura.Controllers
 
                             /// a. Envío de Files
                             var files = (IEnumerable<File>)_operCollection[_unidadNegocio][OutParameter.CursorFile];
-                            var crmFileMethod = ConfigAccess.GetValueInAppSettings("FILE_METHODNAME");
+                            var crmFileMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.FileMethod);
 
                             foreach (var file in files)
                             {
                                 try
                                 {
-                                    var responseFile = RestBase.Execute(crmServer, crmFileMethod, Method.POST, ToSalesforceEntity(file), true, token);
+                                    var fileSf = ToSalesforceEntity(file);
+                                    var responseFile = RestBase.Execute(crmServer, crmFileMethod, Method.POST, fileSf, true, token);
                                     JsonManager.LoadText(responseFile.Content);
                                     file.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
                                     file.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
@@ -105,12 +107,13 @@ namespace Expertia.Estructura.Controllers
 
                             /// b. Envío de Boletos
                             var boletos = (IEnumerable<Boleto>)_operCollection[_unidadNegocio][OutParameter.CursorBoleto];
-                            var crmBoletoMethod = ConfigAccess.GetValueInAppSettings("BOLETO_METHODNAME");
+                            var crmBoletoMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.BoletoMethod);
                             foreach (var boleto in boletos)
                             {
                                 try
                                 {
-                                    var responseBoleto = RestBase.Execute(crmServer, crmBoletoMethod, Method.POST, ToSalesforceEntity(boleto), true, token);
+                                    var boletoSf = ToSalesforceEntity(boleto);
+                                    var responseBoleto = RestBase.Execute(crmServer, crmBoletoMethod, Method.POST, boletoSf, true, token);
                                     JsonManager.LoadText(responseBoleto.Content);
                                     boleto.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
                                     boleto.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
@@ -157,14 +160,16 @@ namespace Expertia.Estructura.Controllers
             }
             return unidadNegocioKey;
         }
+        #endregion
 
+        #region SalesforceEntities
         private object ToSalesforceEntity(AgenciaPnr agenciaPnr)
         {
             try
             {
                 return new
                 {
-                    Pnr = new
+                    PNR = new
                     {
                         Dk_Agencia = agenciaPnr.DkAgencia.ToString(),
                         Pnr = agenciaPnr.PNR
@@ -186,7 +191,9 @@ namespace Expertia.Estructura.Controllers
                     Id_Oportunidad_Sf = file.IdOportunidad,
                     Resumen = new
                     {
-                        Objeto = "FILE",
+                        Accion = file.Accion,
+                        File = file.NumeroFile.ToString(),
+                        Objeto = "FILE", // Hardcode
                         Estado_File = file.EstadoFile,
                         Unidad_Negocio = file.UnidadNegocio,
                         Sucursal = file.Sucursal,
@@ -197,6 +204,7 @@ namespace Expertia.Estructura.Controllers
                         Fecha_Fin = file.FechaFin,
                         Cliente = file.Cliente,
                         Subcodigo = file.Subcodigo,
+                        Contacto = file.Contacto,
                         Condicion_Pago = file.CondicionPago,
                         Num_Pasajeros = file.NumPasajeros,
                         Costo = file.Costo,
