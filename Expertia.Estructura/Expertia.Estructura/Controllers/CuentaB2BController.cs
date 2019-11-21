@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
@@ -103,6 +104,12 @@ namespace Expertia.Estructura.Controllers
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
+        }
+
+        [Route(RouteAction.Send)]
+        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
+        {
+            return Ok();
         }
         #endregion
 

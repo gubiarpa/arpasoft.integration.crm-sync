@@ -182,6 +182,7 @@
     <Compile Include="Models\CuentaB2C.cs" />
     <Compile Include="Models\Auxiliar\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
+    <Compile Include="Models\CuentaPta.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\Foreign\ForeignKey.cs" />
     <Compile Include="Models\Auxiliar\Direccion.cs" />
