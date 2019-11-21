@@ -41,6 +41,7 @@ namespace Expertia.Estructura.Controllers
 
                 /// I. Consulta de Oportunidades
                 var oportunidades = (IEnumerable<Oportunidad>)_oportunidadCollection[_unidadNegocio].GetOportunidades()[OutParameter.CursorOportunidad];
+                if (oportunidades == null || oportunidades.ToList().Count.Equals(0)) return Ok();
 
                 /// Configuraciones
                 var authServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
