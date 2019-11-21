@@ -1,5 +1,4 @@
 ﻿using Expertia.Estructura.Models;
-using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
@@ -22,7 +21,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         public Operation GetNewAgenciaPnr()
         {
             var operation = new Operation();
-            
+
             #region Parameters
             // (1) P_CODIGO_ERROR
             AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);

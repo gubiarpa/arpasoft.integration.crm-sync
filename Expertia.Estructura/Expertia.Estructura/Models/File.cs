@@ -1,5 +1,4 @@
-﻿using Expertia.Estructura.Models.Auxiliar;
-using Expertia.Estructura.Models.Behavior;
+﻿using Expertia.Estructura.Models.Behavior;
 using System;
 
 namespace Expertia.Estructura.Models
