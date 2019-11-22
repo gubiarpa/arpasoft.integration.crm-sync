@@ -105,12 +105,6 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
-
-        [Route(RouteAction.Send)]
-        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
-        {
-            return Ok();
-        }
         #endregion
 
         #region Auxiliar

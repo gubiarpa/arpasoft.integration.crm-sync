@@ -34,6 +34,7 @@ namespace Expertia.Estructura.Utils
         public const string Subcodigo = "api/subcodigo";
         public const string File = "api/file";
         public const string Oportunidad = "api/oportunidad";
+        public const string CuentaPta = "api/cuentapta";
     }
 
     public enum ActionMethod
@@ -122,13 +123,18 @@ namespace Expertia.Estructura.Utils
         public const string IA_Create_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string IA_Read_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_SUBCODIGO";
         public const string IA_Update_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_SUBCODIGO";
-        /// File
+        /// Agencia PNR
         public const string IA_Read_AgenciaPnr = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_AGENCIA_PNR_NOVEDAD";
+        /// File
         public const string IA_Read_File = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_FILE_NOVEDAD";
         public const string IA_Update_File = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_FILE";
+        /// Boleto
         public const string IA_Update_Boleto = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_BOLETO";
+        /// Oportunidad
         public const string IA_Read_Oportunidad = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_OPORTUNIDAD";
         public const string IA_Update_Oportunidad = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_OPOR";
+        /// Cuenta PTA
+        public const string IA_Read_CuentaPta = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_CLIENTE";
         #endregion
     }
 
@@ -145,6 +151,7 @@ namespace Expertia.Estructura.Utils
         public const string FileMethod = "FILE_METHODNAME";
         public const string BoletoMethod = "BOLETO_METHODNAME";
         public const string OportunidadMethod = "OPORTUNIDAD_METHODNAME";
+        public const string CuentaPtaMethod = "CUENTAPTA_METHODNAME";
         #endregion
     }
 
@@ -171,7 +178,7 @@ namespace Expertia.Estructura.Utils
         public const string IdActualizados = "P_ACTUALIZADOS";
         #endregion
 
-        #region Fields
+        #region Cursors
         public const string CursorSubcodigo = "P_SUBCODIGO";
         public const string CursorCotizacion = "P_COTIZACION";
         public const string CursorCotizacionDet = "P_COTIZACION_DETALLE";
@@ -179,6 +186,10 @@ namespace Expertia.Estructura.Utils
         public const string CursorFile = "P_FILE";
         public const string CursorBoleto = "P_BOLETO";
         public const string CursorOportunidad = "P_OPORTUNIDAD";
+        public const string CursorCuentaPta = "P_CLIENTE";
+        #endregion
+
+        #region Fields
         public const string NombrePuntoVenta = "P_NOMBRE_PUNTO_VENTA";
         public const string NumeroSubcodigo = "P_NUMERO_SUBCODIGO";
         public const string NombreGrupo = "P_NOMBRE_GRUPO";

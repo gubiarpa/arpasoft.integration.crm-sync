@@ -158,6 +158,7 @@
     <Compile Include="Controllers\CuentaB2BController.cs" />
     <Compile Include="Controllers\CuentaB2CController.cs" />
     <Compile Include="Controllers\ContactoController.cs" />
+    <Compile Include="Controllers\CuentaPtaController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\OportunidadController.cs" />
     <Compile Include="Controllers\SubcodigoController.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
+    <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />
     <Compile Include="Repository\Behavior\IFileRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadRepository.cs" />
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Repository\DestinosMundiales\Subcodigo_DM_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Contacto_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
+    <Compile Include="Repository\InterAgencias\CuentaPta_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\File_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
