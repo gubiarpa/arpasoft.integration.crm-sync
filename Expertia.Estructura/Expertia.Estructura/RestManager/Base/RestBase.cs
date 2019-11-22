@@ -33,6 +33,11 @@ namespace Expertia.Estructura.RestManager.Base
             }
         }
 
+        public static string GetTokenByKey(string serverNameKey, string methodNameKey, Method methodType = Method.POST)
+        {
+            return GetToken(ConfigAccess.GetValueInAppSettings(serverNameKey), ConfigAccess.GetValueInAppSettings(methodNameKey), methodType);
+        }
+
         public static IRestResponse Execute(string serverName, string methodName, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "")
         {
             try
@@ -47,6 +52,11 @@ namespace Expertia.Estructura.RestManager.Base
             {
                 throw ex;
             }
+        }
+
+        public static IRestResponse ExecuteByKey(string serverNameKey, string methodNameKey, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "")
+        {
+            return Execute(ConfigAccess.GetValueInAppSettings(serverNameKey), ConfigAccess.GetValueInAppSettings(methodNameKey), methodType, body, isAuth, token);
         }
         #endregion
     }

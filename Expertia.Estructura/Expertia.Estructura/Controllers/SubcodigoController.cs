@@ -83,14 +83,8 @@ namespace Expertia.Estructura.Controllers
 
                 if (subcodigos == null || subcodigos.ToList().Count.Equals(0)) return Ok();
 
-                /// Configuraciones
-                var authServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
-                var authMethodName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthMethod);
-                var crmServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.CrmServer);
-                var crmSubcodigoMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.SubcodigoMethod);
-
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetToken(authServer, authMethodName);
+                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
                 foreach (var subcodigo in subcodigos)
                 {
@@ -98,7 +92,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         /// Envío de subcodigo a Salesforce
                         var subcodigoSf = ToSalesforceEntity(subcodigo);
-                        var response = RestBase.Execute(crmServer, crmSubcodigoMethod, Method.POST, subcodigoSf, true, token);
+                        var response = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
                         JsonManager.LoadText(response.Content);
                         subcodigo.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
                         subcodigo.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
@@ -109,8 +103,7 @@ namespace Expertia.Estructura.Controllers
 
                     try
                     {
-                        if (subcodigo.CodigoError.Equals(DbResponseCode.Success))
-                            _subcodigoRepository.Update(subcodigo);
+                        if (!string.IsNullOrEmpty(subcodigo.CodigoError)) _subcodigoRepository.Update(subcodigo);
                     }
                     catch
                     {
