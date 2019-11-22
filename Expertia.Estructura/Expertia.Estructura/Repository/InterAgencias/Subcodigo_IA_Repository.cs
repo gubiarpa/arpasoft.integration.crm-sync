@@ -108,8 +108,6 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     case UnidadNegocioKeys.Interagencias:
                         spName = StoredProcedureName.IA_Read_Subcodigo;
                         break;
-                    default:
-                        break;
                 }
 
                 ExecuteStoredProcedure(spName);
@@ -150,7 +148,23 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.IA_Update_Subcodigo);
+                var spName = string.Empty;
+                switch (_unidadNegocio)
+                {
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        spName = StoredProcedureName.DM_Update_Subcodigo;
+                        break;
+                    case UnidadNegocioKeys.Interagencias:
+                        spName = StoredProcedureName.IA_Update_Subcodigo;
+                        break;
+                }
+
+                ExecuteStoredProcedure(spName);
+
+                operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+                operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+                operation[Operation.Result] = ResultType.Success;
                 #endregion
 
                 return operation;

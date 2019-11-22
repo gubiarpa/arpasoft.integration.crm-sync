@@ -155,17 +155,17 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-                    Sucursal = new
+                    info = new
                     {
+                        UnidadNegocio = subcodigo.UnidadNegocio,
                         Accion = subcodigo.Accion,
-                        Dk_Agencia = subcodigo.DkAgencia,
-                        Correlativo_Subcodigo = subcodigo.CorrelativoSubcodigo,
-                        Nombre_Sucursal = subcodigo.NombreSucursal,
-                        Direccion_Sucursal = subcodigo.DireccionSucursal,
-                        Estado_Sucursal = subcodigo.EstadoSucursal,
+                        DkAgencia = subcodigo.DkAgencia.ToString(),
+                        CorrelativoSubcodigo = subcodigo.CorrelativoSubcodigo.ToString(),
+                        DireccionSucursal = subcodigo.DireccionSucursal,
+                        EstadoSucursal = subcodigo.EstadoSucursal,
+                        NombreSucursal = subcodigo.NombreSucursal,
                         Promotor = subcodigo.Promotor,
-                        Condicion_Pago = subcodigo.CondicionPago,
-                        Tipo_Sucursal = "IA"
+                        CondicionPago = subcodigo.CondicionPago
                     }
                 };
             }
