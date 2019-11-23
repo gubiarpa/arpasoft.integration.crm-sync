@@ -9,6 +9,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -21,13 +22,14 @@ namespace Expertia.Estructura.Controllers
     public class FileController : BaseController<object>
     {
         #region Properties
-        private IDictionary<UnidadNegocioKeys?, IFileRepository> _fileCollection;
+        private IFileRepository _fileRepository;
+        //private IDictionary<UnidadNegocioKeys?, IFileRepository> _fileCollection;
         #endregion
 
         #region Constructor
         public FileController()
         {
-            _fileCollection = new Dictionary<UnidadNegocioKeys?, IFileRepository>();
+            //_fileCollection = new Dictionary<UnidadNegocioKeys?, IFileRepository>();
         }
         #endregion
 
@@ -42,97 +44,97 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de PNRs a PTA
-                _operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetNewAgenciaPnr();
-                var agenciasPnrs = (IEnumerable<AgenciaPnr>)_operCollection[_unidadNegocio][OutParameter.CursorAgenciaPnr];
+                var agenciasPnrs = (IEnumerable<AgenciaPnr>)_fileRepository.GetNewAgenciaPnr()[OutParameter.CursorAgenciaPnr];
                 if (agenciasPnrs == null || agenciasPnrs.ToList().Count.Equals(0)) return Ok();
 
-                /// Configuraciones
-                var authServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
-                var authMethodName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthMethod);
-                var crmServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.CrmServer);
-                var crmPnrMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.PnrMethod);
-
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetToken(authServer, authMethodName, Method.POST);
+                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
                 /// Intentando enviar en paralelo
                 var agenciasPnrTasks = new List<Task>();
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
-                    /*var task = new Task(() =>
-                    {*/
-                    /// II. Completar PNR en Salesforce
-                    try
+                    var task = new Task(() =>
                     {
-                        agenciaPnr.UnidadNegocio = unidadNegocio.Descripcion;
-                        agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
-                        var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
-                        var responsePnr = RestBase.Execute(crmServer, crmPnrMethod, Method.POST, agenciaPnrSf, true, token);
-                        JsonManager.LoadText(responsePnr.Content);
-                        agenciaPnr.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                        agenciaPnr.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                        agenciaPnr.IdCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
-                        agenciaPnr.IdOportunidad = JsonManager.GetSetting(OutParameter.SF_IdOportunidad);
-                    }
-                    catch
-                    {
-                    }
-
-                    /// III. Envío de Files, Boletos a Salesforce
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
+                        /// II. Completar PNR en Salesforce
+                        try
                         {
-                            _operCollection[_unidadNegocio] = _fileCollection[_unidadNegocio].GetFileAndBoleto(agenciaPnr);
-
-                            /// a. Envío de Files
-                            var files = (IEnumerable<File>)_operCollection[_unidadNegocio][OutParameter.CursorFile];
-                            var crmFileMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.FileMethod);
-
-                            foreach (var file in files)
+                            agenciaPnr.UnidadNegocio = unidadNegocio.Descripcion;
+                            agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
+                            var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
+                            var responsePnr = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
+                            if (responsePnr.StatusCode.Equals(HttpStatusCode.OK))
                             {
-                                try
-                                {
-                                    var fileSf = ToSalesforceEntity(file);
-                                    var responseFile = RestBase.Execute(crmServer, crmFileMethod, Method.POST, fileSf, true, token);
-                                    JsonManager.LoadText(responseFile.Content);
-                                    file.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
-                                    file.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
-                                    _fileCollection[_unidadNegocio].UpdateFile(file);
-                                }
-                                catch
-                                {
-                                }
+                                JsonManager.LoadText(responsePnr.Content);
+                                agenciaPnr.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                                agenciaPnr.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                                agenciaPnr.IdCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
+                                agenciaPnr.IdOportunidad = JsonManager.GetSetting(OutParameter.SF_IdOportunidad);
                             }
+                        }
+                        catch
+                        {
+                        }
 
-                            /// b. Envío de Boletos
-                            var boletos = (IEnumerable<Boleto>)_operCollection[_unidadNegocio][OutParameter.CursorBoleto];
-                            var crmBoletoMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.BoletoMethod);
-                            foreach (var boleto in boletos)
+                        /// III. Envío de Files, Boletos a Salesforce
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
                             {
-                                try
+                                _operCollection[_unidadNegocio] = _fileRepository.GetFileAndBoleto(agenciaPnr);
+
+                                /// a. Envío de Files
+                                var files = (IEnumerable<File>)_operCollection[_unidadNegocio][OutParameter.CursorFile];
+                                foreach (var file in files)
                                 {
-                                    var boletoSf = ToSalesforceEntity(boleto);
-                                    var responseBoleto = RestBase.Execute(crmServer, crmBoletoMethod, Method.POST, boletoSf, true, token);
-                                    JsonManager.LoadText(responseBoleto.Content);
-                                    boleto.CodigoError = JsonManager.GetSetting("CODIGO_ERROR");
-                                    boleto.MensajeError = JsonManager.GetSetting("MENSAJE_ERROR");
-                                    _fileCollection[_unidadNegocio].UpdateBoleto(boleto);
+                                    try
+                                    {
+                                        var fileSf = ToSalesforceEntity(file);
+                                        var responseFile = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.FileMethod, Method.POST, fileSf, true, token);
+                                        if (responseFile.StatusCode.Equals(HttpStatusCode.OK))
+                                        {
+                                            JsonManager.LoadText(responseFile.Content);
+                                            file.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                                            file.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                                            _fileRepository.UpdateFile(file);
+                                        }
+                                    }
+                                    catch
+                                    {
+                                    }
                                 }
-                                catch
+
+                                /// b. Envío de Boletos
+                                var boletos = (IEnumerable<Boleto>)_operCollection[_unidadNegocio][OutParameter.CursorBoleto];
+                                foreach (var boleto in boletos)
                                 {
+                                    try
+                                    {
+                                        var boletoSf = ToSalesforceEntity(boleto);
+                                        var responseBoleto = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.BoletoMethod, Method.POST, boletoSf, true, token);
+                                        if (responseBoleto.StatusCode.Equals(HttpStatusCode.OK))
+                                        {
+                                            JsonManager.LoadText(responseBoleto.Content);
+                                            boleto.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                                            boleto.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                                            _fileRepository.UpdateBoleto(boleto);
+                                        }
+                                    }
+                                    catch
+                                    {
+                                    }
                                 }
                             }
                         }
-                    }
-                    catch
-                    {
-                    }
-                    /*});*/
-                    /*task.Start();*/
+                        catch
+                        {
+                        }
+                    });
+                    task.Start();
+                    agenciasPnrTasks.Add(task);
                 }
-                //Task.WaitAll(tasks.ToArray());
-                return Ok();
+                Task.WaitAll(agenciasPnrTasks.ToArray());
+                return Ok(agenciasPnrs);
             }
             catch (Exception ex)
             {
@@ -151,7 +153,8 @@ namespace Expertia.Estructura.Controllers
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.Interagencias:
-                    _fileCollection.Add(UnidadNegocioKeys.Interagencias, new File_IA_Repository());
+                    _fileRepository = new File_IA_Repository();
+                    //_fileCollection.Add(UnidadNegocioKeys.Interagencias, new File_IA_Repository());
                     break;
             }
             return unidadNegocioKey;
@@ -165,9 +168,9 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-                    PNR = new
+                    info = new
                     {
-                        Dk_Agencia = agenciaPnr.DkAgencia.ToString(),
+                        DkAgencia = agenciaPnr.DkAgencia.ToString(),
                         Pnr = agenciaPnr.PNR
                     }
                 };

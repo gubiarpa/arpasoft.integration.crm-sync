@@ -10,6 +10,8 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -86,29 +88,35 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
+                var subcodigoTasks = new List<Task>();
                 foreach (var subcodigo in subcodigos)
                 {
-                    try
+                    var task = new Task(() =>
                     {
-                        /// Envío de subcodigo a Salesforce
-                        var subcodigoSf = ToSalesforceEntity(subcodigo);
-                        var response = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
-                        JsonManager.LoadText(response.Content);
-                        subcodigo.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                        subcodigo.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                    }
-                    catch
-                    {
-                    }
+                        try
+                        {
+                            /// Envío de subcodigo a Salesforce
+                            var subcodigoSf = ToSalesforceEntity(subcodigo);
+                            var response = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
+                            if (response.StatusCode.Equals(HttpStatusCode.OK))
+                            {
+                                JsonManager.LoadText(response.Content);
+                                subcodigo.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                                subcodigo.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                            }
 
-                    try
-                    {
-                        if (!string.IsNullOrEmpty(subcodigo.CodigoError)) _subcodigoRepository.Update(subcodigo);
-                    }
-                    catch
-                    {
-                    }
+                            /// Actualización de estado de subcodigo a PTA
+                            if (!string.IsNullOrEmpty(subcodigo.CodigoError)) _subcodigoRepository.Update(subcodigo);
+                        }
+                        catch
+                        {
+                        }
+                    });
+                    task.Start();
+                    subcodigoTasks.Add(task);
                 }
+
+                Task.WaitAll(subcodigoTasks.ToArray());
                 return Ok(subcodigos);
             }
             catch (Exception ex)
