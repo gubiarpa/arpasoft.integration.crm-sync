@@ -94,6 +94,7 @@ namespace Expertia.Estructura.Utils
                     case UnidadNegocioKeys.CondorTravel: return UnidadNegocioShortNames.CondorTravel;
                     case UnidadNegocioKeys.DestinosMundiales: return UnidadNegocioShortNames.DestinosMundiales;
                     case UnidadNegocioKeys.Interagencias: return UnidadNegocioShortNames.InterAgencias;
+                    case UnidadNegocioKeys.AppWebs: return UnidadNegocioShortNames.AppWebs;
                     default: return null;
                 }
             }
@@ -112,6 +113,7 @@ namespace Expertia.Estructura.Utils
                     case UnidadNegocioKeys.CondorTravel: return ConnectionKeys.CondorConnKey;
                     case UnidadNegocioKeys.DestinosMundiales: return ConnectionKeys.DMConnKey;
                     case UnidadNegocioKeys.Interagencias: return ConnectionKeys.IAConnKey;
+                    case UnidadNegocioKeys.AppWebs: return ConnectionKeys.AWConnKey;
                     default: return null;
                 }
             }

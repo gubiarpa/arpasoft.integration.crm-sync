@@ -15,6 +15,7 @@ namespace Expertia.Estructura.Utils
         public const string CondorConnKey = "CTConnKey";
         public const string DMConnKey = "DMConnKey";
         public const string IAConnKey = "IAConnKey";
+        public const string AWConnKey = "AWConnKey";
     }
 
     public static class LogKeys
@@ -136,6 +137,12 @@ namespace Expertia.Estructura.Utils
         /// Cuenta PTA
         public const string IA_Read_CuentaPta = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_CLIENTE";
         #endregion
+
+        #region AppWebs
+        /// Oportunidad
+        public const string AW_Read_Oportunidad = "APPWEBS.CRM_PKG.SP_LISTAR_OPORTUNIDAD";
+        public const string AW_Update_Oportunidad = "APPWEBS.CRM_PKG.SP_ACTUALIZAR_ENVIO_OPOR";
+        #endregion
     }
 
     public static class SalesforceKeys
@@ -217,7 +224,8 @@ namespace Expertia.Estructura.Utils
     {
         CondorTravel,
         DestinosMundiales,
-        Interagencias
+        Interagencias,
+        AppWebs
     }
 
     public static class UnidadNegocioShortNames
@@ -225,6 +233,7 @@ namespace Expertia.Estructura.Utils
         public const string CondorTravel = "CT";
         public const string DestinosMundiales = "DM";
         public const string InterAgencias = "IA";
+        public const string AppWebs = "AW";
     }
 
     public static class UnidadNegocioLongName

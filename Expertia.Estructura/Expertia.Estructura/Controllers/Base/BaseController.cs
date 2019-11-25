@@ -93,6 +93,10 @@ namespace Expertia.Estructura.Controllers.Base
             {
                 return UnidadNegocioKeys.Interagencias;
             }
+            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.AppWebs.GetKeyValues()).ToUpper().Split(Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
+            {
+                return UnidadNegocioKeys.AppWebs;
+            }
             return null;
         }
 

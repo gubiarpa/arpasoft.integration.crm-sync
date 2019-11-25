@@ -32,7 +32,17 @@ namespace Expertia.Estructura.Repository.InterAgencias
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.IA_Read_Oportunidad);
+            var spName = string.Empty;
+            switch (_unidadNegocio)
+            {
+                case UnidadNegocioKeys.Interagencias:
+                    spName = StoredProcedureName.IA_Read_Oportunidad;
+                    break;
+                case UnidadNegocioKeys.AppWebs:
+                    spName = StoredProcedureName.AW_Read_Oportunidad;
+                    break;
+            }
+            ExecuteStoredProcedure(spName);
             operation[OutParameter.CursorOportunidad] = ToOportunidad(GetDtParameter(OutParameter.CursorOportunidad));
             #endregion
 
@@ -65,7 +75,17 @@ namespace Expertia.Estructura.Repository.InterAgencias
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.IA_Update_Oportunidad);
+            var spName = string.Empty;
+            switch (_unidadNegocio)
+            {
+                case UnidadNegocioKeys.Interagencias:
+                    spName = StoredProcedureName.IA_Update_Oportunidad;
+                    break;
+                case UnidadNegocioKeys.AppWebs:
+                    spName = StoredProcedureName.AW_Update_Oportunidad;
+                    break;
+            }
+            ExecuteStoredProcedure(spName);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             #endregion
