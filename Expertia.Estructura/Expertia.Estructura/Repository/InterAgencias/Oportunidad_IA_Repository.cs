@@ -44,21 +44,23 @@ namespace Expertia.Estructura.Repository.InterAgencias
             var operation = new Operation();
 
             #region Parameters
-            /// (1) P_CODIGO_ERROR
+            /// (01) P_CODIGO_ERROR
             AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (2) P_MENSAJE_ERROR
+            /// (02) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (3) P_PNR
+            /// (03) P_PNR
             AddParameter("P_PNR", OracleDbType.Varchar2, oportunidad.Pnr1);
-            /// (4) P_ID_OPORTUNIDAD_CRM
+            /// (04) P_ID_CLIENTE
+            AddParameter("P_ID_CLIENTE", OracleDbType.Int32, oportunidad.DkCuenta);
+            /// (05) P_ID_OPORTUNIDAD_CRM
             AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, oportunidad.IdOportunidad);
-            /// (5) P_NOMBRE_SUCURSAL
+            /// (06) P_NOMBRE_SUCURSAL
             AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, oportunidad.Sucursal);
-            /// (6) P_ES_ATENCION
+            /// (07) P_ES_ATENCION
             AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, oportunidad.CodigoError);
-            /// (7) P_DESCRIPCION
+            /// (08) P_DESCRIPCION
             AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, oportunidad.MensajeError);
-            /// (8) P_ACTUALIZADOS
+            /// (09) P_ACTUALIZADOS
             AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
             #endregion
 

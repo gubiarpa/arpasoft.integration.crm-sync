@@ -59,10 +59,6 @@ namespace Expertia.Estructura.Controllers
                             JsonManager.LoadText(responseOportunidad.Content);
                             oportunidad.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
                             oportunidad.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                        }
-
-                        if (oportunidad.CodigoError.Equals(DbResponseCode.Success))
-                        {
                             _oportunidadRepository.Update(oportunidad);
                         }
                     }
