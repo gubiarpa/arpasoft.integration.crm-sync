@@ -9,6 +9,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -17,13 +18,13 @@ namespace Expertia.Estructura.Controllers
     public class OportunidadController : BaseController<object>
     {
         #region Properties
-        private IDictionary<UnidadNegocioKeys?, IOportunidadRepository> _oportunidadCollection;
+        private IOportunidadRepository _oportunidadRepository;
         #endregion
 
         #region Constructor
         public OportunidadController()
         {
-            _oportunidadCollection = new Dictionary<UnidadNegocioKeys?, IOportunidadRepository>();
+            //_oportunidadCollection = new Dictionary<UnidadNegocioKeys?, IOportunidadRepository>();
         }
         #endregion
 
@@ -38,17 +39,11 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Oportunidades
-                var oportunidades = (IEnumerable<Oportunidad>)_oportunidadCollection[_unidadNegocio].GetOportunidades()[OutParameter.CursorOportunidad];
+                var oportunidades = (IEnumerable<Oportunidad>)_oportunidadRepository.GetOportunidades()[OutParameter.CursorOportunidad];
                 if (oportunidades == null || oportunidades.ToList().Count.Equals(0)) return Ok();
 
-                /// Configuraciones
-                var authServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
-                var authMethodName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthMethod);
-                var crmServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.CrmServer);
-                var crmOportunidadMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.OportunidadMethod);
-
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetToken(authServer, authMethodName, Method.POST);
+                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
 
                 foreach (var oportunidad in oportunidades)
                 {
@@ -58,29 +53,25 @@ namespace Expertia.Estructura.Controllers
                         oportunidad.UnidadNegocio = unidadNegocio.Descripcion;
                         oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
                         var oportunidadSf = ToSalesfoceEntity(oportunidad);
-                        var responseOportunidad = RestBase.Execute(crmServer, crmOportunidadMethod, Method.POST, oportunidadSf, true, token);
-                        JsonManager.LoadText(responseOportunidad.Content);
-                        oportunidad.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                        oportunidad.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                        var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidadSf, true, token);
+                        if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
+                        {
+                            JsonManager.LoadText(responseOportunidad.Content);
+                            oportunidad.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                            oportunidad.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                        }
+
+                        if (oportunidad.CodigoError.Equals(DbResponseCode.Success))
+                        {
+                            _oportunidadRepository.Update(oportunidad);
+                        }
                     }
                     catch
                     {
                     }
-
-                    /// III. Actualización en PTA
-                    try
-                    {
-                        if (oportunidad.CodigoError.Equals(DbResponseCode.Success))
-                        {
-                            _oportunidadCollection[_unidadNegocio].Update(oportunidad);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                    }
                 }
 
-                return Ok();
+                return Ok(oportunidades);
             }
             catch (Exception)
             {
@@ -147,7 +138,7 @@ namespace Expertia.Estructura.Controllers
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.Interagencias:
-                    _oportunidadCollection.Add(UnidadNegocioKeys.Interagencias, new Oportunidad_IA_Repository());
+                    _oportunidadRepository = new Oportunidad_IA_Repository();
                     break;
             }
             return unidadNegocioKey;
