@@ -122,7 +122,7 @@ namespace Expertia.Estructura.Utils
         public const string IA_Update_Contacto = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
         /// Subcodigo
         public const string IA_Create_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_CREAR_SUBCODIGO";
-        public const string IA_Read_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ENVIAR_SUBCODIGO";
+        public const string IA_Read_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_SUBCODIGO";
         public const string IA_Update_Subcodigo = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_SUBCODIGO";
         /// Agencia PNR
         public const string IA_Read_AgenciaPnr = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_AGENCIA_PNR_NOVEDAD";
@@ -136,6 +136,7 @@ namespace Expertia.Estructura.Utils
         public const string IA_Update_Oportunidad = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_OPOR";
         /// Cuenta PTA
         public const string IA_Read_CuentaPta = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_CLIENTE";
+        public const string IA_Update_CuentaPta = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_CLIENTE";
         #endregion
 
         #region AppWebs

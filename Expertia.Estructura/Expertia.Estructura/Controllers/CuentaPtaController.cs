@@ -5,9 +5,12 @@ using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
 using Expertia.Estructura.Utils;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -29,7 +32,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            IEnumerable<CuentaPta> cuentaPtas = null;
+            IEnumerable<CuentaPta> cuentasPtas = null;
             try
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
@@ -37,24 +40,44 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Cuentas PTA
-                cuentaPtas = (IEnumerable<CuentaPta>)(_cuentaPtaRepository.GetCuenta())[OutParameter.CursorCuentaPta];
-                if (cuentaPtas == null || cuentaPtas.ToList().Count.Equals(0)) return Ok();
-
-                /// Configuraciones
-                var authServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
-                var authMethodName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthMethod);
-                var crmServer = ConfigAccess.GetValueInAppSettings(SalesforceKeys.CrmServer);
-                var crmSubcodigoMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.CuentaPtaMethod);
+                cuentasPtas = (IEnumerable<CuentaPta>)(_cuentaPtaRepository.Read())[OutParameter.CursorCuentaPta];
+                if (cuentasPtas == null || cuentasPtas.ToList().Count.Equals(0)) return Ok();
 
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetToken(authServer, authMethodName);
+                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
-                foreach (var cuentaPta in cuentaPtas)
+                var cuentasPtasTasks = new List<Task>();
+                foreach (var cuentaPta in cuentasPtas)
                 {
-                    var cuentaPtaSf = ToSalesforceEntity(cuentaPta);
-                }
+                    var cuentaPtaTask = new Task(() =>
+                    {
+                        try
+                        {
+                            /// Envío de CuentaPTA a Salesforce
+                            cuentaPta.UnidadNegocio = unidadNegocio.Descripcion;
+                            cuentaPta.CodigoError = cuentaPta.MensajeError = string.Empty;
+                            var cuentaPtaSf = ToSalesforceEntity(cuentaPta);
+                            var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaPta, true, token);
+                            if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
+                            {
+                                JsonManager.LoadText(responseCuentaPta.Content);
+                                cuentaPta.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                                cuentaPta.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                                cuentaPta.DkCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
+                            }
 
-                return Ok(cuentaPtas);
+                            /// Actualización de estado de Cuenta PTA hacia PTA
+                            if (!string.IsNullOrEmpty(cuentaPta.CodigoError)) _cuentaPtaRepository.update
+                        }
+                        catch
+                        {
+                        }
+                    });
+                    cuentaPtaTask.Start();
+                    cuentasPtasTasks.Add(cuentaPtaTask);
+                }
+                Task.WaitAll(cuentasPtasTasks.ToArray());
+                return Ok(new { CuentasPta = cuentasPtas });
             }
             catch (Exception ex)
             {

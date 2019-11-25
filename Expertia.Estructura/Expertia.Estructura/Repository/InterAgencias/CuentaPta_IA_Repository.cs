@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #endregion
 
         #region PublicMethods
-        public Operation GetCuenta()
+        public Operation Read()
         {
             var operation = new Operation();
 
@@ -38,6 +38,46 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
             return operation;
         }
+
+        public Operation Update(CuentaPta cuentaPta)
+        {
+            try
+            {
+                var operation = new Operation();
+
+                #region Parameters
+                /// (01) P_CODIGO_ERROR
+                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                /// (02) P_MENSAJE_ERROR
+                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                /// (03) P_ID_CUENTA
+                AddParameter("P_ID_CUENTA", OracleDbType.Int32, cuentaPta.DkCuenta);
+                /// (05) P_ES_ATENCION
+                AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, cuentaPta.CodigoError);
+                /// (06) P_DESCRIPCION
+                AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, cuentaPta.MensajeError);
+                /// (07) P_ACTUALIZADOS
+                AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+                #endregion
+
+                #region Invoke
+                var spName = string.Empty;
+                switch (_unidadNegocio)
+                {
+                    case UnidadNegocioKeys.Interagencias:
+                        spName = StoredProcedureName.IA_Update_CuentaPta;
+                        break;
+                }
+                #endregion
+
+                return operation;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
         #endregion
 
         #region Parse
@@ -51,7 +91,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 {
                     #region Loading
                     var accion = row.StringParse("ACCION");
-                    var dkCuenta = row.StringParse("DK_CUENTA");
+                    var dkCuenta = row.IntParse("DK_CUENTA");
                     var razonSocial = row.StringParse("RAZON_SOCIAL");
                     var nombreComercial = row.StringParse("NOMBRE_COMERCIAL");
                     var tipoCuenta = row.StringParse("TIPO_CUENTA");

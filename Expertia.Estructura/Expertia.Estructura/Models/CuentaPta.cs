@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Expertia.Estructura.Models.Behavior;
+using System;
 
 namespace Expertia.Estructura.Models
 {
-    public class CuentaPta
+    public class CuentaPta : ICrmApiResponse
     {
+        public string UnidadNegocio { get; set; }
         public string Accion { get; set; }
-        public string DkCuenta { get; set; }
+        public int DkCuenta { get; set; }
         public string RazonSocial { get; set; }
         public string NombreComercial { get; set; }
         public string TipoCuenta { get; set; }
@@ -53,5 +55,7 @@ namespace Expertia.Estructura.Models
         public float FacturacionAnual { get; set; }
         public float ProyeccionFacturacionAnual { get; set; }
         public DateTime InicioRelacionComercial { get; set; }
+        public string CodigoError { get; set; }
+        public string MensajeError { get; set; }
     }
 }

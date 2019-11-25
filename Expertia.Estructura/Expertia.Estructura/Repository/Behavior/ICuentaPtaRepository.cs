@@ -1,9 +1,11 @@
-﻿using Expertia.Estructura.Utils;
+﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Utils;
 
 namespace Expertia.Estructura.Repository.Behavior
 {
     public interface ICuentaPtaRepository
     {
-        Operation GetCuenta();
+        Operation Read();
+        Operation Update(CuentaPta cuentaPta);
     }
 }

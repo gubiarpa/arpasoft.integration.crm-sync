@@ -23,13 +23,11 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private IFileRepository _fileRepository;
-        //private IDictionary<UnidadNegocioKeys?, IFileRepository> _fileCollection;
         #endregion
 
         #region Constructor
         public FileController()
         {
-            //_fileCollection = new Dictionary<UnidadNegocioKeys?, IFileRepository>();
         }
         #endregion
 
@@ -37,16 +35,17 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
+            /// ♫ Listas de Respuesta
+            IEnumerable<AgenciaPnr> agenciasPnrs = null;
+            IEnumerable<File> files = null;
+            IEnumerable<Boleto> boletos = null;
+
             try
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
-                /// ♫ Listas de Respuesta
-                IEnumerable<AgenciaPnr> agenciasPnrs = null;
-                IEnumerable<File> files = null;
-                IEnumerable<Boleto> boletos = null;
 
                 /// I. Consulta de PNRs a PTA
                 agenciasPnrs = (IEnumerable<AgenciaPnr>)_fileRepository.GetNewAgenciaPnr()[OutParameter.CursorAgenciaPnr];
@@ -153,10 +152,7 @@ namespace Expertia.Estructura.Controllers
                     agenciasPnrTasks.Add(agenciaPnrTask);
                 }
                 Task.WaitAll(agenciasPnrTasks.ToArray());
-                return Ok(new
-                {
-                    AgenciasPnr = agenciasPnrs
-                });
+                return Ok(new { AgenciasPnr = agenciasPnrs });
             }
             catch (Exception ex)
             {
@@ -164,7 +160,7 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                //files.TryWriteLogObject(_logFileManager, _clientFeatures);
+                agenciasPnrs.TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
