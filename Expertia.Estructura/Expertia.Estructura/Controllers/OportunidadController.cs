@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -24,7 +25,6 @@ namespace Expertia.Estructura.Controllers
         #region Constructor
         public OportunidadController()
         {
-            //_oportunidadCollection = new Dictionary<UnidadNegocioKeys?, IOportunidadRepository>();
         }
         #endregion
 
@@ -32,6 +32,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
+            IEnumerable<Oportunidad> oportunidades = null;
             try
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
@@ -39,44 +40,54 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Oportunidades
-                var oportunidades = (IEnumerable<Oportunidad>)_oportunidadRepository.GetOportunidades()[OutParameter.CursorOportunidad];
+                oportunidades = (IEnumerable<Oportunidad>)_oportunidadRepository.GetOportunidades()[OutParameter.CursorOportunidad];
                 if (oportunidades == null || oportunidades.ToList().Count.Equals(0)) return Ok();
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
 
+                var oportunidadTasks = new List<Task>();
                 foreach (var oportunidad in oportunidades)
                 {
-                    /// II. Enviar Oportunidad a Salesforce
-                    try
+                    var task = new Task(() =>
                     {
-                        oportunidad.UnidadNegocio = unidadNegocio.Descripcion;
-                        oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
-                        var oportunidadSf = ToSalesfoceEntity(oportunidad);
-                        var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidadSf, true, token);
-                        if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
+                        /// II. Enviar Oportunidad a Salesforce
+                        try
                         {
-                            JsonManager.LoadText(responseOportunidad.Content);
-                            oportunidad.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                            oportunidad.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                            _oportunidadRepository.Update(oportunidad);
+                            oportunidad.UnidadNegocio = unidadNegocio.Descripcion;
+                            oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
+                            var oportunidadSf = ToSalesfoceEntity(oportunidad);
+                            var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidadSf, true, token);
+                            if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
+                            {
+                                JsonManager.LoadText(responseOportunidad.Content);
+                                oportunidad.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                                oportunidad.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                                _oportunidadRepository.Update(oportunidad);
+                            }
                         }
-                    }
-                    catch
-                    {
-                    }
+                        catch
+                        {
+                        }
+                    });
+                    task.Start();
+                    oportunidadTasks.Add(task);
                 }
 
+                Task.WaitAll(oportunidadTasks.ToArray());
                 return Ok(oportunidades);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                oportunidades = null;
+                throw ex;
             }
             finally
             {
-
+                (new
+                {
+                    LegacySystems = oportunidades
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
