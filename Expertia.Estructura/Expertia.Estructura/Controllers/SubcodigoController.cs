@@ -112,7 +112,7 @@ namespace Expertia.Estructura.Controllers
                         }
                         catch (Exception ex)
                         {
-                            subcodigo.CodigoError = "{ex}";
+                            subcodigo.CodigoError = ApiResponseCode.ErrorCode;
                             subcodigo.MensajeError = ex.Message;
                         }
                     }//);

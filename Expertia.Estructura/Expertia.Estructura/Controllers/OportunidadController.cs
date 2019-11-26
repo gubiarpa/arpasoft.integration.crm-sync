@@ -73,7 +73,7 @@ namespace Expertia.Estructura.Controllers
                         }
                         catch (Exception ex)
                         {
-                            oportunidad.CodigoError = "{ex}";
+                            oportunidad.CodigoError = ApiResponseCode.ErrorCode;
                             oportunidad.MensajeError = ex.Message;
                         }
                     }//);

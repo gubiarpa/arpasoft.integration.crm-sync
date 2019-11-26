@@ -72,7 +72,7 @@ namespace Expertia.Estructura.Controllers
                         }
                         catch (Exception ex)
                         {
-                            cuentaPta.CodigoError = "{ex}";
+                            cuentaPta.CodigoError = ApiResponseCode.ErrorCode;
                             cuentaPta.MensajeError = ex.Message;
                         }
                     }//);

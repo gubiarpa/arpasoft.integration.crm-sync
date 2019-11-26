@@ -249,6 +249,11 @@ namespace Expertia.Estructura.Utils
         public const char ListSeparator = ';';
     }
 
+    public static class ApiResponseCode
+    {
+        public const string ErrorCode = "{ex}";
+    }
+
     public static class DbResponseCode
     {
         // Response
