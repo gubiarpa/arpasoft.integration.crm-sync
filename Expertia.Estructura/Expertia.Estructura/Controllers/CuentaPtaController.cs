@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -46,10 +47,10 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
-                var cuentasPtasTasks = new List<Task>();
+                //var cuentasPtasTasks = new List<Task>();
                 foreach (var cuentaPta in cuentasPtas)
                 {
-                    var cuentaPtaTask = new Task(() =>
+                    //var cuentaPtaTask = new Task(() =>
                     {
                         try
                         {
@@ -57,26 +58,26 @@ namespace Expertia.Estructura.Controllers
                             cuentaPta.UnidadNegocio = unidadNegocio.Descripcion;
                             cuentaPta.CodigoError = cuentaPta.MensajeError = string.Empty;
                             var cuentaPtaSf = ToSalesforceEntity(cuentaPta);
-                            var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaPta, true, token);
+                            var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaPtaSf, true, token);
                             if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
                             {
-                                JsonManager.LoadText(responseCuentaPta.Content);
-                                cuentaPta.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                                cuentaPta.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                //cuentaPta.DkCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
-                            }
+                                dynamic jsonReponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaPta.Content);
+                                cuentaPta.CodigoError = jsonReponse[OutParameter.SF_CodigoError];
+                                cuentaPta.MensajeError = jsonReponse[OutParameter.SF_MensajeError];
 
-                            /// Actualización de estado de Cuenta PTA hacia PTA
-                            //if (!string.IsNullOrEmpty(cuentaPta.CodigoError)) _cuentaPtaRepository.update
+                                /// Actualización de estado de Cuenta PTA hacia PTA
+                                var updateResponse = _cuentaPtaRepository.Update(cuentaPta);
+                                cuentaPta.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                            }
                         }
                         catch
                         {
                         }
-                    });
-                    cuentaPtaTask.Start();
-                    cuentasPtasTasks.Add(cuentaPtaTask);
+                    }//);
+                    //cuentaPtaTask.Start();
+                    //cuentasPtasTasks.Add(cuentaPtaTask);
                 }
-                Task.WaitAll(cuentasPtasTasks.ToArray());
+                //Task.WaitAll(cuentasPtasTasks.ToArray());
                 return Ok(new { CuentasPta = cuentasPtas });
             }
             catch (Exception ex)
@@ -106,55 +107,58 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-                    Accion = cuentaPta.Accion,
-                    DkCuenta = cuentaPta.DkCuenta,
-                    RazonSocial = cuentaPta.RazonSocial,
-                    NombreComercial = cuentaPta.NombreComercial,
-                    TipoCuenta = cuentaPta.TipoCuenta,
-                    Propietario = cuentaPta.Propietario,
-                    FechaAniversario = cuentaPta.FechaAniversario,
-                    TipoDocumentoIdentidad = cuentaPta.TipoDocumentoIdentidad,
-                    DocumentoIdentidad = cuentaPta.DocumentoIdentidad,
-                    TipoDireccion = cuentaPta.TipoDireccion,
-                    DireccionResidencia = cuentaPta.DireccionResidencia,
-                    PaisResidencia = cuentaPta.PaisResidencia,
-                    DepartamentoResidencia = cuentaPta.DepartamentoResidencia,
-                    CiudadResidencia = cuentaPta.CiudadResidencia,
-                    DistritoResidencia = cuentaPta.DistritoResidencia,
-                    DireccionFiscal = cuentaPta.DireccionFiscal,
-                    TipoTelefono1 = cuentaPta.TipoTelefono1,
-                    Telefono1 = cuentaPta.Telefono1,
-                    TipoTelefono2 = cuentaPta.TipoTelefono2,
-                    Telefono2 = cuentaPta.Telefono2,
-                    TipoTelefono3 = cuentaPta.TipoTelefono3,
-                    Telefono3 = cuentaPta.Telefono3,
-                    TelefonoEmergencia = cuentaPta.TelefonoEmergencia,
-                    SitioWeb = cuentaPta.SitioWeb,
-                    Twitter = cuentaPta.Twitter,
-                    Facebook = cuentaPta.Facebook,
-                    Linkedin = cuentaPta.LinkedIn,
-                    Instagram = cuentaPta.Instagram,
-                    TipoPresenciaDigital = cuentaPta.TipoPresenciaDigital,
-                    UrlPresenciaDigital = cuentaPta.UrlPresenciaDigital,
-                    TipoCorreo = cuentaPta.TipoCorreo,
-                    Correo = cuentaPta.Correo,
-                    AsesorIA = cuentaPta.Asesor_IA,
-                    AsesorDM = cuentaPta.Asesor_DM,
-                    PuntoContacto = cuentaPta.PuntoContacto,
-                    CondicionPagoIA = cuentaPta.CondicionPago_IA,
-                    CondicionPagoDM = cuentaPta.CondicionPago_DM,
-                    LimiteCredito = cuentaPta.LimiteCredito,
-                    Comentario = cuentaPta.Comentario,
-                    CategValor = cuentaPta.CategoriaValor,
-                    CategPerfilActitudTec = cuentaPta.CategoriaPerfilActitudTecnologica,
-                    CategPerfilFidelidad = cuentaPta.CategoriaPerfilFidelidad,
-                    Incentivo = cuentaPta.Incentivo,
-                    EstadoActivacion = cuentaPta.EstadoActivacion,
-                    Gds = cuentaPta.GDS,
-                    Herramientas = cuentaPta.Herramientas,
-                    FacturacionAnual = cuentaPta.FacturacionAnual,
-                    ProyeccionFactAnual = cuentaPta.ProyeccionFacturacionAnual,
-                    InicioRelacionComercial = cuentaPta.InicioRelacionComercial
+                    info = new
+                    {
+                        accion = cuentaPta.Accion,
+                        dkCuenta = cuentaPta.DkCuenta.ToString(),
+                        razonSocial = cuentaPta.RazonSocial,
+                        nombreComercial = cuentaPta.NombreComercial,
+                        tipoCuenta = cuentaPta.TipoCuenta,
+                        propietario = cuentaPta.Propietario,
+                        fechaAniversario = cuentaPta.FechaAniversario.ToString("dd/MM/yyyy"),
+                        tipoDocumentoIdentidad = cuentaPta.TipoDocumentoIdentidad,
+                        documentoIdentidad = cuentaPta.DocumentoIdentidad,
+                        tipoDireccion = cuentaPta.TipoDireccion,
+                        direccionResidencia = cuentaPta.DireccionResidencia,
+                        paisResidencia = cuentaPta.PaisResidencia,
+                        departamentoResidencia = cuentaPta.DepartamentoResidencia,
+                        ciudadResidencia = cuentaPta.CiudadResidencia,
+                        distritoResidencia = cuentaPta.DistritoResidencia,
+                        direccionFiscal = cuentaPta.DireccionFiscal,
+                        tipoTelefono1 = cuentaPta.TipoTelefono1,
+                        telefono1 = cuentaPta.Telefono1,
+                        tipoTelefono2 = cuentaPta.TipoTelefono2,
+                        telefono2 = cuentaPta.Telefono2,
+                        tipoTelefono3 = cuentaPta.TipoTelefono3,
+                        telefono3 = cuentaPta.Telefono3,
+                        telefonoEmergencia = cuentaPta.TelefonoEmergencia,
+                        sitioWeb = cuentaPta.SitioWeb,
+                        twitter = cuentaPta.Twitter,
+                        facebook = cuentaPta.Facebook,
+                        linkedin = cuentaPta.LinkedIn,
+                        instagram = cuentaPta.Instagram,
+                        tipoPresenciaDigital = cuentaPta.TipoPresenciaDigital,
+                        urlPresenciaDigital = cuentaPta.UrlPresenciaDigital,
+                        tipoCorreo = cuentaPta.TipoCorreo,
+                        correo = cuentaPta.Correo,
+                        asesorIA = cuentaPta.Asesor_IA,
+                        asesorDM = cuentaPta.Asesor_DM,
+                        puntoContacto = cuentaPta.PuntoContacto,
+                        condicionPagoIA = cuentaPta.CondicionPago_IA,
+                        condicionPagoDM = cuentaPta.CondicionPago_DM,
+                        limiteCredito = cuentaPta.LimiteCredito.ToString("0.00"),
+                        comentario = cuentaPta.Comentario,
+                        categValor = cuentaPta.CategoriaValor,
+                        categPerfilActitudTec = cuentaPta.CategoriaPerfilActitudTecnologica,
+                        categPerfilFidelidad = cuentaPta.CategoriaPerfilFidelidad,
+                        incentivo = cuentaPta.Incentivo,
+                        estadoActivacion = cuentaPta.EstadoActivacion,
+                        gds = cuentaPta.GDS,
+                        herramientas = cuentaPta.Herramientas,
+                        facturacionAnual = cuentaPta.FacturacionAnual,
+                        proyeccionFactAnual = cuentaPta.ProyeccionFacturacionAnual,
+                        inicioRelacionComercial = cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy")
+                    }
                 };
             }
             catch (Exception ex)

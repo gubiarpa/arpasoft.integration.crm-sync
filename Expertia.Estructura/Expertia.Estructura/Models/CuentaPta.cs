@@ -3,7 +3,7 @@ using System;
 
 namespace Expertia.Estructura.Models
 {
-    public class CuentaPta : ICrmApiResponse
+    public class CuentaPta : ICrmApiResponse, IActualizado
     {
         public string UnidadNegocio { get; set; }
         public string Accion { get; set; }
@@ -57,5 +57,6 @@ namespace Expertia.Estructura.Models
         public DateTime InicioRelacionComercial { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
+        public int Actualizados { get; set; }
     }
 }

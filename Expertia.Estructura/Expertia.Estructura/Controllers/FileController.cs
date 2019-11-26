@@ -55,7 +55,7 @@ namespace Expertia.Estructura.Controllers
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
                 /// Intentando enviar en paralelo
-                var agenciasPnrTasks = new List<Task>();
+                //var agenciasPnrTasks = new List<Task>();
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
                     //var agenciaPnrTask = new Task(() =>

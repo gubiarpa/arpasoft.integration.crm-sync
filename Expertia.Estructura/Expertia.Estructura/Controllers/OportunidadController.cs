@@ -47,10 +47,10 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
 
-                var oportunidadTasks = new List<Task>();
+                //var oportunidadTasks = new List<Task>();
                 foreach (var oportunidad in oportunidades)
                 {
-                    var task = new Task(() =>
+                    //var task = new Task(() =>
                     {
                         /// II. Enviar Oportunidad a Salesforce
                         try
@@ -70,12 +70,12 @@ namespace Expertia.Estructura.Controllers
                         catch
                         {
                         }
-                    });
-                    task.Start();
-                    oportunidadTasks.Add(task);
+                    }//);
+                    //task.Start();
+                    //oportunidadTasks.Add(task);
                 }
 
-                Task.WaitAll(oportunidadTasks.ToArray());
+                //Task.WaitAll(oportunidadTasks.ToArray());
                 return Ok(oportunidades);
             }
             catch (Exception ex)

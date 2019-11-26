@@ -68,6 +68,10 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         spName = StoredProcedureName.IA_Update_CuentaPta;
                         break;
                 }
+                ExecuteStoredProcedure(spName);
+                operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+                operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
                 #endregion
 
                 return operation;
@@ -192,7 +196,11 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         Herramientas = herramientas,
                         FacturacionAnual = facturacionAnual,
                         ProyeccionFacturacionAnual = proyeccionFacturacionAnual,
-                        InicioRelacionComercial = inicioRelacionComercial
+                        InicioRelacionComercial = inicioRelacionComercial,
+                        /// Datos de Auditoría
+                        CodigoError = string.Empty,
+                        MensajeError = string.Empty,
+                        Actualizados = -1
                     });
                     #endregion
                 }

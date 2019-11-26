@@ -88,10 +88,10 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
-                var subcodigoTasks = new List<Task>();
+                //var subcodigoTasks = new List<Task>();
                 foreach (var subcodigo in subcodigos)
                 {
-                    var task = new Task(() =>
+                    //var task = new Task(() =>
                     {
                         try
                         {
@@ -111,12 +111,12 @@ namespace Expertia.Estructura.Controllers
                         catch
                         {
                         }
-                    });
-                    task.Start();
-                    subcodigoTasks.Add(task);
+                    }//);
+                    //task.Start();
+                    //subcodigoTasks.Add(task);
                 }
 
-                Task.WaitAll(subcodigoTasks.ToArray());
+                //Task.WaitAll(subcodigoTasks.ToArray());
                 return Ok(subcodigos);
             }
             catch (Exception ex)
