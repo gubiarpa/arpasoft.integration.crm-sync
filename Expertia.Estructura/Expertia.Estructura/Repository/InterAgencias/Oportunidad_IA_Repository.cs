@@ -88,6 +88,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             ExecuteStoredProcedure(spName);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
             #endregion
 
             return operation;
@@ -115,6 +116,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var fechaOportunidad = row.DateTimeParse("FECHA_OPORTUNIDAD");
                     var nombreOportunidad = row.StringParse("NOMBRE_OPORTUNIDAD");
                     var origenOportunidad = row.StringParse("ORIGEN_OPORTUNIDAD");
+                    var medioOportunidad = row.StringParse("MEDIO_OPORTUNIDAD");
+                    var gds = row.StringParse("GDS");
                     var tipoProducto = row.StringParse("TIPO_PRODUCTO");
                     var rutaViaje = row.StringParse("RUTA_VIAJE");
                     var ciudadOrigen = row.StringParse("CIUDAD_ORIGEN");
@@ -146,6 +149,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         FechaOportunidad = fechaOportunidad,
                         NombreOportunidad = nombreOportunidad,
                         OrigenOportunidad = origenOportunidad,
+                        MedioOportunidad = medioOportunidad,
+                        GDS = gds,
                         TipoProducto = tipoProducto,
                         RutaViaje = rutaViaje,
                         CiudadOrigen = ciudadOrigen,

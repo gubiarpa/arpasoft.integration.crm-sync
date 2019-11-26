@@ -16,6 +16,8 @@ namespace Expertia.Estructura.Models
         public DateTime FechaOportunidad { get; set; }
         public string NombreOportunidad { get; set; }
         public string OrigenOportunidad { get; set; }
+        public string MedioOportunidad { get; set; }
+        public string GDS { get; set; }
         public string TipoProducto { get; set; }
         public string RutaViaje { get; set; }
         public string CiudadOrigen { get; set; }

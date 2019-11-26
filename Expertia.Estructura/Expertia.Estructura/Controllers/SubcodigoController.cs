@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -97,17 +98,17 @@ namespace Expertia.Estructura.Controllers
                         {
                             /// Envío de subcodigo a Salesforce
                             var subcodigoSf = ToSalesforceEntity(subcodigo);
-                            var response = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
-                            if (response.StatusCode.Equals(HttpStatusCode.OK))
+                            var responseSubcodigo = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
+                            if (responseSubcodigo.StatusCode.Equals(HttpStatusCode.OK))
                             {
-                                JsonManager.LoadText(response.Content);
-                                subcodigo.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                                subcodigo.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                            }
+                                dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseSubcodigo.Content);
+                                subcodigo.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                                subcodigo.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
 
-                            /// Actualización de estado de subcodigo a PTA
-                            var updateResponse = _subcodigoRepository.Update(subcodigo);
-                            subcodigo.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                /// Actualización de estado de subcodigo a PTA
+                                var updateResponse = _subcodigoRepository.Update(subcodigo);
+                                subcodigo.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                            }
                         }
                         catch (Exception ex)
                         {

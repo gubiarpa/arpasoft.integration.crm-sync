@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -61,9 +62,11 @@ namespace Expertia.Estructura.Controllers
                             var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidadSf, true, token);
                             if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                             {
-                                JsonManager.LoadText(responseOportunidad.Content);
-                                oportunidad.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                                oportunidad.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                                dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
+                                oportunidad.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                                oportunidad.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
+                                
+                                /// Actualización de estado de Oportunidad a PTA
                                 var updateResponse = _oportunidadRepository.Update(oportunidad);
                                 oportunidad.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                             }
@@ -108,32 +111,34 @@ namespace Expertia.Estructura.Controllers
                 {
                     info = new
                     {
-                        IdOportunidad = oportunidad.IdOportunidad,
-                        Accion = oportunidad.Accion,
-                        Etapa = oportunidad.Etapa,
-                        DkCuenta = oportunidad.DkCuenta,
-                        UnidadNegocio = oportunidad.UnidadNegocio,
-                        Sucursal = oportunidad.Sucursal,
-                        PuntoVenta = oportunidad.PuntoVenta,
-                        Subcodigo = oportunidad.Subcodigo,
-                        FechaOportunidad = oportunidad.FechaOportunidad,
-                        NombreOportunidad = oportunidad.NombreOportunidad,
-                        OrigenOportunidad = oportunidad.OrigenOportunidad,
-                        TipoProducto = oportunidad.TipoProducto,
-                        RutaViaje = oportunidad.RutaViaje,
-                        CiudadOrigen = oportunidad.CiudadOrigen,
-                        CiudadDestino = oportunidad.CiudadDestino,
-                        TipoRuta = oportunidad.TipoRuta,
-                        NumPasajeros = oportunidad.NumPasajeros,
-                        FechaInicioViaje1 = oportunidad.FechaInicioViaje1,
-                        FechaFinViaje1 = oportunidad.FechaFinViaje1,
-                        FechaInicioViaje2 = oportunidad.FechaInicioViaje2,
-                        FechaFinViaje2 = oportunidad.FechaFinViaje2,
-                        MontoEstimado = oportunidad.MontoEstimado,
-                        MontoReal = oportunidad.MontoReal,
-                        Pnr1 = oportunidad.Pnr1,
-                        Pnr2 = oportunidad.Pnr2,
-                        MotivoPerdida = oportunidad.MotivoPerdida
+                        idOportunidad = oportunidad.IdOportunidad,
+                        accion = oportunidad.Accion,
+                        etapa = oportunidad.Etapa,
+                        dkCuenta = oportunidad.DkCuenta.ToString(),
+                        unidadNegocio = oportunidad.UnidadNegocio,
+                        sucursal = oportunidad.Sucursal,
+                        puntoVenta = oportunidad.PuntoVenta,
+                        subcodigo = oportunidad.Subcodigo,
+                        fechaOportunidad = oportunidad.FechaOportunidad.ToString("dd/MM/yyyy"),
+                        nombreOportunidad = oportunidad.NombreOportunidad,
+                        origenOportunidad = oportunidad.OrigenOportunidad,
+                        medioOportunidad = oportunidad.MedioOportunidad,
+                        gds = oportunidad.GDS,
+                        tipoProducto = oportunidad.TipoProducto,
+                        rutaViaje = oportunidad.RutaViaje,
+                        ciudadOrigen = oportunidad.CiudadOrigen,
+                        ciudadDestino = oportunidad.CiudadDestino,
+                        tipoRuta = oportunidad.TipoRuta,
+                        numPasajeros = oportunidad.NumPasajeros,
+                        fechaInicioViaje1 = oportunidad.FechaInicioViaje1.ToString("dd/MM/yyyy"),
+                        fechaFinViaje1 = oportunidad.FechaFinViaje1.ToString("dd/MM/yyyy"),
+                        fechaInicioViaje2 = oportunidad.FechaInicioViaje2.ToString("dd/MM/yyyy"),
+                        fechaFinViaje2 = oportunidad.FechaFinViaje2.ToString("dd/MM/yyyy"),
+                        montoEstimado = oportunidad.MontoEstimado,
+                        montoReal = oportunidad.MontoReal,
+                        pnr1 = oportunidad.Pnr1,
+                        pnr2 = oportunidad.Pnr2,
+                        motivoPerdida = oportunidad.MotivoPerdida
                     }
                 };
             }
