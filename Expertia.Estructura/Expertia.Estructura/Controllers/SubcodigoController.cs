@@ -106,10 +106,13 @@ namespace Expertia.Estructura.Controllers
                             }
 
                             /// Actualización de estado de subcodigo a PTA
-                            if (!string.IsNullOrEmpty(subcodigo.CodigoError)) _subcodigoRepository.Update(subcodigo);
+                            var updateResponse = _subcodigoRepository.Update(subcodigo);
+                            subcodigo.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            subcodigo.CodigoError = "{ex}";
+                            subcodigo.MensajeError = ex.Message;
                         }
                     }//);
                     //task.Start();

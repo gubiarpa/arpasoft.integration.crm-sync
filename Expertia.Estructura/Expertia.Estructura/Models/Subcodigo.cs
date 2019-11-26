@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class Subcodigo : ICrmApiResponse
+    public class Subcodigo : ICrmApiResponse, IActualizado
     {
         public string UnidadNegocio { get; set; }
         public string Accion { get; set; }
@@ -17,17 +17,6 @@ namespace Expertia.Estructura.Models
         public string Usuario { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
-    }
-
-    public class SubcodigoCrm
-    {
-        public string Accion { get; set; }
-        public IEnumerable<SimpleNegocioDesc> Dk_Agencias { get; set; }
-        public IEnumerable<SimpleNegocioDesc> Correlativos { get; set; }
-        public string Nombre_Sucursal { get; set; }
-        public string Direccion_Sucursal { get; set; }
-        public string Estado_Sucursal { get; set; }
-        public IEnumerable<SimpleNegocioDesc> Promotores { get; set; }
-        public IEnumerable<SimpleNegocioDesc> CondicionesPago { get; set; }
+        public int Actualizados { get; set; } = -1;
     }
 }

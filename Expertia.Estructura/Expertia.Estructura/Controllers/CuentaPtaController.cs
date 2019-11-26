@@ -70,8 +70,10 @@ namespace Expertia.Estructura.Controllers
                                 cuentaPta.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                             }
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            cuentaPta.CodigoError = "{ex}";
+                            cuentaPta.MensajeError = ex.Message;
                         }
                     }//);
                     //cuentaPtaTask.Start();
@@ -83,6 +85,13 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                (new
+                {
+                    LegacySystems = cuentasPtas
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion

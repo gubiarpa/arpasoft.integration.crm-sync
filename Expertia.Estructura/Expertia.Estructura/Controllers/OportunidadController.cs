@@ -64,11 +64,14 @@ namespace Expertia.Estructura.Controllers
                                 JsonManager.LoadText(responseOportunidad.Content);
                                 oportunidad.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
                                 oportunidad.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                _oportunidadRepository.Update(oportunidad);
+                                var updateResponse = _oportunidadRepository.Update(oportunidad);
+                                oportunidad.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                             }
                         }
-                        catch
+                        catch (Exception ex)
                         {
+                            oportunidad.CodigoError = "{ex}";
+                            oportunidad.MensajeError = ex.Message;
                         }
                     }//);
                     //task.Start();

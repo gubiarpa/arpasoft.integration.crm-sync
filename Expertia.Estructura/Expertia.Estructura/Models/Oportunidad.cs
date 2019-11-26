@@ -3,7 +3,7 @@ using System;
 
 namespace Expertia.Estructura.Models
 {
-    public class Oportunidad : ICrmApiResponse
+    public class Oportunidad : ICrmApiResponse, IActualizado
     {
         public string IdOportunidad { get; set; }
         public string Accion { get; set; }
@@ -33,5 +33,6 @@ namespace Expertia.Estructura.Models
         public string MotivoPerdida { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
+        public int Actualizados { get; set; }
     }
 }
