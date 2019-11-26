@@ -106,6 +106,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.IA_Update_File);
+            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
             #endregion
 
@@ -144,6 +146,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.IA_Update_Boleto);
+            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
             #endregion
 
@@ -174,7 +178,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         PNR = pnr,
                         IdFile = id_file,
                         Sucursal = nombre_sucursal,
-                        IdOportunidad = id_oportunidad
+                        IdOportunidad = id_oportunidad,
+                        Files = new List<File>(),
+                        Boletos = new List<Boleto>()
                     });
                     #endregion
                 }

@@ -58,22 +58,26 @@ namespace Expertia.Estructura.Controllers
                 var agenciasPnrTasks = new List<Task>();
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
-                    var agenciaPnrTask = new Task(() =>
+                    //var agenciaPnrTask = new Task(() =>
                     {
                         /// II. Completar PNR en Salesforce
                         try
                         {
                             agenciaPnr.UnidadNegocio = unidadNegocio.Descripcion;
                             agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
-                            var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
-                            var responsePnr = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
-                            if (responsePnr.StatusCode.Equals(HttpStatusCode.OK))
+                            agenciaPnr.LastMethod = "[SP_LISTAR_AGENCIA_PNR_NOVEDAD]";
+                            if (string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
                             {
-                                JsonManager.LoadText(responsePnr.Content);
-                                agenciaPnr.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                                agenciaPnr.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                agenciaPnr.IdCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
-                                agenciaPnr.IdOportunidad = JsonManager.GetSetting(OutParameter.SF_IdOportunidad);
+                                var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
+                                var responsePnr = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
+                                if (responsePnr.StatusCode.Equals(HttpStatusCode.OK))
+                                {
+                                    JsonManager.LoadText(responsePnr.Content);
+                                    agenciaPnr.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                                    agenciaPnr.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                                    agenciaPnr.IdOportunidad = JsonManager.GetSetting(OutParameter.SF_IdOportunidad);
+                                    agenciaPnr.LastMethod = "[services/apexrest/restBuscarPNR]";
+                                }
                             }
                         }
                         catch
@@ -89,10 +93,10 @@ namespace Expertia.Estructura.Controllers
                                 var filesOrBoletosTasks = new List<Task>();
 
                                 /// a. Envío de Files
-                                files = (IEnumerable<File>)_operCollection[_unidadNegocio][OutParameter.CursorFile];
+                                agenciaPnr.Files = files = (IEnumerable<File>)_operCollection[_unidadNegocio][OutParameter.CursorFile];
                                 foreach (var file in files)
                                 {
-                                    var fileTask = new Task(() =>
+                                    //var fileTask = new Task(() =>
                                     {
                                         try
                                         {
@@ -103,22 +107,27 @@ namespace Expertia.Estructura.Controllers
                                                 JsonManager.LoadText(responseFile.Content);
                                                 file.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
                                                 file.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                                _fileRepository.UpdateFile(file);
+                                                file.LastMethod = "[services/apexrest/restRecibirFile]";
+                                                var operFileUpdate = _fileRepository.UpdateFile(file);
+                                                file.CodigoError = operFileUpdate[OutParameter.CodigoError].ToString();
+                                                file.MensajeError = operFileUpdate[OutParameter.MensajeError].ToString();
+                                                file.Actualizados = int.Parse(operFileUpdate[OutParameter.IdActualizados].ToString());
+                                                file.LastMethod = "[SP_ACTUALIZAR_ENVIO_FILE]";
                                             }
                                         }
                                         catch
                                         {
                                         }
-                                    });
-                                    fileTask.Start();
-                                    filesOrBoletosTasks.Add(fileTask);
+                                    }//);
+                                    //fileTask.Start();
+                                    //filesOrBoletosTasks.Add(fileTask);
                                 }
 
                                 /// b. Envío de Boletos
                                 boletos = (IEnumerable<Boleto>)_operCollection[_unidadNegocio][OutParameter.CursorBoleto];
                                 foreach (var boleto in boletos)
                                 {
-                                    var boletoTask = new Task(() =>
+                                    //var boletoTask = new Task(() =>
                                     {
                                         try
                                         {
@@ -129,29 +138,34 @@ namespace Expertia.Estructura.Controllers
                                                 JsonManager.LoadText(responseBoleto.Content);
                                                 boleto.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
                                                 boleto.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                                _fileRepository.UpdateBoleto(boleto);
+                                                boleto.LastMethod = "[services/apexrest/restRecibirBoleto]";
+                                                var operBoletoUpdate = _fileRepository.UpdateBoleto(boleto);
+                                                boleto.CodigoError = operBoletoUpdate[OutParameter.CodigoError].ToString();
+                                                boleto.MensajeError = operBoletoUpdate[OutParameter.MensajeError].ToString();
+                                                boleto.Actualizados = int.Parse(operBoletoUpdate[OutParameter.IdActualizados].ToString());
+                                                boleto.LastMethod = "[SP_ACTUALIZAR_ENVIO_BOLETO]";
                                             }
                                         }
                                         catch
                                         {
                                         }
-                                    });
-                                    boletoTask.Start();
-                                    filesOrBoletosTasks.Add(boletoTask);
+                                    }//);
+                                    //boletoTask.Start();
+                                    //filesOrBoletosTasks.Add(boletoTask);
                                 }
 
                                 /// c. Espera los Files, Boletos
-                                Task.WaitAll(filesOrBoletosTasks.ToArray());
+                                //Task.WaitAll(filesOrBoletosTasks.ToArray());
                             }
                         }
                         catch
                         {
                         }
-                    });
-                    agenciaPnrTask.Start();
-                    agenciasPnrTasks.Add(agenciaPnrTask);
+                    }//);
+                    //agenciaPnrTask.Start();
+                    //agenciasPnrTasks.Add(agenciaPnrTask);
                 }
-                Task.WaitAll(agenciasPnrTasks.ToArray());
+                //Task.WaitAll(agenciasPnrTasks.ToArray());
                 return Ok(new { AgenciasPnr = agenciasPnrs });
             }
             catch (Exception ex)
@@ -205,28 +219,27 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-                    Id_Oportunidad_Sf = file.IdOportunidad,
-                    Resumen = new
+                    info = new
                     {
-                        Accion = file.Accion,
-                        File = file.NumeroFile.ToString(),
-                        Objeto = "FILE", // Hardcode
-                        Estado_File = file.EstadoFile,
-                        Unidad_Negocio = file.UnidadNegocio,
-                        Sucursal = file.Sucursal,
-                        Nombre_Grupo = file.NombreGrupo,
-                        Counter = file.Counter,
-                        Fecha_Apertura = file.FechaApertura,
-                        Fecha_Inicio = file.FechaInicio,
-                        Fecha_Fin = file.FechaFin,
-                        Cliente = file.Cliente,
-                        Subcodigo = file.Subcodigo,
-                        Contacto = file.Contacto,
-                        Condicion_Pago = file.CondicionPago,
-                        Num_Pasajeros = file.NumPasajeros,
-                        Costo = file.Costo,
-                        Venta = file.Venta,
-                        Comision_Agencia = file.ComisionAgencia
+                        idOportunidad = file.IdOportunidad,
+                        accion = file.Accion,
+                        file = file.NumeroFile.ToString(),
+                        estadoFile = file.EstadoFile,
+                        unidadNegocio = file.UnidadNegocio,
+                        sucursal = file.Sucursal,
+                        nombreGrupo = file.NombreGrupo,
+                        counter = file.Counter,
+                        fechaApertura = file.FechaApertura.ToString("dd/MM/yyyy"),
+                        fechaInicio = file.FechaInicio.ToString("dd/MM/yyyy"),
+                        fechaFin = file.FechaFin.ToString("dd/MM/yyyy"),
+                        cliente = file.Cliente,
+                        subcodigo = file.Subcodigo,
+                        contacto = file.Contacto,
+                        condicionPago = file.CondicionPago,
+                        numPasajeros = file.NumPasajeros,
+                        costo = file.Costo,
+                        venta = file.Venta,
+                        comisionAgencia = file.ComisionAgencia
                     }
                 };
             }
@@ -242,36 +255,39 @@ namespace Expertia.Estructura.Controllers
             {
                 return new
                 {
-                    Id_Oportunidad = boleto.IdOportunidad,
-                    Accion = boleto.Accion,
-                    File = boleto.NumeroFile,
-                    Sucursal = boleto.Sucursal,
-                    Boleto = boleto.NumeroBoleto,
-                    Estado_Boleto = boleto.EstadoBoleto,
-                    Pnr = boleto.Pnr,
-                    Tipo_Boleto = boleto.TipoBoleto,
-                    Linea_Aerea = boleto.LineaAerea,
-                    Ruta = boleto.Ruta,
-                    Tipo_Ruta = boleto.TipoRuta,
-                    Ciudad_Origen = boleto.CiudadOrigen,
-                    Ciudad_Destino = boleto.CiudadDestino,
-                    Punto_De_Emision = boleto.PuntoEmision,
-                    Nombre_Pasajero = boleto.NombrePasajero,
-                    Infante_Con_Adulto = boleto.InfanteAdulto,
-                    Fecha_Emision = boleto.FechaEmision,
-                    Emitido_Canje = boleto.EmitidoCanje,
-                    Agente_Quien_Emite = boleto.AgenteQuienEmite,
-                    Monto_Tarifa = boleto.MontoTarifa,
-                    Monto_Comision = boleto.MontoComision,
-                    Monto_Total = boleto.MontoTotal,
-                    Forma_Pago = boleto.FormaPago,
-                    Reembolsado = boleto.Reembolsado,
-                    Pago_Con_Tarjeta = boleto.PagoConTarjeta,
-                    Tiene_Waiver = boleto.TieneWaiver,
-                    Tipo_Waiver = boleto.TipoWaiver,
-                    Monto_Waiver = boleto.MontoWaiver,
-                    Pagado = boleto.Pagado,
-                    Comprobante = boleto.Comprobante
+                    info = new
+                    {
+                        idOportunidad = boleto.IdOportunidad,
+                        accion = boleto.Accion,
+                        file = boleto.NumeroFile,
+                        sucursal = boleto.Sucursal,
+                        boleto = boleto.NumeroBoleto,
+                        estadoBoleto = boleto.EstadoBoleto,
+                        pnr = boleto.Pnr,
+                        tipoBoleto = boleto.TipoBoleto,
+                        lineaAerea = boleto.LineaAerea,
+                        ruta = boleto.Ruta,
+                        tipoRuta = boleto.TipoRuta,
+                        ciudadOrigen = boleto.CiudadOrigen,
+                        ciudadDestino = boleto.CiudadDestino,
+                        puntoDeEmision = boleto.PuntoEmision,
+                        nombrePasajero = boleto.NombrePasajero,
+                        infanteConAdulto = boleto.InfanteAdulto.Equals("true"),
+                        fechaEmision = boleto.FechaEmision.ToString("dd/MM/yyyy"),
+                        emitidoCanje = boleto.EmitidoCanje,
+                        agenteQuienEmite = boleto.AgenteQuienEmite,
+                        montoTarifa = boleto.MontoTarifa,
+                        montoComision = boleto.MontoComision,
+                        montoTotal = boleto.MontoTotal,
+                        formaPago = boleto.FormaPago,
+                        reembolsado = boleto.Reembolsado.Equals("true"),
+                        pagoConTarjeta = boleto.PagoConTarjeta.Equals("true"),
+                        tieneWaiver = boleto.TieneWaiver == null ? false : boleto.TieneWaiver.Equals("true"),
+                        tipoWaiver = boleto.TipoWaiver,
+                        montoWaiver = boleto.MontoWaiver,
+                        pagado = boleto.Pagado,
+                        comprobante = boleto.Comprobante
+                    }
                 };
             }
             catch (Exception ex)

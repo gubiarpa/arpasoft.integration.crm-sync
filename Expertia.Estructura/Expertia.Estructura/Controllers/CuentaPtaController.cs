@@ -63,11 +63,11 @@ namespace Expertia.Estructura.Controllers
                                 JsonManager.LoadText(responseCuentaPta.Content);
                                 cuentaPta.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
                                 cuentaPta.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                cuentaPta.DkCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
+                                //cuentaPta.DkCuenta = JsonManager.GetSetting(OutParameter.SF_IdCuenta);
                             }
 
                             /// Actualización de estado de Cuenta PTA hacia PTA
-                            if (!string.IsNullOrEmpty(cuentaPta.CodigoError)) _cuentaPtaRepository.update
+                            //if (!string.IsNullOrEmpty(cuentaPta.CodigoError)) _cuentaPtaRepository.update
                         }
                         catch
                         {

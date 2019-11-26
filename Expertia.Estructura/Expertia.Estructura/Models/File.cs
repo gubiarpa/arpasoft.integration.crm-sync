@@ -1,22 +1,26 @@
 ﻿using Expertia.Estructura.Models.Behavior;
 using System;
+using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class AgenciaPnr : ICrmApiResponse
+    public class AgenciaPnr : ICrmApiResponse, IActualizado
     {
         public string UnidadNegocio { get; set; }
         public int DkAgencia { get; set; }
         public string PNR { get; set; }
         public int IdFile { get; set; }
         public string Sucursal { get; set; }
-        public string IdCuenta { get; set; }
         public string IdOportunidad { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
+        public int Actualizados { get; set; }
+        public IEnumerable<File> Files { get; set; }
+        public IEnumerable<Boleto> Boletos { get; set; }
+        public string LastMethod { get; set; } = string.Empty;
     }
 
-    public class File : ICrmApiResponse
+    public class File : ICrmApiResponse, IActualizado
     {
         public string IdOportunidad { get; set; }
         public string Accion { get; set; }
@@ -39,29 +43,11 @@ namespace Expertia.Estructura.Models
         public float ComisionAgencia { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
+        public int Actualizados { get; set; }
+        public string LastMethod { get; set; } = string.Empty;
     }
 
-    public class FileSalesforce
-    {
-        public string Objeto { get; set; }
-        public string Estado_File { get; set; }
-        public string Unidad_Negocio { get; set; }
-        public string Sucursal { get; set; }
-        public string Nombre_Grupo { get; set; }
-        public string Counter { get; set; }
-        public DateTime Fecha_Apertura { get; set; }
-        public DateTime Fecha_Inicio { get; set; }
-        public DateTime Fecha_Fin { get; set; }
-        public string Cliente { get; set; }
-        public string Subcodigo { get; set; }
-        public string Condicion_Pago { get; set; }
-        public string Num_Pasajeros { get; set; }
-        public string Costo { get; set; }
-        public string Venta { get; set; }
-        public string Comision_Agencia { get; set; }
-    }
-
-    public class Boleto : ICrmApiResponse
+    public class Boleto : ICrmApiResponse, IActualizado
     {
         public string IdOportunidad { get; set; }
         public string Accion { get; set; }
@@ -95,5 +81,7 @@ namespace Expertia.Estructura.Models
         public string Comprobante { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
+        public int Actualizados { get; set; }
+        public string LastMethod { get; set; } = string.Empty;
     }
 }

@@ -6,6 +6,11 @@
         string MensajeError { get; set; }
     }
 
+    public interface IActualizado
+    {
+        int Actualizados { get; set; }
+    }
+
     public class CrmApiResponse : ICrmApiResponse
     {
         public string CodigoError { get; set; }
