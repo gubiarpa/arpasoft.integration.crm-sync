@@ -23,7 +23,7 @@ namespace Expertia.Estructura.Repository.AppWebs
 
         public Operation Update(ContactoPta cuentaPta)
         {
-            throw new NotImplementedException();
+            return new ContactoPta_IA_Repository(UnidadNegocioKeys.AppWebs).Update(cuentaPta);
         }
     }
 }

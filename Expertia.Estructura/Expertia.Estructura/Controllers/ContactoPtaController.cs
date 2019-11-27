@@ -1,6 +1,7 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Repository.AppWebs;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
@@ -95,6 +96,9 @@ namespace Expertia.Estructura.Controllers
             {
                 case UnidadNegocioKeys.Interagencias:
                     _contactoPtaRepository = new ContactoPta_IA_Repository();
+                    break;
+                case UnidadNegocioKeys.AppWebs:
+                    _contactoPtaRepository = new ContactoPta_AW_Repository();
                     break;
             }
             return unidadNegocioKey;

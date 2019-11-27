@@ -35,7 +35,17 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.IA_Read_ContactoPta);
+                var spName = string.Empty;
+                switch (_unidadNegocio)
+                {
+                    case UnidadNegocioKeys.Interagencias:
+                        spName = StoredProcedureName.IA_Read_ContactoPta;
+                        break;
+                    case UnidadNegocioKeys.AppWebs:
+                        spName = StoredProcedureName.AW_Read_ContactoPta;
+                        break;
+                }
+                ExecuteStoredProcedure(spName);
                 operation[OutParameter.CursorContactoPta] = ToContactoPta(GetDtParameter(OutParameter.CursorContactoPta));
                 #endregion
             }
@@ -75,7 +85,17 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.IA_Update_ContactoPta);
+                var spName = string.Empty;
+                switch (_unidadNegocio)
+                {
+                    case UnidadNegocioKeys.Interagencias:
+                        spName = StoredProcedureName.IA_Update_ContactoPta;
+                        break;
+                    case UnidadNegocioKeys.AppWebs:
+                        spName = StoredProcedureName.AW_Update_ContactoPta;
+                        break;
+                }
+                ExecuteStoredProcedure(spName);
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
                 operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
