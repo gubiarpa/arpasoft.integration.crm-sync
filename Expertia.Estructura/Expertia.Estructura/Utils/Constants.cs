@@ -36,6 +36,7 @@ namespace Expertia.Estructura.Utils
         public const string File = "api/file";
         public const string Oportunidad = "api/oportunidad";
         public const string CuentaPta = "api/cuentapta";
+        public const string ContactoPta = "api/contactopta";
     }
 
     public enum ActionMethod
@@ -137,6 +138,9 @@ namespace Expertia.Estructura.Utils
         /// Cuenta PTA
         public const string IA_Read_CuentaPta = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_CLIENTE";
         public const string IA_Update_CuentaPta = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_CLIENTE";
+        /// Contacto PTA
+        public const string IA_Read_ContactoPta = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_CONTACTO";
+        public const string IA_Update_ContactoPta = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_CONTACTO";
         #endregion
 
         #region AppWebs
@@ -160,6 +164,7 @@ namespace Expertia.Estructura.Utils
         public const string BoletoMethod = "BOLETO_METHODNAME";
         public const string OportunidadMethod = "OPORTUNIDAD_METHODNAME";
         public const string CuentaPtaMethod = "CUENTAPTA_METHODNAME";
+        public const string ContactoPtaMethod = "CONTACTOPTA_METHODNAME";
         #endregion
     }
 
@@ -195,6 +200,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorBoleto = "P_BOLETO";
         public const string CursorOportunidad = "P_OPORTUNIDAD";
         public const string CursorCuentaPta = "P_CLIENTE";
+        public const string CursorContactoPta = "P_CONTACTO";
         #endregion
 
         #region Fields
@@ -214,8 +220,9 @@ namespace Expertia.Estructura.Utils
         #region SalesforceParameters
         public const string SF_CodigoError = "CODIGO_ERROR";
         public const string SF_MensajeError = "MENSAJE_ERROR";
-        public const string SF_IdCuenta = "ID_CUENTA_SF";
         public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF";
+        public const string SF_IdCuenta = "ID_CUENTA_SF";
+        public const string SF_IdContacto = "ID_CONTACTO_SF";
         #endregion
     }
     #endregion

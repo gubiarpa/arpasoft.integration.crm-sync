@@ -197,7 +197,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         FacturacionAnual = facturacionAnual,
                         ProyeccionFacturacionAnual = proyeccionFacturacionAnual,
                         InicioRelacionComercial = inicioRelacionComercial,
-                        /// Datos de Auditoría
+                        /// Datos de Reserva
                         CodigoError = string.Empty,
                         MensajeError = string.Empty,
                         Actualizados = -1

@@ -84,7 +84,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                return InternalServerError(ex);
             }
             finally
             {

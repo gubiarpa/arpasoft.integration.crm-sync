@@ -39,11 +39,10 @@ namespace Expertia.Estructura.Controllers
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
-                _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Oportunidades
                 oportunidades = (IEnumerable<Oportunidad>)_oportunidadRepository.GetOportunidades()[OutParameter.CursorOportunidad];
-                if (oportunidades == null || oportunidades.ToList().Count.Equals(0)) return Ok();
+                if (oportunidades == null || oportunidades.ToList().Count.Equals(0)) return Ok(oportunidades);
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
@@ -63,12 +62,26 @@ namespace Expertia.Estructura.Controllers
                             if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                             {
                                 dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
-                                oportunidad.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
-                                oportunidad.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
-                                
-                                /// Actualización de estado de Oportunidad a PTA
-                                var updateResponse = _oportunidadRepository.Update(oportunidad);
-                                oportunidad.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                try
+                                {
+                                    oportunidad.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                                    oportunidad.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
+                                    if (string.IsNullOrEmpty(oportunidad.IdOportunidad))
+                                        oportunidad.IdOportunidad = jsonResponse[OutParameter.SF_IdOportunidad];
+                                }
+                                catch
+                                {
+                                }
+
+                                try
+                                {
+                                    /// Actualización de estado de Oportunidad a PTA
+                                    var updateResponse = _oportunidadRepository.Update(oportunidad);
+                                    oportunidad.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                }
+                                catch
+                                {
+                                }
                             }
                         }
                         catch (Exception ex)

@@ -14,7 +14,7 @@ namespace Expertia.Estructura.Models
         public string IdOportunidad { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
-        public int Actualizados { get; set; }
+        public int Actualizados { get; set; } = -1;
         public IEnumerable<File> Files { get; set; }
         public IEnumerable<Boleto> Boletos { get; set; }
         public string LastMethod { get; set; } = string.Empty;
@@ -43,7 +43,7 @@ namespace Expertia.Estructura.Models
         public float ComisionAgencia { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
-        public int Actualizados { get; set; }
+        public int Actualizados { get; set; } = -1;
         public string LastMethod { get; set; } = string.Empty;
     }
 
@@ -81,7 +81,7 @@ namespace Expertia.Estructura.Models
         public string Comprobante { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
-        public int Actualizados { get; set; }
+        public int Actualizados { get; set; } = -1;
         public string LastMethod { get; set; } = string.Empty;
     }
 }

@@ -57,6 +57,6 @@ namespace Expertia.Estructura.Models
         public DateTime InicioRelacionComercial { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
-        public int Actualizados { get; set; }
+        public int Actualizados { get; set; } = -1;
     }
 }

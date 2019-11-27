@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -49,7 +50,7 @@ namespace Expertia.Estructura.Controllers
 
                 /// I. Consulta de PNRs a PTA
                 agenciasPnrs = (IEnumerable<AgenciaPnr>)_fileRepository.GetNewAgenciaPnr()[OutParameter.CursorAgenciaPnr];
-                if (agenciasPnrs == null || agenciasPnrs.ToList().Count.Equals(0)) return Ok();
+                if (agenciasPnrs == null || agenciasPnrs.ToList().Count.Equals(0)) return Ok(agenciasPnrs);
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
@@ -72,11 +73,17 @@ namespace Expertia.Estructura.Controllers
                                 var responsePnr = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
                                 if (responsePnr.StatusCode.Equals(HttpStatusCode.OK))
                                 {
-                                    JsonManager.LoadText(responsePnr.Content);
-                                    agenciaPnr.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                                    agenciaPnr.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                    agenciaPnr.IdOportunidad = JsonManager.GetSetting(OutParameter.SF_IdOportunidad);
-                                    agenciaPnr.LastMethod = "[services/apexrest/restBuscarPNR]";
+                                    dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePnr.Content);
+                                    try
+                                    {
+                                        agenciaPnr.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                                        agenciaPnr.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
+                                        agenciaPnr.IdOportunidad = jsonResponse[OutParameter.SF_IdOportunidad];
+                                        agenciaPnr.LastMethod = "[services/apexrest/restBuscarPNR]";
+                                    }
+                                    catch
+                                    {
+                                    }
                                 }
                             }
                         }
@@ -89,11 +96,11 @@ namespace Expertia.Estructura.Controllers
                         {
                             if (!string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
                             {
-                                _operCollection[_unidadNegocio] = _fileRepository.GetFileAndBoleto(agenciaPnr);
+                                var _operFileAndBoleto = _fileRepository.GetFileAndBoleto(agenciaPnr);
                                 var filesOrBoletosTasks = new List<Task>();
 
                                 /// a. Envío de Files
-                                agenciaPnr.Files = files = (IEnumerable<File>)_operCollection[_unidadNegocio][OutParameter.CursorFile];
+                                agenciaPnr.Files = files = (IEnumerable<File>)_operFileAndBoleto[OutParameter.CursorFile];
                                 foreach (var file in files)
                                 {
                                     //var fileTask = new Task(() =>
@@ -124,7 +131,7 @@ namespace Expertia.Estructura.Controllers
                                 }
 
                                 /// b. Envío de Boletos
-                                boletos = (IEnumerable<Boleto>)_operCollection[_unidadNegocio][OutParameter.CursorBoleto];
+                                boletos = (IEnumerable<Boleto>)_operFileAndBoleto[OutParameter.CursorBoleto];
                                 foreach (var boleto in boletos)
                                 {
                                     //var boletoTask = new Task(() =>
