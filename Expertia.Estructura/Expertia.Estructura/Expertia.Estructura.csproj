@@ -198,6 +198,7 @@
     <Compile Include="Models\Subcodigo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AppWebs\ContactoPta_AW_Repository.cs" />
+    <Compile Include="Repository\AppWebs\Contacto_AW_Repository.cs" />
     <Compile Include="Repository\AppWebs\Oportunidad_AW_Repository.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\IContactoPtaRepository.cs" />

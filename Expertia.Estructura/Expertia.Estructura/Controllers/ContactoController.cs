@@ -42,11 +42,7 @@ namespace Expertia.Estructura.Controllers
 
                         #region CondorTravel
                         CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel)) CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError, _delayTimeRetry);
                         #endregion
 
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
@@ -58,29 +54,17 @@ namespace Expertia.Estructura.Controllers
 
                         #region DestinosMundiales
                         CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales)) CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         #endregion
 
                         #region Interagencias
                         CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias)) CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         #endregion
                         
                         #region AppWebs
                         CreateOrUpdate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            CreateOrUpdate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs)) CreateOrUpdate(UnidadNegocioKeys.AppWebs, entity, codigoError);
                         #endregion
 
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
@@ -126,11 +110,7 @@ namespace Expertia.Estructura.Controllers
 
                         #region CondorTravel
                         UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel)) UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         #endregion
 
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
@@ -138,36 +118,26 @@ namespace Expertia.Estructura.Controllers
 
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
+                    case UnidadNegocioKeys.AppWebs:
 
                         #region DestinosMundiales
                         UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales)) UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         #endregion
 
                         #region Interagencias
                         UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias)) UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         #endregion
 
                         #region AppWebs
                         UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs))
-                        {
-                            Thread.Sleep(_delayTimeRetry);
-                            UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        }
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs)) UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
                         #endregion
 
                         LoadResults(UnidadNegocioKeys.AppWebs, out logResult, out result);
                         break;
+
                     default:
                         return BadRequest(LogLineMessage.UnidadNegocioNotFound);
                 }
@@ -233,6 +203,7 @@ namespace Expertia.Estructura.Controllers
                     #endregion
                     break;
                 #endregion
+
                 #region DestinosMundiales, Interagencias, AppWebs o TrustWeb
                 case UnidadNegocioKeys.DestinosMundiales:
                 case UnidadNegocioKeys.Interagencias:
@@ -300,6 +271,7 @@ namespace Expertia.Estructura.Controllers
                     #endregion
                     break;
                 #endregion
+
                 #region Default
                 default:
                     logResult = null; result = null;

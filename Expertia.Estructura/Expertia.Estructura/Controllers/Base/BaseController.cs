@@ -104,8 +104,9 @@ namespace Expertia.Estructura.Controllers.Base
         #endregion
 
         #region RetryMethods
-        protected void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError)
+        protected void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError, int delayTimeRetry = 0)
         {
+            if (delayTimeRetry > 0) System.Threading.Thread.Sleep(delayTimeRetry);
             if (_operRetry[unidadNegocio] =
                 ((_operCollection[unidadNegocio] =
                     _crmCollection[unidadNegocio].Create(entity))

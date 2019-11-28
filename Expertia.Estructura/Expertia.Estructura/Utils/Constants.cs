@@ -145,6 +145,9 @@ namespace Expertia.Estructura.Utils
         #endregion
 
         #region AppWebs
+        /// Contacto
+        public const string AW_Create_Contacto = "APPWEBS.CRM_PKG.SP_CREAR_CONTACTO";
+        public const string AW_Update_Contacto = "APPWEBS.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
         /// Oportunidad
         public const string AW_Read_Oportunidad = "APPWEBS.CRM_PKG.SP_LISTAR_OPORTUNIDAD";
         public const string AW_Update_Oportunidad = "APPWEBS.CRM_PKG.SP_ACTUALIZAR_ENVIO_OPOR";
