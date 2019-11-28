@@ -66,6 +66,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
             AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, oportunidad.IdOportunidad);
             /// (06) P_NOMBRE_SUCURSAL
             AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, oportunidad.Sucursal);
+            /// (07) P_ID_FILE
+            AddParameter("P_ID_FILE", OracleDbType.Int32, oportunidad.IdFile);
             /// (07) P_ES_ATENCION
             AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, oportunidad.CodigoError);
             /// (08) P_DESCRIPCION
@@ -133,12 +135,14 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var pnr_1 = row.StringParse("PNR_1");
                     var pnr_2 = row.StringParse("PNR_2");
                     var motivoPerdida = row.StringParse("MOTIVO_PERDIDA");
+                    var idFile = row.StringParse("ID_FILE");
                     #endregion
 
                     #region AddingElement
                     oportunidadList.Add(new Oportunidad()
                     {
                         IdOportunidad = idOportunidad,
+                        IdFile = idFile,
                         Accion = accion,
                         Etapa = etapa,
                         DkCuenta = dkCuenta,

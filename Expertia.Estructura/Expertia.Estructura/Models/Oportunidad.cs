@@ -6,6 +6,7 @@ namespace Expertia.Estructura.Models
     public class Oportunidad : ICrmApiResponse, IActualizado
     {
         public string IdOportunidad { get; set; }
+        public string IdFile { get; set; }
         public string Accion { get; set; }
         public string Etapa { get; set; }
         public string DkCuenta { get; set; }
