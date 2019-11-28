@@ -73,6 +73,7 @@ namespace Expertia.Estructura.Utils
     {
         public const string Unauthorized = "Unauthorized";
         public const string BadRequest = "Bad Request";
+        public const string UnidadNegocioNotFound = "Unidad de Negocio no encontrada";
     }
     #endregion
 

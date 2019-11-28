@@ -113,8 +113,9 @@ namespace Expertia.Estructura.Controllers.Base
                 _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Update(entity);
         }
 
-        protected void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError)
+        protected void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError, int delayTimeRetry = 0)
         {
+            if (delayTimeRetry > 0) System.Threading.Thread.Sleep(delayTimeRetry);
             if (_operRetry[unidadNegocio] =
                 ((_operCollection[unidadNegocio] =
                     _crmCollection[unidadNegocio].Update(entity))

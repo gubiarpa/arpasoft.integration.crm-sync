@@ -39,32 +39,55 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
+
+                        #region CondorTravel
                         CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         }
+                        #endregion
+
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
+
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
+                    case UnidadNegocioKeys.AppWebs:
+
+                        #region DestinosMundiales
                         CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         }
+                        #endregion
+
+                        #region Interagencias
                         CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         }
+                        #endregion
+                        
+                        #region AppWebs
+                        CreateOrUpdate(UnidadNegocioKeys.AppWebs, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs))
+                        {
+                            Thread.Sleep(_delayTimeRetry);
+                            CreateOrUpdate(UnidadNegocioKeys.AppWebs, entity, codigoError);
+                        }
+                        #endregion
+
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
+
                     default:
-                        return NotFound();
+                        return BadRequest(LogLineMessage.UnidadNegocioNotFound);
                 }
                 _instants[InstantKey.Oracle] = DateTime.Now;
                 return Ok(result);
@@ -100,32 +123,53 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
+
+                        #region CondorTravel
                         UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
                         }
+                        #endregion
+
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
+
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
+
+                        #region DestinosMundiales
                         UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         }
+                        #endregion
+
+                        #region Interagencias
                         UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias))
                         {
                             Thread.Sleep(_delayTimeRetry);
                             UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         }
-                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
+                        #endregion
+
+                        #region AppWebs
+                        UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs))
+                        {
+                            Thread.Sleep(_delayTimeRetry);
+                            UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
+                        }
+                        #endregion
+
+                        LoadResults(UnidadNegocioKeys.AppWebs, out logResult, out result);
                         break;
                     default:
-                        return NotFound();
+                        return BadRequest(LogLineMessage.UnidadNegocioNotFound);
                 }
                 _instants[InstantKey.Oracle] = DateTime.Now;
                 return Ok(result);
@@ -160,6 +204,7 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocio)
             {
+                #region CondorTravel
                 case UnidadNegocioKeys.CondorTravel:
                     #region Log
                     logResult = new
@@ -187,8 +232,11 @@ namespace Expertia.Estructura.Controllers
                     };
                     #endregion
                     break;
+                #endregion
+                #region DestinosMundiales, Interagencias, AppWebs o TrustWeb
                 case UnidadNegocioKeys.DestinosMundiales:
                 case UnidadNegocioKeys.Interagencias:
+                case UnidadNegocioKeys.AppWebs:
                     #region Log
                     logResult = new
                     {
@@ -209,6 +257,14 @@ namespace Expertia.Estructura.Controllers
                                 NotAssociated = _operNotAssociated[UnidadNegocioKeys.Interagencias],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdContacto].ToString()
+                            },
+                            AppWebs = new
+                            {
+                                Codes = GetErrorResult(UnidadNegocioKeys.AppWebs),
+                                Retry = _operRetry[UnidadNegocioKeys.AppWebs],
+                                NotAssociated = _operNotAssociated[UnidadNegocioKeys.AppWebs],
+                                IdCuenta = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdContacto].ToString()
                             }
                         }
                     };
@@ -231,14 +287,24 @@ namespace Expertia.Estructura.Controllers
                                 MensajeError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.MensajeError].ToString(),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdContacto].ToString()
+                            },
+                            AppWebs = new
+                            {
+                                CodigoError = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdContacto].ToString()
                             }
                         }
                     };
                     #endregion
                     break;
+                #endregion
+                #region Default
                 default:
                     logResult = null; result = null;
                     break;
+                #endregion
             }
         }
 
