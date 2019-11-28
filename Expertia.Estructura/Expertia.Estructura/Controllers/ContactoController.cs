@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Repository.AppWebs;
 using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
@@ -48,18 +49,20 @@ namespace Expertia.Estructura.Controllers
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
 
-                    case UnidadNegocioKeys.DestinosMundiales:
+                    /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
 
+                        /*
                         #region DestinosMundiales
                         CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales)) CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         #endregion
+                        */
 
                         #region Interagencias
                         CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias)) CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias)) CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError, _delayTimeRetry);
                         #endregion
                         
                         #region AppWebs
@@ -116,14 +119,16 @@ namespace Expertia.Estructura.Controllers
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
 
-                    case UnidadNegocioKeys.DestinosMundiales:
+                    /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
 
+                        /*
                         #region DestinosMundiales
                         UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales)) UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
                         #endregion
+                        */
 
                         #region Interagencias
                         UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
@@ -213,6 +218,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
+                            /*
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
@@ -221,6 +227,7 @@ namespace Expertia.Estructura.Controllers
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
                             },
+                            */
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.Interagencias),
@@ -245,6 +252,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
+                            /*
                             DestinosMundiales = new
                             {
                                 CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
@@ -252,6 +260,7 @@ namespace Expertia.Estructura.Controllers
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
                             },
+                            */
                             InterAgencias = new
                             {
                                 CodigoError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.CodigoError].ToString(),
@@ -287,10 +296,14 @@ namespace Expertia.Estructura.Controllers
                 case UnidadNegocioKeys.CondorTravel:
                     _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new Contacto_CT_Repository());
                     break;
-                case UnidadNegocioKeys.DestinosMundiales:
+                /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                 case UnidadNegocioKeys.Interagencias:
+                case UnidadNegocioKeys.AppWebs:
+                    /*
                     _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository());
+                    */
                     _crmCollection.Add(UnidadNegocioKeys.Interagencias, new Contacto_IA_Repository());
+                    _crmCollection.Add(UnidadNegocioKeys.AppWebs, new Contacto_AW_Repository());
                     break;
                 default:
                     break;
