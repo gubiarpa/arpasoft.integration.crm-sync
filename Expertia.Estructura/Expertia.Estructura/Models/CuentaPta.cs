@@ -6,6 +6,7 @@ namespace Expertia.Estructura.Models
     public class CuentaPta : ICrmApiResponse, IActualizado
     {
         public string UnidadNegocio { get; set; }
+        public string IdCuentaCrm { get; set; }
         public string Accion { get; set; }
         public int DkCuenta { get; set; }
         public string RazonSocial { get; set; }

@@ -52,6 +52,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 /// (03) P_ID_CUENTA
                 AddParameter("P_ID_CUENTA", OracleDbType.Int32, cuentaPta.DkCuenta);
+                /// (04) P_ID_CUENTA_CRM
+                AddParameter("P_ID_CUENTA_CRM", OracleDbType.Varchar2, cuentaPta.IdCuentaCrm);
                 /// (05) P_ES_ATENCION
                 AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, cuentaPta.CodigoError);
                 /// (06) P_DESCRIPCION

@@ -64,6 +64,7 @@ namespace Expertia.Estructura.Controllers
                                 dynamic jsonReponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaPta.Content);
                                 cuentaPta.CodigoError = jsonReponse[OutParameter.SF_CodigoError];
                                 cuentaPta.MensajeError = jsonReponse[OutParameter.SF_MensajeError];
+                                cuentaPta.IdCuentaCrm = jsonReponse[OutParameter.SF_IdContacto];
 
                                 /// Actualización de estado de Cuenta PTA hacia PTA
                                 var updateResponse = _cuentaPtaRepository.Update(cuentaPta);
