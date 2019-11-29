@@ -1,5 +1,10 @@
 ﻿namespace Expertia.Estructura.Models.Behavior
 {
+    public interface ISalesforceParse
+    {
+        object ToSalesforceEntity();
+    }
+
     public interface ICrmApiResponse
     {
         string CodigoError { get; set; }

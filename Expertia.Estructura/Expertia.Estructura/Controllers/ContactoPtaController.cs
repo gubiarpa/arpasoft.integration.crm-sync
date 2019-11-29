@@ -5,6 +5,7 @@ using Expertia.Estructura.Repository.AppWebs;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
+using Expertia.Estructura.RestManager.RestParse;
 using Expertia.Estructura.Utils;
 using RestSharp;
 using System;
@@ -51,8 +52,8 @@ namespace Expertia.Estructura.Controllers
                             contactoPta.UnidadNegocio = unidadNegocio.Descripcion;
                             contactoPta.CodigoError = contactoPta.MensajeError = string.Empty;
 
-                            var contactoPtaSf = ToSalesforceEntity(contactoPta);
-                            var responseContactoPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.ContactoPtaMethod, Method.POST, contactoPtaSf, true, token);
+                            //var contactoPtaSf = ToSalesforceEntity(contactoPta);
+                            var responseContactoPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.ContactoPtaMethod, Method.POST, contactoPta.ToSalesforceEntity(), true, token);
                             if (responseContactoPta.StatusCode.Equals(HttpStatusCode.OK))
                             {
                                 dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseContactoPta.Content);
@@ -106,6 +107,7 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region Salesforce
+        /*
         private object ToSalesforceEntity(ContactoPta contactoPta)
         {
             try
@@ -152,6 +154,7 @@ namespace Expertia.Estructura.Controllers
                 throw ex;
             }
         }
+        */
         #endregion
     }
 }
