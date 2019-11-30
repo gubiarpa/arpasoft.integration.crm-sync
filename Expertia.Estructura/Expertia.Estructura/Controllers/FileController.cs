@@ -116,8 +116,6 @@ namespace Expertia.Estructura.Controllers
                                                 file.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
                                                 file.LastMethod = "[services/apexrest/restRecibirFile]";
                                                 var operFileUpdate = _fileRepository.UpdateFile(file);
-                                                file.CodigoError = operFileUpdate[OutParameter.CodigoError].ToString();
-                                                file.MensajeError = operFileUpdate[OutParameter.MensajeError].ToString();
                                                 file.Actualizados = int.Parse(operFileUpdate[OutParameter.IdActualizados].ToString());
                                                 file.LastMethod = "[SP_ACTUALIZAR_ENVIO_FILE]";
                                             }
@@ -131,7 +129,7 @@ namespace Expertia.Estructura.Controllers
                                 }
 
                                 /// b. Envío de Boletos
-                                boletos = (IEnumerable<Boleto>)_operFileAndBoleto[OutParameter.CursorBoleto];
+                                agenciaPnr.Boletos = boletos = (IEnumerable<Boleto>)_operFileAndBoleto[OutParameter.CursorBoleto];
                                 foreach (var boleto in boletos)
                                 {
                                     //var boletoTask = new Task(() =>
@@ -147,8 +145,6 @@ namespace Expertia.Estructura.Controllers
                                                 boleto.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
                                                 boleto.LastMethod = "[services/apexrest/restRecibirBoleto]";
                                                 var operBoletoUpdate = _fileRepository.UpdateBoleto(boleto);
-                                                boleto.CodigoError = operBoletoUpdate[OutParameter.CodigoError].ToString();
-                                                boleto.MensajeError = operBoletoUpdate[OutParameter.MensajeError].ToString();
                                                 boleto.Actualizados = int.Parse(operBoletoUpdate[OutParameter.IdActualizados].ToString());
                                                 boleto.LastMethod = "[SP_ACTUALIZAR_ENVIO_BOLETO]";
                                             }

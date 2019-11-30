@@ -10,6 +10,7 @@ namespace Expertia.Estructura.Models
     {
         #region Properties
         public string ID { get; set; }
+        public int DkAgencia { get; set; }
         public string IDCuenta { get; set; }
         public string IdSalesforce { get; set; }
         public string IdCuentaSalesForce { get; set; }

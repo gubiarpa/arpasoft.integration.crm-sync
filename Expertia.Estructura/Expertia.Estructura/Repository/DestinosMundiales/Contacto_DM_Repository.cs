@@ -93,10 +93,13 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (17) P_FECHA_CUMPLE
                 if (entity.FechaNacimiento == null) value = DBNull.Value; else value = entity.FechaNacimiento;
                 AddParameter("P_FECHA_CUMPLE", OracleDbType.Date, value);
-                // (18) P_ID_CUENTA
+                // (18) P_DK_AGENCIA
+                value = entity.DkAgencia;
+                AddParameter("P_DK_AGENCIA", OracleDbType.Varchar2, value);
+                // (19) P_ID_CUENTA
                 value = DBNull.Value;
                 AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
-                // (19) P_ID_CONTACTO
+                // (20) P_ID_CONTACTO
                 value = DBNull.Value;
                 AddParameter("P_ID_CONTACTO", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
