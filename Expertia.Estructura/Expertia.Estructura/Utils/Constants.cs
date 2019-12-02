@@ -172,6 +172,9 @@ namespace Expertia.Estructura.Utils
         public const string OportunidadMethod = "OPORTUNIDAD_METHODNAME";
         public const string CuentaPtaMethod = "CUENTAPTA_METHODNAME";
         public const string ContactoPtaMethod = "CONTACTOPTA_METHODNAME";
+        /// Actions
+        public const string CreateAction = "Crear";
+        public const string UpdateAction = "Actualizar";
         #endregion
     }
 
@@ -279,6 +282,16 @@ namespace Expertia.Estructura.Utils
         public const string CuentaNoExiste = "C2";
         public const string ContactoYaExiste = "D1";
         public const string ContactoNoExiste = "D2";
+    }
+
+    public static class SfResponseCode
+    {
+        public const string CuentaYaExiste = "C1";
+        public const string CuentaNoExiste = "C2";
+        public const string FileYaExiste = "F1";
+        public const string FileNoExiste = "F2";
+        public const string BoletoYaExiste = "B1";
+        public const string BoletoNoExiste = "B2";
     }
     #endregion
 

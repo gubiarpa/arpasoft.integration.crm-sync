@@ -1,6 +1,7 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
@@ -38,15 +39,13 @@ namespace Expertia.Estructura.Controllers
         {
             /// ♫ Listas de Respuesta
             IEnumerable<AgenciaPnr> agenciasPnrs = null;
-            IEnumerable<File> files = null;
-            IEnumerable<Boleto> boletos = null;
+            IEnumerable<File> files; IEnumerable<Boleto> boletos;
 
             try
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
-
 
                 /// I. Consulta de PNRs a PTA
                 agenciasPnrs = (IEnumerable<AgenciaPnr>)_fileRepository.GetNewAgenciaPnr()[OutParameter.CursorAgenciaPnr];
@@ -55,120 +54,61 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
-                /// Intentando enviar en paralelo
-                //var agenciasPnrTasks = new List<Task>();
+                /// Procesamos los Files y Boletos de cada Agencia PNR
                 foreach (var agenciaPnr in agenciasPnrs)
                 {
-                    //var agenciaPnrTask = new Task(() =>
+                    /// II. Completar PNR en Salesforce
+                    agenciaPnr.UnidadNegocio = unidadNegocio.Descripcion;
+
+                    agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
+                    if (string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
+                        SendToSalesforce(agenciaPnr, token);
+
+                    /// III. Envío de Files, Boletos a Salesforce
+                    if (!string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
                     {
-                        /// II. Completar PNR en Salesforce
-                        try
+                        /// 1. Consulta Lista de Files, Lista de Boletos
+                        var _operFileAndBoleto = _fileRepository.GetFileAndBoleto(agenciaPnr);
+
+                        /// 2. Envío de Files
+                        agenciaPnr.Files = files = (IEnumerable<File>)_operFileAndBoleto[OutParameter.CursorFile];
+                        foreach (var file in files)
                         {
-                            agenciaPnr.UnidadNegocio = unidadNegocio.Descripcion;
-                            agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
-                            agenciaPnr.LastMethod = "[SP_LISTAR_AGENCIA_PNR_NOVEDAD]";
-                            if (string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
+                            try
                             {
-                                var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
-                                var responsePnr = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
-                                if (responsePnr.StatusCode.Equals(HttpStatusCode.OK))
-                                {
-                                    dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePnr.Content);
-                                    try
-                                    {
-                                        agenciaPnr.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
-                                        agenciaPnr.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
-                                        agenciaPnr.IdOportunidad = jsonResponse[OutParameter.SF_IdOportunidad];
-                                        agenciaPnr.LastMethod = "[services/apexrest/restBuscarPNR]";
-                                    }
-                                    catch
-                                    {
-                                    }
-                                }
+                                /// a. Envío a Salesforce
+                                SendToSalesforce(file, token);
+                                if (EvaluateRetry(file)) SendToSalesforce(file, token);
+
+                                /// b. Resultado a BD
+                                var operFileUpdate = _fileRepository.UpdateFile(file);
+                                file.Actualizados = int.Parse(operFileUpdate[OutParameter.IdActualizados].ToString());
+                            }
+                            catch
+                            {
                             }
                         }
-                        catch
-                        {
-                        }
 
-                        /// III. Envío de Files, Boletos a Salesforce
-                        try
+                        /// 3. Envío de Boletos
+                        agenciaPnr.Boletos = boletos = (IEnumerable<Boleto>)_operFileAndBoleto[OutParameter.CursorBoleto];
+                        foreach (var boleto in boletos)
                         {
-                            if (!string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
+                            try
                             {
-                                var _operFileAndBoleto = _fileRepository.GetFileAndBoleto(agenciaPnr);
-                                var filesOrBoletosTasks = new List<Task>();
+                                /// a. Envío a Salesforce
+                                SendToSalesforce(boleto, token);
+                                if (EvaluateRetry(boleto)) SendToSalesforce(boleto, token);
 
-                                /// a. Envío de Files
-                                agenciaPnr.Files = files = (IEnumerable<File>)_operFileAndBoleto[OutParameter.CursorFile];
-                                foreach (var file in files)
-                                {
-                                    //var fileTask = new Task(() =>
-                                    {
-                                        try
-                                        {
-                                            var fileSf = ToSalesforceEntity(file);
-                                            var responseFile = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.FileMethod, Method.POST, fileSf, true, token);
-                                            if (responseFile.StatusCode.Equals(HttpStatusCode.OK))
-                                            {
-                                                JsonManager.LoadText(responseFile.Content);
-                                                file.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                                                file.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                                file.LastMethod = "[services/apexrest/restRecibirFile]";
-                                                var operFileUpdate = _fileRepository.UpdateFile(file);
-                                                file.Actualizados = int.Parse(operFileUpdate[OutParameter.IdActualizados].ToString());
-                                                file.LastMethod = "[SP_ACTUALIZAR_ENVIO_FILE]";
-                                            }
-                                        }
-                                        catch
-                                        {
-                                        }
-                                    }//);
-                                    //fileTask.Start();
-                                    //filesOrBoletosTasks.Add(fileTask);
-                                }
-
-                                /// b. Envío de Boletos
-                                agenciaPnr.Boletos = boletos = (IEnumerable<Boleto>)_operFileAndBoleto[OutParameter.CursorBoleto];
-                                foreach (var boleto in boletos)
-                                {
-                                    //var boletoTask = new Task(() =>
-                                    {
-                                        try
-                                        {
-                                            var boletoSf = ToSalesforceEntity(boleto);
-                                            var responseBoleto = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.BoletoMethod, Method.POST, boletoSf, true, token);
-                                            if (responseBoleto.StatusCode.Equals(HttpStatusCode.OK))
-                                            {
-                                                JsonManager.LoadText(responseBoleto.Content);
-                                                boleto.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
-                                                boleto.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
-                                                boleto.LastMethod = "[services/apexrest/restRecibirBoleto]";
-                                                var operBoletoUpdate = _fileRepository.UpdateBoleto(boleto);
-                                                boleto.Actualizados = int.Parse(operBoletoUpdate[OutParameter.IdActualizados].ToString());
-                                                boleto.LastMethod = "[SP_ACTUALIZAR_ENVIO_BOLETO]";
-                                            }
-                                        }
-                                        catch
-                                        {
-                                        }
-                                    }//);
-                                    //boletoTask.Start();
-                                    //filesOrBoletosTasks.Add(boletoTask);
-                                }
-
-                                /// c. Espera los Files, Boletos
-                                //Task.WaitAll(filesOrBoletosTasks.ToArray());
+                                /// b. Resultado a BD
+                                var operBoletoUpdate = _fileRepository.UpdateBoleto(boleto);
+                                boleto.Actualizados = int.Parse(operBoletoUpdate[OutParameter.IdActualizados].ToString());
+                            }
+                            catch
+                            {
                             }
                         }
-                        catch
-                        {
-                        }
-                    }//);
-                    //agenciaPnrTask.Start();
-                    //agenciasPnrTasks.Add(agenciaPnrTask);
+                    }
                 }
-                //Task.WaitAll(agenciasPnrTasks.ToArray());
                 return Ok(new { AgenciasPnr = agenciasPnrs });
             }
             catch (Exception ex)
@@ -182,6 +122,96 @@ namespace Expertia.Estructura.Controllers
         }
         #endregion
 
+        #region Send
+        private void SendToSalesforce(AgenciaPnr agenciaPnr, string token)
+        {
+            try
+            {
+                var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
+                var responsePnr = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
+                if (responsePnr.StatusCode.Equals(HttpStatusCode.OK))
+                {
+                    dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePnr.Content);
+                    try
+                    {
+                        agenciaPnr.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                        agenciaPnr.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
+                        agenciaPnr.IdOportunidad = jsonResponse[OutParameter.SF_IdOportunidad];
+                        agenciaPnr.LastMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.PnrMethod);
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void SendToSalesforce(File file, string token)
+        {
+            try
+            {
+                var fileSf = ToSalesforceEntity(file);
+                var responseFile = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.FileMethod, Method.POST, fileSf, true, token);
+                if (responseFile.StatusCode.Equals(HttpStatusCode.OK))
+                {
+                    dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseFile.Content);
+                    file.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                    file.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
+                    file.LastMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.FileMethod);
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void SendToSalesforce(Boleto boleto, string token)
+        {
+            var boletoSf = ToSalesforceEntity(boleto);
+            var responseBoleto = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.BoletoMethod, Method.POST, boletoSf, true, token);
+            if (responseBoleto.StatusCode.Equals(HttpStatusCode.OK))
+            {
+                JsonManager.LoadText(responseBoleto.Content);
+                boleto.CodigoError = JsonManager.GetSetting(OutParameter.SF_CodigoError);
+                boleto.MensajeError = JsonManager.GetSetting(OutParameter.SF_MensajeError);
+                boleto.LastMethod = ConfigAccess.GetValueInAppSettings(SalesforceKeys.BoletoMethod);
+            }
+        }
+        #endregion
+
+        #region Retry
+        private bool EvaluateRetry(File file)
+        {
+            var retry = true;
+
+            if (file.Accion.Equals(SalesforceKeys.CreateAction) && file.CodigoError.Equals(SfResponseCode.FileYaExiste))
+                file.Accion = SalesforceKeys.UpdateAction;
+            else if (file.Accion.Equals(SalesforceKeys.UpdateAction) && file.CodigoError.Equals(SfResponseCode.FileNoExiste))
+                file.Accion = SalesforceKeys.CreateAction;
+            else
+                retry = false;
+
+            return retry;
+        }
+
+        private bool EvaluateRetry(Boleto boleto)
+        {
+            var retry = true;
+            
+            if (boleto.Accion.Equals(SalesforceKeys.CreateAction) && boleto.CodigoError.Equals(SfResponseCode.BoletoYaExiste))
+                boleto.Accion = SalesforceKeys.UpdateAction;
+            else if (boleto.Accion.Equals(SalesforceKeys.UpdateAction) && boleto.CodigoError.Equals(SfResponseCode.BoletoNoExiste))
+                boleto.Accion = SalesforceKeys.CreateAction;
+            else
+                retry = false;
+
+            return retry;
+        }
+        #endregion
+
         #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
@@ -189,7 +219,6 @@ namespace Expertia.Estructura.Controllers
             {
                 case UnidadNegocioKeys.Interagencias:
                     _fileRepository = new File_IA_Repository();
-                    //_fileCollection.Add(UnidadNegocioKeys.Interagencias, new File_IA_Repository());
                     break;
             }
             return unidadNegocioKey;

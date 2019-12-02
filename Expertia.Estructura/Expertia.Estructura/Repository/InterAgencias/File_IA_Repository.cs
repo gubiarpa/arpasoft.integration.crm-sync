@@ -33,7 +33,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.IA_Read_AgenciaPnr);
-            operation[OutParameter.CursorAgenciaPnr] = ToAgenciaPnr(GetDtParameter(OutParameter.CursorAgenciaPnr));
+            operation[OutParameter.CursorAgenciaPnr] = ToAgenciaPnr(GetDtParameter(OutParameter.CursorAgenciaPnr), StoredProcedureName.IA_Read_AgenciaPnr);
             #endregion
 
             return operation;
@@ -70,8 +70,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.IA_Read_File);
-            operation[OutParameter.CursorFile] = ToFile(GetDtParameter(OutParameter.CursorFile));
-            operation[OutParameter.CursorBoleto] = ToBoleto(GetDtParameter(OutParameter.CursorBoleto));
+            operation[OutParameter.CursorFile] = ToFile(GetDtParameter(OutParameter.CursorFile), StoredProcedureName.IA_Read_File);
+            operation[OutParameter.CursorBoleto] = ToBoleto(GetDtParameter(OutParameter.CursorBoleto), StoredProcedureName.IA_Read_File);
             #endregion
 
             return operation;
@@ -105,7 +105,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.IA_Update_File);
+            ExecuteStoredProcedure(file.LastMethod = StoredProcedureName.IA_Update_File);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
@@ -145,7 +145,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.IA_Update_Boleto);
+            ExecuteStoredProcedure(boleto.LastMethod = StoredProcedureName.IA_Update_Boleto);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
@@ -156,7 +156,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #endregion
 
         #region Auxiliar
-        private IEnumerable<AgenciaPnr> ToAgenciaPnr(DataTable dt)
+        private IEnumerable<AgenciaPnr> ToAgenciaPnr(DataTable dt, string spName = "")
         {
             try
             {
@@ -180,7 +180,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         Sucursal = nombre_sucursal,
                         IdOportunidad = id_oportunidad,
                         Files = new List<File>(),
-                        Boletos = new List<Boleto>()
+                        Boletos = new List<Boleto>(),
+                        LastMethod = spName
                     });
                     #endregion
                 }
@@ -192,7 +193,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             }
         }
 
-        private IEnumerable<File> ToFile(DataTable dt)
+        private IEnumerable<File> ToFile(DataTable dt, string spName = "")
         {
             try
             {
@@ -242,7 +243,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         NumPasajeros = numPasajeros,
                         Costo = costo,
                         Venta = venta,
-                        ComisionAgencia = comisionAgencia
+                        ComisionAgencia = comisionAgencia,
+                        LastMethod = spName
                     });
                     #endregion
                 }
@@ -254,7 +256,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             }
         }
 
-        private IEnumerable<Boleto> ToBoleto(DataTable dt)
+        private IEnumerable<Boleto> ToBoleto(DataTable dt, string spName = "")
         {
             try
             {
@@ -323,7 +325,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         TipoWaiver = tipoWaiver,
                         MontoWaiver = montoWaiver,
                         Pagado = pagado,
-                        Comprobante = comprobante
+                        Comprobante = comprobante,
+                        LastMethod = spName
                     });
                     #endregion
                 }
