@@ -97,6 +97,10 @@ namespace Expertia.Estructura.Controllers.Base
             {
                 return UnidadNegocioKeys.AppWebs;
             }
+            if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravelCL.GetKeyValues()).ToUpper().Split(Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
+            {
+                return UnidadNegocioKeys.CondorTravelCL;
+            }
             return null;
         }
 

@@ -16,6 +16,7 @@ namespace Expertia.Estructura.Utils
         public const string DMConnKey = "DMConnKey";
         public const string IAConnKey = "IAConnKey";
         public const string AWConnKey = "AWConnKey";
+        public const string CondorCLConnKey = "CTCLConnKey";
     }
 
     public static class LogKeys
@@ -155,6 +156,15 @@ namespace Expertia.Estructura.Utils
         public const string AW_Read_ContactoPta = "APPWEBS.CRM_PKG.SP_LISTAR_CONTACTO";
         public const string AW_Update_ContactoPta = "APPWEBS.CRM_PKG.SP_ACTUALIZAR_ENVIO_CONTACTO";
         #endregion
+
+        #region CondorTravelChile
+        // Cuenta B2B
+        public const string CT_Create_CuentaB2B_CL = "CONDOR.CRM_PKG.SP_CREAR_CLIENTE";
+        public const string CT_Update_CuentaB2B_CL = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
+        // Contacto
+        public const string CT_Create_Contacto_CL = "CONDOR.CRM_PKG.SP_CREAR_CONTACTO";
+        public const string CT_Update_Contacto_CL = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
+        #endregion
     }
 
     public static class SalesforceKeys
@@ -243,7 +253,8 @@ namespace Expertia.Estructura.Utils
         CondorTravel,
         DestinosMundiales,
         Interagencias,
-        AppWebs
+        AppWebs,
+        CondorTravelCL,
     }
 
     public static class UnidadNegocioShortNames
@@ -252,6 +263,7 @@ namespace Expertia.Estructura.Utils
         public const string DestinosMundiales = "DM";
         public const string InterAgencias = "IA";
         public const string AppWebs = "AW";
+        public const string CondorTravelCL = "CL";
     }
 
     public static class UnidadNegocioLongName
@@ -259,6 +271,7 @@ namespace Expertia.Estructura.Utils
         public const string CondorTravel = "Condor Travel";
         public const string DestinosMundiales = "Destinos Mundiales";
         public const string Interagencias = "Interagencias";
+        public const string CondorTravelCL = "Condor Travel Chile";
     }
 
     public static class Auxiliar

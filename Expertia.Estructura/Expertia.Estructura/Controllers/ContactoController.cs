@@ -49,6 +49,18 @@ namespace Expertia.Estructura.Controllers
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
 
+                    case UnidadNegocioKeys.CondorTravelCL:
+
+                        #region CondorTravelCL
+                        CreateOrUpdate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravelCL)) CreateOrUpdate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError, _delayTimeRetry);
+                        #endregion
+
+                        LoadResults(UnidadNegocioKeys.CondorTravelCL, out logResult, out result);
+                        break;
+
+
+
                     /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
@@ -119,6 +131,18 @@ namespace Expertia.Estructura.Controllers
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
 
+
+                    case UnidadNegocioKeys.CondorTravelCL:
+
+                        #region CondorTravelCL
+                        UpdateOrCreate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravelCL)) UpdateOrCreate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError);
+                        #endregion
+
+                        LoadResults(UnidadNegocioKeys.CondorTravelCL, out logResult, out result);
+                        break;
+
+
                     /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
@@ -139,6 +163,8 @@ namespace Expertia.Estructura.Controllers
                         UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
                         if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs)) UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
                         #endregion
+
+
 
                         LoadResults(UnidadNegocioKeys.AppWebs, out logResult, out result);
                         break;
@@ -202,6 +228,36 @@ namespace Expertia.Estructura.Controllers
                                 MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.MensajeError].ToString(),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel][OutParameter.IdContacto].ToString()
+                            }
+                        }
+                    };
+                    #endregion
+                    break;
+                #endregion
+
+                #region CondorTravelCL
+                case UnidadNegocioKeys.CondorTravelCL:
+                    #region Log
+                    logResult = new
+                    {
+                        Codes = GetErrorResult(UnidadNegocioKeys.CondorTravelCL),
+                        Retry = _operRetry[UnidadNegocioKeys.CondorTravelCL],
+                        NotAssociated = _operNotAssociated[UnidadNegocioKeys.CondorTravelCL],
+                        IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdCuenta].ToString(),
+                        IdContacto = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdContacto].ToString()
+                    };
+                    #endregion
+                    #region Client
+                    result = new
+                    {
+                        Result = new
+                        {
+                            CondorTravelCL = new
+                            {
+                                CodigoError = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdContacto].ToString()
                             }
                         }
                     };
@@ -295,6 +351,9 @@ namespace Expertia.Estructura.Controllers
             {
                 case UnidadNegocioKeys.CondorTravel:
                     _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new Contacto_CT_Repository());
+                    break;
+                case UnidadNegocioKeys.CondorTravelCL:
+                    _crmCollection.Add(UnidadNegocioKeys.CondorTravelCL, new Contacto_CT_CL_Repository());
                     break;
                 /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                 case UnidadNegocioKeys.Interagencias:

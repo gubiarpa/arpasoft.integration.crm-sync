@@ -9,18 +9,18 @@ using System.Linq;
 
 namespace Expertia.Estructura.Repository.Condor
 {
-    public class CuentaB2B_CT_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>, ISameSPName<CuentaB2B>
+    public class CuentaB2B_CT_CL_Repository : OracleBase<CuentaB2B>, ICrud<CuentaB2B>, ISameSPName<CuentaB2B>
     {
-        public CuentaB2B_CT_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.CondorTravel) : base(ConnectionKeys.CondorConnKey, unidadNegocio)
+        public CuentaB2B_CT_CL_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.CondorTravelCL) : base(ConnectionKeys.CondorCLConnKey, unidadNegocio)
         {
         }
 
-       
         #region PublicMethods
         public Operation Create(CuentaB2B entity)
         {
             return ExecuteOperation(entity, StoredProcedureName.CT_Create_CuentaB2B, entity.Auditoria.CreateUser.Descripcion);
         }
+
 
         public Operation Update(CuentaB2B entity)
         {
