@@ -55,7 +55,7 @@ namespace Expertia.Estructura.Controllers
                         /// II. Enviar Oportunidad a Salesforce
                         try
                         {
-                            oportunidad.UnidadNegocio = unidadNegocio.Descripcion;
+                            //oportunidad.UnidadNegocio = unidadNegocio.Descripcion;
                             oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
                             var oportunidadSf = ToSalesfoceEntity(oportunidad);
                             var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidadSf, true, token);
