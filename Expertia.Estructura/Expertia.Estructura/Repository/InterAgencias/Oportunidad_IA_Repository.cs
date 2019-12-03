@@ -135,7 +135,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var pnr_1 = row.StringParse("PNR_1");
                     var pnr_2 = row.StringParse("PNR_2");
                     var motivoPerdida = row.StringParse("MOTIVO_PERDIDA");
-                    var idFile = row.StringParse("ID_FILE");
+                    var idFile = row.IntParse("ID_FILE");
                     #endregion
 
                     #region AddingElement
