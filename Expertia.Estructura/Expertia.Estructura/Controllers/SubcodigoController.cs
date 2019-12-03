@@ -45,7 +45,8 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 var operResult = _subcodigoRepository.Create(subcodigo);
-                _response = new CrmApiResponse(operResult[OutParameter.CodigoError].ToString(), operResult[OutParameter.MensajeError].ToString());
+                //_response = new CrmApiResponse(operResult[OutParameter.CodigoError].ToString(), operResult[OutParameter.MensajeError].ToString());
+                _response = new CrmApiResponse(subcodigo.CodigoError, subcodigo.MensajeError);
                 result = new
                 {
                     Result = _response,
