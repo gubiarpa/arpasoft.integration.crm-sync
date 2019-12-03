@@ -23,7 +23,7 @@ namespace Expertia.Estructura.Repository.AppWebs
 
         public Operation Update(Oportunidad oportunidad)
         {
-            throw new NotImplementedException();
+            return (new Oportunidad_IA_Repository(UnidadNegocioKeys.AppWebs).Update(oportunidad));
         }
     }
 }
