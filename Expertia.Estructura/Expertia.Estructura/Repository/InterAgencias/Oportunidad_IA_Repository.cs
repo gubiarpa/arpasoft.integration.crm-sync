@@ -168,7 +168,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         MontoEstimado = montoEstimado,
                         MontoReal = montoReal,
                         Pnr1 = pnr_1,
-                        Pnr2 = pnr_2
+                        Pnr2 = pnr_2,
+                        MotivoPerdida = motivoPerdida
                     });
                     #endregion
                 }
