@@ -42,7 +42,7 @@ namespace Expertia.Estructura.Controllers
 
                 /// I. Consulta de Cuentas PTA
                 cuentasPtas = (IEnumerable<CuentaPta>)(_cuentaPtaRepository.Read())[OutParameter.CursorCuentaPta];
-                if (cuentasPtas == null || cuentasPtas.ToList().Count.Equals(0)) return Ok();
+                if (cuentasPtas == null || cuentasPtas.ToList().Count.Equals(0)) return Ok(cuentasPtas);
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);

@@ -51,7 +51,7 @@ namespace Expertia.Estructura.Controllers
                     Result = _response,
                     Response = new
                     {
-                        IdSubcodigo = operResult[OutParameter.IdSubcodigo].ToString()
+                        IdSubcodigo = int.Parse(operResult[OutParameter.IdSubcodigo].ToString())
                     }
                 };
 

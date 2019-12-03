@@ -46,7 +46,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 /// (10) P_PROMOTOR
                 AddParameter("P_NOMBRE_PROMOTOR", OracleDbType.Varchar2, subcodigo.Promotor);
                 /// (11) CORRELATIVO_SUBCODIGO
-                AddParameter(OutParameter.IdSubcodigo, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                AddParameter(OutParameter.IdSubcodigo, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
                 #endregion
 
                 #region Invoke
