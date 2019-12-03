@@ -65,8 +65,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
                 ExecuteStoredProcedure(spName);
 
-                operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
-                operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                subcodigo.CodigoError = (operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError)).ToString();
+                subcodigo.MensajeError = (operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError)).ToString();
                 operation[OutParameter.IdSubcodigo] = GetOutParameter(OutParameter.IdSubcodigo);
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
