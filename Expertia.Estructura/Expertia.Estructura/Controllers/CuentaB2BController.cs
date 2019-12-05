@@ -31,7 +31,9 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
+                        /*
                         CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        */
                         CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
@@ -142,12 +144,14 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
+                            /*
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
                                 Retry = _operRetry[UnidadNegocioKeys.DestinosMundiales],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                             },
+                            */
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.Interagencias),
@@ -162,12 +166,14 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
+                            /*
                             DestinosMundiales = new
                             {
                                 CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
                                 MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                             },
+                            */
                             InterAgencias = new
                             {
                                 CodigoError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.CodigoError].ToString(),
