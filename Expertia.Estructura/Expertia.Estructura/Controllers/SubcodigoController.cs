@@ -120,7 +120,7 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 subcodigos = null;
-                throw ex;
+                return InternalServerError(ex);
             }
             finally
             {

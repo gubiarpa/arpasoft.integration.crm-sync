@@ -92,7 +92,7 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 oportunidades = null;
-                throw ex;
+                return InternalServerError(ex);
             }
             finally
             {

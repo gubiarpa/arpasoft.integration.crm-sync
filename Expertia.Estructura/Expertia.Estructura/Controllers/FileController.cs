@@ -113,6 +113,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
+                agenciasPnrs = null;
                 return InternalServerError(ex);
             }
             finally

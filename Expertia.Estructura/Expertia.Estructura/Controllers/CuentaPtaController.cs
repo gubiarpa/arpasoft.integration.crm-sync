@@ -78,6 +78,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
+                cuentasPtas = null;
                 return InternalServerError(ex);
             }
             finally
