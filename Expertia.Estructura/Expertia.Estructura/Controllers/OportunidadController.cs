@@ -47,54 +47,46 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
 
-                //var oportunidadTasks = new List<Task>();
                 foreach (var oportunidad in oportunidades)
                 {
-                    //var task = new Task(() =>
+                    /// II. Enviar Oportunidad a Salesforce
+                    try
                     {
-                        /// II. Enviar Oportunidad a Salesforce
-                        try
+                        oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
+                        var oportunidadSf = ToSalesfoceEntity(oportunidad);
+                        var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidadSf, true, token);
+                        if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                         {
-                            //oportunidad.UnidadNegocio = unidadNegocio.Descripcion;
-                            oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
-                            var oportunidadSf = ToSalesfoceEntity(oportunidad);
-                            var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidadSf, true, token);
-                            if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
+                            dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
+                            try
                             {
-                                dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
-                                try
-                                {
-                                    oportunidad.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
-                                    oportunidad.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
-                                    if (string.IsNullOrEmpty(oportunidad.IdOportunidad))
-                                        oportunidad.IdOportunidad = jsonResponse[OutParameter.SF_IdOportunidad];
-                                }
-                                catch
-                                {
-                                }
+                                oportunidad.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                                oportunidad.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
+                                if (string.IsNullOrEmpty(oportunidad.IdOportunidad))
+                                    oportunidad.IdOportunidad = jsonResponse[OutParameter.SF_IdOportunidad];
+                            }
+                            catch
+                            {
+                            }
 
-                                try
-                                {
-                                    /// Actualización de estado de Oportunidad a PTA
-                                    var updateResponse = _oportunidadRepository.Update(oportunidad);
-                                    oportunidad.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
-                                }
-                                catch
-                                {
-                                }
+                            try
+                            {
+                                /// Actualización de estado de Oportunidad a PTA
+                                var updateResponse = _oportunidadRepository.Update(oportunidad);
+                                oportunidad.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                            }
+                            catch
+                            {
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            oportunidad.CodigoError = ApiResponseCode.ErrorCode;
-                            oportunidad.MensajeError = ex.Message;
-                        }
-                    }//);
-                    //task.Start();
-                    //oportunidadTasks.Add(task);
+                    }
+                    catch (Exception ex)
+                    {
+                        oportunidad.CodigoError = ApiResponseCode.ErrorCode;
+                        oportunidad.MensajeError = ex.Message;
+                    }
                 }
 
-                //Task.WaitAll(oportunidadTasks.ToArray());
                 return Ok(oportunidades);
             }
             catch (Exception ex)
@@ -106,6 +98,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    UnidadNegocio = unidadNegocio,
                     LegacySystems = oportunidades
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

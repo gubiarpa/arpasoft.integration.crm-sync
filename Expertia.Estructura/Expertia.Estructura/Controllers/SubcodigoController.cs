@@ -133,6 +133,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    UnidadNegocio = unidadNegocio,
                     LegacySystems = subcodigos
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

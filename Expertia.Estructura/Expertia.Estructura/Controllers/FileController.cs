@@ -117,7 +117,11 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                agenciasPnrs.TryWriteLogObject(_logFileManager, _clientFeatures);
+                (new
+                {
+                    UnidadNegocio = unidadNegocio,
+                    LegacySystems = agenciasPnrs
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
