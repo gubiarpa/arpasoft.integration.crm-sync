@@ -98,7 +98,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    UnidadNegocio = unidadNegocio,
+                    UnidadNegocio = unidadNegocio.Descripcion,
                     LegacySystems = oportunidades
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

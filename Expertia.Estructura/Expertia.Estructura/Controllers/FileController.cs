@@ -119,7 +119,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    UnidadNegocio = unidadNegocio,
+                    UnidadNegocio = unidadNegocio.Descripcion,
                     LegacySystems = agenciasPnrs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
