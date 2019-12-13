@@ -7,7 +7,7 @@ using System;
 
 namespace Expertia.Estructura.Repository.DestinosMundiales
 {
-    public class Subcodigo_DM_Repository : OracleBase<Subcodigo>, ICrud<Subcodigo>
+    public class Subcodigo_DM_Repository : OracleBase<Subcodigo>, ISubcodigoRepository
     {
         #region Constructor
         public Subcodigo_DM_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.DestinosMundiales) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
@@ -21,29 +21,14 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             return new Subcodigo_IA_Repository(UnidadNegocioKeys.DestinosMundiales).Create(entity);
         }
 
-        public Operation Read(Subcodigo entity)
+        public Operation Read()
         {
             return new Subcodigo_IA_Repository(UnidadNegocioKeys.DestinosMundiales).Read();
         }
-        #endregion
 
-        #region Auxiliar
-        #endregion
-
-        #region NotImplemented
-        public Operation Asociate(Subcodigo entity)
+        public Operation Update(Subcodigo subcodigo)
         {
-            throw new NotImplementedException();
-        }
-
-        public Operation Generate(Subcodigo entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Operation Update(Subcodigo entity)
-        {
-            throw new NotImplementedException();
+            return new Subcodigo_IA_Repository(UnidadNegocioKeys.DestinosMundiales).Update(subcodigo);
         }
         #endregion
     }

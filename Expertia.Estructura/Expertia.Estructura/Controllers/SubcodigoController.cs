@@ -3,6 +3,7 @@ using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Behavior;
+using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
 using Expertia.Estructura.Utils;
@@ -47,12 +48,13 @@ namespace Expertia.Estructura.Controllers
                 var operResult = _subcodigoRepository.Create(subcodigo);
                 //_response = new CrmApiResponse(operResult[OutParameter.CodigoError].ToString(), operResult[OutParameter.MensajeError].ToString());
                 _response = new CrmApiResponse(subcodigo.CodigoError, subcodigo.MensajeError);
+                if (!int.TryParse(operResult[OutParameter.IdSubcodigo].ToString(), out int idSubcodigo)) idSubcodigo = -1;
                 result = new
                 {
                     Result = _response,
                     Response = new
                     {
-                        IdSubcodigo = int.Parse(operResult[OutParameter.IdSubcodigo].ToString())
+                        IdSubcodigo = idSubcodigo
                     }
                 };
 
@@ -139,6 +141,9 @@ namespace Expertia.Estructura.Controllers
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.CondorTravel:
+                    break;
+                case UnidadNegocioKeys.DestinosMundiales:
+                    _subcodigoRepository = new Subcodigo_DM_Repository();
                     break;
                 case UnidadNegocioKeys.Interagencias:
                     _subcodigoRepository = new Subcodigo_IA_Repository();
