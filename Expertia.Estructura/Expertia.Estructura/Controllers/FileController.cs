@@ -113,11 +113,16 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
+                agenciasPnrs = null;
                 return InternalServerError(ex);
             }
             finally
             {
-                agenciasPnrs.TryWriteLogObject(_logFileManager, _clientFeatures);
+                (new
+                {
+                    UnidadNegocio = unidadNegocio.Descripcion,
+                    LegacySystems = agenciasPnrs
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
