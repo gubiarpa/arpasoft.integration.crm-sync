@@ -22,6 +22,7 @@ namespace Expertia.Estructura.Utils
     {
         public const string LogPath = "LogPath";
         public const string LogName = "LogName";
+        public const string LogDate = "LogDate";
     }
     #endregion
 
