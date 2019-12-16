@@ -35,6 +35,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<Oportunidad> oportunidades = null;
+            string exceptionMsg = string.Empty;
             try
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
@@ -82,6 +83,7 @@ namespace Expertia.Estructura.Controllers
                     }
                     catch (Exception ex)
                     {
+                        exceptionMsg = ex.Message;
                         oportunidad.CodigoError = ApiResponseCode.ErrorCode;
                         oportunidad.MensajeError = ex.Message;
                     }
@@ -99,6 +101,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
+                    Exception = exceptionMsg,
                     LegacySystems = oportunidades
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

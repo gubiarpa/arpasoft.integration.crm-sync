@@ -80,6 +80,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<Subcodigo> subcodigos = null;
+            string exceptionMsg = string.Empty;
             try
             {
                 var unidadNegocioType = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
@@ -122,6 +123,7 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 subcodigos = null;
+                exceptionMsg = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -129,6 +131,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
+                    Exception = exceptionMsg,
                     LegacySystems = subcodigos
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
