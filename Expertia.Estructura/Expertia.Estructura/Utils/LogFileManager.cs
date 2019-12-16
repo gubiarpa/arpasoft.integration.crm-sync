@@ -19,7 +19,7 @@ namespace Expertia.Estructura.Utils
         {
             _fileIO = new FileIO(
                 ConfigAccess.GetValueInAppSettings(filePathKey),
-                string.Format(ConfigAccess.GetValueInAppSettings(fileNameKey), DateTime.Now.ToString(FormatTemplate.FileDate)));
+                string.Format(ConfigAccess.GetValueInAppSettings(fileNameKey), DateTime.Now.ToString(ConfigAccess.GetValueInAppSettings(LogKeys.LogDate))));
         }
 
         public void WriteText(string text)

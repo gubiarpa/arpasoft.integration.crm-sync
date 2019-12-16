@@ -23,6 +23,7 @@ namespace Expertia.Estructura.Utils
     {
         public const string LogPath = "LogPath";
         public const string LogName = "LogName";
+        public const string LogDate = "LogDate";
     }
     #endregion
 
@@ -116,7 +117,7 @@ namespace Expertia.Estructura.Utils
         public const string DM_Send_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_COTIZACION";
         // Subcodigo
         public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
-        public const string DM_Read_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_SUBCODIGO";
+        public const string DM_Read_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_SUBCODIGO";
         public const string DM_Update_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_SUBCODIGO";
         #endregion
 

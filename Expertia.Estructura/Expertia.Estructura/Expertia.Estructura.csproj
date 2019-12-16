@@ -260,6 +260,7 @@
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DevProfile.pubxml" />
     <None Include="Properties\PublishProfiles\DevPublishing.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\QAProfile.pubxml" />
     <None Include="Properties\PublishProfiles\QAPublising.pubxml" />
   </ItemGroup>

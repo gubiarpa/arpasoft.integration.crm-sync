@@ -40,6 +40,7 @@ namespace Expertia.Estructura.Controllers
             /// ♫ Listas de Respuesta
             IEnumerable<AgenciaPnr> agenciasPnrs = null;
             IEnumerable<File> files; IEnumerable<Boleto> boletos;
+            string exceptionMsg = string.Empty;
 
             try
             {
@@ -113,6 +114,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
+                exceptionMsg = ex.Message;
                 agenciasPnrs = null;
                 return InternalServerError(ex);
             }
@@ -121,6 +123,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
+                    Exception = exceptionMsg,
                     LegacySystems = agenciasPnrs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

@@ -30,6 +30,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<ContactoPta> contactoPtaList = null;
+            string exceptionMsg = string.Empty;
             try
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
@@ -78,12 +79,15 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
+                exceptionMsg = ex.Message;
                 return InternalServerError(ex);
             }
             finally
             {
                 (new
                 {
+                    UnidadNegocio = unidadNegocio.Descripcion,
+                    Exception = exceptionMsg,
                     LegacySystems = contactoPtaList
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
