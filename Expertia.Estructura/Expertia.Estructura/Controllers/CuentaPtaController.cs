@@ -47,50 +47,45 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
-                //var cuentasPtasTasks = new List<Task>();
                 foreach (var cuentaPta in cuentasPtas)
                 {
-                    //var cuentaPtaTask = new Task(() =>
+                    try
                     {
-                        try
+                        /// Envío de CuentaPTA a Salesforce
+                        cuentaPta.UnidadNegocio = unidadNegocio.Descripcion;
+                        cuentaPta.CodigoError = cuentaPta.MensajeError = string.Empty;
+                        var cuentaPtaSf = ToSalesforceEntity(cuentaPta);
+                        var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaPtaSf, true, token);
+                        if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
                         {
-                            /// Envío de CuentaPTA a Salesforce
-                            cuentaPta.UnidadNegocio = unidadNegocio.Descripcion;
-                            cuentaPta.CodigoError = cuentaPta.MensajeError = string.Empty;
-                            var cuentaPtaSf = ToSalesforceEntity(cuentaPta);
-                            var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaPtaSf, true, token);
-                            if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
-                            {
-                                dynamic jsonReponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaPta.Content);
-                                cuentaPta.CodigoError = jsonReponse[OutParameter.SF_CodigoError];
-                                cuentaPta.MensajeError = jsonReponse[OutParameter.SF_MensajeError];
-                                cuentaPta.IdCuentaCrm = jsonReponse[OutParameter.SF_IdCuenta];
+                            dynamic jsonReponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaPta.Content);
+                            cuentaPta.CodigoError = jsonReponse[OutParameter.SF_CodigoError];
+                            cuentaPta.MensajeError = jsonReponse[OutParameter.SF_MensajeError];
+                            cuentaPta.IdCuentaCrm = jsonReponse[OutParameter.SF_IdCuenta];
 
-                                /// Actualización de estado de Cuenta PTA hacia PTA
-                                var updateResponse = _cuentaPtaRepository.Update(cuentaPta);
-                                cuentaPta.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
-                            }
+                            /// Actualización de estado de Cuenta PTA hacia PTA
+                            var updateResponse = _cuentaPtaRepository.Update(cuentaPta);
+                            cuentaPta.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                         }
-                        catch (Exception ex)
-                        {
-                            cuentaPta.CodigoError = ApiResponseCode.ErrorCode;
-                            cuentaPta.MensajeError = ex.Message;
-                        }
-                    }//);
-                    //cuentaPtaTask.Start();
-                    //cuentasPtasTasks.Add(cuentaPtaTask);
+                    }
+                    catch (Exception ex)
+                    {
+                        cuentaPta.CodigoError = ApiResponseCode.ErrorCode;
+                        cuentaPta.MensajeError = ex.Message;
+                    }   
                 }
-                //Task.WaitAll(cuentasPtasTasks.ToArray());
                 return Ok(new { CuentasPta = cuentasPtas });
             }
             catch (Exception ex)
             {
+                cuentasPtas = null;
                 return InternalServerError(ex);
             }
             finally
             {
                 (new
                 {
+                    UnidadNegocio = unidadNegocio.Descripcion,
                     LegacySystems = cuentasPtas
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

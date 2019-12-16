@@ -90,49 +90,43 @@ namespace Expertia.Estructura.Controllers
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
 
-                //var subcodigoTasks = new List<Task>();
                 foreach (var subcodigo in subcodigos)
                 {
-                    //var task = new Task(() =>
+                    try
                     {
-                        try
+                        /// Envío de subcodigo a Salesforce
+                        var subcodigoSf = ToSalesforceEntity(subcodigo);
+                        var responseSubcodigo = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
+                        if (responseSubcodigo.StatusCode.Equals(HttpStatusCode.OK))
                         {
-                            /// Envío de subcodigo a Salesforce
-                            var subcodigoSf = ToSalesforceEntity(subcodigo);
-                            var responseSubcodigo = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
-                            if (responseSubcodigo.StatusCode.Equals(HttpStatusCode.OK))
-                            {
-                                dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseSubcodigo.Content);
-                                subcodigo.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
-                                subcodigo.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
+                            dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseSubcodigo.Content);
+                            subcodigo.CodigoError = jsonResponse[OutParameter.SF_CodigoError];
+                            subcodigo.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
 
-                                /// Actualización de estado de subcodigo a PTA
-                                var updateResponse = _subcodigoRepository.Update(subcodigo);
-                                subcodigo.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
-                            }
+                            /// Actualización de estado de subcodigo a PTA
+                            var updateResponse = _subcodigoRepository.Update(subcodigo);
+                            subcodigo.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                         }
-                        catch (Exception ex)
-                        {
-                            subcodigo.CodigoError = ApiResponseCode.ErrorCode;
-                            subcodigo.MensajeError = ex.Message;
-                        }
-                    }//);
-                    //task.Start();
-                    //subcodigoTasks.Add(task);
+                    }
+                    catch (Exception ex)
+                    {
+                        subcodigo.CodigoError = ApiResponseCode.ErrorCode;
+                        subcodigo.MensajeError = ex.Message;
+                    }
                 }
 
-                //Task.WaitAll(subcodigoTasks.ToArray());
                 return Ok(subcodigos);
             }
             catch (Exception ex)
             {
                 subcodigos = null;
-                throw ex;
+                return InternalServerError(ex);
             }
             finally
             {
                 (new
                 {
+                    UnidadNegocio = unidadNegocio.Descripcion,
                     LegacySystems = subcodigos
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
