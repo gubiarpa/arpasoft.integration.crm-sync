@@ -55,9 +55,9 @@ namespace Expertia.Estructura.Models.Foreign
                 return UnidadNegocioKeys.Interagencias;
             }
 
-            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravelCL.GetKeyValues()).ToUpper().Split(Utils.Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
+            else if (ConfigAccess.GetValueInAppSettings(UnidadNegocioKeys.CondorTravel_CL.GetKeyValues()).ToUpper().Split(Utils.Auxiliar.ListSeparator).ToList().Contains(unidadNegocioName.ToUpper()))
             {
-                return UnidadNegocioKeys.CondorTravelCL;
+                return UnidadNegocioKeys.CondorTravel_CL;
             }
 
             return null;

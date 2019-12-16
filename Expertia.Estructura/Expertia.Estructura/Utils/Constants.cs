@@ -16,7 +16,9 @@ namespace Expertia.Estructura.Utils
         public const string DMConnKey = "DMConnKey";
         public const string IAConnKey = "IAConnKey";
         public const string AWConnKey = "AWConnKey";
-        public const string CondorCLConnKey = "CTCLConnKey";
+        public const string CondorConnKey_CL = "CTConnKey_CL";
+        public const string CondorConnKey_EC = "CTConnKey_EC";
+        public const string CondorConnKey_BR = "CTConnKey_BR";
     }
 
     public static class LogKeys
@@ -260,7 +262,9 @@ namespace Expertia.Estructura.Utils
         DestinosMundiales,
         Interagencias,
         AppWebs,
-        CondorTravelCL,
+        CondorTravel_CL,
+        CondorTravel_EC,
+        CondorTravel_BR
     }
 
     public static class UnidadNegocioShortNames

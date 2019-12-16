@@ -49,14 +49,14 @@ namespace Expertia.Estructura.Controllers
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
 
-                    case UnidadNegocioKeys.CondorTravelCL:
+                    case UnidadNegocioKeys.CondorTravel_CL:
 
                         #region CondorTravelCL
-                        CreateOrUpdate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravelCL)) CreateOrUpdate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError, _delayTimeRetry);
+                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel_CL)) CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError, _delayTimeRetry);
                         #endregion
 
-                        LoadResults(UnidadNegocioKeys.CondorTravelCL, out logResult, out result);
+                        LoadResults(UnidadNegocioKeys.CondorTravel_CL, out logResult, out result);
                         break;
 
 
@@ -132,14 +132,14 @@ namespace Expertia.Estructura.Controllers
                         break;
 
 
-                    case UnidadNegocioKeys.CondorTravelCL:
+                    case UnidadNegocioKeys.CondorTravel_CL:
 
                         #region CondorTravelCL
-                        UpdateOrCreate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravelCL)) UpdateOrCreate(UnidadNegocioKeys.CondorTravelCL, entity, codigoError);
+                        UpdateOrCreate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
+                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel_CL)) UpdateOrCreate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
                         #endregion
 
-                        LoadResults(UnidadNegocioKeys.CondorTravelCL, out logResult, out result);
+                        LoadResults(UnidadNegocioKeys.CondorTravel_CL, out logResult, out result);
                         break;
 
 
@@ -236,15 +236,15 @@ namespace Expertia.Estructura.Controllers
                 #endregion
 
                 #region CondorTravelCL
-                case UnidadNegocioKeys.CondorTravelCL:
+                case UnidadNegocioKeys.CondorTravel_CL:
                     #region Log
                     logResult = new
                     {
-                        Codes = GetErrorResult(UnidadNegocioKeys.CondorTravelCL),
-                        Retry = _operRetry[UnidadNegocioKeys.CondorTravelCL],
-                        NotAssociated = _operNotAssociated[UnidadNegocioKeys.CondorTravelCL],
-                        IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdCuenta].ToString(),
-                        IdContacto = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdContacto].ToString()
+                        Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel_CL),
+                        Retry = _operRetry[UnidadNegocioKeys.CondorTravel_CL],
+                        NotAssociated = _operNotAssociated[UnidadNegocioKeys.CondorTravel_CL],
+                        IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.IdCuenta].ToString(),
+                        IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.IdContacto].ToString()
                     };
                     #endregion
                     #region Client
@@ -254,10 +254,10 @@ namespace Expertia.Estructura.Controllers
                         {
                             CondorTravelCL = new
                             {
-                                CodigoError = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.CondorTravelCL][OutParameter.IdContacto].ToString()
+                                CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.IdCuenta].ToString(),
+                                IdContacto = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.IdContacto].ToString()
                             }
                         }
                     };
@@ -352,8 +352,8 @@ namespace Expertia.Estructura.Controllers
                 case UnidadNegocioKeys.CondorTravel:
                     _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new Contacto_CT_Repository());
                     break;
-                case UnidadNegocioKeys.CondorTravelCL:
-                    _crmCollection.Add(UnidadNegocioKeys.CondorTravelCL, new Contacto_CT_CL_Repository());
+                case UnidadNegocioKeys.CondorTravel_CL:
+                    _crmCollection.Add(UnidadNegocioKeys.CondorTravel_CL, new Contacto_CT_CL_Repository());
                     break;
                 /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                 case UnidadNegocioKeys.Interagencias:

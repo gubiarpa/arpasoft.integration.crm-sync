@@ -119,7 +119,7 @@ namespace Expertia.Estructura.Controllers
                         unidadNegocioKeys = UnidadNegocioKeys.CondorTravel;
                         break;
                     case "CL":
-                        unidadNegocioKeys = UnidadNegocioKeys.CondorTravelCL;
+                        unidadNegocioKeys = UnidadNegocioKeys.CondorTravel_CL;
                         break;
                     default:
                         break;
@@ -186,8 +186,8 @@ namespace Expertia.Estructura.Controllers
                 case UnidadNegocioKeys.CondorTravel:
                     _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravel);
                     break;
-                case UnidadNegocioKeys.CondorTravelCL:
-                    _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravelCL);
+                case UnidadNegocioKeys.CondorTravel_CL:
+                    _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravel_CL);
                     break;
                 /*
                 case UnidadNegocioKeys.DestinosMundiales:

@@ -216,7 +216,6 @@
     <Compile Include="Repository\Condor\Contacto_CT_CL_Repository.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
     <Compile Include="Repository\Condor\Cotizacion_CT_Repository.cs" />
-    <Compile Include="Repository\Condor\CuentaB2B_CT_CL_Repository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_CT_Repository.cs" />
     <Compile Include="Repository\Condor\File_CT_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Contacto_DM_Repository.cs" />

@@ -111,6 +111,9 @@ namespace Expertia.Estructura.Utils
                 switch (unidadNegocio)
                 {
                     case UnidadNegocioKeys.CondorTravel: return ConnectionKeys.CondorConnKey;
+                    case UnidadNegocioKeys.CondorTravel_CL: return ConnectionKeys.CondorConnKey_CL;
+                    case UnidadNegocioKeys.CondorTravel_EC: return ConnectionKeys.CondorConnKey_EC;
+                    case UnidadNegocioKeys.CondorTravel_BR: return ConnectionKeys.CondorConnKey_BR;
                     case UnidadNegocioKeys.DestinosMundiales: return ConnectionKeys.DMConnKey;
                     case UnidadNegocioKeys.Interagencias: return ConnectionKeys.IAConnKey;
                     case UnidadNegocioKeys.AppWebs: return ConnectionKeys.AWConnKey;
