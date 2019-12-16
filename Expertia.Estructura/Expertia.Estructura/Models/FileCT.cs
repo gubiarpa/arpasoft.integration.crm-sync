@@ -2,22 +2,28 @@
 using Expertia.Estructura.Models.Behavior;
 using System;
 
+
 namespace Expertia.Estructura.Models
 {
-    public class CotizacionRequest
+    public class FileCTRequest
     {
         public string IdOportunidadSf { get; set; }
         public string IdCotizacionSf { get; set; }
         public string Region { get; set; }
-        public string Cotizacion { get; set; }
+        public string File { get; set; }
+        public int subfile { get; set; }
     }
 
-    public class Cotizacion : IUnidadNegocio
+    public class FileCT : IUnidadNegocio
     {
-       #region ForeignKey
+        #region ForeignKey
         public UnidadNegocio UnidadNegocio { get; set; }
 
         public string Grupo { get; set; }
+
+        public string File { get; set; }
+
+        public int Subfile { get; set; }
 
         public string Cliente { get; set; }
 
@@ -36,15 +42,14 @@ namespace Expertia.Estructura.Models
         public DateTime Fecha_Fin { get; set; }
 
         public string Estado { get; set; }
+        public string Num_Pasajero { get; set; }
 
         public bool Aceptada { get; set; }
 
         public SimpleDesc CondicionPago { get; set; }
         #endregion
 
-        #region ResponseSalesforce
-        public string CodigoError { get; set; }
-        public string MensajeError { get; set; }
-        #endregion
     }
+
+
 }

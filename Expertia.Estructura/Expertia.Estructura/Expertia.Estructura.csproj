@@ -153,6 +153,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\FileCTController.cs" />
     <Compile Include="Controllers\Behavior\IClientFeatures.cs" />
     <Compile Include="Controllers\ContactoPtaController.cs" />
     <Compile Include="Controllers\CotizacionController.cs" />
@@ -169,6 +170,7 @@
     </Compile>
     <Compile Include="Models\Auxiliar\Auditoria.cs" />
     <Compile Include="Models\Auxiliar\CondicionPago.cs" />
+    <Compile Include="Models\Auxiliar\Cotizacion_CT.cs" />
     <Compile Include="Models\Auxiliar\UnidadNegocio.cs" />
     <Compile Include="Models\Behavior\IAuditable.cs" />
     <Compile Include="Models\Behavior\ICrm.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="Models\Cuenta.cs" />
     <Compile Include="Models\CuentaPta.cs" />
     <Compile Include="Models\File.cs" />
+    <Compile Include="Models\FileCT.cs" />
     <Compile Include="Models\Foreign\ForeignKey.cs" />
     <Compile Include="Models\Auxiliar\Direccion.cs" />
     <Compile Include="Models\Auxiliar\Documento.cs" />
@@ -202,16 +205,20 @@
     <Compile Include="Repository\AppWebs\Oportunidad_AW_Repository.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\IContactoPtaRepository.cs" />
+    <Compile Include="Repository\Behavior\ICotizacionCT.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />
+    <Compile Include="Repository\Behavior\IFileCT.cs" />
     <Compile Include="Repository\Behavior\IFileRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadRepository.cs" />
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
     <Compile Include="Repository\Behavior\ISubcodigoRepository.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_CL_Repository.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
+    <Compile Include="Repository\Condor\Cotizacion_CT_Repository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_CT_CL_Repository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_CT_Repository.cs" />
+    <Compile Include="Repository\Condor\File_CT_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Contacto_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Cotizacion_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\CuentaB2B_DM_Repository.cs" />

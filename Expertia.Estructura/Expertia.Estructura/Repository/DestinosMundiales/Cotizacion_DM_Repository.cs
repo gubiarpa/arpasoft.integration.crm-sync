@@ -34,57 +34,6 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 // (02) P_MENSAJE_ERROR
                 value = DBNull.Value;
                 AddParameter("P_MENSAJE_ERROR", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
-                // (03) P_NOMBRE_USUARIO
-                value = entity.Usuario.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
-                // (04) P_ID_CUENTA_SALESFORCE
-                value = entity.IdCuentaSalesforce.Coalesce();
-                AddParameter("P_ID_CUENTA_SALESFORCE", OracleDbType.Varchar2, value);
-                // (05) P_ID_OPORTUNIDAD_SALESFORCE
-                value = entity.IdOportunidadSalesforce.Coalesce();
-                AddParameter("P_ID_OPORTUNIDAD_SALESFORCE", OracleDbType.Varchar2, value);
-                // (06) P_ID_COTIZACION_SALESFORCE
-                value = entity.IDCotizacionSalesforce.Coalesce();
-                AddParameter("P_ID_COTIZACION_SALESFORCE", OracleDbType.Varchar2, value);
-                // (07) P_NOMBRE_SUCURSAL
-                value = entity.Surcursal.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, value);
-                // (08) P_NOMBRE_PUNTO_VENTA
-                value = entity.PuntoVenta.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_PUNTO_VENTA", OracleDbType.Varchar2, value);
-                // (09) P_NOMBRE_GRUPO
-                value = entity.Grupo.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_GRUPO", OracleDbType.Varchar2, value);
-                // (10) P_FECHA_SALIDA
-                value = entity.FechaSalida;
-                AddParameter("P_FECHA_SALIDA", OracleDbType.Date, value);
-                // (11) P_FECHA_RETORNO
-                value = entity.FechaRetorno;
-                AddParameter("P_FECHA_RETORNO", OracleDbType.Date, value);
-                // (12) P_NOMBRE_ORIGEN
-                value = entity.Origen.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_ORIGEN", OracleDbType.Varchar2, value);
-                // (13) P_NOMBRE_PAIS
-                value = entity.Pais.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_PAIS", OracleDbType.Varchar2, value);
-                // (14) P_NOMBRE_CIUDAD
-                value = entity.Ciudad.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_CIUDAD", OracleDbType.Varchar2, value);
-                // (15) P_NOMBRE_VENDEDOR_COUNTER
-                value = entity.VendedorCounter.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_VENDEDOR_COUNTER", OracleDbType.Varchar2, value);
-                // (16) P_NOMBRE_VENDEDOR_COTIZADOR
-                value = entity.VendedorCotizador.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_VENDEDOR_COTIZADOR", OracleDbType.Varchar2, value);
-                // (17) P_NOMBRE_VENDEDOR_RESERVA
-                value = entity.VendedorReserva.Descripcion.Coalesce();
-                AddParameter("P_NOMBRE_VENDEDOR_RESERVA", OracleDbType.Varchar2, value);
-                // (18) P_ID_CUENTA
-                value = entity.IdCuenta.Coalesce();
-                AddParameter("P_ID_CUENTA", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
-                // (19) P_ID_COTIZACION
-                value = entity.IdCotizacion.Coalesce();
-                AddParameter("P_ID_COTIZACION", OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
                 #endregion
 
                 #region Invoke
@@ -92,8 +41,8 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-                operation[OutParameter.IdCuenta] = entity.IdCuenta = GetOutParameter(OutParameter.IdCuenta).ToString();
-                operation[OutParameter.IdCotizacion] = entity.IdCotizacion = int.Parse(GetOutParameter(OutParameter.IdCotizacion).ToString());
+                //operation[OutParameter.IdCuenta] = entity.IdCuenta = GetOutParameter(OutParameter.IdCuenta).ToString();
+                //operation[OutParameter.IdCotizacion] = entity.IdCotizacion = int.Parse(GetOutParameter(OutParameter.IdCotizacion).ToString());
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
 
@@ -117,24 +66,6 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             // (02) P_MENSAJE_ERROR
             value = DBNull.Value;
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
-            // (03) P_NOMBRE_USUARIO
-            value = entity.Usuario.Descripcion.Coalesce();
-            AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, value);
-            // (04) P_ID_CUENTA_SALESFORCE
-            value = entity.IdCuentaSalesforce.Coalesce();
-            AddParameter("P_ID_CUENTA_SALESFORCE", OracleDbType.Varchar2, value);
-            // (05) P_ID_OPORTUNIDAD_SALESFORCE
-            value = entity.IdOportunidadSalesforce.Coalesce();
-            AddParameter("P_ID_OPORTUNIDAD_SALESFORCE", OracleDbType.Varchar2, value);
-            // (06) P_ID_COTIZACION_SALESFORCE
-            value = entity.IDCotizacionSalesforce.Coalesce();
-            AddParameter("P_ID_COTIZACION_SALESFORCE", OracleDbType.Varchar2, value);
-            // (07) P_NOMBRE_SUCURSAL
-            value = entity.Surcursal.Descripcion.Coalesce();
-            AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, value);
-            // (08) P_ID_COTIZACION_PTA
-            value = entity.IdCotizacionPta;
-            AddParameter("P_ID_COTIZACION_PTA", OracleDbType.Int32, value);
             // (09) P_NOMBRE_PUNTO_VENTA
             value = DBNull.Value;
             AddParameter(OutParameter.NombrePuntoVenta, OracleDbType.Varchar2, value, ParameterDirection.Output, OutParameter.DefaultSize);
@@ -181,8 +112,6 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.IdCuenta] = entity.IdCuenta = GetOutParameter(OutParameter.IdCuenta).ToString();
-            operation[OutParameter.IdCotizacion] = entity.IdCotizacion = int.Parse(GetOutParameter(OutParameter.IdCotizacion).ToString());
             operation[OutParameter.NombrePuntoVenta] = GetOutParameter(OutParameter.NombrePuntoVenta).ToString();
             operation[OutParameter.NumeroSubcodigo] = (int.TryParse(GetOutParameter(OutParameter.NumeroSubcodigo).ToString(), out int subCodigo)) ? subCodigo : 0;
             operation[OutParameter.NombreGrupo] = GetOutParameter(OutParameter.NombreGrupo).ToString();
@@ -286,44 +215,8 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                     #region AddingElement
                     cotizaciones.Add(new Cotizacion()
                     {
-                        IdCotizacion = id_cotizacion,
-                        Propietario = new SimpleDesc(propietario),
-                        Estado = new SimpleDesc(estado),
-                        UnidadNegocio = new UnidadNegocio() { Descripcion = unidad_negocio },
-                        Branch = new SimpleDesc(branch),
-                        Referencia = referencia,
-                        NumeroAdultos = num_adultos,
-                        NumeroNinos = num_ninos,
-                        Rango = rango,
-                        Cliente = new SimpleDesc(cliente),
-                        Contacto = new SimpleDesc(contacto),
-                        Pais = new SimpleDesc(pais),
-                        FechaCotizacion = fecha_cotizacion,
-                        FechaIniVigencia = fecha_ini_vigencia,
-                        FechaFinVigencia = fecha_fin_vigencia,
-                        FechaIniServicio = fecha_ini_servicio,
-                        FechaFinServicio = fecha_fin_servicio,
-                        FechaSolicitud = fecha_solicitud,
-                        MarkupHotel = markup_hotel,
-                        LiberadosVenta = liberados_venta,
-                        CostoFinal = costo_final,
-                        VentaFinal = venta_final,
-                        TipoVuelo = tipo_vuelo,
-                        Destino = destino,
-                        Clase = new SimpleDesc(clase),
-                        PuntoVenta = new SimpleDesc(punto_venta),
-                        Servicio = new SimpleDesc(servicio),
-                        CanalVenta = new SimpleDesc(canal_venta),
-                        Seguimiento = new SimpleDesc(seguimiento),
-                        PuntoContacto = new SimpleDesc(punto_de_contacto),
-                        Counter = new SimpleDesc(counter),
-                        ReservadoPor = new SimpleDesc(reservado_por),
-                        RegistradaPor = new SimpleDesc(registrada_por),
-                        EsBloqueo = es_bloqueo,
-                        EsGrupo = es_grupo,
-                        CondicionPago = new SimpleDesc(condicion_pago),
-                        MotivoNoVenta = motivo_no_venta,
-                        Notas = notas
+                        Cliente_Cliente = cliente,
+                       
                     });
                     #endregion
                 }

@@ -97,6 +97,10 @@ namespace Expertia.Estructura.Utils
         // Contacto
         public const string CT_Create_Contacto = "CONDOR.CRM_PKG.SP_CREAR_CONTACTO";
         public const string CT_Update_Contacto = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
+
+        public const string CT_Obtiene_Cotizacion = "CONDOR.CRM_PKG.SP_OBTIENE_COTIZACION";
+
+        public const string CT_Obtiene_FileCT = "CONDOR.CRM_PKG.SP_OBTIENE_FILE";
         #endregion
 
         #region DestinosMundiales
@@ -213,7 +217,8 @@ namespace Expertia.Estructura.Utils
 
         #region Cursors
         public const string CursorSubcodigo = "P_SUBCODIGO";
-        public const string CursorCotizacion = "P_COTIZACION";
+        public const string CursorCotizacion = "P_RECORDSET";
+        public const string CursorFileCT = "P_RECORDSET";
         public const string CursorCotizacionDet = "P_COTIZACION_DETALLE";
         public const string CursorAgenciaPnr = "P_CLIENTE_PNR";
         public const string CursorFile = "P_FILE";

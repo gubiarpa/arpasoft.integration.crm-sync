@@ -10,26 +10,26 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Expertia.Estructura.RestManager.Base;
 using RestSharp;
-
 namespace Expertia.Estructura.Controllers
 {
-    [RoutePrefix(RoutePrefix.Cotizacion)]
-    public class CotizacionController : BaseController<Cotizacion>
+    [RoutePrefix(RoutePrefix.File)]
+    public class FileCTController : BaseController<FileCT>
     {
         #region Properties
-        private ICotizacionCT _cotizacionCTRepository;
+        private IFileCT _fileCTRepository;
         #endregion
 
         #region Constructor
-        public CotizacionController()
+        public FileCTController()
         {
-            _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravel);
+            _fileCTRepository = new File_CT_Repository(UnidadNegocioKeys.CondorTravel);
         }
         #endregion
 
         #region PublicMethods
         [Route(RouteAction.Generate)]
-        /*public*/ IHttpActionResult Generate(Cotizacion entity)
+        /*public*/
+        IHttpActionResult Generate(FileCT entity)
         {
             object error = null, logResult = null;
             try
@@ -68,7 +68,8 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Asociate)]
-        /*public*/ IHttpActionResult Asociate(Cotizacion entity)
+        /*public*/
+        IHttpActionResult Asociate(FileCT entity)
         {
             object error = null, logResult = null;
             try
@@ -78,9 +79,9 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
-                    case UnidadNegocioKeys.DestinosMundiales:
-                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Asociate(entity);
-                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
+                    case UnidadNegocioKeys.CondorTravel:
+                        _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Asociate(entity);
+                        LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     default:
                         return NotFound();
@@ -107,13 +108,13 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Read)]
-        public IHttpActionResult Read(CotizacionRequest cotizacionRequest)
+        public IHttpActionResult Read(FileCTRequest fileRequest)
         {
             try
             {
                 #region UnidadNegocio
                 UnidadNegocioKeys? unidadNegocioKeys = null;
-                switch (cotizacionRequest.Region)
+                switch (fileRequest.Region)
                 {
                     case "PE":
                         unidadNegocioKeys = UnidadNegocioKeys.CondorTravel;
@@ -127,8 +128,8 @@ namespace Expertia.Estructura.Controllers
                 RepositoryByBusiness(unidadNegocioKeys);
                 #endregion
 
-                var cotizaciones = (IEnumerable<Cotizacion>)_cotizacionCTRepository.GetCotizacionCT(cotizacionRequest)[OutParameter.CursorCotizacion];
-                return Ok(cotizaciones);
+                var files = (IEnumerable<FileCT>)_fileCTRepository.GetFileCT(fileRequest)[OutParameter.CursorFileCT];
+                return Ok(files);
             }
             catch (Exception ex)
             {
@@ -184,10 +185,10 @@ namespace Expertia.Estructura.Controllers
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.CondorTravel:
-                    _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravel);
+                    _fileCTRepository = new File_CT_Repository(UnidadNegocioKeys.CondorTravel);
                     break;
                 case UnidadNegocioKeys.CondorTravelCL:
-                    _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravelCL);
+                    _fileCTRepository = new File_CT_Repository(UnidadNegocioKeys.CondorTravelCL);
                     break;
                 /*
                 case UnidadNegocioKeys.DestinosMundiales:
@@ -225,5 +226,10 @@ namespace Expertia.Estructura.Controllers
             }
         }
         #endregion
+
+
+
+
+
     }
 }
