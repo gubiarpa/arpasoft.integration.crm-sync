@@ -79,7 +79,9 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
+                        /*
                         UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
+                        */
                         UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
