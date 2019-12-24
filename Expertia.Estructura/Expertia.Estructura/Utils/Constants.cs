@@ -255,6 +255,16 @@ namespace Expertia.Estructura.Utils
     }
     #endregion
 
+    #region Country
+    public static class CountryName
+    {
+        public const string Peru = "PE";
+        public const string Chile = "CL";
+        public const string Ecuador = "EC";
+        public const string Brasil = "BR";
+    }
+    #endregion
+
     #region UnidadNegocio
     public enum UnidadNegocioKeys
     {
