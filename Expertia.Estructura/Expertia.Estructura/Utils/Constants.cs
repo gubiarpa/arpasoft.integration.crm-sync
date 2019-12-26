@@ -41,6 +41,7 @@ namespace Expertia.Estructura.Utils
         public const string Oportunidad = "api/oportunidad";
         public const string CuentaPta = "api/cuentapta";
         public const string ContactoPta = "api/contactopta";
+        public const string RegionCuenta = "api/regioncuenta";
     }
 
     public enum ActionMethod
@@ -104,6 +105,8 @@ namespace Expertia.Estructura.Utils
         public const string CT_Obtiene_Cotizacion = "CONDOR.CRM_PKG.SP_OBTIENE_COTIZACION";
 
         public const string CT_Obtiene_FileCT = "CONDOR.CRM_PKG.SP_OBTIENE_FILE";
+
+        public const string CT_Register_RegionCuenta = "CONDOR.CRM_PKG.SP_ACTUALIZAR_ESTADO_CLIENTE";
         #endregion
 
         #region DestinosMundiales
