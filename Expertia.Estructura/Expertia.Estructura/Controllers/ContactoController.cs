@@ -40,48 +40,32 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-
-                        #region CondorTravel
-                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel)) CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError, _delayTimeRetry);
-                        #endregion
+                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
+                                UnidadNegocioKeys.CondorTravel,
+                                UnidadNegocioKeys.CondorTravel_CL,
+                                UnidadNegocioKeys.CondorTravel_EC,
+                                UnidadNegocioKeys.CondorTravel_BR
+                            })
+                        {
+                            CreateOrUpdate(unidadNegocio, entity, codigoError);
+                            if (CuentaAsociadaNoExiste(unidadNegocio)) CreateOrUpdate(unidadNegocio, entity, codigoError, _delayTimeRetry);
+                        }
 
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
-
-                    case UnidadNegocioKeys.CondorTravel_CL:
-
-                        #region CondorTravelCL
-                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel_CL)) CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError, _delayTimeRetry);
-                        #endregion
-
-                        LoadResults(UnidadNegocioKeys.CondorTravel_CL, out logResult, out result);
-                        break;
-
-
-
                     /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
 
-                        /*
-                        #region DestinosMundiales
-                        CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales)) CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        #endregion
-                        */
-
-                        #region Interagencias
-                        CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias)) CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError, _delayTimeRetry);
-                        #endregion
-                        
-                        #region AppWebs
-                        CreateOrUpdate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs)) CreateOrUpdate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        #endregion
-
+                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
+                                /*UnidadNegocioKeys.DestinosMundiales,*/
+                                UnidadNegocioKeys.Interagencias,
+                                UnidadNegocioKeys.AppWebs
+                            })
+                        {
+                            CreateOrUpdate(unidadNegocio, entity, codigoError);
+                            if (CuentaAsociadaNoExiste(unidadNegocio)) CreateOrUpdate(unidadNegocio, entity, codigoError, _delayTimeRetry);
+                        }
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
 
@@ -123,48 +107,33 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
 
-                        #region CondorTravel
-                        UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel)) UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        #endregion
+                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
+                                UnidadNegocioKeys.CondorTravel,
+                                UnidadNegocioKeys.CondorTravel_CL,
+                                UnidadNegocioKeys.CondorTravel_EC,
+                                UnidadNegocioKeys.CondorTravel_BR
+                            })
+                        {
+                            UpdateOrCreate(unidadNegocio, entity, codigoError);
+                            if (CuentaAsociadaNoExiste(unidadNegocio)) UpdateOrCreate(unidadNegocio, entity, codigoError);
+                        }
 
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
-
-
-                    case UnidadNegocioKeys.CondorTravel_CL:
-
-                        #region CondorTravelCL
-                        UpdateOrCreate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.CondorTravel_CL)) UpdateOrCreate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
-                        #endregion
-
-                        LoadResults(UnidadNegocioKeys.CondorTravel_CL, out logResult, out result);
-                        break;
-
 
                     /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
 
-                        /*
-                        #region DestinosMundiales
-                        UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.DestinosMundiales)) UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError);
-                        #endregion
-                        */
-
-                        #region Interagencias
-                        UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.Interagencias)) UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
-                        #endregion
-
-                        #region AppWebs
-                        UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        if (CuentaAsociadaNoExiste(UnidadNegocioKeys.AppWebs)) UpdateOrCreate(UnidadNegocioKeys.AppWebs, entity, codigoError);
-                        #endregion
-
-
+                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
+                                /*UnidadNegocioKeys.DestinosMundiales,*/
+                                UnidadNegocioKeys.Interagencias,
+                                UnidadNegocioKeys.AppWebs
+                            })
+                        {
+                            UpdateOrCreate(unidadNegocio, entity, codigoError);
+                            if (CuentaAsociadaNoExiste(unidadNegocio)) UpdateOrCreate(unidadNegocio, entity, codigoError);
+                        }
 
                         LoadResults(UnidadNegocioKeys.AppWebs, out logResult, out result);
                         break;
@@ -350,10 +319,15 @@ namespace Expertia.Estructura.Controllers
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.CondorTravel:
-                    _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new Contacto_CT_Repository());
-                    break;
-                case UnidadNegocioKeys.CondorTravel_CL:
-                    _crmCollection.Add(UnidadNegocioKeys.CondorTravel_CL, new Contacto_CT_CL_Repository());
+                    foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
+                                UnidadNegocioKeys.CondorTravel,
+                                UnidadNegocioKeys.CondorTravel_CL,
+                                UnidadNegocioKeys.CondorTravel_EC,
+                                UnidadNegocioKeys.CondorTravel_BR
+                            })
+                    {
+                        _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository());
+                    }
                     break;
                 /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
                 case UnidadNegocioKeys.Interagencias:

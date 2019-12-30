@@ -11,7 +11,7 @@ namespace Expertia.Estructura.Repository.Condor
 {
     public class Contacto_CT_Repository : OracleBase<Contacto>, ICrud<Contacto>, ISameSPName<Contacto>
     {
-        public Contacto_CT_Repository() : base(ConnectionKeys.CondorConnKey)
+        public Contacto_CT_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.CondorTravel) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
 
