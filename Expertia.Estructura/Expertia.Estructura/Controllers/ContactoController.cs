@@ -17,12 +17,14 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         protected IDictionary<UnidadNegocioKeys?, bool> _operNotAssociated;
+        private IDictionary<UnidadNegocioKeys?, string> _errorsValuesPairs;
         #endregion
 
         #region Constructor
         public ContactoController()
         {
             _operNotAssociated = new Dictionary<UnidadNegocioKeys?, bool>();
+            _errorsValuesPairs = new Dictionary<UnidadNegocioKeys?, string>();
         }
         #endregion
 
@@ -31,6 +33,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Create(Contacto entity)
         {
             object error = null, logResult = null;
+            IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
             try
             {
                 var codigoError = DbResponseCode.ContactoYaExiste;
@@ -40,32 +43,26 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
-                                UnidadNegocioKeys.CondorTravel,
-                                UnidadNegocioKeys.CondorTravel_CL,
-                                UnidadNegocioKeys.CondorTravel_EC,
-                                UnidadNegocioKeys.CondorTravel_BR
-                            })
+                        unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
-                            CreateOrUpdate(unidadNegocio, entity, codigoError);
-                            if (CuentaAsociadaNoExiste(unidadNegocio)) CreateOrUpdate(unidadNegocio, entity, codigoError, _delayTimeRetry);
-                        }
-
+                            UnidadNegocioKeys.CondorTravel,
+                            UnidadNegocioKeys.CondorTravel_CL,
+                            UnidadNegocioKeys.CondorTravel_EC,
+                            UnidadNegocioKeys.CondorTravel_BR
+                        };
+                        CreateOrUpdate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
-                    /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
+                    /* case UnidadNegocioKeys.DestinosMundiales: */
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
-
-                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
-                                /*UnidadNegocioKeys.DestinosMundiales,*/
-                                UnidadNegocioKeys.Interagencias,
-                                UnidadNegocioKeys.AppWebs
-                            })
+                        unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
-                            CreateOrUpdate(unidadNegocio, entity, codigoError);
-                            if (CuentaAsociadaNoExiste(unidadNegocio)) CreateOrUpdate(unidadNegocio, entity, codigoError, _delayTimeRetry);
-                        }
+                            /*UnidadNegocioKeys.DestinosMundiales,*/
+                            UnidadNegocioKeys.Interagencias,
+                            UnidadNegocioKeys.AppWebs
+                        };
+                        CreateOrUpdate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
 
@@ -87,7 +84,12 @@ namespace Expertia.Estructura.Controllers
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
                     Instants = GetInstants(),
-                    Error = error,
+                    Error = new {
+                        error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel],
+                        error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_CL],
+                        error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_EC],
+                        error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_BR]
+                    },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -97,45 +99,37 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Update(Contacto entity)
         {
             object error = null, logResult = null;
+            IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
             try
             {
-                var codigoError = DbResponseCode.ContactoNoExiste;
+                var codigoError = DbResponseCode.ContactoYaExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
                 object result;
                 _instants[InstantKey.Salesforce] = DateTime.Now;
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-
-                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
-                                UnidadNegocioKeys.CondorTravel,
-                                UnidadNegocioKeys.CondorTravel_CL,
-                                UnidadNegocioKeys.CondorTravel_EC,
-                                UnidadNegocioKeys.CondorTravel_BR
-                            })
+                        unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
-                            UpdateOrCreate(unidadNegocio, entity, codigoError);
-                            if (CuentaAsociadaNoExiste(unidadNegocio)) UpdateOrCreate(unidadNegocio, entity, codigoError);
-                        }
-
+                            UnidadNegocioKeys.CondorTravel,
+                            UnidadNegocioKeys.CondorTravel_CL,
+                            UnidadNegocioKeys.CondorTravel_EC,
+                            UnidadNegocioKeys.CondorTravel_BR
+                        };
+                        UpdateOrCreate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
-
-                    /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
+                    /* case UnidadNegocioKeys.DestinosMundiales: */
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
-
-                        foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
-                                /*UnidadNegocioKeys.DestinosMundiales,*/
-                                UnidadNegocioKeys.Interagencias,
-                                UnidadNegocioKeys.AppWebs
-                            })
+                        unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
-                            UpdateOrCreate(unidadNegocio, entity, codigoError);
-                            if (CuentaAsociadaNoExiste(unidadNegocio)) UpdateOrCreate(unidadNegocio, entity, codigoError);
-                        }
-
-                        LoadResults(UnidadNegocioKeys.AppWebs, out logResult, out result);
+                            /*UnidadNegocioKeys.DestinosMundiales,*/
+                            UnidadNegocioKeys.Interagencias,
+                            UnidadNegocioKeys.AppWebs
+                        };
+                        UpdateOrCreate(unidadNegocioList, entity, codigoError);
+                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
 
                     default:
@@ -156,7 +150,13 @@ namespace Expertia.Estructura.Controllers
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
                     Instants = GetInstants(),
-                    Error = error,
+                    Error = new
+                    {
+                        error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel],
+                        error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_CL],
+                        error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_EC],
+                        error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_BR]
+                    },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -164,6 +164,40 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region Auxiliar
+        private void CreateOrUpdate(IEnumerable<UnidadNegocioKeys?> unidadNegocioList, Contacto entity, string codigoError)
+        {
+            foreach (var unidadNegocio in unidadNegocioList)
+            {
+                try
+                {
+                    CreateOrUpdate(unidadNegocio, entity, codigoError);
+                    if (CuentaAsociadaNoExiste(unidadNegocio)) CreateOrUpdate(unidadNegocio, entity, codigoError, _delayTimeRetry);
+                    _errorsValuesPairs[unidadNegocio] = null;
+                }
+                catch (Exception ex)
+                {
+                    _errorsValuesPairs[unidadNegocio] = ex.Message;
+                }
+            }
+        }
+
+        private void UpdateOrCreate(IEnumerable<UnidadNegocioKeys?> unidadNegocioList, Contacto entity, string codigoError)
+        {
+            foreach (var unidadNegocio in unidadNegocioList)
+            {
+                try
+                {
+                    UpdateOrCreate(unidadNegocio, entity, codigoError);
+                    if (CuentaAsociadaNoExiste(unidadNegocio)) UpdateOrCreate(unidadNegocio, entity, codigoError, _delayTimeRetry);
+                    _errorsValuesPairs[unidadNegocio] = null;
+                }
+                catch (Exception ex)
+                {
+                    _errorsValuesPairs[unidadNegocio] = ex.Message;
+                }
+            }
+        }
+
         private bool CuentaAsociadaNoExiste(UnidadNegocioKeys? unidadNegocio)
         {
             return (_operNotAssociated[unidadNegocio] =
@@ -320,13 +354,12 @@ namespace Expertia.Estructura.Controllers
             {
                 case UnidadNegocioKeys.CondorTravel:
                     foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
-                                UnidadNegocioKeys.CondorTravel,
-                                UnidadNegocioKeys.CondorTravel_CL,
-                                UnidadNegocioKeys.CondorTravel_EC,
-                                UnidadNegocioKeys.CondorTravel_BR
-                            })
+                        UnidadNegocioKeys.CondorTravel,
+                        UnidadNegocioKeys.CondorTravel_CL,
+                        UnidadNegocioKeys.CondorTravel_EC,
+                        UnidadNegocioKeys.CondorTravel_BR })
                     {
-                        _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository());
+                        _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository(unidadNegocio));
                     }
                     break;
                 /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado

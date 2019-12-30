@@ -17,6 +17,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Create(CuentaB2B entity)
         {
             object error = null, logResult = null;
+            string error_PE = null, error_CL = null, error_EC = null, error_BR = null;
             try
             {
                 var codigoError = DbResponseCode.CuentaYaExiste;
@@ -27,8 +28,10 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
                     case UnidadNegocioKeys.CondorTravel_CL:
-                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
-                        CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError); } catch (Exception ex) { error_PE = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError); } catch (Exception ex) { error_CL = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_EC, entity, codigoError); } catch (Exception ex) { error_EC = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_BR, entity, codigoError); } catch (Exception ex) { error_BR = ex.Message; }
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
@@ -58,6 +61,12 @@ namespace Expertia.Estructura.Controllers
                     LegacySystems = logResult,
                     Instants = GetInstants(),
                     Error = error,
+                    ErrorDB = new {
+                        error_PE,
+                        error_CL,
+                        error_EC,
+                        error_BR
+                    },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -67,6 +76,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Update(CuentaB2B entity)
         {
             object error = null, logResult = null;
+            string error_PE = null, error_CL = null, error_EC = null, error_BR = null;
             try
             {
                 var codigoError = DbResponseCode.CuentaNoExiste;
@@ -76,7 +86,10 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError);
+                        try { UpdateOrCreate(UnidadNegocioKeys.CondorTravel, entity, codigoError); } catch (Exception ex) { error_PE = ex.Message; }
+                        try { UpdateOrCreate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError); } catch (Exception ex) { error_CL = ex.Message; }
+                        try { UpdateOrCreate(UnidadNegocioKeys.CondorTravel_EC, entity, codigoError); } catch (Exception ex) { error_EC = ex.Message; }
+                        try { UpdateOrCreate(UnidadNegocioKeys.CondorTravel_BR, entity, codigoError); } catch (Exception ex) { error_BR = ex.Message; }
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
@@ -86,10 +99,6 @@ namespace Expertia.Estructura.Controllers
                         */
                         UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
-                        break;
-                    case UnidadNegocioKeys.CondorTravel_CL:
-                        UpdateOrCreate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError);
-                        LoadResults(UnidadNegocioKeys.CondorTravel_CL, out logResult, out result);
                         break;
                     default:
                         return NotFound();
@@ -110,6 +119,13 @@ namespace Expertia.Estructura.Controllers
                     LegacySystems = logResult,
                     Instants = GetInstants(),
                     Error = error,
+                    ErrorDB = new
+                    {
+                        error_PE,
+                        error_CL,
+                        error_EC,
+                        error_BR
+                    },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -194,31 +210,33 @@ namespace Expertia.Estructura.Controllers
                     break;
                 default:
                     logResult = null; result = null;
-                    break;                    
-                case UnidadNegocioKeys.CondorTravel_CL:
-                    #region Log
-                    logResult = new
-                    {
-                        Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel_CL),
-                        Retry = _operRetry[UnidadNegocioKeys.CondorTravel_CL],
-                        IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.IdCuenta].ToString()
-                    };
-                    #endregion
-                    #region Client
-                    result = new
-                    {
-                        Result = new
-                        {
-                            CondorTravelCL = new
+                    break;     
+                    /*
+                        case UnidadNegocioKeys.CondorTravel_CL:
+                            #region Log
+                            logResult = new
                             {
-                                CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.MensajeError].ToString(),
+                                Codes = GetErrorResult(UnidadNegocioKeys.CondorTravel_CL),
+                                Retry = _operRetry[UnidadNegocioKeys.CondorTravel_CL],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.IdCuenta].ToString()
-                            }
-                        }
-                    };
-                    #endregion
-                    break;                                      
+                            };
+                            #endregion
+                            #region Client
+                            result = new
+                            {
+                                Result = new
+                                {
+                                    CondorTravelCL = new
+                                    {
+                                        CodigoError = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.CodigoError].ToString(),
+                                        MensajeError = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.MensajeError].ToString(),
+                                        IdCuenta = _operCollection[UnidadNegocioKeys.CondorTravel_CL][OutParameter.IdCuenta].ToString()
+                                    }
+                                }
+                            };
+                            #endregion
+                            break;                                      
+                    */
 
             }
         }
