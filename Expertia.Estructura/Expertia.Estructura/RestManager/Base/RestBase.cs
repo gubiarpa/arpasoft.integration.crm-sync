@@ -38,11 +38,11 @@ namespace Expertia.Estructura.RestManager.Base
             return GetToken(ConfigAccess.GetValueInAppSettings(serverNameKey), ConfigAccess.GetValueInAppSettings(methodNameKey), methodType);
         }
 
-        public static IRestResponse Execute(string serverName, string methodName, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "")
+        public static IRestResponse Execute(string serverName, string methodName, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "", int timeout = -1)
         {
             try
             {
-                var client = new RestClient(serverName);
+                var client = new RestClient(serverName) { Timeout = timeout };
                 var request = new RestRequest(methodName, Method.POST, DataFormat.Json);
                 if (isAuth) request.AddHeader("Authorization", "Bearer " + token);
                 request.AddJsonBody(body);
@@ -56,7 +56,14 @@ namespace Expertia.Estructura.RestManager.Base
 
         public static IRestResponse ExecuteByKey(string serverNameKey, string methodNameKey, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "")
         {
-            return Execute(ConfigAccess.GetValueInAppSettings(serverNameKey), ConfigAccess.GetValueInAppSettings(methodNameKey), methodType, body, isAuth, token);
+            return Execute(
+                ConfigAccess.GetValueInAppSettings(serverNameKey),
+                ConfigAccess.GetValueInAppSettings(methodNameKey),
+                methodType,
+                body,
+                isAuth,
+                token,
+                int.Parse(ConfigAccess.GetValueInAppSettings(SecurityKeys.CrmTimeOutKey)));
         }
         #endregion
     }

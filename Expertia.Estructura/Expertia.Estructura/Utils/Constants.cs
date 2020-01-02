@@ -8,6 +8,7 @@ namespace Expertia.Estructura.Utils
         public const string Token = "MainToken";
         public const string SecreKey = "SecretKey";
         public const string ExpirationInMin = "ExpirationInMin";
+        public const string CrmTimeOutKey = "CRM_TIMEOUT";
     }
 
     public static class ConnectionKeys
