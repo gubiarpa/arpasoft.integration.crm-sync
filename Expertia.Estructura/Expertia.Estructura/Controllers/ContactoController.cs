@@ -350,30 +350,41 @@ namespace Expertia.Estructura.Controllers
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
+            IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.CondorTravel:
-                    foreach (var unidadNegocio in new List<UnidadNegocioKeys?> {
+                    unidadNegocioList = new List<UnidadNegocioKeys?>()
+                    {
                         UnidadNegocioKeys.CondorTravel,
                         UnidadNegocioKeys.CondorTravel_CL,
                         UnidadNegocioKeys.CondorTravel_EC,
-                        UnidadNegocioKeys.CondorTravel_BR })
-                    {
-                        _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository(unidadNegocio));
-                    }
+                        UnidadNegocioKeys.CondorTravel_BR 
+                    };
                     break;
-                /// case UnidadNegocioKeys.DestinosMundiales: // Inhabilitado
+                /* case UnidadNegocioKeys.DestinosMundiales: */
                 case UnidadNegocioKeys.Interagencias:
                 case UnidadNegocioKeys.AppWebs:
-                    /*
-                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository());
-                    */
-                    _crmCollection.Add(UnidadNegocioKeys.Interagencias, new Contacto_IA_Repository());
-                    _crmCollection.Add(UnidadNegocioKeys.AppWebs, new Contacto_AW_Repository());
+                    unidadNegocioList = new List<UnidadNegocioKeys?>
+                    {
+                        /*UnidadNegocioKeys.DestinosMundiales,*/
+                        UnidadNegocioKeys.Interagencias,
+                        UnidadNegocioKeys.AppWebs
+                    };
                     break;
                 default:
+                    unidadNegocioList = null;
                     break;
             }
+
+            if (unidadNegocioList != null)
+            {
+                foreach (var unidadNegocio in unidadNegocioList)
+                {
+                    _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository(unidadNegocio));
+                }
+            }
+
             return unidadNegocioKey; // Devuelve el mismo parámetro
         }
         #endregion
