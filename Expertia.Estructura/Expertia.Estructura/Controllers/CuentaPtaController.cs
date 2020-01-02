@@ -34,6 +34,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<CuentaPta> cuentasPtas = null;
+            string error = string.Empty;
             try
             {
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
@@ -67,6 +68,10 @@ namespace Expertia.Estructura.Controllers
                             var updateResponse = _cuentaPtaRepository.Update(cuentaPta);
                             cuentaPta.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                         }
+                        else
+                        {
+                            cuentaPta.CodigoError = responseCuentaPta.StatusCode.ToString();
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -78,7 +83,8 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                cuentasPtas = null;
+                //cuentasPtas = null;
+                error = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -86,6 +92,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
+                    Error = error,
                     LegacySystems = cuentasPtas
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
