@@ -14,7 +14,7 @@ namespace Expertia.Estructura.Models
 
     public class Cotizacion : IUnidadNegocio
     {
-       #region ForeignKey
+        #region ForeignKey
         public UnidadNegocio UnidadNegocio { get; set; }
 
         public string Grupo { get; set; }

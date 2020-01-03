@@ -111,21 +111,8 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                #region UnidadNegocio
-                UnidadNegocioKeys? unidadNegocioKeys = null;
-                switch (cotizacionRequest.Region)
-                {
-                    case "PE":
-                        unidadNegocioKeys = UnidadNegocioKeys.CondorTravel;
-                        break;
-                    case "CL":
-                        unidadNegocioKeys = UnidadNegocioKeys.CondorTravel_CL;
-                        break;
-                    default:
-                        break;
-                }
-                RepositoryByBusiness(unidadNegocioKeys);
-                #endregion
+                RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry());
+                
 
                 var cotizaciones = (IEnumerable<Cotizacion>)_cotizacionCTRepository.GetCotizacionCT(cotizacionRequest)[OutParameter.CursorCotizacion];
                 return Ok(cotizaciones);
@@ -181,26 +168,8 @@ namespace Expertia.Estructura.Controllers
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
-            switch (unidadNegocioKey)
-            {
-                case UnidadNegocioKeys.CondorTravel:
-                    _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravel);
-                    break;
-                case UnidadNegocioKeys.CondorTravel_CL:
-                    _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravel_CL);
-                    break;
-                /*
-                case UnidadNegocioKeys.DestinosMundiales:
-                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Cotizacion_DM_Repository());
-                    break;
-                case UnidadNegocioKeys.CondorTravel:
-                    _crmCollection.Add(UnidadNegocioKeys.CondorTravel, new Cotizacion_CT_Repository());
-                    break;
-                */
-                default:
-                    break;
-            }
-            return unidadNegocioKey; // Devuelve el mismo parámetro
+            _cotizacionCTRepository = new Cotizacion_CT_Repository(unidadNegocioKey);
+            return unidadNegocioKey;
         }
         #endregion
 

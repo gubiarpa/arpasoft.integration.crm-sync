@@ -26,15 +26,14 @@ namespace Expertia.Estructura.Repository.Condor
             #region Loading
             var idOportunidadSf = cotizacionRequest.IdOportunidadSf;
             var idCotizacionSf = cotizacionRequest.IdCotizacionSf;
-            var region = cotizacionRequest.Region;
             var cotizacion = cotizacionRequest.Cotizacion;
             #endregion
 
             #region Parameters
             /// (1) P_CODIGO_ERROR
-            //AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (2) P_MENSAJE_ERROR
-            //AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (3) P_ID_OPORTUNIDAD_SF
             AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, idOportunidadSf);
             /// (4) P_ID_FILE_SF

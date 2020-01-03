@@ -168,6 +168,18 @@ namespace Expertia.Estructura.Utils
                     return null;
             }
         }
+
+        public static UnidadNegocioKeys? ToUnidadNegocioByCountry(this string countryName)
+        {
+            switch (countryName)
+            {
+                case CountryName.Peru: return UnidadNegocioKeys.CondorTravel;
+                case CountryName.Chile: return UnidadNegocioKeys.CondorTravel_CL;
+                case CountryName.Ecuador: return UnidadNegocioKeys.CondorTravel_EC;
+                case CountryName.Brasil: return UnidadNegocioKeys.CondorTravel_BR;
+            }
+            return null;
+        }
         #endregion
 
         #region Rows

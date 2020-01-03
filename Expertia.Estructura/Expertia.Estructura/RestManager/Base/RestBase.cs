@@ -12,7 +12,8 @@ namespace Expertia.Estructura.RestManager.Base
         {
             try
             {
-                var client = new RestClient(serverName);
+                if (!int.TryParse(ConfigAccess.GetValueInAppSettings(SecurityKeys.AuthTimeoutKey), out int authTimeout)) authTimeout = 0;
+                var client = new RestClient(serverName) { Timeout = authTimeout };
                 ServicePointManager.Expect100Continue = true;
                 ServicePointManager.DefaultConnectionLimit = 9999;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
@@ -23,6 +24,7 @@ namespace Expertia.Estructura.RestManager.Base
                 request.AddParameter("username", ConfigAccess.GetValueInAppSettings("AUTH_USERNAME"));
                 request.AddParameter("password", ConfigAccess.GetValueInAppSettings("AUTH_PASSWORD"));
                 var response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK && response.ErrorMessage != null) throw new Exception(response.ErrorMessage);
                 var content = response.Content;
                 JsonManager.LoadText(content);
                 return JsonManager.GetSetting("access_token");
@@ -42,7 +44,7 @@ namespace Expertia.Estructura.RestManager.Base
         {
             try
             {
-                var client = new RestClient(serverName) { Timeout = timeout };
+                var client = new RestClient(serverName) /*{ Timeout = timeout }*/;
                 var request = new RestRequest(methodName, Method.POST, DataFormat.Json);
                 if (isAuth) request.AddHeader("Authorization", "Bearer " + token);
                 request.AddJsonBody(body);
@@ -63,7 +65,7 @@ namespace Expertia.Estructura.RestManager.Base
                 body,
                 isAuth,
                 token,
-                int.Parse(ConfigAccess.GetValueInAppSettings(SecurityKeys.CrmTimeOutKey)));
+                int.Parse(ConfigAccess.GetValueInAppSettings(SecurityKeys.CrmTimeoutKey)));
         }
         #endregion
     }
