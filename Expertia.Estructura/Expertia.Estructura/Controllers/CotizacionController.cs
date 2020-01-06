@@ -20,13 +20,6 @@ namespace Expertia.Estructura.Controllers
         private ICotizacionCT _cotizacionCTRepository;
         #endregion
 
-        #region Constructor
-        public CotizacionController()
-        {
-            _cotizacionCTRepository = new Cotizacion_CT_Repository(UnidadNegocioKeys.CondorTravel);
-        }
-        #endregion
-
         #region PublicMethods
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(CotizacionRequest cotizacionRequest)

@@ -50,6 +50,7 @@ namespace Expertia.Estructura.Repository.Condor
             /// (8) P_RECORDSET
             AddParameter(OutParameter.CursorCotizacion, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
+
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.CT_Obtiene_Cotizacion);
             operation[OutParameter.CursorCotizacion] = ToCotizacionResponse(GetDtParameter(OutParameter.CursorCotizacion));
@@ -108,33 +109,38 @@ namespace Expertia.Estructura.Repository.Condor
             try
             {
                 var cotizaciones = new List<CotizacionResponse>();
-                foreach (DataRow row in dt.Rows)
-                {
-                    #region Loading
-                    var grupo = row.StringParse("GRUPO");
-                    var estado = row.StringParse("ESTADO");
-                    var ventaEstimada = row.FloatParse("VENTA_ESTIMADA");
-                    var elegida = row.StringParse("ELEGIDA").Equals(ApiResponseCode.SI);
-                    var file = row.StringParse("FILE_SUBFILE");
-                    var venta_file = row.FloatParse("VENTA_FILE");
-                    var margen_file = row.FloatParse("MARGEN_FILE");
-                    var paxs_file = row.IntParse("PAXS_FILE");
-                    #endregion
 
-                    #region AddingElement
-                    cotizaciones.Add(new CotizacionResponse()
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt.Rows)
                     {
-                        Grupo = grupo,
-                        Estado = estado,
-                        VentaEstimada = ventaEstimada,
-                        Elegida = elegida,
-                        File = file,
-                        VentaFile = venta_file,
-                        MargenFile = margen_file,
-                        PaxsFile = paxs_file
-                    });
-                    #endregion
+                        #region Loading
+                        var grupo = row.StringParse("GRUPO");
+                        var estado = row.StringParse("ESTADO");
+                        var ventaEstimada = row.FloatParse("VENTA_ESTIMADA");
+                        var elegida = row.StringParse("ELEGIDA").Equals(ApiResponseCode.SI);
+                        var file = row.StringParse("FILE_SUBFILE");
+                        var venta_file = row.FloatParse("VENTA_FILE");
+                        var margen_file = row.FloatParse("MARGEN_FILE");
+                        var paxs_file = row.IntParse("PAXS_FILE");
+                        #endregion
+
+                        #region AddingElement
+                        cotizaciones.Add(new CotizacionResponse()
+                        {
+                            Grupo = grupo,
+                            Estado = estado,
+                            VentaEstimada = ventaEstimada,
+                            Elegida = elegida,
+                            File = file,
+                            VentaFile = venta_file,
+                            MargenFile = margen_file,
+                            PaxsFile = paxs_file
+                        });
+                        #endregion
+                    }
                 }
+
                 return cotizaciones;
             }
             catch (Exception ex)

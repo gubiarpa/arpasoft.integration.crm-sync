@@ -66,7 +66,10 @@ namespace Expertia.Estructura.Repository.Base
                         {
                             if (_parameters[key].Direction.Equals(ParameterDirection.Output))
                                 if (_parameters[key].OracleDbType.Equals(OracleDbType.RefCursor))
-                                    (_dtParameters[key] = new DataTable()).Load(((OracleRefCursor)(_parameters[key]).Value).GetDataReader());
+                                    if (_parameters[key].Size > 0)
+                                        (_dtParameters[key] = new DataTable()).Load(((OracleRefCursor)(_parameters[key]).Value).GetDataReader());
+                                    else
+                                        _dtParameters[key] = null;
                                 else
                                     _outParameters[key] = _parameters[key];
                         }
