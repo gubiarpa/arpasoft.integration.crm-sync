@@ -23,10 +23,13 @@ namespace Expertia.Estructura.Repository.Condor
         public Operation GetCotizacionCT(CotizacionRequest cotizacionRequest)
         {
             var operation = new Operation();
+
             #region Loading
+            var usuario = cotizacionRequest.Usuario;
             var idOportunidadSf = cotizacionRequest.IdOportunidadSf;
             var idCotizacionSf = cotizacionRequest.IdCotizacionSf;
             var cotizacion = cotizacionRequest.Cotizacion;
+            var accion = cotizacionRequest.Accion;
             #endregion
 
             #region Parameters
@@ -34,19 +37,22 @@ namespace Expertia.Estructura.Repository.Condor
             AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (3) P_ID_OPORTUNIDAD_SF
+            /// (3) P_NOMBRE_USUARIO
+            AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, usuario);
+            /// (4) P_ID_OPORTUNIDAD_SF
             AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, idOportunidadSf);
-            /// (4) P_ID_FILE_SF
-            AddParameter("P_ID_FILE_SF", OracleDbType.Varchar2, idCotizacionSf);
-            /// (5) P_COTIZACION
+            /// (5) P_ID_COTIZACION_SF
+            AddParameter("P_ID_COTIZACION_SF", OracleDbType.Varchar2, idCotizacionSf);
+            /// (6) P_COTIZACION
             AddParameter("P_COTIZACION", OracleDbType.Varchar2, cotizacion);
-            /// (6) P_CUR_COTIZACION
+            /// (7) P_ACCION
+            AddParameter("P_ACCION", OracleDbType.Varchar2, accion);
+            /// (8) P_RECORDSET
             AddParameter(OutParameter.CursorCotizacion, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
-
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.CT_Obtiene_Cotizacion);
-            operation[OutParameter.CursorCotizacion] = ToCotizacion(GetDtParameter(OutParameter.CursorCotizacion));
+            operation[OutParameter.CursorCotizacion] = ToCotizacionResponse(GetDtParameter(OutParameter.CursorCotizacion));
             #endregion
 
             return operation;
@@ -70,9 +76,7 @@ namespace Expertia.Estructura.Repository.Condor
                     var branch = row.StringParse("BRANCH");
                     var fecha_Apertura = row.DateTimeParse("FECHA_COTIZ");
                     var fecha_Inicio = row.DateTimeParse("FECHA_INI_SERVICIO");
-                    var fecha_Fin = row.DateTimeParse("FECHA_FIN_SERVICIO");
-
-                                      
+                    var fecha_Fin = row.DateTimeParse("FECHA_FIN_SERVICIO");        
                     #endregion
 
                     #region AddingElement
@@ -88,6 +92,46 @@ namespace Expertia.Estructura.Repository.Condor
                         Fecha_Inicio = fecha_Inicio,
                         Fecha_Fin = fecha_Fin
 
+                    });
+                    #endregion
+                }
+                return cotizaciones;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IEnumerable<CotizacionResponse> ToCotizacionResponse(DataTable dt)
+        {
+            try
+            {
+                var cotizaciones = new List<CotizacionResponse>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    #region Loading
+                    var grupo = row.StringParse("GRUPO");
+                    var estado = row.StringParse("ESTADO");
+                    var ventaEstimada = row.FloatParse("VENTA_ESTIMADA");
+                    var elegida = row.StringParse("ELEGIDA").Equals(ApiResponseCode.SI);
+                    var file = row.StringParse("FILE_SUBFILE");
+                    var venta_file = row.FloatParse("VENTA_FILE");
+                    var margen_file = row.FloatParse("MARGEN_FILE");
+                    var paxs_file = row.IntParse("PAXS_FILE");
+                    #endregion
+
+                    #region AddingElement
+                    cotizaciones.Add(new CotizacionResponse()
+                    {
+                        Grupo = grupo,
+                        Estado = estado,
+                        VentaEstimada = ventaEstimada,
+                        Elegida = elegida,
+                        File = file,
+                        VentaFile = venta_file,
+                        MargenFile = margen_file,
+                        PaxsFile = paxs_file
                     });
                     #endregion
                 }

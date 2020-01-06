@@ -307,6 +307,8 @@ namespace Expertia.Estructura.Utils
     public static class ApiResponseCode
     {
         public const string ErrorCode = "{ex}";
+        public const string SI = "SI";
+        public const string NO = "NO";
     }
 
     public static class DbResponseCode

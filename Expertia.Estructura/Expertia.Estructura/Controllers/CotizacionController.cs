@@ -28,6 +28,104 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region PublicMethods
+        [Route(RouteAction.Read)]
+        public IHttpActionResult Read(CotizacionRequest cotizacionRequest)
+        {
+            var error = string.Empty;
+            try
+            {
+                RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry());
+                var cotizaciones = (IEnumerable<CotizacionResponse>)_cotizacionCTRepository.GetCotizacionCT(cotizacionRequest)[OutParameter.CursorCotizacion];
+                return Ok(cotizaciones);
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return InternalServerError(ex);
+            }
+            finally
+            {
+                (new
+                {
+                    Error = error,
+                    Body = cotizacionRequest
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+            }
+        }
+        #endregion
+
+        #region Auxiliar
+        private void LoadResults(UnidadNegocioKeys? unidadNegocio, out object logResult, out object result)
+        {
+            switch (unidadNegocio)
+            {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    #region Log
+                    logResult = new
+                    {
+                        Result = new
+                        {
+                            DestinosMundiales = new
+                            {
+                                Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
+                                IdCotizacion = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCotizacion].ToString()
+                            }
+                        }
+                    };
+                    #endregion
+                    #region Client
+                    result = new
+                    {
+                        Result = new
+                        {
+                            DestinosMundiales = new
+                            {
+                                CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
+                                MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
+                                IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
+                                IdCotizacion = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCotizacion].ToString()
+                            }
+                        }
+                    };
+                    #endregion
+                    break;
+                default:
+                    logResult = null; result = null;
+                    break;
+            }
+        }
+
+        protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
+        {
+            _cotizacionCTRepository = new Cotizacion_CT_Repository(unidadNegocioKey);
+            return unidadNegocioKey;
+        }
+        #endregion
+
+        #region SalesforceEntities
+        private object ToCotizacionEntity(Cotizacion cotizacion)
+        {
+            try
+            {
+                return new
+                {
+                    info = new
+                    {
+                        CodigoRetorno = "OK",
+                        MensajeRetorno = "Mensaje Retorno",
+                        Grupo = cotizacion.Grupo
+                    }
+                };
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        #endregion
+
+        #region NotPublic
         [Route(RouteAction.Generate)]
         /*public*/ IHttpActionResult Generate(Cotizacion entity)
         {
@@ -103,94 +201,6 @@ namespace Expertia.Estructura.Controllers
                     Error = error,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
-            }
-        }
-
-        [Route(RouteAction.Read)]
-        public IHttpActionResult Read(CotizacionRequest cotizacionRequest)
-        {
-            try
-            {
-                RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry());
-                
-
-                var cotizaciones = (IEnumerable<Cotizacion>)_cotizacionCTRepository.GetCotizacionCT(cotizacionRequest)[OutParameter.CursorCotizacion];
-                return Ok(cotizaciones);
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
-        #endregion
-
-        #region Auxiliar
-        private void LoadResults(UnidadNegocioKeys? unidadNegocio, out object logResult, out object result)
-        {
-            switch (unidadNegocio)
-            {
-                case UnidadNegocioKeys.DestinosMundiales:
-                    #region Log
-                    logResult = new
-                    {
-                        Result = new
-                        {
-                            DestinosMundiales = new
-                            {
-                                Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
-                                IdCotizacion = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCotizacion].ToString()
-                            }
-                        }
-                    };
-                    #endregion
-                    #region Client
-                    result = new
-                    {
-                        Result = new
-                        {
-                            DestinosMundiales = new
-                            {
-                                CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
-                                IdCotizacion = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCotizacion].ToString()
-                            }
-                        }
-                    };
-                    #endregion
-                    break;
-                default:
-                    logResult = null; result = null;
-                    break;
-            }
-        }
-
-        protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
-        {
-            _cotizacionCTRepository = new Cotizacion_CT_Repository(unidadNegocioKey);
-            return unidadNegocioKey;
-        }
-        #endregion
-
-        #region SalesforceEntities
-        private object ToCotizacionEntity(Cotizacion cotizacion)
-        {
-            try
-            {
-                return new
-                {
-                    info = new
-                    {
-                        CodigoRetorno = "OK",
-                        MensajeRetorno = "Mensaje Retorno",
-                        Grupo = cotizacion.Grupo
-                    }
-                };
-            }
-            catch
-            {
-                throw;
             }
         }
         #endregion
