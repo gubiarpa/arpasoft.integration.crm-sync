@@ -44,6 +44,7 @@ namespace Expertia.Estructura.Utils
         public const string CuentaPta = "api/cuentapta";
         public const string ContactoPta = "api/contactopta";
         public const string RegionCuenta = "api/regioncuenta";
+        public const string Ventas = "api/ventas";
     }
 
     public enum ActionMethod
@@ -97,18 +98,20 @@ namespace Expertia.Estructura.Utils
     public static class StoredProcedureName
     {
         #region CondorTravel
-        // Cuenta B2B
+        /// Cuenta B2B
         public const string CT_Create_CuentaB2B = "CONDOR.CRM_PKG.SP_CREAR_CLIENTE";
         public const string CT_Update_CuentaB2B = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
-        // Contacto
+        /// Contacto
         public const string CT_Create_Contacto = "CONDOR.CRM_PKG.SP_CREAR_CONTACTO";
         public const string CT_Update_Contacto = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
-
+        /// Cotización
         public const string CT_Obtiene_Cotizacion = "CONDOR.CRM_PKG.SP_OBTIENE_COTIZACION";
-
+        /// File
         public const string CT_Obtiene_FileCT = "CONDOR.CRM_PKG.SP_OBTIENE_FILE";
-
+        /// Región
         public const string CT_Register_RegionCuenta = "CONDOR.CRM_PKG.SP_ACTUALIZAR_ESTADO_CLIENTE";
+        /// Venta
+        public const string CT_Get_VentasResumen = "CONDOR.CRM_PKG.SP_RESUMEN_CLIENTE";
         #endregion
 
         #region DestinosMundiales
@@ -234,6 +237,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorOportunidad = "P_OPORTUNIDAD";
         public const string CursorCuentaPta = "P_CLIENTE";
         public const string CursorContactoPta = "P_CONTACTO";
+        public const string CursorVentas = "P_CUR_RESU_VENTAS";
         #endregion
 
         #region Fields

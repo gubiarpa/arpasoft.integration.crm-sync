@@ -221,6 +221,25 @@ namespace Expertia.Estructura.Utils
             }
         }
 
+        public static float? FloatNullParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                float? result;
+
+                if (float.TryParse(row[fieldName].ToString(), out float _result))
+                    result = _result;
+                else
+                    result = null;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static DateTime DateTimeParse(this DataRow row, string fieldName)
         {
             try
