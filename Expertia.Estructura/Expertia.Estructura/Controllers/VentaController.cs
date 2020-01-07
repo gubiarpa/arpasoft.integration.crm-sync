@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -16,7 +17,7 @@ namespace Expertia.Estructura.Controllers
     public class VentaController : BaseController<object>
     {
         #region Properties
-        private IVentaCT _ventaCTRepository;
+        private IDictionary<UnidadNegocioKeys?, IVentaCT> _ventaCollection = new Dictionary<UnidadNegocioKeys?, IVentaCT>();
         #endregion
 
         #region PublicMethods
@@ -24,17 +25,28 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Read(VentasRequest ventasRequest)
         {
             var error = string.Empty;
+            var ventasRowList = new List<VentasRow>();
             try
             {
-                RepositoryByBusiness(ventasRequest.Region.ToUnidadNegocioByCountry());
-                var ventasOperation = _ventaCTRepository.GetVentasCT(ventasRequest);
-                var ventas = new VentasResponse()
+                var regiones = ventasRequest.Region.Split(Auxiliar.ListSeparator).ToList();
+                var tasks = new List<Task<VentasResponse>>();
+                foreach (var region in regiones)
                 {
-                    CodigoRetorno = ventasOperation[OutParameter.CodigoError].ToString(),
-                    MensajeRetorno = ventasOperation[OutParameter.MensajeError].ToString(),
-                    VentaRowList = (IEnumerable<VentasRow>)ventasOperation[OutParameter.CursorVentas]
-                };
-                return Ok(ventas);
+                    var unidadNeg = RepositoryByBusiness(region.ToUnidadNegocioByCountry());
+                    tasks.Add(new Task<VentasResponse>(() => {
+                        var ventasOper = _ventaCollection[unidadNeg].GetVentasCT(ventasRequest);
+                        return new VentasResponse()
+                        {
+                            CodigoRetorno = ventasOper[OutParameter.CodigoError].ToString(),
+                            MensajeRetorno = ventasOper[OutParameter.MensajeError].ToString(),
+                            VentaRowList = (IEnumerable<VentasRow>)ventasOper[OutParameter.CursorVentas]
+                        };
+                    }));
+                }
+                tasks.ForEach(t => t.Start());
+                Task.WaitAll(tasks.ToArray());
+                tasks.ForEach(t => ventasRowList.AddRange(t.Result.VentaRowList));
+                return Ok(ventasRowList);
             }
             catch (Exception ex)
             {
@@ -55,7 +67,7 @@ namespace Expertia.Estructura.Controllers
         #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
-            _ventaCTRepository = new Venta_CT_Repository(unidadNegocioKey);
+            _ventaCollection[unidadNegocioKey] = new Venta_CT_Repository(unidadNegocioKey);
             return unidadNegocioKey;
         }
         #endregion

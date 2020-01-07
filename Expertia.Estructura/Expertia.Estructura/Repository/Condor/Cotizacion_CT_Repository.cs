@@ -41,7 +41,7 @@ namespace Expertia.Estructura.Repository.Condor
             /// (3) P_NOMBRE_USUARIO
             AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, usuario);
             /// (4) P_ID_CUENTA_SF
-            AddParameter("P_ID_CUENTA_SF", OracleDbType.Varchar2, idCotizacionSf);
+            AddParameter("P_ID_CUENTA_SF", OracleDbType.Varchar2, cuentaSf);
             /// (5) P_ID_OPORTUNIDAD_SF
             AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, idOportunidadSf);
             /// (6) P_ID_COTIZACION_SF
