@@ -8,6 +8,7 @@ namespace Expertia.Estructura.Models
     {
         public string IdOportunidadSf { get; set; }
         public string IdCotizacionSf { get; set; }
+        public string IdCuentaSf { get; set; }
         public string Cotizacion { get; set; }
         public string Region { get; set; }
         public string Accion { get; set; }
@@ -24,6 +25,7 @@ namespace Expertia.Estructura.Models
         public float VentaFile { get; set; }
         public float MargenFile { get; set; }
         public int PaxsFile { get; set; }
+        public string EstadoFile { get; set; }
     }
 
     public class Cotizacion : IUnidadNegocio

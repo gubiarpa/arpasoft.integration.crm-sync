@@ -26,6 +26,7 @@ namespace Expertia.Estructura.Repository.Condor
 
             #region Loading
             var usuario = cotizacionRequest.Usuario;
+            var cuentaSf = cotizacionRequest.IdCuentaSf;
             var idOportunidadSf = cotizacionRequest.IdOportunidadSf;
             var idCotizacionSf = cotizacionRequest.IdCotizacionSf;
             var cotizacion = cotizacionRequest.Cotizacion;
@@ -39,15 +40,17 @@ namespace Expertia.Estructura.Repository.Condor
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (3) P_NOMBRE_USUARIO
             AddParameter("P_NOMBRE_USUARIO", OracleDbType.Varchar2, usuario);
-            /// (4) P_ID_OPORTUNIDAD_SF
+            /// (4) P_ID_CUENTA_SF
+            AddParameter("P_ID_CUENTA_SF", OracleDbType.Varchar2, idCotizacionSf);
+            /// (5) P_ID_OPORTUNIDAD_SF
             AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, idOportunidadSf);
-            /// (5) P_ID_COTIZACION_SF
+            /// (6) P_ID_COTIZACION_SF
             AddParameter("P_ID_COTIZACION_SF", OracleDbType.Varchar2, idCotizacionSf);
-            /// (6) P_COTIZACION
+            /// (7) P_COTIZACION
             AddParameter("P_COTIZACION", OracleDbType.Varchar2, cotizacion);
-            /// (7) P_ACCION
+            /// (8) P_ACCION
             AddParameter("P_ACCION", OracleDbType.Varchar2, accion);
-            /// (8) P_RECORDSET
+            /// (9) P_RECORDSET
             AddParameter(OutParameter.CursorCotizacion, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
@@ -123,6 +126,7 @@ namespace Expertia.Estructura.Repository.Condor
                         var venta_file = row.FloatParse("VENTA_FILE");
                         var margen_file = row.FloatParse("MARGEN_FILE");
                         var paxs_file = row.IntParse("PAXS_FILE");
+                        var estado_file = row.StringParse("ESTADO_FILE");
                         #endregion
 
                         #region AddingElement
@@ -135,7 +139,8 @@ namespace Expertia.Estructura.Repository.Condor
                             File = file,
                             VentaFile = venta_file,
                             MargenFile = margen_file,
-                            PaxsFile = paxs_file
+                            PaxsFile = paxs_file,
+                            EstadoFile = estado_file
                         });
                         #endregion
                     }
