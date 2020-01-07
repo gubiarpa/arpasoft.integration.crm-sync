@@ -32,16 +32,22 @@ namespace Expertia.Estructura.Controllers
                 var tasks = new List<Task<VentasResponse>>();
                 foreach (var region in regiones)
                 {
-                    var unidadNeg = RepositoryByBusiness(region.ToUnidadNegocioByCountry());
-                    tasks.Add(new Task<VentasResponse>(() => {
-                        var ventasOper = _ventaCollection[unidadNeg].GetVentasCT(ventasRequest);
-                        return new VentasResponse()
-                        {
-                            CodigoRetorno = ventasOper[OutParameter.CodigoError].ToString(),
-                            MensajeRetorno = ventasOper[OutParameter.MensajeError].ToString(),
-                            VentaRowList = (IEnumerable<VentasRow>)ventasOper[OutParameter.CursorVentas]
-                        };
-                    }));
+                    try
+                    {
+                        var unidadNeg = RepositoryByBusiness(region.ToUnidadNegocioByCountry());
+                        tasks.Add(new Task<VentasResponse>(() => {
+                            var ventasOper = _ventaCollection[unidadNeg].GetVentasCT(ventasRequest);
+                            return new VentasResponse()
+                            {
+                                CodigoRetorno = ventasOper[OutParameter.CodigoError].ToString(),
+                                MensajeRetorno = ventasOper[OutParameter.MensajeError].ToString(),
+                                VentaRowList = (IEnumerable<VentasRow>)ventasOper[OutParameter.CursorVentas]
+                            };
+                        }));
+                    }
+                    catch
+                    {
+                    }
                 }
                 tasks.ForEach(t => t.Start());
                 Task.WaitAll(tasks.ToArray());
