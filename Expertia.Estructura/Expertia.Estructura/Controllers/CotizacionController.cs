@@ -27,9 +27,15 @@ namespace Expertia.Estructura.Controllers
             var error = string.Empty;
             try
             {
-                RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry());
-                var cotizaciones = (IEnumerable<CotizacionResponse>)_cotizacionCTRepository.GetCotizacionCT(cotizacionRequest)[OutParameter.CursorCotizacion];
-                return Ok(cotizaciones);
+                if (RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry()) != null)
+                {
+                    var cotizacionResponse = _cotizacionCTRepository.GetCotizacionCT(cotizacionRequest);
+                    var codigoRetorno = cotizacionResponse[OutParameter.CodigoError].ToString();
+                    var mensajeRetorno = cotizacionResponse[OutParameter.MensajeError].ToString();
+                    var data = (IEnumerable<CotizacionResponse>)cotizacionResponse[OutParameter.CursorCotizacion];
+                    return Ok(new { codigoRetorno, mensajeRetorno, data });
+                }
+                return NotFound();
             }
             catch (Exception ex)
             {
