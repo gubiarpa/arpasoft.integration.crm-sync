@@ -56,6 +56,8 @@ namespace Expertia.Estructura.Repository.Condor
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.CT_Obtiene_Cotizacion);
+            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.CursorCotizacion] = ToCotizacionResponse(GetDtParameter(OutParameter.CursorCotizacion));
             #endregion
 
