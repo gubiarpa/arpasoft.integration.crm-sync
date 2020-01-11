@@ -25,7 +25,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Read(VentasRequest ventasRequest)
         {
             var error = string.Empty;
-            var ventasRowList = new List<VentasRow>();
+            var data = new List<VentasRow>();
             try
             {
                 var regiones = ventasRequest.Region.Split(Auxiliar.ListSeparator).ToList();
@@ -39,6 +39,7 @@ namespace Expertia.Estructura.Controllers
                             var ventasOper = _ventaCollection[unidadNeg].GetVentasCT(ventasRequest);
                             return new VentasResponse()
                             {
+                                Region = region,
                                 CodigoRetorno = ventasOper[OutParameter.CodigoError].ToString(),
                                 MensajeRetorno = ventasOper[OutParameter.MensajeError].ToString(),
                                 VentaRowList = (IEnumerable<VentasRow>)ventasOper[OutParameter.CursorVentas]
@@ -51,8 +52,13 @@ namespace Expertia.Estructura.Controllers
                 }
                 tasks.ForEach(t => t.Start());
                 Task.WaitAll(tasks.ToArray());
-                tasks.ForEach(t => ventasRowList.AddRange(t.Result.VentaRowList));
-                return Ok(ventasRowList);
+                var result = new List<object>();
+                tasks.ForEach(t =>
+                {
+                    result.Add(new { t.Result.Region, t.Result.CodigoRetorno, t.Result.MensajeRetorno });
+                    data.AddRange(t.Result.VentaRowList); // Agrega lista
+                });
+                return Ok(new { result, data });
             }
             catch (Exception ex)
             {

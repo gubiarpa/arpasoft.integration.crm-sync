@@ -16,6 +16,7 @@ namespace Expertia.Estructura.Models
     {
         public string CodigoRetorno { get; set; }
         public string MensajeRetorno { get; set; }
+        public string Region { get; set; }
         public IEnumerable<VentasRow> VentaRowList { get; set; }
     }
 
