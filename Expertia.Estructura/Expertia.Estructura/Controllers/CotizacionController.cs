@@ -51,6 +51,27 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
+
+        public IHttpActionResult Send()
+        {
+            var error = string.Empty;
+            try
+            {
+                return null;
+            }
+            catch (Exception ex)
+            {
+                error = ex.Message;
+                return InternalServerError(ex);
+            }
+            finally
+            {
+                (new
+                {
+                    Error = error
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+            }
+        }
         #endregion
 
         #region Auxiliar

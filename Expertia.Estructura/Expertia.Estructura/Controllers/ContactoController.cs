@@ -204,6 +204,34 @@ namespace Expertia.Estructura.Controllers
                 _operCollection[unidadNegocio][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
         }
 
+        private IEnumerable<UnidadNegocioKeys?> GetRegiones(UnidadNegocioKeys? unidadNegocioKeys)
+        {
+            IEnumerable<UnidadNegocioKeys?> unidadNegocioList = null;
+            switch (RepositoryByBusiness(unidadNegocioKeys))
+            {
+                case UnidadNegocioKeys.CondorTravel:
+                    unidadNegocioList = new List<UnidadNegocioKeys?>
+                        {
+                            UnidadNegocioKeys.CondorTravel,
+                            UnidadNegocioKeys.CondorTravel_CL,
+                            UnidadNegocioKeys.CondorTravel_EC,
+                            UnidadNegocioKeys.CondorTravel_BR
+                        };
+                    break;
+                case UnidadNegocioKeys.DestinosMundiales:
+                case UnidadNegocioKeys.Interagencias:
+                case UnidadNegocioKeys.AppWebs:
+                    unidadNegocioList = new List<UnidadNegocioKeys?>
+                        {
+                            UnidadNegocioKeys.DestinosMundiales,
+                            UnidadNegocioKeys.Interagencias,
+                            UnidadNegocioKeys.AppWebs
+                        };
+                    break;
+            }
+            return unidadNegocioList;
+        }
+
         private void LoadResults(UnidadNegocioKeys? unidadNegocio, out object logResult, out object result)
         {
             switch (unidadNegocio)

@@ -114,6 +114,11 @@ namespace Expertia.Estructura.Utils
         public const string CT_Get_VentasResumen = "CONDOR.CRM_PKG.SP_RESUMEN_CLIENTE";
         #endregion
 
+        #region JourneyYou
+        /// Cotización
+        public const string CT_Obtiene_NovedadCotizacion = "CONDOR.CRM_PKG.";
+        #endregion
+
         #region DestinosMundiales
         // Cuenta B2B
         public const string DM_Create_CuentaB2B = "DESTINOS_TRP.CRM_PKG.SP_CREAR_CLIENTE";
