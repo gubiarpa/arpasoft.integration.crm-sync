@@ -28,10 +28,10 @@ namespace Expertia.Estructura.Controllers
                 {
                     case UnidadNegocioKeys.CondorTravel:
                     case UnidadNegocioKeys.CondorTravel_CL:
-                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError); } catch (Exception ex) { error_PE = ex.Message; }
-                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError); } catch (Exception ex) { error_CL = ex.Message; }
-                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_EC, entity, codigoError); } catch (Exception ex) { error_EC = ex.Message; }
-                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_BR, entity, codigoError); } catch (Exception ex) { error_BR = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel, entity, codigoError, _delayTimeRetry); } catch (Exception ex) { error_PE = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_CL, entity, codigoError, _delayTimeRetry); } catch (Exception ex) { error_CL = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_EC, entity, codigoError, _delayTimeRetry); } catch (Exception ex) { error_EC = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.CondorTravel_BR, entity, codigoError, _delayTimeRetry); } catch (Exception ex) { error_BR = ex.Message; }
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:

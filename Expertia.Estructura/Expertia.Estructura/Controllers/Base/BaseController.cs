@@ -110,22 +110,26 @@ namespace Expertia.Estructura.Controllers.Base
         #region RetryMethods
         protected void CreateOrUpdate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError, int delayTimeRetry = 0)
         {
-            if (delayTimeRetry > 0) System.Threading.Thread.Sleep(delayTimeRetry);
             if (_operRetry[unidadNegocio] =
                 ((_operCollection[unidadNegocio] =
                     _crmCollection[unidadNegocio].Create(entity))
                         [OutParameter.CodigoError].ToString().Equals(codigoError)))
+            {
+                System.Threading.Thread.Sleep(delayTimeRetry);
                 _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Update(entity);
+            }
         }
 
         protected void UpdateOrCreate(UnidadNegocioKeys? unidadNegocio, T entity, string codigoError, int delayTimeRetry = 0)
         {
-            if (delayTimeRetry > 0) System.Threading.Thread.Sleep(delayTimeRetry);
             if (_operRetry[unidadNegocio] =
                 ((_operCollection[unidadNegocio] =
                     _crmCollection[unidadNegocio].Update(entity))
                         [OutParameter.CodigoError].ToString().Equals(codigoError)))
+            {
+                System.Threading.Thread.Sleep(delayTimeRetry);
                 _operCollection[unidadNegocio] = _crmCollection[unidadNegocio].Create(entity);
+            }
         }
 
         protected object GetErrorResult(UnidadNegocioKeys? unidadNegocio)
