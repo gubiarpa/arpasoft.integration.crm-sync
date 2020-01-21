@@ -6,6 +6,7 @@ using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
+using Expertia.Estructura.RestManager.RestParse;
 using Expertia.Estructura.Utils;
 using RestSharp;
 using System;
@@ -98,8 +99,7 @@ namespace Expertia.Estructura.Controllers
                     try
                     {
                         /// Envío de subcodigo a Salesforce
-                        var subcodigoSf = ToSalesforceEntity(subcodigo);
-                        var responseSubcodigo = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigoSf, true, token);
+                        var responseSubcodigo = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigo.ToSalesforceEntity(), true, token);
                         if (responseSubcodigo.StatusCode.Equals(HttpStatusCode.OK))
                         {
                             dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseSubcodigo.Content);
@@ -155,32 +155,6 @@ namespace Expertia.Estructura.Controllers
                     break;
             }
             return unidadNegocioKey;
-        }
-
-        private object ToSalesforceEntity(Subcodigo subcodigo)
-        {
-            try
-            {
-                return new
-                {
-                    info = new
-                    {
-                        UnidadNegocio = subcodigo.UnidadNegocio,
-                        Accion = subcodigo.Accion,
-                        DkAgencia = subcodigo.DkAgencia.ToString(),
-                        CorrelativoSubcodigo = subcodigo.CorrelativoSubcodigo.ToString(),
-                        DireccionSucursal = subcodigo.DireccionSucursal,
-                        EstadoSucursal = subcodigo.EstadoSucursal,
-                        NombreSucursal = subcodigo.NombreSucursal,
-                        Promotor = subcodigo.Promotor,
-                        CondicionPago = subcodigo.CondicionPago
-                    }
-                };
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
         #endregion
     }
