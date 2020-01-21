@@ -238,7 +238,7 @@
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="RestManager\Base\RestBase.cs" />
-    <Compile Include="RestManager\RestParse\ContactoPtaParse.cs" />
+    <Compile Include="RestManager\RestParse\PtaParse.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
     <Compile Include="Utils\Behavior\ILogFileManager.cs" />
     <Compile Include="Utils\ClientFeatures.cs" />
