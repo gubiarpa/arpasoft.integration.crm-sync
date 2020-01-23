@@ -12,6 +12,7 @@ namespace Expertia.Estructura.Models
         public float? LimiteCredito_IA { get; set; }
         // Asesor
         public string Asesor_DM { get; set; }
+        public string Asesor_IA { get; set; }
 
         public string RazonSocial { get; set; } // Razón Social
         public string Alias { get; set; } // Alias
