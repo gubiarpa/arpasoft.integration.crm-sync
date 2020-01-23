@@ -4,6 +4,7 @@ using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -115,7 +116,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 if ((entity.Correos != null) && (entity.Correos.ToList().Count > 0)) value = entity.Correos.ToList()[0].Descripcion.Coalesce();
                 AddParameter("P_CORREO", OracleDbType.Varchar2, value);
                 // (25) P_PROPIETARIO
-                if ((entity.Participantes != null) && (entity.Participantes.ToList().Count > 0)) value = entity.Participantes.ToList()[0].EmpleadoOrEjecutivoResponsable.Descripcion; else value = DBNull.Value;
+                if (_unidadNegocio == UnidadNegocioKeys.DestinosMundiales)
+                    value = entity.Asesor_DM;
+                else if (_unidadNegocio == UnidadNegocioKeys.Interagencias)
+                    value = entity.Asesor_IA;
                 AddParameter("P_PROPIETARIO", OracleDbType.Varchar2, value);
                 // (26) P_PUNTO_CONTACTO
                 if (entity.PuntoContacto == null) value = DBNull.Value; else value = entity.PuntoContacto.Descripcion.Coalesce();
@@ -156,7 +160,10 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 if (entity.Herramientas == null) value = DBNull.Value; else value = entity.Herramientas.Array.Coalesce();
                 AddParameter("P_HERRAMIENTAS", OracleDbType.Varchar2, value);
                 // (37) P_LIMITE_CREDITO
-                value = entity.MontoLineaCredito.Coalesce();
+                if (_unidadNegocio == UnidadNegocioKeys.DestinosMundiales)
+                    value = entity.LimiteCredito_DM;
+                else if (_unidadNegocio == UnidadNegocioKeys.Interagencias)
+                    value = entity.LimiteCredito_IA;
                 AddParameter("P_LIMITE_CREDITO", OracleDbType.Decimal, value);
                 // (38) P_ID_CUENTA
                 value = DBNull.Value;

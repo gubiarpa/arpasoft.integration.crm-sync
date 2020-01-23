@@ -7,6 +7,12 @@ namespace Expertia.Estructura.Models
     public class CuentaB2B : Cuenta
     {
         #region Properties
+        // LimiteCredito
+        public float? LimiteCredito_DM { get; set; }
+        public float? LimiteCredito_IA { get; set; }
+        // Asesor
+        public string Asesor_DM { get; set; }
+
         public string RazonSocial { get; set; } // Razón Social
         public string Alias { get; set; } // Alias
         public decimal? MontoLineaCredito { get; set; } // Monto de Línea de Crédito        
