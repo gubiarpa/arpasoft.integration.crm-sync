@@ -1,6 +1,7 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.AppWebs;
+using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
@@ -79,17 +80,25 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
+                object errorResponse = null;
+
+                if (entity.UnidadNegocio.ID == UnidadNegocioKeys.CondorTravel)
+                {
+                    errorResponse = new
+                    {
+                        error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel],
+                        error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_CL],
+                        error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_EC],
+                        error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_BR]
+                    };
+                }
+
                 (new
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
                     Instants = GetInstants(),
-                    Error = new {
-                        error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel],
-                        error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_CL],
-                        error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_EC],
-                        error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_BR]
-                    },
+                    ErrorCT = errorResponse,
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -379,6 +388,7 @@ namespace Expertia.Estructura.Controllers
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
+
             switch (unidadNegocioKey)
             {
                 case UnidadNegocioKeys.CondorTravel:
@@ -389,28 +399,19 @@ namespace Expertia.Estructura.Controllers
                         UnidadNegocioKeys.CondorTravel_EC,
                         UnidadNegocioKeys.CondorTravel_BR 
                     };
+                    foreach (var unidadNegocio in unidadNegocioList)
+                        _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository(unidadNegocio));
                     break;
                 /* case UnidadNegocioKeys.DestinosMundiales: */
                 case UnidadNegocioKeys.Interagencias:
                 case UnidadNegocioKeys.AppWebs:
-                    unidadNegocioList = new List<UnidadNegocioKeys?>
-                    {
-                        /*UnidadNegocioKeys.DestinosMundiales,*/
-                        UnidadNegocioKeys.Interagencias,
-                        UnidadNegocioKeys.AppWebs
-                    };
+                    /*_crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository());*/
+                    _crmCollection.Add(UnidadNegocioKeys.Interagencias, new Contacto_IA_Repository());
+                    _crmCollection.Add(UnidadNegocioKeys.AppWebs, new Contacto_AW_Repository());
                     break;
                 default:
                     unidadNegocioList = null;
                     break;
-            }
-
-            if (unidadNegocioList != null)
-            {
-                foreach (var unidadNegocio in unidadNegocioList)
-                {
-                    _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository(unidadNegocio));
-                }
             }
 
             return unidadNegocioKey; // Devuelve el mismo parámetro
