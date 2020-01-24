@@ -39,11 +39,9 @@ namespace Expertia.Estructura.Models
         public string UrlPresenciaDigital { get; set; }
         public string TipoCorreo { get; set; }
         public string Correo { get; set; }
-        public string Asesor_IA { get; set; }
-        public string Asesor_DM { get; set; }
+        public string Asesor { get; set; }
         public string PuntoContacto { get; set; }
-        public string CondicionPago_IA { get; set; }
-        public string CondicionPago_DM { get; set; }
+        public string CondicionPago { get; set; }
         public float LimiteCredito { get; set; }
         public string Comentario { get; set; }
         public string CategoriaValor { get; set; }
@@ -53,8 +51,8 @@ namespace Expertia.Estructura.Models
         public string EstadoActivacion { get; set; }
         public string GDS { get; set; }
         public string Herramientas { get; set; }
-        public float FacturacionAnual { get; set; }
-        public float ProyeccionFacturacionAnual { get; set; }
+        public float? FacturacionAnual { get; set; }
+        public float? ProyeccionFacturacionAnual { get; set; }
         public DateTime InicioRelacionComercial { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }

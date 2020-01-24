@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
         #endregion
 
         #region PublicMethods
-        public Operation Read()
+        public Operation Read(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.Interagencias)
         {
             var operation = new Operation();
 
@@ -32,8 +32,21 @@ namespace Expertia.Estructura.Repository.InterAgencias
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.IA_Read_CuentaPta);
+            string spName = string.Empty;
+            switch (unidadNegocio)
+            {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    spName = StoredProcedureName.DM_Read_CuentaPta;
+                    break;
+                case UnidadNegocioKeys.Interagencias:
+                    spName = StoredProcedureName.IA_Read_CuentaPta;
+                    break;
+                default:
+                    throw new Exception(ApiResponseCode.ErrorCode);
+            }
+            ExecuteStoredProcedure(spName);
             operation[OutParameter.CursorCuentaPta] = ToCuentaPta(GetDtParameter(OutParameter.CursorCuentaPta));
+            
             #endregion
 
             return operation;
@@ -66,6 +79,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 var spName = string.Empty;
                 switch (_unidadNegocio)
                 {
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        spName = StoredProcedureName.DM_Update_CuentaPta;
+                        break;
                     case UnidadNegocioKeys.Interagencias:
                         spName = StoredProcedureName.IA_Update_CuentaPta;
                         break;
@@ -128,11 +144,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var urlPresenciaDigital = row.StringParse("URL_PRESENCIA_DIGITAL");
                     var tipoCorreo = row.StringParse("TIPO_CORREO");
                     var correo = row.StringParse("CORREO");
-                    var asesorIA = row.StringParse("ASESOR_IA");
-                    var asesorDM = row.StringParse("ASESOR_DM");
+                    var asesor = row.StringParse("ASESOR");
                     var puntoContacto = row.StringParse("PUNTO_CONTACTO");
-                    var condicionPagoIA = row.StringParse("CONDICION_PAGO_IA");
-                    var condicionPagoDM = row.StringParse("CONDICION_PAGO_DM");
+                    var condicionPago = row.StringParse("CONDICION_PAGO");
                     var limiteCredito = row.FloatParse("LIMITE_CREDITO");
                     var comentario = row.StringParse("COMENTARIO");
                     var categoriaValor = row.StringParse("CATEG_VALOR");
@@ -142,8 +156,8 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var estadoActivacion = row.StringParse("ESTADO_ACTIVACION");
                     var gds = row.StringParse("GDS");
                     var herramientas = row.StringParse("HERRAMIENTAS");
-                    var facturacionAnual = row.FloatParse("FACTURACION_ANUAL");
-                    var proyeccionFacturacionAnual = row.FloatParse("PROYECCION_FACT_ANUAL");
+                    var facturacionAnual = row.FloatNullParse("FACTURACION_ANUAL");
+                    var proyeccionFacturacionAnual = row.FloatNullParse("PROYECCION_FACT_ANUAL");
                     var inicioRelacionComercial = row.DateTimeParse("INICIO_RELACION_COMERCIAL");
                     #endregion
 
@@ -182,11 +196,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         UrlPresenciaDigital = urlPresenciaDigital,
                         TipoCorreo = tipoCorreo,
                         Correo = correo,
-                        Asesor_IA = asesorIA,
-                        Asesor_DM = asesorDM,
+                        Asesor = asesor,
                         PuntoContacto = puntoContacto,
-                        CondicionPago_IA = condicionPagoIA,
-                        CondicionPago_DM = condicionPagoDM,
+                        CondicionPago = condicionPago,
                         LimiteCredito = limiteCredito,
                         Comentario = comentario,
                         CategoriaValor = categoriaValor,

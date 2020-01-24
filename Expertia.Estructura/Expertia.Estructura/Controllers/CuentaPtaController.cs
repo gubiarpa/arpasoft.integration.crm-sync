@@ -43,7 +43,7 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Cuentas PTA
-                cuentasPtas = (IEnumerable<CuentaPta>)(_cuentaPtaRepository.Read())[OutParameter.CursorCuentaPta];
+                cuentasPtas = (IEnumerable<CuentaPta>)(_cuentaPtaRepository.Read(_unidadNegocio))[OutParameter.CursorCuentaPta];
                 if (cuentasPtas == null || cuentasPtas.ToList().Count.Equals(0)) return Ok(cuentasPtas);
 
                 /// Obtiene Token para envío a Salesforce
@@ -104,6 +104,9 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    _cuentaPtaRepository = new CuentaPta_IA_Repository(UnidadNegocioKeys.DestinosMundiales);
+                    break;
                 case UnidadNegocioKeys.Interagencias:
                     _cuentaPtaRepository = new CuentaPta_IA_Repository();
                     break;

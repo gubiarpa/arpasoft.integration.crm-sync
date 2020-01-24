@@ -134,6 +134,9 @@ namespace Expertia.Estructura.Utils
         public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string DM_Read_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_SUBCODIGO";
         public const string DM_Update_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_SUBCODIGO";
+        /// Cuenta PTA
+        public const string DM_Read_CuentaPta = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_CLIENTE";
+        public const string DM_Update_CuentaPta = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_CLIENTE";
         #endregion
 
         #region Interagencias
@@ -175,15 +178,6 @@ namespace Expertia.Estructura.Utils
         /// Contacto PTA
         public const string AW_Read_ContactoPta = "APPWEBS.CRM_PKG.SP_LISTAR_CONTACTO";
         public const string AW_Update_ContactoPta = "APPWEBS.CRM_PKG.SP_ACTUALIZAR_ENVIO_CONTACTO";
-        #endregion
-
-        #region CondorTravelChile
-        // Cuenta B2B
-        public const string CT_Create_CuentaB2B_CL = "CONDOR.CRM_PKG.SP_CREAR_CLIENTE";
-        public const string CT_Update_CuentaB2B_CL = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CLIENTE";
-        // Contacto
-        public const string CT_Create_Contacto_CL = "CONDOR.CRM_PKG.SP_CREAR_CONTACTO";
-        public const string CT_Update_Contacto_CL = "CONDOR.CRM_PKG.SP_ACTUALIZAR_CONTACTO";
         #endregion
     }
 

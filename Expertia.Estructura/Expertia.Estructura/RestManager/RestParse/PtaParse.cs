@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,14 @@ namespace Expertia.Estructura.RestManager.RestParse
         {
             try
             {
+                var _unidadNegocio = cuentaPta.UnidadNegocio.ToUnidadNegocio();
                 return new
                 {
                     info = new
                     {
                         accion = cuentaPta.Accion,
-                        dkCuenta = cuentaPta.DkCuenta.ToString(),
+                        dkCuenta_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.DkCuenta.ToString() : null,
+                        dkCuenta_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.DkCuenta.ToString() : null,
                         razonSocial = cuentaPta.RazonSocial,
                         nombreComercial = cuentaPta.NombreComercial,
                         tipoCuenta = cuentaPta.TipoCuenta,
@@ -48,12 +51,13 @@ namespace Expertia.Estructura.RestManager.RestParse
                         urlPresenciaDigital = cuentaPta.UrlPresenciaDigital,
                         tipoCorreo = cuentaPta.TipoCorreo,
                         correo = cuentaPta.Correo,
-                        asesorIA = cuentaPta.Asesor_IA,
-                        asesorDM = cuentaPta.Asesor_DM,
+                        asesor_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.Asesor : null,
+                        asesor_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.Asesor : null,
                         puntoContacto = cuentaPta.PuntoContacto,
-                        condicionPagoIA = cuentaPta.CondicionPago_IA,
-                        condicionPagoDM = cuentaPta.CondicionPago_DM,
-                        limiteCredito = cuentaPta.LimiteCredito.ToString("0.00"),
+                        condicionPago_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.CondicionPago : null,
+                        condicionPago_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.CondicionPago : null,
+                        limiteCredito_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ?  cuentaPta.LimiteCredito.ToString("0.00") : null,
+                        limiteCredito_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ?  cuentaPta.LimiteCredito.ToString("0.00") : null,
                         comentario = cuentaPta.Comentario,
                         categValor = cuentaPta.CategoriaValor,
                         categPerfilActitudTec = cuentaPta.CategoriaPerfilActitudTecnologica,
@@ -62,9 +66,12 @@ namespace Expertia.Estructura.RestManager.RestParse
                         estadoActivacion = cuentaPta.EstadoActivacion,
                         gds = cuentaPta.GDS,
                         herramientas = cuentaPta.Herramientas,
-                        facturacionAnual = cuentaPta.FacturacionAnual,
-                        proyeccionFactAnual = cuentaPta.ProyeccionFacturacionAnual,
-                        inicioRelacionComercial = cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy")
+                        facturacionAnual_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ?  cuentaPta.FacturacionAnual : null,
+                        facturacionAnual_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.FacturacionAnual : null,
+                        proyeccionFactAnual_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.ProyeccionFacturacionAnual : null,
+                        proyeccionFactAnual_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.ProyeccionFacturacionAnual : null,
+                        inicioRelacionComercial_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ?  cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy") : null,
+                        inicioRelacionComercial_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ?  cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy") : null
                     }
                 };
             }

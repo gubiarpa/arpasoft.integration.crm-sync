@@ -18,11 +18,17 @@ namespace Expertia.Estructura.RestManager.Base
                 ServicePointManager.DefaultConnectionLimit = 9999;
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
                 var request = new RestRequest(methodName, methodType);
-                request.AddParameter("grant_type", ConfigAccess.GetValueInAppSettings("AUTH_GRANT_TYPE"));
-                request.AddParameter("client_id", ConfigAccess.GetValueInAppSettings("AUTH_CLIENT_ID"));
-                request.AddParameter("client_secret", ConfigAccess.GetValueInAppSettings("AUTH_CLIENT_SECRET"));
-                request.AddParameter("username", ConfigAccess.GetValueInAppSettings("AUTH_USERNAME"));
-                request.AddParameter("password", ConfigAccess.GetValueInAppSettings("AUTH_PASSWORD"));
+                var sf_authgranttype = ConfigAccess.GetValueInAppSettings("AUTH_GRANT_TYPE");
+                var sf_authclientid = ConfigAccess.GetValueInAppSettings("AUTH_CLIENT_ID");
+                var sf_auth_clientsecret = ConfigAccess.GetValueInAppSettings("AUTH_CLIENT_SECRET");
+                var sf_authusername = ConfigAccess.GetValueInAppSettings("AUTH_USERNAME");
+                var sf_authpassword = ConfigAccess.GetValueInAppSettings("AUTH_PASSWORD");
+
+                request.AddParameter("grant_type", sf_authgranttype);
+                request.AddParameter("client_id", sf_authclientid);
+                request.AddParameter("client_secret", sf_auth_clientsecret);
+                request.AddParameter("username", sf_authusername);
+                request.AddParameter("password", sf_authpassword);
                 var response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK && response.ErrorMessage != null) throw new Exception(response.ErrorMessage);
                 var content = response.Content;
