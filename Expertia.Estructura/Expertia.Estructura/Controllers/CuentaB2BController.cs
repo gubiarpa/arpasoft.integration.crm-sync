@@ -36,7 +36,7 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                        //try { CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
+                        try { CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
                         try { CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError); } catch (Exception ex) { error_IA = ex.Message; }
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
@@ -102,7 +102,7 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                        //try { UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
+                        try { UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
                         try { UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError); } catch (Exception ex) { error_IA = ex.Message; }
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
@@ -182,14 +182,12 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
-                            /*
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
                                 Retry = _operRetry[UnidadNegocioKeys.DestinosMundiales],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
                             },
-                            */
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.Interagencias),
@@ -206,11 +204,9 @@ namespace Expertia.Estructura.Controllers
                         {
                             DestinosMundiales = new
                             {
-                                /*
                                 CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
                                 MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString()
-                                */
                             },
                             InterAgencias = new
                             {
