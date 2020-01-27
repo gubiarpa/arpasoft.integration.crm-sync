@@ -19,20 +19,17 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
-    /// <summary>
-    /// Entidad exclusiva para Destinos Mundiales e Interagencias
-    /// </summary>
     [RoutePrefix(RoutePrefix.Subcodigo)]
     public class SubcodigoController : BaseController<object>
     {
         #region Properties
-        private ISubcodigoRepository _subcodigoRepository;
-        private ICrmApiResponse _response;
+        private IDictionary<UnidadNegocioKeys?, ISubcodigoRepository> _subcodigoCollection;
         #endregion
 
         #region Constructor
         public SubcodigoController()
         {
+            _subcodigoCollection = new Dictionary<UnidadNegocioKeys?, ISubcodigoRepository>();
         }
         #endregion
 
@@ -40,39 +37,61 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(Subcodigo subcodigo)
         {
-            object result = null;
+            object response = null;
+            var errorDetail = string.Empty;
             try
             {
-                var unidadNegocio = RepositoryByBusiness(subcodigo.UnidadNegocio.ToUnidadNegocio());
-                _instants[InstantKey.Salesforce] = DateTime.Now;
+                RepositoryByBusiness(UnidadNegocioKeys.DestinosMundiales);
 
-                var operResult = _subcodigoRepository.Create(subcodigo);
-                //_response = new CrmApiResponse(operResult[OutParameter.CodigoError].ToString(), operResult[OutParameter.MensajeError].ToString());
-                _response = new CrmApiResponse(subcodigo.CodigoError, subcodigo.MensajeError);
-                if (!int.TryParse(operResult[OutParameter.IdSubcodigo].ToString(), out int idSubcodigo)) idSubcodigo = -1;
-                result = new
+                /// Variables
+                Operation operResult_DM = null, operResult_IA = null;
+                //int idSubcodigo_DM = 0, idSubcodigo_IA = 0;
+                var tasks = new List<Task>();
+
+                /// Tareas
+                tasks.Add(new Task(() =>
                 {
-                    Result = _response,
+                    operResult_DM = _subcodigoCollection[UnidadNegocioKeys.DestinosMundiales].Create(subcodigo);
+                }));
+                tasks.Add(new Task(() =>
+                {
+                    operResult_IA = _subcodigoCollection[UnidadNegocioKeys.Interagencias].Create(subcodigo);
+                }));
+                tasks.ForEach(t => t.Start());
+                Task.WaitAll(tasks.ToArray());
+
+                response = new
+                {
                     Response = new
                     {
-                        IdSubcodigo = idSubcodigo
+                        DestinosMundiales = new 
+                        {
+                            CodigoError = operResult_DM[OutParameter.CodigoError].ToString(),
+                            MensajeError = operResult_DM[OutParameter.MensajeError].ToString(),
+                            IdSubcodigo = int.TryParse(operResult_DM[OutParameter.IdSubcodigo].ToString(), out int idSubcodigo_DM) ? idSubcodigo_DM : -1
+                        },
+                        Interagencias = new
+                        {
+                            CodigoError = operResult_IA[OutParameter.CodigoError].ToString(),
+                            MensajeError = operResult_IA[OutParameter.MensajeError].ToString(),
+                            IdSubcodigo = int.TryParse(operResult_IA[OutParameter.IdSubcodigo].ToString(), out int idSubcodigo_IA) ? idSubcodigo_IA : -1
+                        }
                     }
                 };
-
-                _instants[InstantKey.Oracle] = DateTime.Now;
-                return Ok(result);
+                return Ok(response);
             }
             catch (Exception ex)
             {
+                errorDetail = ex.Message;
                 return InternalServerError(ex);
             }
             finally
             {
                 (new
                 {
-                    Instants = GetInstants(),
-                    Result = result,
-                    Body = subcodigo
+                    Request = subcodigo,
+                    Response = response,
+                    Exception = errorDetail
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
@@ -81,15 +100,14 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<Subcodigo> subcodigos = null;
-            string exceptionMsg = string.Empty;
+            var errorDetail = string.Empty;
             try
             {
-                var unidadNegocioType = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
+                RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
 
                 /// Consulta de Subcodigos a PTA
-                subcodigos = (IEnumerable<Subcodigo>)(_subcodigoRepository.Read())[OutParameter.CursorSubcodigo];
-
-                if (subcodigos == null || subcodigos.ToList().Count.Equals(0)) return Ok();
+                subcodigos = (IEnumerable<Subcodigo>)(_subcodigoCollection[unidadNegocio.Descripcion.ToUnidadNegocio()].Read())[OutParameter.CursorSubcodigo];
+                if ( subcodigos == null || subcodigos.ToList().Count.Equals(0) ) return Ok();
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
@@ -107,7 +125,7 @@ namespace Expertia.Estructura.Controllers
                             subcodigo.MensajeError = jsonResponse[OutParameter.SF_MensajeError];
 
                             /// Actualización de estado de subcodigo a PTA
-                            var updateResponse = _subcodigoRepository.Update(subcodigo);
+                            var updateResponse = _subcodigoCollection[unidadNegocio.Descripcion.ToUnidadNegocio()].Update(subcodigo);
                             subcodigo.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                         }
                     }
@@ -123,7 +141,7 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 subcodigos = null;
-                exceptionMsg = ex.Message;
+                errorDetail = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -131,7 +149,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
-                    Exception = exceptionMsg,
+                    Exception = errorDetail,
                     LegacySystems = subcodigos
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -143,15 +161,10 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
-                case UnidadNegocioKeys.CondorTravel:
-                    break;
                 case UnidadNegocioKeys.DestinosMundiales:
-                    _subcodigoRepository = new Subcodigo_DM_Repository();
-                    break;
                 case UnidadNegocioKeys.Interagencias:
-                    _subcodigoRepository = new Subcodigo_IA_Repository();
-                    break;
-                default:
+                    _subcodigoCollection[UnidadNegocioKeys.DestinosMundiales] = new Subcodigo_IA_Repository(UnidadNegocioKeys.DestinosMundiales);
+                    _subcodigoCollection[UnidadNegocioKeys.Interagencias] = new Subcodigo_IA_Repository(UnidadNegocioKeys.Interagencias);
                     break;
             }
             return unidadNegocioKey;

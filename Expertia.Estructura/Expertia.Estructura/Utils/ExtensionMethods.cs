@@ -208,6 +208,24 @@ namespace Expertia.Estructura.Utils
             }
         }
 
+        public static int? IntNullParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                int? result;
+                if (int.TryParse(row[fieldName].ToString(), out int _result))
+                    result = _result;
+                else
+                    result = null;
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static float FloatParse(this DataRow row, string fieldName)
         {
             try
