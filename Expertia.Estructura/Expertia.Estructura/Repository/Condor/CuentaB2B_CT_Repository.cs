@@ -15,7 +15,7 @@ namespace Expertia.Estructura.Repository.Condor
         {
         }
 
-       
+
         #region PublicMethods
         public Operation Create(CuentaB2B entity)
         {

@@ -1,14 +1,12 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Repository.AppWebs;
-using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -349,7 +347,7 @@ namespace Expertia.Estructura.Controllers
                 default:
                     logResult = null; result = null;
                     break;
-                #endregion
+                    #endregion
             }
         }
 
@@ -365,7 +363,7 @@ namespace Expertia.Estructura.Controllers
                         UnidadNegocioKeys.CondorTravel,
                         UnidadNegocioKeys.CondorTravel_CL,
                         UnidadNegocioKeys.CondorTravel_EC,
-                        UnidadNegocioKeys.CondorTravel_BR 
+                        UnidadNegocioKeys.CondorTravel_BR
                     };
                     foreach (var unidadNegocio in unidadNegocioList)
                         _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository(unidadNegocio));

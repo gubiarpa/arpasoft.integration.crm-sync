@@ -1,9 +1,6 @@
 ﻿using Expertia.Estructura.Models;
 using Expertia.Estructura.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.RestManager.RestParse
 {
@@ -56,8 +53,8 @@ namespace Expertia.Estructura.RestManager.RestParse
                         PuntoContacto = cuentaPta.PuntoContacto,
                         CondicionPago_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.CondicionPago : null,
                         CondicionPago_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.CondicionPago : null,
-                        LimiteCredito_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ?  cuentaPta.LimiteCredito.ToString("0.00") : null,
-                        LimiteCredito_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ?  cuentaPta.LimiteCredito.ToString("0.00") : null,
+                        LimiteCredito_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.LimiteCredito.ToString("0.00") : null,
+                        LimiteCredito_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.LimiteCredito.ToString("0.00") : null,
                         Comentario = cuentaPta.Comentario,
                         CategValor = cuentaPta.CategoriaValor,
                         CategPerfilActitudTec = cuentaPta.CategoriaPerfilActitudTecnologica,
@@ -66,12 +63,12 @@ namespace Expertia.Estructura.RestManager.RestParse
                         EstadoActivacion = cuentaPta.EstadoActivacion,
                         Gds = cuentaPta.GDS,
                         Herramientas = cuentaPta.Herramientas,
-                        FacturacionAnual_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ?  cuentaPta.FacturacionAnual : null,
+                        FacturacionAnual_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.FacturacionAnual : null,
                         FacturacionAnual_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.FacturacionAnual : null,
                         ProyeccionFactAnual_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.ProyeccionFacturacionAnual : null,
                         ProyeccionFactAnual_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.ProyeccionFacturacionAnual : null,
-                        InicioRelacionComercial_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ?  cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy") : null,
-                        InicioRelacionComercial_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ?  cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy") : null
+                        InicioRelacionComercial_IA = _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy") : null,
+                        InicioRelacionComercial_DM = _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? cuentaPta.InicioRelacionComercial.ToString("dd/MM/yyyy") : null
                     }
                 };
             }
@@ -138,7 +135,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     info = new
                     {
                         Accion = subcodigo.Accion,
-                        DkCuenta_DM = subcodigo.DkAgencia_DM ,
+                        DkCuenta_DM = subcodigo.DkAgencia_DM,
                         DkCuenta_IA = subcodigo.DkAgencia_IA,
                         CorrelativoSubcodigo_DM = subcodigo.CorrelativoSubcodigo_DM,
                         CorrelativoSubcodigo_IA = subcodigo.CorrelativoSubcodigo_IA,

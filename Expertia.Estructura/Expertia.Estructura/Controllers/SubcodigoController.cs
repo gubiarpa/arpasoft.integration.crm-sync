@@ -1,9 +1,7 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
-using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Behavior;
-using Expertia.Estructura.Repository.DestinosMundiales;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
 using Expertia.Estructura.RestManager.RestParse;
@@ -64,7 +62,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     Response = new
                     {
-                        DestinosMundiales = new 
+                        DestinosMundiales = new
                         {
                             CodigoError = operResult_DM[OutParameter.CodigoError].ToString(),
                             MensajeError = operResult_DM[OutParameter.MensajeError].ToString(),
@@ -107,7 +105,7 @@ namespace Expertia.Estructura.Controllers
 
                 /// Consulta de Subcodigos a PTA
                 subcodigos = (IEnumerable<Subcodigo>)(_subcodigoCollection[unidadNegocio.Descripcion.ToUnidadNegocio()].Read())[OutParameter.CursorSubcodigo];
-                if ( subcodigos == null || subcodigos.ToList().Count.Equals(0) ) return Ok();
+                if (subcodigos == null || subcodigos.ToList().Count.Equals(0)) return Ok();
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);

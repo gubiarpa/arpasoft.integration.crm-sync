@@ -1,7 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
-using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.RestManager.Base;
@@ -11,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 
@@ -208,7 +206,7 @@ namespace Expertia.Estructura.Controllers
         private bool EvaluateRetry(Boleto boleto)
         {
             var retry = true;
-            
+
             if (boleto.Accion.Equals(SalesforceKeys.CreateAction) && boleto.CodigoError.Equals(SfResponseCode.BoletoYaExiste))
                 boleto.Accion = SalesforceKeys.UpdateAction;
             else if (boleto.Accion.Equals(SalesforceKeys.UpdateAction) && boleto.CodigoError.Equals(SfResponseCode.BoletoNoExiste))

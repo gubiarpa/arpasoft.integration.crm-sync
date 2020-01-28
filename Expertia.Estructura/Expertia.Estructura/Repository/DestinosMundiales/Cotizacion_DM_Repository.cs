@@ -1,6 +1,4 @@
 ﻿using Expertia.Estructura.Models;
-using Expertia.Estructura.Models.Auxiliar;
-using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
@@ -216,7 +214,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                     cotizaciones.Add(new Cotizacion()
                     {
                         Cliente_Cliente = cliente,
-                       
+
                     });
                     #endregion
                 }

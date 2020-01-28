@@ -4,10 +4,7 @@ using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Repository.Condor
 {
@@ -22,7 +19,7 @@ namespace Expertia.Estructura.Repository.Condor
             try
             {
                 Operation operation = new Operation();
-                
+
                 /// (01) P_CODIGO_ERROR
                 AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
                 /// (02) P_MENSAJE_ERROR
@@ -33,7 +30,7 @@ namespace Expertia.Estructura.Repository.Condor
                 AddParameter("P_ID_CUENTA_SF", OracleDbType.Varchar2, regionCuenta.IdCuentaSf);
                 /// (05) PESTADO_CLIENTE
                 AddParameter("P_ESTADO_CLIENTE", OracleDbType.Varchar2, regionCuenta.Estado);
-                
+
 
                 ExecuteStoredProcedure(StoredProcedureName.CT_Register_RegionCuenta);
 

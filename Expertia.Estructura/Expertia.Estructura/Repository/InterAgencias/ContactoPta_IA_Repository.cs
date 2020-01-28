@@ -6,8 +6,6 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Web;
 
 namespace Expertia.Estructura.Repository.InterAgencias
 {
@@ -133,7 +131,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var tipoDocumentoIdentidad = row.StringParse("TIPO_DOCUMENTO_IDENTIDAD");
                     var documentoIdentidad = row.StringParse("DOCUMENTO_IDENTIDAD");
                     var direccion = row.StringParse("DIRECCION");
-                    var twitter  = row.StringParse("TWITTER");
+                    var twitter = row.StringParse("TWITTER");
                     var facebook = row.StringParse("FACEBOOK");
                     var linkedIn = row.StringParse("LINKEDIN");
                     var instagram = row.StringParse("INSTAGRAM");
@@ -154,7 +152,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
 
                     #region AddingElement
                     contactoPtaList.Add(new ContactoPta()
-                    { 
+                    {
                         Accion = accion,
                         DkAgencia = dkAgencia,
                         PrimerNombre = primerNombre,

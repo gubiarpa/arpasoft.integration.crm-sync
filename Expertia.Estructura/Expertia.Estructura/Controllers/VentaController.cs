@@ -6,8 +6,6 @@ using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -35,7 +33,8 @@ namespace Expertia.Estructura.Controllers
                     try
                     {
                         var unidadNeg = RepositoryByBusiness(region.ToUnidadNegocioByCountry());
-                        tasks.Add(new Task<VentasResponse>(() => {
+                        tasks.Add(new Task<VentasResponse>(() =>
+                        {
                             var ventasOper = _ventaCollection[unidadNeg].GetVentasCT(ventasRequest);
                             return new VentasResponse()
                             {

@@ -1,5 +1,4 @@
 ﻿using Expertia.Estructura.Models.Behavior;
-using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {

@@ -1,15 +1,11 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
-using Expertia.Estructura.Repository.DestinosMundiales;
-using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.Behavior;
-using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using Expertia.Estructura.RestManager.Base;
-using RestSharp;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -147,7 +143,8 @@ namespace Expertia.Estructura.Controllers
 
         #region NotPublic
         [Route(RouteAction.Generate)]
-        /*public*/ IHttpActionResult Generate(Cotizacion entity)
+        /*public*/
+        IHttpActionResult Generate(Cotizacion entity)
         {
             object error = null, logResult = null;
             try
@@ -186,7 +183,8 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Asociate)]
-        /*public*/ IHttpActionResult Asociate(Cotizacion entity)
+        /*public*/
+        IHttpActionResult Asociate(Cotizacion entity)
         {
             object error = null, logResult = null;
             try

@@ -1,6 +1,4 @@
 ﻿using Expertia.Estructura.Models;
-using Expertia.Estructura.Models.Auxiliar;
-using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
@@ -104,12 +102,12 @@ namespace Expertia.Estructura.Repository.Condor
                     var branch = row.StringParse("BRANCH");
                     var fecha_Apertura = row.DateTimeParse("FECHA_COTIZ");
                     var fecha_Inicio = row.DateTimeParse("FECHA_INI_SERVICIO");
-                    var fecha_Fin = row.DateTimeParse("FECHA_FIN_SERVICIO");        
+                    var fecha_Fin = row.DateTimeParse("FECHA_FIN_SERVICIO");
                     #endregion
 
                     #region AddingElement
                     cotizaciones.Add(new Cotizacion()
-                    {   
+                    {
                         Grupo = grupo,
                         Cliente = cliente,
                         Cliente_Cliente = cliente_Cliente,

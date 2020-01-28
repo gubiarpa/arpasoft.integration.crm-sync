@@ -1,15 +1,11 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
-using Expertia.Estructura.Repository.DestinosMundiales;
-using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Repository.Behavior;
-using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.Repository.Condor;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using Expertia.Estructura.RestManager.Base;
-using RestSharp;
 namespace Expertia.Estructura.Controllers
 {
     [RoutePrefix(RoutePrefix.File)]

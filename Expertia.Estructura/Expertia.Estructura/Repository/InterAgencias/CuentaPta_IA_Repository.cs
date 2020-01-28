@@ -46,7 +46,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             }
             ExecuteStoredProcedure(spName);
             operation[OutParameter.CursorCuentaPta] = ToCuentaPta(GetDtParameter(OutParameter.CursorCuentaPta));
-            
+
             #endregion
 
             return operation;
