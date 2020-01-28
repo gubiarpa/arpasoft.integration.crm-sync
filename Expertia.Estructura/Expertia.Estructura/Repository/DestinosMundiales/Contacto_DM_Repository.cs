@@ -58,7 +58,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 value = entity.IdSalesforce;
                 AddParameter("P_ID_CONTACTO_SALESFORCE", OracleDbType.Varchar2, value);
                 // (06) P_CARGO
-                value = entity.CargoEmpresa.Descripcion;
+                value = entity.CargoEmpresa != null ? entity.CargoEmpresa.Descripcion : null;
                 AddParameter("P_CARGO", OracleDbType.Varchar2, value);
                 // (07) P_NOMBRES
                 value = entity.Nombre;
