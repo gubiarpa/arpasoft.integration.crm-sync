@@ -219,7 +219,6 @@
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
     <Compile Include="Repository\Behavior\ISubcodigoRepository.cs" />
     <Compile Include="Repository\Behavior\IVentaCT.cs" />
-    <Compile Include="Repository\Condor\Contacto_CT_CL_Repository.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
     <Compile Include="Repository\Condor\Cotizacion_CT_Repository.cs" />
     <Compile Include="Repository\Condor\CuentaB2B_CT_Repository.cs" />

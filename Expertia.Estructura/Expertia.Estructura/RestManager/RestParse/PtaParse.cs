@@ -90,7 +90,8 @@ namespace Expertia.Estructura.RestManager.RestParse
                     info = new
                     {
                         accion = contactoPta.Accion,
-                        dkCuenta = contactoPta.DkAgencia,
+                        dkCuenta_DM = contactoPta.UnidadNegocio.ToUnidadNegocio().Equals(UnidadNegocioKeys.DestinosMundiales) ? contactoPta.DkAgencia : null,
+                        dkCuenta_IA = contactoPta.UnidadNegocio.ToUnidadNegocio().Equals(UnidadNegocioKeys.Interagencias) ? contactoPta.DkAgencia : null,
                         primerNombre = contactoPta.PrimerNombre,
                         segundoNombre = contactoPta.SegundoNombre,
                         apellidoPaterno = contactoPta.ApellidoPaterno,

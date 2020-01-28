@@ -54,12 +54,12 @@ namespace Expertia.Estructura.Controllers
                         CreateOrUpdate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
-                    /* case UnidadNegocioKeys.DestinosMundiales: */
+                    case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
                         unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
-                            /*UnidadNegocioKeys.DestinosMundiales,*/
+                            UnidadNegocioKeys.DestinosMundiales,
                             UnidadNegocioKeys.Interagencias,
                             UnidadNegocioKeys.AppWebs
                         };
@@ -128,12 +128,12 @@ namespace Expertia.Estructura.Controllers
                         UpdateOrCreate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
                         break;
-                    /* case UnidadNegocioKeys.DestinosMundiales: */
+                    case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
                     case UnidadNegocioKeys.AppWebs:
                         unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
-                            /*UnidadNegocioKeys.DestinosMundiales,*/
+                            UnidadNegocioKeys.DestinosMundiales,
                             UnidadNegocioKeys.Interagencias,
                             UnidadNegocioKeys.AppWebs
                         };
@@ -213,34 +213,6 @@ namespace Expertia.Estructura.Controllers
                 _operCollection[unidadNegocio][OutParameter.CodigoError].ToString().Equals(DbResponseCode.CuentaNoExiste));
         }
 
-        private IEnumerable<UnidadNegocioKeys?> GetRegiones(UnidadNegocioKeys? unidadNegocioKeys)
-        {
-            IEnumerable<UnidadNegocioKeys?> unidadNegocioList = null;
-            switch (RepositoryByBusiness(unidadNegocioKeys))
-            {
-                case UnidadNegocioKeys.CondorTravel:
-                    unidadNegocioList = new List<UnidadNegocioKeys?>
-                        {
-                            UnidadNegocioKeys.CondorTravel,
-                            UnidadNegocioKeys.CondorTravel_CL,
-                            UnidadNegocioKeys.CondorTravel_EC,
-                            UnidadNegocioKeys.CondorTravel_BR
-                        };
-                    break;
-                case UnidadNegocioKeys.DestinosMundiales:
-                case UnidadNegocioKeys.Interagencias:
-                case UnidadNegocioKeys.AppWebs:
-                    unidadNegocioList = new List<UnidadNegocioKeys?>
-                        {
-                            UnidadNegocioKeys.DestinosMundiales,
-                            UnidadNegocioKeys.Interagencias,
-                            UnidadNegocioKeys.AppWebs
-                        };
-                    break;
-            }
-            return unidadNegocioList;
-        }
-
         private void LoadResults(UnidadNegocioKeys? unidadNegocio, out object logResult, out object result)
         {
             switch (unidadNegocio)
@@ -314,7 +286,6 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
-                            /*
                             DestinosMundiales = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.DestinosMundiales),
@@ -323,7 +294,6 @@ namespace Expertia.Estructura.Controllers
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
                             },
-                            */
                             InterAgencias = new
                             {
                                 Codes = GetErrorResult(UnidadNegocioKeys.Interagencias),
@@ -348,7 +318,6 @@ namespace Expertia.Estructura.Controllers
                     {
                         Result = new
                         {
-                            /*
                             DestinosMundiales = new
                             {
                                 CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
@@ -356,7 +325,6 @@ namespace Expertia.Estructura.Controllers
                                 IdCuenta = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString()
                             },
-                            */
                             InterAgencias = new
                             {
                                 CodigoError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.CodigoError].ToString(),
@@ -402,10 +370,10 @@ namespace Expertia.Estructura.Controllers
                     foreach (var unidadNegocio in unidadNegocioList)
                         _crmCollection.Add(unidadNegocio, new Contacto_CT_Repository(unidadNegocio));
                     break;
-                /* case UnidadNegocioKeys.DestinosMundiales: */
+                case UnidadNegocioKeys.DestinosMundiales:
                 case UnidadNegocioKeys.Interagencias:
                 case UnidadNegocioKeys.AppWebs:
-                    /*_crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository());*/
+                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository());
                     _crmCollection.Add(UnidadNegocioKeys.Interagencias, new Contacto_IA_Repository());
                     _crmCollection.Add(UnidadNegocioKeys.AppWebs, new Contacto_AW_Repository());
                     break;

@@ -94,7 +94,9 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 if (entity.FechaNacimiento == null) value = DBNull.Value; else value = entity.FechaNacimiento;
                 AddParameter("P_FECHA_CUMPLE", OracleDbType.Date, value);
                 // (18) P_DK_AGENCIA
-                value = entity.DkAgencia;
+                value =
+                    _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? entity.DkAgencia_DM :
+                    _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? entity.DkAgencia_IA : null;
                 AddParameter("P_DK_AGENCIA", OracleDbType.Varchar2, value);
                 // (19) P_ID_CUENTA
                 value = DBNull.Value;
