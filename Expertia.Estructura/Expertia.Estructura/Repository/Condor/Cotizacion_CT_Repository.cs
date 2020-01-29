@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.Condor
 {
-    public class Cotizacion_CT_Repository : OracleBase<Cotizacion>, ICotizacionCT
+    public class Cotizacion_CT_Repository : OracleBase<Cotizacion>, ICotizacion_CT
     {
         #region Constructor
         public Cotizacion_CT_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.CondorTravel) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)

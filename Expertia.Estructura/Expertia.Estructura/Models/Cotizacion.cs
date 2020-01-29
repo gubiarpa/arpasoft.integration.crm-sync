@@ -79,4 +79,18 @@ namespace Expertia.Estructura.Models
         public string MensajeError { get; set; }
         #endregion
     }
+
+    public class CotizacionDM
+    {
+        public string IdOportunidadSf { get; set; }
+        public string IdCotizacionSf { get; set; }
+        public int? IdCotizacion { get; set; }
+        public float? MontoCotizacion { get; set; }
+        public float? MontoComision { get; set; }
+        public string EstadoCotizacion { get; set; }
+        public string NombreCotizacion { get; set; }
+        public int? NumPasajerosAdult { get; set; }
+        public int? NumPasajerosChild { get; set; }
+        public int? NumPasajerosTotal { get; set; }
+    }
 }

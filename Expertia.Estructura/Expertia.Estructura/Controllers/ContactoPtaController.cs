@@ -98,6 +98,9 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    _contactoPtaRepository = new ContactoPta_IA_Repository(UnidadNegocioKeys.DestinosMundiales);
+                    break;
                 case UnidadNegocioKeys.Interagencias:
                     _contactoPtaRepository = new ContactoPta_IA_Repository();
                     break;

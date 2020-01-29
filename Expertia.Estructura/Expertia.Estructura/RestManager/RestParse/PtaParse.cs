@@ -84,7 +84,7 @@ namespace Expertia.Estructura.RestManager.RestParse
             {
                 return new
                 {
-                    info = new
+                    datos = new
                     {
                         accion = contactoPta.Accion,
                         dkCuenta_DM = contactoPta.UnidadNegocio.ToUnidadNegocio().Equals(UnidadNegocioKeys.DestinosMundiales) ? contactoPta.DkAgencia : null,

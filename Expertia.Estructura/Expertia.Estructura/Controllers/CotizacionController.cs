@@ -13,7 +13,7 @@ namespace Expertia.Estructura.Controllers
     public class CotizacionController : BaseController<Cotizacion>
     {
         #region Properties
-        private ICotizacionCT _cotizacionCTRepository;
+        private ICotizacion_CT _cotizacionRepositoryDM;
         #endregion
 
         #region PublicMethods
@@ -25,7 +25,7 @@ namespace Expertia.Estructura.Controllers
             {
                 if (RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry()) != null)
                 {
-                    var cotizacionResponse = _cotizacionCTRepository.GetCotizacionCT(cotizacionRequest);
+                    var cotizacionResponse = _cotizacionRepositoryDM.GetCotizacionCT(cotizacionRequest);
                     var codigoRetorno = cotizacionResponse[OutParameter.CodigoError].ToString();
                     var mensajeRetorno = cotizacionResponse[OutParameter.MensajeError].ToString();
                     var data = (IEnumerable<CotizacionResponse>)cotizacionResponse[OutParameter.CursorCotizacion];
@@ -50,9 +50,11 @@ namespace Expertia.Estructura.Controllers
 
         public IHttpActionResult Send()
         {
+            IEnumerable<CotizacionDM> cotizaciones;
             var error = string.Empty;
             try
             {
+                //cotizaciones = (IEnumerable<CotizacionDM>)(_cotizacionRepository_DM.)
                 return null;
             }
             catch (Exception ex)
@@ -114,7 +116,7 @@ namespace Expertia.Estructura.Controllers
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
-            _cotizacionCTRepository = new Cotizacion_CT_Repository(unidadNegocioKey);
+            _cotizacionRepositoryDM = new Cotizacion_CT_Repository(unidadNegocioKey);
             return unidadNegocioKey;
         }
         #endregion
@@ -137,88 +139,6 @@ namespace Expertia.Estructura.Controllers
             catch
             {
                 throw;
-            }
-        }
-        #endregion
-
-        #region NotPublic
-        [Route(RouteAction.Generate)]
-        /*public*/
-        IHttpActionResult Generate(Cotizacion entity)
-        {
-            object error = null, logResult = null;
-            try
-            {
-                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
-                object result;
-                _instants[InstantKey.Salesforce] = DateTime.Now;
-                switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
-                {
-                    case UnidadNegocioKeys.CondorTravel:
-                        _operCollection[UnidadNegocioKeys.CondorTravel] = _crmCollection[UnidadNegocioKeys.CondorTravel].Generate(entity);
-                        LoadResults(UnidadNegocioKeys.CondorTravel, out logResult, out result);
-                        break;
-                    default:
-                        return NotFound();
-                }
-                _instants[InstantKey.Oracle] = DateTime.Now;
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                error = ex.Message;
-                return InternalServerError(ex);
-            }
-            finally
-            {
-                (new
-                {
-                    BusinessUnity = entity.UnidadNegocio.Descripcion,
-                    LegacySystems = logResult,
-                    Instants = GetInstants(),
-                    Error = error,
-                    Body = entity
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
-            }
-        }
-
-        [Route(RouteAction.Asociate)]
-        /*public*/
-        IHttpActionResult Asociate(Cotizacion entity)
-        {
-            object error = null, logResult = null;
-            try
-            {
-                entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
-                object result;
-                _instants[InstantKey.Salesforce] = DateTime.Now;
-                switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
-                {
-                    case UnidadNegocioKeys.DestinosMundiales:
-                        _operCollection[UnidadNegocioKeys.DestinosMundiales] = _crmCollection[UnidadNegocioKeys.DestinosMundiales].Asociate(entity);
-                        LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
-                        break;
-                    default:
-                        return NotFound();
-                }
-                _instants[InstantKey.Oracle] = DateTime.Now;
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                error = ex.Message;
-                return InternalServerError(ex);
-            }
-            finally
-            {
-                (new
-                {
-                    BusinessUnity = entity.UnidadNegocio.Descripcion,
-                    LegacySystems = logResult,
-                    Instants = GetInstants(),
-                    Error = error,
-                    Body = entity
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion

@@ -130,6 +130,7 @@ namespace Expertia.Estructura.Utils
         public const string DM_Generate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_GENERAR_COTIZACION";
         public const string DM_Asociate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ASOCIAR_COTIZACION";
         public const string DM_Send_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_COTIZACION";
+        public const string DM_Read_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_COTIZACION";
         // Subcodigo
         public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string DM_Read_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_SUBCODIGO";
@@ -137,6 +138,9 @@ namespace Expertia.Estructura.Utils
         /// Cuenta PTA
         public const string DM_Read_CuentaPta = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_CLIENTE";
         public const string DM_Update_CuentaPta = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_CLIENTE";
+        /// Contacto PTA
+        public const string DM_Read_ContactoPta = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_CONTACTO";
+        public const string DM_Update_ContactoPta = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_CONTACTO";
         #endregion
 
         #region Interagencias
@@ -227,6 +231,7 @@ namespace Expertia.Estructura.Utils
 
         #region Cursors
         public const string CursorSubcodigo = "P_SUBCODIGO";
+        public const string CursorCotizacionDM = "P_COTIZACION";
         public const string CursorCotizacion = "P_RECORDSET";
         public const string CursorFileCT = "P_RECORDSET";
         public const string CursorCotizacionDet = "P_COTIZACION_DETALLE";

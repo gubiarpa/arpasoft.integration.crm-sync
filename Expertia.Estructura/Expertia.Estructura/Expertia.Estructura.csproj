@@ -209,7 +209,7 @@
     <Compile Include="Repository\AppWebs\Oportunidad_AW_Repository.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\IContactoPtaRepository.cs" />
-    <Compile Include="Repository\Behavior\ICotizacionCT.cs" />
+    <Compile Include="Repository\Behavior\ICotizacion.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />
     <Compile Include="Repository\Behavior\IFileCT.cs" />

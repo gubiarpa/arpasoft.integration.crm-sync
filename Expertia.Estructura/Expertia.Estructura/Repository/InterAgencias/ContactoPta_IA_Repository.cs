@@ -36,6 +36,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 var spName = string.Empty;
                 switch (_unidadNegocio)
                 {
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        spName = StoredProcedureName.DM_Read_ContactoPta;
+                        break;
                     case UnidadNegocioKeys.Interagencias:
                         spName = StoredProcedureName.IA_Read_ContactoPta;
                         break;
@@ -86,6 +89,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
                 var spName = string.Empty;
                 switch (_unidadNegocio)
                 {
+                    case UnidadNegocioKeys.DestinosMundiales:
+                        spName = StoredProcedureName.DM_Update_ContactoPta;
+                        break;
                     case UnidadNegocioKeys.Interagencias:
                         spName = StoredProcedureName.IA_Update_ContactoPta;
                         break;
