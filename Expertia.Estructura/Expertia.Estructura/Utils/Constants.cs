@@ -135,6 +135,8 @@ namespace Expertia.Estructura.Utils
         public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string DM_Read_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_SUBCODIGO";
         public const string DM_Update_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_SUBCODIGO";
+        /// Oportunidad
+        public const string DM_Read_Oportunidad = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_OPORTUNIDAD";
         /// Cuenta PTA
         public const string DM_Read_CuentaPta = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_CLIENTE";
         public const string DM_Update_CuentaPta = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_CLIENTE";

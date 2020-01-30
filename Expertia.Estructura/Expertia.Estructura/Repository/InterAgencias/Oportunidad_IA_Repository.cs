@@ -35,6 +35,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
             var spName = string.Empty;
             switch (_unidadNegocio)
             {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    spName = StoredProcedureName.DM_Read_Oportunidad;
+                    break;
                 case UnidadNegocioKeys.Interagencias:
                     spName = StoredProcedureName.IA_Read_Oportunidad;
                     break;

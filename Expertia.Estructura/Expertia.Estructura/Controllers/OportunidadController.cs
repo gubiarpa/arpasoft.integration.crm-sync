@@ -161,6 +161,9 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    _oportunidadRepository = new Oportunidad_IA_Repository(UnidadNegocioKeys.DestinosMundiales);
+                    break;
                 case UnidadNegocioKeys.Interagencias:
                     _oportunidadRepository = new Oportunidad_IA_Repository();
                     break;
