@@ -32,6 +32,8 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Create(Contacto entity)
         {
             object error = null, logResult = null;
+            string error_PE = null, error_CL = null, error_EC = null, error_BR = null;
+            string error_DM = null, error_IA = null;
             IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
             try
             {
@@ -54,12 +56,10 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                    case UnidadNegocioKeys.AppWebs:
                         unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
                             UnidadNegocioKeys.DestinosMundiales,
-                            UnidadNegocioKeys.Interagencias,
-                            UnidadNegocioKeys.AppWebs
+                            UnidadNegocioKeys.Interagencias
                         };
                         CreateOrUpdate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
@@ -78,25 +78,16 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                object errorResponse = null;
-
-                if (entity.UnidadNegocio.ID == UnidadNegocioKeys.CondorTravel)
-                {
-                    errorResponse = new
-                    {
-                        error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel],
-                        error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_CL],
-                        error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_EC],
-                        error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_BR]
-                    };
-                }
-
+                try { error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_PE = null; }
+                try { error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_CL = null; }
+                try { error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_EC = null; }
+                try { error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_BR = null; }
                 (new
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
                     Instants = GetInstants(),
-                    ErrorCT = errorResponse,
+                    Error = new { error_PE, error_CL, error_EC, error_BR },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -106,6 +97,8 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Update(Contacto entity)
         {
             object error = null, logResult = null;
+            string error_PE = null, error_CL = null, error_EC = null, error_BR = null;
+            string error_DM = null, error_IA = null;
             IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
             try
             {
@@ -128,12 +121,10 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                    case UnidadNegocioKeys.AppWebs:
                         unidadNegocioList = new List<UnidadNegocioKeys?>
                         {
                             UnidadNegocioKeys.DestinosMundiales,
-                            UnidadNegocioKeys.Interagencias,
-                            UnidadNegocioKeys.AppWebs
+                            UnidadNegocioKeys.Interagencias
                         };
                         UpdateOrCreate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
@@ -152,18 +143,16 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
+                try { error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_PE = null; }
+                try { error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_CL = null; }
+                try { error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_EC = null; }
+                try { error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_BR = null; }
                 (new
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
                     Instants = GetInstants(),
-                    Error = new
-                    {
-                        error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel],
-                        error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_CL],
-                        error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_EC],
-                        error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel_BR]
-                    },
+                    Error = new { error_PE, error_CL, error_EC, error_BR },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -299,14 +288,6 @@ namespace Expertia.Estructura.Controllers
                                 NotAssociated = _operNotAssociated[UnidadNegocioKeys.Interagencias],
                                 IdCuenta = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdContacto].ToString()
-                            },
-                            AppWebs = new
-                            {
-                                Codes = GetErrorResult(UnidadNegocioKeys.AppWebs),
-                                Retry = _operRetry[UnidadNegocioKeys.AppWebs],
-                                NotAssociated = _operNotAssociated[UnidadNegocioKeys.AppWebs],
-                                IdCuenta = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdContacto].ToString()
                             }
                         }
                     };
@@ -329,13 +310,6 @@ namespace Expertia.Estructura.Controllers
                                 MensajeError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.MensajeError].ToString(),
                                 IdCuenta = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString(),
                                 IdContacto = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdContacto].ToString()
-                            },
-                            AppWebs = new
-                            {
-                                CodigoError = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdCuenta].ToString(),
-                                IdContacto = _operCollection[UnidadNegocioKeys.AppWebs][OutParameter.IdContacto].ToString()
                             }
                         }
                     };
@@ -371,9 +345,8 @@ namespace Expertia.Estructura.Controllers
                 case UnidadNegocioKeys.DestinosMundiales:
                 case UnidadNegocioKeys.Interagencias:
                 case UnidadNegocioKeys.AppWebs:
-                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository());
-                    _crmCollection.Add(UnidadNegocioKeys.Interagencias, new Contacto_IA_Repository());
-                    _crmCollection.Add(UnidadNegocioKeys.AppWebs, new Contacto_AW_Repository());
+                    _crmCollection.Add(UnidadNegocioKeys.DestinosMundiales, new Contacto_DM_Repository(UnidadNegocioKeys.DestinosMundiales));
+                    _crmCollection.Add(UnidadNegocioKeys.Interagencias, new Contacto_DM_Repository(UnidadNegocioKeys.Interagencias));
                     break;
                 default:
                     unidadNegocioList = null;

@@ -205,7 +205,6 @@
     <Compile Include="Models\Ventas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\AppWebs\ContactoPta_AW_Repository.cs" />
-    <Compile Include="Repository\AppWebs\Contacto_AW_Repository.cs" />
     <Compile Include="Repository\AppWebs\Oportunidad_AW_Repository.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\IContactoPtaRepository.cs" />
@@ -229,7 +228,6 @@
     <Compile Include="Repository\DestinosMundiales\Cotizacion_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\CuentaB2B_DM_Repository.cs" />
     <Compile Include="Repository\InterAgencias\ContactoPta_IA_Repository.cs" />
-    <Compile Include="Repository\InterAgencias\Contacto_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaPta_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\File_IA_Repository.cs" />

@@ -12,29 +12,31 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
     public class Contacto_DM_Repository : OracleBase<Contacto>, ICrud<Contacto>, ISameSPName<Contacto>
     {
         #region GenericConstructor
-        public Contacto_DM_Repository(string connKey) : base(connKey)
+        public Contacto_DM_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.DestinosMundiales) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
         #endregion
-
-        public Contacto_DM_Repository() : base(ConnectionKeys.DMConnKey, UnidadNegocioKeys.DestinosMundiales)
-        {
-        }
 
         #region PublicMethods
         public Operation Create(Contacto entity)
         {
-            return ExecuteOperation(entity, StoredProcedureName.DM_Create_Contacto, entity.Auditoria.CreateUser.Descripcion);
+            return ExecuteOperation(entity,
+                    _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? StoredProcedureName.DM_Create_Contacto :
+                    _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? StoredProcedureName.IA_Create_Contacto : string.Empty,
+                    entity.Auditoria.CreateUser.Descripcion);
         }
 
         public Operation Update(Contacto entity)
         {
-            return ExecuteOperation(entity, StoredProcedureName.DM_Update_Contacto, entity.Auditoria.ModifyUser.Descripcion);
+            return ExecuteOperation(entity,
+                    _unidadNegocio.Equals(UnidadNegocioKeys.DestinosMundiales) ? StoredProcedureName.DM_Update_Contacto :
+                    _unidadNegocio.Equals(UnidadNegocioKeys.Interagencias) ? StoredProcedureName.IA_Update_Contacto : string.Empty,
+                    entity.Auditoria.ModifyUser.Descripcion);
         }
         #endregion
 
         #region Auxiliar
-        public Operation ExecuteOperation(Contacto entity, string SPName, string userName)
+        public Operation ExecuteOperation(Contacto entity, string spName, string userName)
         {
             try
             {
@@ -108,7 +110,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(SPName);
+                ExecuteStoredProcedure(spName);
 
                 operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
                 operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
