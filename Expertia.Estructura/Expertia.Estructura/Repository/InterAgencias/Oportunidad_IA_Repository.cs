@@ -83,6 +83,9 @@ namespace Expertia.Estructura.Repository.InterAgencias
             var spName = string.Empty;
             switch (_unidadNegocio)
             {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    spName = StoredProcedureName.DM_Update_Oportunidad;
+                    break;
                 case UnidadNegocioKeys.Interagencias:
                     spName = StoredProcedureName.IA_Update_Oportunidad;
                     break;
@@ -138,7 +141,18 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var pnr_1 = row.StringParse("PNR_1");
                     var pnr_2 = row.StringParse("PNR_2");
                     var motivoPerdida = row.StringParse("MOTIVO_PERDIDA");
-                    var idFile = row.IntParse("ID_FILE");
+                    var idFile =
+                        (new List<UnidadNegocioKeys?>() { UnidadNegocioKeys.Interagencias, UnidadNegocioKeys.AppWebs }).Contains(_unidadNegocio) ?
+                            row.IntNullParse("ID_FILE") : 0;
+                    var contacto =
+                        (new List<UnidadNegocioKeys?>() { UnidadNegocioKeys.DestinosMundiales }).Contains(_unidadNegocio) ?
+                            row.StringParse("CONTACTO") : string.Empty;
+                    var counter_ventas =
+                        (new List<UnidadNegocioKeys?>() { UnidadNegocioKeys.DestinosMundiales }).Contains(_unidadNegocio) ?
+                            row.StringParse("COUNTER_VENTAS") : string.Empty;
+                    var counter_admin =
+                        (new List<UnidadNegocioKeys?>() { UnidadNegocioKeys.DestinosMundiales }).Contains(_unidadNegocio) ?
+                            row.StringParse("COUNTER_ADM") : string.Empty;
                     #endregion
 
                     #region AddingElement
@@ -172,7 +186,10 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         MontoReal = montoReal,
                         Pnr1 = pnr_1,
                         Pnr2 = pnr_2,
-                        MotivoPerdida = motivoPerdida
+                        MotivoPerdida = motivoPerdida,
+                        Contacto = contacto,
+                        CounterVentas = counter_ventas,
+                        CounterAdmin = counter_admin
                     });
                     #endregion
                 }

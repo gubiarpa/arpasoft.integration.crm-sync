@@ -154,5 +154,53 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this Oportunidad oportunidad)
+        {
+            try
+            {
+                return new
+                {
+                    info = new
+                    {
+                        idOportunidad = oportunidad.IdOportunidad,
+                        accion = oportunidad.Accion,
+                        etapa = oportunidad.Etapa,
+                        dkCuenta = oportunidad.DkCuenta.ToString(),
+                        unidadNegocio = oportunidad.UnidadNegocio,
+                        sucursal = oportunidad.Sucursal,
+                        puntoVenta = oportunidad.PuntoVenta,
+                        subcodigo = oportunidad.Subcodigo,
+                        fechaOportunidad = oportunidad.FechaOportunidad.ToString("dd/MM/yyyy"),
+                        nombreOportunidad = oportunidad.NombreOportunidad,
+                        origenOportunidad = oportunidad.OrigenOportunidad,
+                        medioOportunidad = oportunidad.MedioOportunidad,
+                        gds = oportunidad.GDS,
+                        tipoProducto = oportunidad.TipoProducto,
+                        rutaViaje = oportunidad.RutaViaje,
+                        ciudadOrigen = oportunidad.CiudadOrigen,
+                        ciudadDestino = oportunidad.CiudadDestino,
+                        tipoRuta = oportunidad.TipoRuta,
+                        numPasajeros = oportunidad.NumPasajeros,
+                        fechaInicioViaje1 = oportunidad.FechaInicioViaje1.ToString("dd/MM/yyyy"),
+                        fechaFinViaje1 = oportunidad.FechaFinViaje1.ToString("dd/MM/yyyy"),
+                        fechaInicioViaje2 = oportunidad.FechaInicioViaje2.ToString("dd/MM/yyyy"),
+                        fechaFinViaje2 = oportunidad.FechaFinViaje2.ToString("dd/MM/yyyy"),
+                        montoEstimado = oportunidad.MontoEstimado,
+                        montoReal = oportunidad.MontoReal,
+                        pnr1 = oportunidad.Pnr1,
+                        pnr2 = oportunidad.Pnr2,
+                        motivoPerdida = oportunidad.MotivoPerdida,
+                        contacto = oportunidad.Contacto,
+                        counterVentas = oportunidad.CounterVentas,
+                        counterAdm = oportunidad.CounterAdmin
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

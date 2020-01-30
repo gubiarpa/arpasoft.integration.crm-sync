@@ -17,7 +17,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         }
         #endregion
 
-        public Contacto_DM_Repository() : base(ConnectionKeys.DMConnKey)
+        public Contacto_DM_Repository() : base(ConnectionKeys.DMConnKey, UnidadNegocioKeys.DestinosMundiales)
         {
         }
 
@@ -39,6 +39,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             try
             {
                 Operation operation = new Operation();
+                //_unidadNegocio = entity.UnidadNegocio.Descripcion.ToUnidadNegocio();
                 object value;
 
                 #region Parameters

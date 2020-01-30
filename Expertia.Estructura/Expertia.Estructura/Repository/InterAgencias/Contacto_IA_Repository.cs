@@ -8,7 +8,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
 {
     public class Contacto_IA_Repository : OracleBase<Contacto>, ICrud<Contacto>, ISameSPName<Contacto>
     {
-        public Contacto_IA_Repository() : base(ConnectionKeys.IAConnKey)
+        public Contacto_IA_Repository() : base(ConnectionKeys.IAConnKey, UnidadNegocioKeys.Interagencias)
         {
         }
 
