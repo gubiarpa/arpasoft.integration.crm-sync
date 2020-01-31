@@ -7,6 +7,7 @@ using Expertia.Estructura.Repository.InterAgencias;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
@@ -32,8 +33,6 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Create(Contacto entity)
         {
             object error = null, logResult = null;
-            string error_PE = null, error_CL = null, error_EC = null, error_BR = null;
-            string error_DM = null, error_IA = null;
             IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
             try
             {
@@ -56,11 +55,9 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                        unidadNegocioList = new List<UnidadNegocioKeys?>
-                        {
-                            UnidadNegocioKeys.DestinosMundiales,
-                            UnidadNegocioKeys.Interagencias
-                        };
+                        unidadNegocioList = new List<UnidadNegocioKeys?>(); // ▼ Adiciona U.Neg si está lleno el campo DkAgencia_XX
+                        if (entity.DkAgencia_DM == null | entity.DkAgencia_DM == 0) unidadNegocioList.ToList().Add(UnidadNegocioKeys.DestinosMundiales);
+                        if (entity.DkAgencia_IA == null | entity.DkAgencia_IA == 0) unidadNegocioList.ToList().Add(UnidadNegocioKeys.Interagencias);
                         CreateOrUpdate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
@@ -78,16 +75,19 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
+                string error_PE = null, error_CL = null, error_EC = null, error_BR = null, error_DM = null, error_IA = null;
                 try { error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_PE = null; }
                 try { error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_CL = null; }
                 try { error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_EC = null; }
                 try { error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_BR = null; }
+                try { error_DM = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_DM = null; }
+                try { error_IA = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_IA = null; }
                 (new
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
                     Instants = GetInstants(),
-                    Error = new { error_PE, error_CL, error_EC, error_BR },
+                    Error = new { RB = new { error_PE, error_CL, error_EC, error_BR }, PTA = new { error_DM, error_IA } },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
@@ -97,8 +97,6 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Update(Contacto entity)
         {
             object error = null, logResult = null;
-            string error_PE = null, error_CL = null, error_EC = null, error_BR = null;
-            string error_DM = null, error_IA = null;
             IEnumerable<UnidadNegocioKeys?> unidadNegocioList;
             try
             {
@@ -109,7 +107,7 @@ namespace Expertia.Estructura.Controllers
                 switch (RepositoryByBusiness(entity.UnidadNegocio.ID))
                 {
                     case UnidadNegocioKeys.CondorTravel:
-                        unidadNegocioList = new List<UnidadNegocioKeys?>
+                        unidadNegocioList = new List<UnidadNegocioKeys?>()
                         {
                             UnidadNegocioKeys.CondorTravel,
                             UnidadNegocioKeys.CondorTravel_CL,
@@ -121,11 +119,9 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                        unidadNegocioList = new List<UnidadNegocioKeys?>
-                        {
-                            UnidadNegocioKeys.DestinosMundiales,
-                            UnidadNegocioKeys.Interagencias
-                        };
+                        unidadNegocioList = new List<UnidadNegocioKeys?>();
+                        if (entity.DkAgencia_DM == null | entity.DkAgencia_DM == 0) unidadNegocioList.ToList().Add(UnidadNegocioKeys.DestinosMundiales);
+                        if (entity.DkAgencia_IA == null | entity.DkAgencia_IA == 0) unidadNegocioList.ToList().Add(UnidadNegocioKeys.Interagencias);
                         UpdateOrCreate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
@@ -143,16 +139,19 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
+                string error_PE = null, error_CL = null, error_EC = null, error_BR = null, error_DM = null, error_IA = null;
                 try { error_PE = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_PE = null; }
                 try { error_CL = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_CL = null; }
                 try { error_EC = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_EC = null; }
                 try { error_BR = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_BR = null; }
+                try { error_DM = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_DM = null; }
+                try { error_IA = _errorsValuesPairs[UnidadNegocioKeys.CondorTravel]; } catch { error_IA = null; }
                 (new
                 {
                     BusinessUnity = entity.UnidadNegocio.Descripcion,
                     LegacySystems = logResult,
                     Instants = GetInstants(),
-                    Error = new { error_PE, error_CL, error_EC, error_BR },
+                    Error = new { RB = new { error_PE, error_CL, error_EC, error_BR }, PTA = new { error_DM, error_IA } },
                     Body = entity
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
