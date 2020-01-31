@@ -41,7 +41,6 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
             Operation operation = new Operation();
             try
             {
-                //_unidadNegocio = entity.UnidadNegocio.Descripcion.ToUnidadNegocio();
                 object value;
 
                 #region Parameters

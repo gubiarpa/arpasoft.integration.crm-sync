@@ -114,8 +114,8 @@ namespace Expertia.Estructura.Controllers
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
                         unidadNegocioList = new List<UnidadNegocioKeys?>(); // ▼ Adiciona U.Neg si está lleno el campo DkAgencia_XX
-                        if (entity.DkAgencia_DM != null & entity.DkAgencia_DM != 0) unidadNegocioList.ToList().Add(UnidadNegocioKeys.DestinosMundiales);
-                        if (entity.DkAgencia_IA != null & entity.DkAgencia_IA != 0) unidadNegocioList.ToList().Add(UnidadNegocioKeys.Interagencias);
+                        if (entity.DkAgencia_DM != null & entity.DkAgencia_DM != 0) unidadNegocioList.Add(UnidadNegocioKeys.DestinosMundiales);
+                        if (entity.DkAgencia_IA != null & entity.DkAgencia_IA != 0) unidadNegocioList.Add(UnidadNegocioKeys.Interagencias);
                         UpdateOrCreate(unidadNegocioList, entity, codigoError);
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result);
                         break;
@@ -232,54 +232,74 @@ namespace Expertia.Estructura.Controllers
                 case UnidadNegocioKeys.DestinosMundiales:
                 case UnidadNegocioKeys.Interagencias:
                     #region Log
-                    logResult = new
+                    object result_DM = null, result_IA = null;
+                    #region DestinosMundiales
+                    try
                     {
-                        Result = new
+                        result_DM = new
                         {
-                            DestinosMundiales = new
+                            CodigoError = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
+                                _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString() : null,
+                            MensajeError = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
+                                _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString() : null,
+                            IdCuenta = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
+                                _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString() : null,
+                            IdContacto = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
+                            _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString() : null
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        result_DM = ex.Message;
+                    }
+                    #endregion
+
+                    #region Interagencias
+                    try
+                    {
+                        result_IA = new
+                        {
+                            CodigoError = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
+                                _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.CodigoError].ToString() : null,
+                            MensajeError = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
+                                _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.MensajeError].ToString() : null,
+                            IdCuenta = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
+                                _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString() : null,
+                            IdContacto = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
+                                _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdContacto].ToString() : null
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        result_IA = ex.Message;
+                    }
+                    #endregion
+
+                    try
+                    {
+
+                        logResult = new
+                        {
+                            Result = new
                             {
-                                CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString() ,
-                                MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString() ,
-                                IdCuenta = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
-                                    _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString() : null,
-                                IdContacto = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
-                                    _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString() : null
-                            },
-                            InterAgencias = new
-                            {
-                                CodigoError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.CodigoError].ToString() ,
-                                MensajeError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.MensajeError].ToString() ,
-                                IdCuenta = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
-                                    _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString() : null,
-                                IdContacto = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
-                                    _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdContacto].ToString() : null
+                                DestinosMundiales = result_DM,
+                                InterAgencias = result_IA
                             }
-                        }
-                    };
+                        };
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
                     #endregion
                     #region Client
                     result = new
                     {
                         Result = new
                         {
-                            DestinosMundiales = new
-                            {
-                                CodigoError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
-                                    _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdCuenta].ToString() : null,
-                                IdContacto = _operCollection.ContainsKey(UnidadNegocioKeys.DestinosMundiales) ?
-                                    _operCollection[UnidadNegocioKeys.DestinosMundiales][OutParameter.IdContacto].ToString() : null
-                            },
-                            InterAgencias = new
-                            {
-                                CodigoError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.CodigoError].ToString(),
-                                MensajeError = _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.MensajeError].ToString(),
-                                IdCuenta = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
-                                    _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdCuenta].ToString() : null,
-                                IdContacto = _operCollection.ContainsKey(UnidadNegocioKeys.Interagencias) ?
-                                    _operCollection[UnidadNegocioKeys.Interagencias][OutParameter.IdContacto].ToString() : null
-                            }
+                            DestinosMundiales = result_DM,
+                            InterAgencias = result_IA
                         }
                     };
                     #endregion
