@@ -38,9 +38,9 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
         #region Auxiliar
         public Operation ExecuteOperation(Contacto entity, string spName, string userName)
         {
+            Operation operation = new Operation();
             try
             {
-                Operation operation = new Operation();
                 //_unidadNegocio = entity.UnidadNegocio.Descripcion.ToUnidadNegocio();
                 object value;
 
@@ -118,13 +118,16 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 operation[OutParameter.IdContacto] = entity.ID = GetOutParameter(OutParameter.IdContacto).ToString();
                 operation[Operation.Result] = ResultType.Success;
                 #endregion
-
-                return operation;
             }
             catch (Exception ex)
             {
-                throw ex;
+                operation[OutParameter.CodigoError] = ApiResponseCode.ErrorCode;
+                operation[OutParameter.MensajeError] = ex.Message;
+                operation[OutParameter.IdCuenta] = string.Empty;
+                operation[OutParameter.IdContacto] = string.Empty;
+                //throw ex;
             }
+            return operation;
         }
 
         public Operation Generate(Contacto entity)
