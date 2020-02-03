@@ -209,13 +209,21 @@ namespace Expertia.Estructura.RestManager.RestParse
             {
                 return new
                 {
-
+                    ID_OPORTUNIDAD_SF = cotizacionDM.IdOportunidadSf,
+                    ID_COTIZACION_SF = string.IsNullOrEmpty(cotizacionDM.IdCotizacionSf) ? null : cotizacionDM.IdCotizacionSf,
+                    COTIZACION = cotizacionDM.IdCotizacion,
+                    MONTO_COTIZACION = cotizacionDM.MontoCotizacion,
+                    MONTO_COMISION = cotizacionDM.MontoComision,
+                    ESTADO_COTIZACION = cotizacionDM.EstadoCotizacion,
+                    NOMBRE_COTIZACION = cotizacionDM.NombreCotizacion,
+                    NUM_PASAJEROS_ADL = cotizacionDM.NumPasajerosAdult,
+                    NUM_PASAJEROS_CHD = cotizacionDM.NumPasajerosChild,
+                    NUM_PASAJEROS_TOT = cotizacionDM.NumPasajerosTotal
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
         }
     }

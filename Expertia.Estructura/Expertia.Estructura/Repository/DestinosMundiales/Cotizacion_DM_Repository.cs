@@ -51,7 +51,43 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
 
         public Operation UpdateCotizacion(Cotizacion_DM cotizacion)
         {
-            return null;
+            try
+            {
+                var operation = new Operation();
+
+                #region Parameters
+                /// (01) P_CODIGO_ERROR
+                AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                /// (02) P_MENSAJE_ERROR
+                AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                /// (03) P_ID_OPORTUNIDAD_CRM IN VARCHAR2,
+                AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, cotizacion.IdOportunidadSf);
+                /// (04) P_ID_COTIZACION_CRM IN VARCHAR2,
+                AddParameter("P_ID_COTIZACION_CRM", OracleDbType.Varchar2, cotizacion.IdCotizacionSf);
+                /// (05) P_ID_COTIZACION IN NUMBER,
+                AddParameter("P_ID_COTIZACION", OracleDbType.Int16, cotizacion.IdCotizacion);
+                /// (06) P_ES_ATENCION IN VARCHAR2,
+                AddParameter("P_ES_ATENCION", OracleDbType.Varchar2, cotizacion.CodigoError);
+                /// (07) P_DESCRIPCION IN VARCHAR2,
+                AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, cotizacion.MensajeError);
+                /// (08) P_ACTUALIZADOS OUT NUMBER
+                AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.DM_Update_Cotizacion);
+
+                operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+                operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+                operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+                #endregion
+
+                return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
 
@@ -66,7 +102,7 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                     #region Loading
                     var idOportunidadSf = row.StringParse("ID_OPORTUNIDAD_SF");
                     var idCotizacionSf = row.StringParse("ID_COTIZACION_SF");
-                    var idCotizacion = row.IntNullParse("COTIZACION");
+                    var idCotizacion = row.IntNullParse("ID_COTIZACION");
                     var montoCotizacion = row.FloatNullParse("MONTO_COTIZACION");
                     var montoComision = row.FloatNullParse("MONTO_COMISION");
                     var estadoCotizacion = row.StringParse("ESTADO_COTIZACION");

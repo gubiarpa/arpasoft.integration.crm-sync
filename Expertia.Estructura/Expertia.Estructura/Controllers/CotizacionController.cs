@@ -71,9 +71,7 @@ namespace Expertia.Estructura.Controllers
                 
                 var cotizaciones_SF = new List<object>();
                 foreach (var cotizacion in cotizaciones)
-                {
                     cotizaciones_SF.Add(cotizacion.ToSalesforceEntity());
-                }
 
                 /// Obtiene Token para envío a Salesforce
                 var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
@@ -81,35 +79,39 @@ namespace Expertia.Estructura.Controllers
                 /// II. Enviar Oportunidad a Salesforce
                 try
                 {
-                    
-                    var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, cotizaciones_SF, true, token);
+                    //System.IO.File.WriteAllText("\\\\10.10.10.25\\Logs\\crm-api\\body.json", (new { datos = cotizaciones_SF }).Stringify(true));
+                    var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CotizacionListMethod, Method.POST, new { datos = cotizaciones_SF }, true, token);
                     if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
                         try
                         {
                             var responseList = jsonResponse["Cotizaciones"]; // Obtiene todo el json
-                            foreach (var response in (List<object>)responseList)
+                            foreach (var item in responseList)
                             {
-                                #region Deserialize
-                                dynamic item = new JavaScriptSerializer().DeserializeObject(response.Stringify());
+                                try
+                                {
+                                    #region Deserialize
+                                    var codigoRetorno = (item["CODIGO_RETORNO"] ?? string.Empty).ToString();
+                                    var mensajeRetorno = (item["MENSAJE_RETORNO"] ?? string.Empty).ToString();
+                                    var idCotizacionSf = (item["ID_COTIZACION_SF"] ?? string.Empty).ToString();
+                                    var idOportunidadSf = (item["ID_OPORTUNIDAD_SF"] ?? string.Empty).ToString();
+                                    var idCotizacion = (item["COTIZACION"] ?? string.Empty).ToString();
 
-                                var codigoRetorno = item["CODIGO_RETORNO"].ToString();
-                                var mensajeRetorno = item["MENSAJE_RETORNO"].ToString();
-                                var idCotizacionSf = item["ID_COTIZACION_SF"].ToString();
-                                var idOportunidadSf = item["ID_OPORTUNIDAD_SF"].ToString();
-                                var idCotizacion = item["COTIZACION"].ToString();
+                                    var cotizacion = cotizaciones.SingleOrDefault(c =>
+                                        c.IdCotizacionSf.Equals(idCotizacionSf) && c.IdOportunidadSf.Equals(idOportunidadSf));
 
-                                var cotizacion = cotizaciones.SingleOrDefault(c =>
-                                    c.IdCotizacionSf.Equals(idCotizacionSf) &&
-                                    c.IdOportunidadSf.Equals(idOportunidadSf) &&
-                                    c.IdCotizacion.Equals(idCotizacion));
+                                    cotizacion.CodigoError = codigoRetorno;
+                                    cotizacion.MensajeError = mensajeRetorno;
 
-                                cotizacion.CodigoError = codigoRetorno;
-                                cotizacion.MensajeError = mensajeRetorno;
-                                #endregion
-
-                                #region ReturnToDB
+                                    #region ReturnToDB
+                                    _cotizacionRepository_DM.UpdateCotizacion(cotizacion);
+                                    #endregion
+                                }
+                                catch (Exception)
+                                {
+                                    throw;
+                                }
 
                                 #endregion
                             }
@@ -118,17 +120,22 @@ namespace Expertia.Estructura.Controllers
                         {
                         }
                     }
+                    return Ok(cotizaciones);
                 }
                 catch (Exception ex)
                 {
                     exceptionMsg = ex.Message;
-                    //cotizacion.CodigoError = ApiResponseCode.ErrorCode;
-                    //cotizacion.MensajeError = ex.Message;
+                    return InternalServerError(ex);
                 }
-
-                
-
-                return Ok(cotizaciones);
+                finally
+                {
+                    (new
+                    {
+                        UnidadNegocio = unidadNegocio.Descripcion,
+                        Exception = exceptionMsg,
+                        LegacySystems = cotizaciones
+                    }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                }
             }
             catch (Exception ex)
             {
@@ -139,6 +146,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Body = cotizaciones,
                     Error = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

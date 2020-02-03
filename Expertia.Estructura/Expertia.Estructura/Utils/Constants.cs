@@ -131,6 +131,7 @@ namespace Expertia.Estructura.Utils
         public const string DM_Asociate_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ASOCIAR_COTIZACION";
         public const string DM_Send_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ENVIAR_COTIZACION";
         public const string DM_Read_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_COTIZACION";
+        public const string DM_Update_Cotizacion = "DESTINOS_TRP.CRM_PKG.SP_ACTUALIZAR_ENVIO_COTIZACION";
         // Subcodigo
         public const string DM_Create_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_CREAR_SUBCODIGO";
         public const string DM_Read_Subcodigo = "DESTINOS_TRP.CRM_PKG.SP_LISTAR_SUBCODIGO";
@@ -201,6 +202,7 @@ namespace Expertia.Estructura.Utils
         public const string FileMethod = "FILE_METHODNAME";
         public const string BoletoMethod = "BOLETO_METHODNAME";
         public const string OportunidadMethod = "OPORTUNIDAD_METHODNAME";
+        public const string CotizacionListMethod = "COTIZACIONLIST_METHODNAME";
         public const string CuentaPtaMethod = "CUENTAPTA_METHODNAME";
         public const string ContactoPtaMethod = "CONTACTOPTA_METHODNAME";
         /// Actions
