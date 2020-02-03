@@ -98,11 +98,11 @@ namespace Expertia.Estructura.Controllers
                                     var idOportunidadSf = (item["ID_OPORTUNIDAD_SF"] ?? string.Empty).ToString();
                                     var idCotizacion = (item["COTIZACION"] ?? string.Empty).ToString();
 
-                                    var cotizacion = cotizaciones.SingleOrDefault(c =>
-                                        c.IdCotizacionSf.Equals(idCotizacionSf) && c.IdOportunidadSf.Equals(idOportunidadSf));
+                                    var cotizacion = cotizaciones.FirstOrDefault(c => c.IdOportunidadSf.Equals(idOportunidadSf));
 
                                     cotizacion.CodigoError = codigoRetorno;
                                     cotizacion.MensajeError = mensajeRetorno;
+                                    cotizacion.IdCotizacionSf = idCotizacionSf;
 
                                     #region ReturnToDB
                                     _cotizacionRepository_DM.UpdateCotizacion(cotizacion);
