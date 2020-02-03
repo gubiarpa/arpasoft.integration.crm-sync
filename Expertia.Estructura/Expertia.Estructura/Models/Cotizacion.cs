@@ -80,7 +80,7 @@ namespace Expertia.Estructura.Models
         #endregion
     }
 
-    public class CotizacionDM
+    public class Cotizacion_DM : ICrmApiResponse
     {
         public string IdOportunidadSf { get; set; }
         public string IdCotizacionSf { get; set; }
@@ -92,5 +92,7 @@ namespace Expertia.Estructura.Models
         public int? NumPasajerosAdult { get; set; }
         public int? NumPasajerosChild { get; set; }
         public int? NumPasajerosTotal { get; set; }
+        public string CodigoError { get; set; }
+        public string MensajeError { get; set; }
     }
 }

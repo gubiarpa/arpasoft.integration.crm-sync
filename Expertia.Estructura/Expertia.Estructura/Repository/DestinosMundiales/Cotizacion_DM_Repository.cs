@@ -9,16 +9,16 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.DestinosMundiales
 {
-    public class Cotizacion_DM_Repository : OracleBase<Cotizacion>
+    public class Cotizacion_DM_Repository : OracleBase<Cotizacion>, ICotizacion_DM
     {
         #region Constructor
-        public Cotizacion_DM_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.DestinosMundiales) : base(ConnectionKeys.DMConnKey, unidadNegocio)
+        public Cotizacion_DM_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.DestinosMundiales) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
         #endregion
 
         #region PublicMethods
-        public Operation GetCotizacionesDM()
+        public Operation GetCotizaciones()
         {
             try
             {
@@ -48,31 +48,36 @@ namespace Expertia.Estructura.Repository.DestinosMundiales
                 throw ex;
             }
         }
+
+        public Operation UpdateCotizacion(Cotizacion_DM cotizacion)
+        {
+            return null;
+        }
         #endregion
 
         #region Auxiliar
-        private IEnumerable<CotizacionDM> ToCotizacion(DataTable dt)
+        private IEnumerable<Cotizacion_DM> ToCotizacion(DataTable dt)
         {
             try
             {
-                var cotizaciones = new List<CotizacionDM>();
+                var cotizaciones = new List<Cotizacion_DM>();
                 foreach (DataRow row in dt.Rows)
                 {
                     #region Loading
-                    var idOportunidadSf = row.StringParse("");
-                    var idCotizacionSf = row.StringParse("");
-                    var idCotizacion = row.IntNullParse("");
-                    var montoCotizacion = row.FloatNullParse("");
-                    var montoComision = row.FloatNullParse("");
-                    var estadoCotizacion = row.StringParse("");
-                    var nombreCotizacion = row.StringParse("");
-                    var numPasajerosAdult = row.IntNullParse("");
-                    var numPasajerosChild = row.IntNullParse("");
-                    var numPasajerosTotal = row.IntNullParse("");
+                    var idOportunidadSf = row.StringParse("ID_OPORTUNIDAD_SF");
+                    var idCotizacionSf = row.StringParse("ID_COTIZACION_SF");
+                    var idCotizacion = row.IntNullParse("COTIZACION");
+                    var montoCotizacion = row.FloatNullParse("MONTO_COTIZACION");
+                    var montoComision = row.FloatNullParse("MONTO_COMISION");
+                    var estadoCotizacion = row.StringParse("ESTADO_COTIZACION");
+                    var nombreCotizacion = row.StringParse("NOMBRE_COTIZACION");
+                    var numPasajerosAdult = row.IntNullParse("NUM_PASAJEROS_ADL");
+                    var numPasajerosChild = row.IntNullParse("NUM_PASAJEROS_CHD");
+                    var numPasajerosTotal = row.IntNullParse("NUM_PASAJEROS_TOT");
                     #endregion
 
                     #region AddingElement
-                    cotizaciones.Add(new CotizacionDM()
+                    cotizaciones.Add(new Cotizacion_DM()
                     {
                         IdOportunidadSf = idOportunidadSf,
                         IdCotizacionSf = idCotizacionSf,

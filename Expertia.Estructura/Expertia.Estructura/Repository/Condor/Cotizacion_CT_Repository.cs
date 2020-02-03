@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.Condor
         #endregion
 
         #region PublicMethods
-        public Operation GetCotizacionCT(CotizacionRequest cotizacionRequest)
+        public Operation GetCotizaciones(CotizacionRequest cotizacionRequest)
         {
             var operation = new Operation();
 

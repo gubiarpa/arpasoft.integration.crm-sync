@@ -5,11 +5,12 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface ICotizacion_CT
     {
-        Operation GetCotizacionCT(CotizacionRequest cotizacionRequest);
+        Operation GetCotizaciones(CotizacionRequest cotizacionRequest);
     }
 
     public interface ICotizacion_DM
     {
-        Operation GetCotizacionesDM(CotizacionDM cotizacionDM);
+        Operation GetCotizaciones();
+        Operation UpdateCotizacion(Cotizacion_DM cotizacion);
     }
 }

@@ -1,11 +1,19 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.Condor;
+using Expertia.Estructura.Repository.DestinosMundiales;
+using Expertia.Estructura.RestManager.Base;
+using Expertia.Estructura.RestManager.RestParse;
 using Expertia.Estructura.Utils;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -13,7 +21,8 @@ namespace Expertia.Estructura.Controllers
     public class CotizacionController : BaseController<Cotizacion>
     {
         #region Properties
-        private ICotizacion_CT _cotizacionRepositoryDM;
+        private ICotizacion_CT _cotizacionRepository_CT;
+        private ICotizacion_DM _cotizacionRepository_DM;
         #endregion
 
         #region PublicMethods
@@ -25,7 +34,7 @@ namespace Expertia.Estructura.Controllers
             {
                 if (RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry()) != null)
                 {
-                    var cotizacionResponse = _cotizacionRepositoryDM.GetCotizacionCT(cotizacionRequest);
+                    var cotizacionResponse = _cotizacionRepository_CT.GetCotizaciones(cotizacionRequest);
                     var codigoRetorno = cotizacionResponse[OutParameter.CodigoError].ToString();
                     var mensajeRetorno = cotizacionResponse[OutParameter.MensajeError].ToString();
                     var data = (IEnumerable<CotizacionResponse>)cotizacionResponse[OutParameter.CursorCotizacion];
@@ -48,25 +57,89 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        public IHttpActionResult Send()
+        [Route(RouteAction.Send)]
+        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            IEnumerable<CotizacionDM> cotizaciones;
-            var error = string.Empty;
+            IEnumerable<Cotizacion_DM> cotizaciones = null;
+            var exceptionMsg = string.Empty;
             try
             {
-                //cotizaciones = (IEnumerable<CotizacionDM>)(_cotizacionRepository_DM.)
-                return null;
+                var _unidadNegocio = unidadNegocio.Descripcion.ToUnidadNegocio();
+                RepositoryByBusiness(_unidadNegocio);
+                cotizaciones = (IEnumerable<Cotizacion_DM>)_cotizacionRepository_DM.GetCotizaciones()[OutParameter.CursorCotizacionDM];
+                if (cotizaciones == null || cotizaciones.ToList().Count.Equals(0)) return Ok(cotizaciones);
+                
+                var cotizaciones_SF = new List<object>();
+                foreach (var cotizacion in cotizaciones)
+                {
+                    cotizaciones_SF.Add(cotizacion.ToSalesforceEntity());
+                }
+
+                /// Obtiene Token para envío a Salesforce
+                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
+
+                /// II. Enviar Oportunidad a Salesforce
+                try
+                {
+                    
+                    var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, cotizaciones_SF, true, token);
+                    if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
+                    {
+                        dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
+                        try
+                        {
+                            var responseList = jsonResponse["Cotizaciones"]; // Obtiene todo el json
+                            foreach (var response in (List<object>)responseList)
+                            {
+                                #region Deserialize
+                                dynamic item = new JavaScriptSerializer().DeserializeObject(response.Stringify());
+
+                                var codigoRetorno = item["CODIGO_RETORNO"].ToString();
+                                var mensajeRetorno = item["MENSAJE_RETORNO"].ToString();
+                                var idCotizacionSf = item["ID_COTIZACION_SF"].ToString();
+                                var idOportunidadSf = item["ID_OPORTUNIDAD_SF"].ToString();
+                                var idCotizacion = item["COTIZACION"].ToString();
+
+                                var cotizacion = cotizaciones.SingleOrDefault(c =>
+                                    c.IdCotizacionSf.Equals(idCotizacionSf) &&
+                                    c.IdOportunidadSf.Equals(idOportunidadSf) &&
+                                    c.IdCotizacion.Equals(idCotizacion));
+
+                                cotizacion.CodigoError = codigoRetorno;
+                                cotizacion.MensajeError = mensajeRetorno;
+                                #endregion
+
+                                #region ReturnToDB
+
+                                #endregion
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    exceptionMsg = ex.Message;
+                    //cotizacion.CodigoError = ApiResponseCode.ErrorCode;
+                    //cotizacion.MensajeError = ex.Message;
+                }
+
+                
+
+                return Ok(cotizaciones);
             }
             catch (Exception ex)
             {
-                error = ex.Message;
+                exceptionMsg = ex.Message;
                 return InternalServerError(ex);
             }
             finally
             {
                 (new
                 {
-                    Error = error
+                    Error = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
@@ -116,7 +189,12 @@ namespace Expertia.Estructura.Controllers
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
-            _cotizacionRepositoryDM = new Cotizacion_CT_Repository(unidadNegocioKey);
+            switch (unidadNegocioKey)
+            {
+                case UnidadNegocioKeys.DestinosMundiales:
+                    _cotizacionRepository_DM = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales);
+                    break;
+            }
             return unidadNegocioKey;
         }
         #endregion

@@ -202,5 +202,21 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this Cotizacion_DM cotizacionDM)
+        {
+            try
+            {
+                return new
+                {
+
+                };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
