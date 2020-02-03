@@ -143,7 +143,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var motivoPerdida = row.StringParse("MOTIVO_PERDIDA");
                     var idFile =
                         (new List<UnidadNegocioKeys?>() { UnidadNegocioKeys.Interagencias, UnidadNegocioKeys.AppWebs }).Contains(_unidadNegocio) ?
-                            row.IntNullParse("ID_FILE") : 0;
+                            row.IntNullParse("ID_FILE") : row.IntNullParse("COTIZACION");
                     var contacto =
                         (new List<UnidadNegocioKeys?>() { UnidadNegocioKeys.DestinosMundiales }).Contains(_unidadNegocio) ?
                             row.StringParse("CONTACTO") : string.Empty;
