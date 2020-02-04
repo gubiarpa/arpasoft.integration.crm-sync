@@ -79,7 +79,7 @@ namespace Expertia.Estructura.Controllers
                 /// II. Enviar Oportunidad a Salesforce
                 try
                 {
-                    //System.IO.File.WriteAllText("\\\\10.10.10.25\\Logs\\crm-api\\body.json", (new { datos = cotizaciones_SF }).Stringify(true));
+                    System.IO.File.WriteAllText("\\\\10.10.10.25\\Logs\\crm-api\\body.json", (new { datos = cotizaciones_SF }).Stringify(true));
                     var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CotizacionListMethod, Method.POST, new { datos = cotizaciones_SF }, true, token);
                     if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                     {
