@@ -36,8 +36,8 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                        try { CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
-                        try { CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError); } catch (Exception ex) { error_IA = ex.Message; }
+                        if (string.IsNullOrEmpty(entity.Asesor_DM)) try { CreateOrUpdate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
+                        if (string.IsNullOrEmpty(entity.Asesor_IA)) try { CreateOrUpdate(UnidadNegocioKeys.Interagencias, entity, codigoError); } catch (Exception ex) { error_IA = ex.Message; }
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
                     default:
@@ -102,8 +102,8 @@ namespace Expertia.Estructura.Controllers
                         break;
                     case UnidadNegocioKeys.DestinosMundiales:
                     case UnidadNegocioKeys.Interagencias:
-                        try { UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
-                        try { UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError); } catch (Exception ex) { error_IA = ex.Message; }
+                        if (string.IsNullOrEmpty(entity.Asesor_DM)) try { UpdateOrCreate(UnidadNegocioKeys.DestinosMundiales, entity, codigoError); } catch (Exception ex) { error_DM = ex.Message; }
+                        if (string.IsNullOrEmpty(entity.Asesor_IA)) try { UpdateOrCreate(UnidadNegocioKeys.Interagencias, entity, codigoError); } catch (Exception ex) { error_IA = ex.Message; }
                         LoadResults(UnidadNegocioKeys.DestinosMundiales, out logResult, out result); // Se escoge DM o IA (es indistinto)
                         break;
                     default:
