@@ -20,7 +20,7 @@ namespace Expertia.Estructura.Models
         public string Usuario { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
-        public int Actualizados { get; set; } = -1;
+        public int Actualizados_DM { get; set; } = -1;
         public int Actualizados_IA { get; set; } = -1;
     }
 }

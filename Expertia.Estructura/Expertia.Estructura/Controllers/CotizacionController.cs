@@ -79,11 +79,13 @@ namespace Expertia.Estructura.Controllers
                 /// II. Enviar Oportunidad a Salesforce
                 try
                 {
-                    System.IO.File.WriteAllText("\\\\10.10.10.25\\Logs\\crm-api\\body.json", (new { datos = cotizaciones_SF }).Stringify(true));
-                    var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CotizacionListMethod, Method.POST, new { datos = cotizaciones_SF }, true, token);
+                    var objEnvio = new { datos = cotizaciones_SF };
+                    QuickLog("\\\\10.10.10.25\\Logs\\crm-api\\cotizacion_body_request.json", (objEnvio).Stringify(true)); // ◄ Trace
+                    var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CotizacionListMethod, Method.POST, objEnvio, true, token);
                     if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
+                        QuickLog("\\\\10.10.10.25\\Logs\\crm-api\\cotizacion_body_response.json", (responseOportunidad.Content).Stringify(true));
                         try
                         {
                             var responseList = jsonResponse["Cotizaciones"]; // Obtiene todo el json

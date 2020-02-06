@@ -124,7 +124,7 @@ namespace Expertia.Estructura.Controllers
 
                             /// Actualización de estado de subcodigo a PTA
                             var updateResponse = _subcodigoCollection[unidadNegocio.Descripcion.ToUnidadNegocio()].Update(subcodigo);
-                            subcodigo.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                            subcodigo.Actualizados_DM = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
                         }
                     }
                     catch (Exception ex)

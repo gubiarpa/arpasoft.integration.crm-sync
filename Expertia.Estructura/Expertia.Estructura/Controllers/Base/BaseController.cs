@@ -77,6 +77,17 @@ namespace Expertia.Estructura.Controllers.Base
             }
         }
 
+        protected void QuickLog(string fullName, object obj)
+        {
+            try
+            {
+                System.IO.File.WriteAllText(fullName, obj.Stringify(true));
+            }
+            catch
+            {
+            }
+        }
+
         protected string GetMethod { get { return Request.RequestUri.Segments[Request.RequestUri.Segments.Length - 1]; } }
 
         protected UnidadNegocioKeys? GetUnidadNegocio(string unidadNegocioName)
@@ -134,10 +145,15 @@ namespace Expertia.Estructura.Controllers.Base
 
         protected object GetErrorResult(UnidadNegocioKeys? unidadNegocio)
         {
+            object codigoError, mensajeError;
+            
+            try { codigoError = _operCollection[unidadNegocio][OutParameter.CodigoError].ToString(); } catch (Exception ex) { codigoError = ex.Message; }
+            try { mensajeError = _operCollection[unidadNegocio][OutParameter.MensajeError].ToString(); } catch (Exception ex) { mensajeError = ex.Message; }
+
             return new
             {
-                CodigoError = _operCollection[unidadNegocio][OutParameter.CodigoError].ToString(),
-                MensajeError = _operCollection[unidadNegocio][OutParameter.MensajeError].ToString()
+                CodigoError = codigoError,
+                MensajeError = mensajeError
             };
         }
         #endregion

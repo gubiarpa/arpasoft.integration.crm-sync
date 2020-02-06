@@ -7,6 +7,9 @@ namespace Expertia.Estructura.Models
     public class CuentaB2B : Cuenta
     {
         #region Properties
+        // DkAgencia
+        public string DkAgencia_DM { get; set; }
+        public string DkAgencia_IA { get; set; }
         // LimiteCredito
         public float? LimiteCredito_DM { get; set; }
         public float? LimiteCredito_IA { get; set; }
