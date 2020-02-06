@@ -21,56 +21,24 @@ namespace Expertia.Estructura.Controllers
     public class CotizacionController : BaseController<Cotizacion>
     {
         #region Properties
-        private ICotizacion_CT _cotizacionRepository_CT;
         private ICotizacion_DM _cotizacionRepository_DM;
         #endregion
 
         #region PublicMethods
-        [Route(RouteAction.Read)]
-        public IHttpActionResult Read(CotizacionRequest cotizacionRequest)
-        {
-            var error = string.Empty;
-            try
-            {
-                if (RepositoryByBusiness(cotizacionRequest.Region.ToUnidadNegocioByCountry()) != null)
-                {
-                    var cotizacionResponse = _cotizacionRepository_CT.GetCotizaciones(cotizacionRequest);
-                    var codigoRetorno = cotizacionResponse[OutParameter.CodigoError].ToString();
-                    var mensajeRetorno = cotizacionResponse[OutParameter.MensajeError].ToString();
-                    var data = (IEnumerable<CotizacionResponse>)cotizacionResponse[OutParameter.CursorCotizacion];
-                    return Ok(new { codigoRetorno, mensajeRetorno, data });
-                }
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                error = ex.Message;
-                return InternalServerError(ex);
-            }
-            finally
-            {
-                (new
-                {
-                    Error = error,
-                    Body = cotizacionRequest
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
-            }
-        }
-
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            IEnumerable<Cotizacion_DM> cotizaciones = null;
+            IEnumerable<Cotizacion_DM> cotizaciones_DM = null;
             var exceptionMsg = string.Empty;
             try
             {
-                var _unidadNegocio = unidadNegocio.Descripcion.ToUnidadNegocio();
-                RepositoryByBusiness(_unidadNegocio);
-                cotizaciones = (IEnumerable<Cotizacion_DM>)_cotizacionRepository_DM.GetCotizaciones()[OutParameter.CursorCotizacionDM];
-                if (cotizaciones == null || cotizaciones.ToList().Count.Equals(0)) return Ok(cotizaciones);
+                ClearQuickLog("body_request.json", "Cotizacion");
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
+                cotizaciones_DM = (IEnumerable<Cotizacion_DM>)_cotizacionRepository_DM.GetCotizaciones()[OutParameter.CursorCotizacionDM];
+                if (cotizaciones_DM == null || cotizaciones_DM.ToList().Count.Equals(0)) return Ok(cotizaciones_DM);
                 
                 var cotizaciones_SF = new List<object>();
-                foreach (var cotizacion in cotizaciones)
+                foreach (var cotizacion in cotizaciones_DM)
                     cotizaciones_SF.Add(cotizacion.ToSalesforceEntity());
 
                 /// Obtiene Token para envío a Salesforce
@@ -80,15 +48,15 @@ namespace Expertia.Estructura.Controllers
                 try
                 {
                     var objEnvio = new { datos = cotizaciones_SF };
-                    QuickLog("\\\\10.10.10.25\\Logs\\crm-api\\cotizacion_body_request.json", (objEnvio).Stringify(true)); // ◄ Trace
+                    QuickLog(objEnvio, "body_request.json", "Cotizacion"); /// ♫ Trace
                     var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CotizacionListMethod, Method.POST, objEnvio, true, token);
                     if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
-                        QuickLog("\\\\10.10.10.25\\Logs\\crm-api\\cotizacion_body_response.json", (responseOportunidad.Content).Stringify(true));
                         try
                         {
                             var responseList = jsonResponse["Cotizaciones"]; // Obtiene todo el json
+                            QuickLog(responseList, "body_response.json", "Cotizacion"); /// ♫ Trace
                             foreach (var item in responseList)
                             {
                                 try
@@ -100,7 +68,7 @@ namespace Expertia.Estructura.Controllers
                                     var idOportunidadSf = (item["ID_OPORTUNIDAD_SF"] ?? string.Empty).ToString();
                                     var idCotizacion = (item["COTIZACION"] ?? string.Empty).ToString();
 
-                                    var cotizacion = cotizaciones.FirstOrDefault(c => c.IdOportunidadSf.Equals(idOportunidadSf));
+                                    var cotizacion = cotizaciones_DM.FirstOrDefault(c => c.IdOportunidadSf.Equals(idOportunidadSf));
 
                                     cotizacion.CodigoError = codigoRetorno;
                                     cotizacion.MensajeError = mensajeRetorno;
@@ -122,7 +90,7 @@ namespace Expertia.Estructura.Controllers
                         {
                         }
                     }
-                    return Ok(cotizaciones);
+                    return Ok(cotizaciones_DM);
                 }
                 catch (Exception ex)
                 {
@@ -135,7 +103,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         UnidadNegocio = unidadNegocio.Descripcion,
                         Exception = exceptionMsg,
-                        LegacySystems = cotizaciones
+                        LegacySystems = cotizaciones_DM
                     }).TryWriteLogObject(_logFileManager, _clientFeatures);
                 }
             }
@@ -148,7 +116,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    Body = cotizaciones,
+                    Body = cotizaciones_DM,
                     Error = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

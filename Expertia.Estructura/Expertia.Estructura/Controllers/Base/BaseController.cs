@@ -77,11 +77,30 @@ namespace Expertia.Estructura.Controllers.Base
             }
         }
 
-        protected void QuickLog(string fullName, object obj)
+        protected void ClearQuickLog(string fileName, string path = "SF_Entities\\")
         {
             try
             {
-                System.IO.File.WriteAllText(fullName, obj.Stringify(true));
+                string _path = ConfigAccess.GetValueInAppSettings("LogPath", "") + path + "\\";
+                if (!System.IO.Directory.Exists(_path)) System.IO.Directory.CreateDirectory(_path);
+                System.IO.File.WriteAllText(_path + fileName, string.Empty);
+            }
+            catch
+            {
+            }
+        }
+
+        protected void QuickLog(object obj, string fileName, string path = "SF_Entities\\", bool append = false)
+        {
+            try
+            {
+                string _path = ConfigAccess.GetValueInAppSettings("LogPath", "") + path + "\\";
+                if (!System.IO.Directory.Exists(_path)) System.IO.Directory.CreateDirectory(_path);
+
+                if (append)
+                    System.IO.File.AppendAllText(_path + fileName, obj.Stringify(true, false));
+                else
+                    System.IO.File.WriteAllText(_path + fileName, obj.Stringify(true, false));
             }
             catch
             {

@@ -38,8 +38,9 @@ namespace Expertia.Estructura.Controllers
             string exceptionMsg = string.Empty;
             try
             {
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
-                RepositoryByBusiness(_unidadNegocio);
+                ClearQuickLog("body_request.json", "Oportunidad"); /// ♫ Trace
+                ClearQuickLog("body_response.json", "Oportunidad"); /// ♫ Trace
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
 
                 /// I. Consulta de Oportunidades
                 oportunidades = (IEnumerable<Oportunidad>)_oportunidadRepository.GetOportunidades()[OutParameter.CursorOportunidad];
@@ -54,10 +55,14 @@ namespace Expertia.Estructura.Controllers
                     try
                     {
                         oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
-                        var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidad.ToSalesforceEntity(), true, token);
+
+                        var oportunidad_SF = oportunidad.ToSalesforceEntity();
+                        QuickLog(oportunidad_SF, "body_request.json", "Oportunidad", true); /// ♫ Trace
+                        var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidad_SF, true, token);
                         if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                         {
                             dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
+                            QuickLog(jsonResponse, "body_response.json", "Oportunidad", true); /// ♫ Trace
                             try
                             {
                                 oportunidad.CodigoError = jsonResponse[OutParameter.SF_CodigoError];

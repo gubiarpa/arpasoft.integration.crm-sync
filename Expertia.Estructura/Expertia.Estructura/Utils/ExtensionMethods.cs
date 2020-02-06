@@ -24,14 +24,16 @@ namespace Expertia.Estructura.Utils
         #endregion
 
         #region Json
-        public static string Stringify(this object obj, bool indented = false)
+        public static string Stringify(this object obj, bool indented = false, bool camelCase = true)
         {
             try
             {
+                //JsonSerializerSettings settings;
+
                 var settings = new JsonSerializerSettings
                 {
                     Formatting = indented ? Formatting.Indented : Formatting.None,
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    ContractResolver = camelCase ? new CamelCasePropertyNamesContractResolver() : null
                 };
                 return JsonConvert.SerializeObject(obj, settings);
             }

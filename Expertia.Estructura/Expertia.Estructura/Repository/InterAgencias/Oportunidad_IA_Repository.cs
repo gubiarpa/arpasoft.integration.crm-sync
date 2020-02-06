@@ -68,7 +68,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
             /// (05) P_ID_OPORTUNIDAD_CRM
             AddParameter("P_ID_OPORTUNIDAD_CRM", OracleDbType.Varchar2, oportunidad.IdOportunidad);
             /// (06) P_NOMBRE_SUCURSAL
-            AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, oportunidad.Sucursal);
+            AddParameter("P_NOMBRE_SUCURSAL", OracleDbType.Varchar2, oportunidad.Suc);
             /// (07) P_ID_FILE
             AddParameter("P_ID_FILE", OracleDbType.Int32, oportunidad.IdFile);
             /// (07) P_ES_ATENCION
@@ -119,6 +119,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                     var dkCuenta = row.StringParse("DK_CUENTA");
                     var unidadNegocio = row.StringParse("UNIDAD_NEGOCIO");
                     var sucursal = row.StringParse("SUCURSAL");
+                    var suc = row.StringParse("SUC"); // campo sólo para mantener el flujo
                     var puntoVenta = row.StringParse("PUNTO_VENTA");
                     var subcodigo = row.StringParse("SUBCODIGO");
                     var fechaOportunidad = row.DateTimeParse("FECHA_OPORTUNIDAD");
@@ -165,6 +166,7 @@ namespace Expertia.Estructura.Repository.InterAgencias
                         DkCuenta = dkCuenta,
                         UnidadNegocio = unidadNegocio,
                         Sucursal = sucursal,
+                        Suc = suc,
                         PuntoVenta = puntoVenta,
                         Subcodigo = subcodigo,
                         FechaOportunidad = fechaOportunidad,
