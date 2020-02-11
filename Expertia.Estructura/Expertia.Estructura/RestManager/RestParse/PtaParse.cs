@@ -168,7 +168,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                         etapa = oportunidad.Etapa,
                         dkCuenta = oportunidad.DkCuenta.ToString(),
                         unidadNegocio = oportunidad.UnidadNegocio,
-                        sucursal = oportunidad.Sucursal,
+                        sucursal = oportunidad.NombreSubcodigo,
                         puntoVenta = oportunidad.PuntoVenta,
                         subcodigo = oportunidad.Subcodigo,
                         fechaOportunidad = oportunidad.FechaOportunidad.ToString("dd/MM/yyyy"),

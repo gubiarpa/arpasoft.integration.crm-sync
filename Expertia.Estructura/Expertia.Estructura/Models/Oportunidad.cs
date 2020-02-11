@@ -12,7 +12,7 @@ namespace Expertia.Estructura.Models
         public string DkCuenta { get; set; }
         public string UnidadNegocio { get; set; }
         public string Sucursal { get; set; }
-        public string Suc { get; set; }
+        public string NombreSubcodigo { get; set; }
         public string PuntoVenta { get; set; }
         public string Subcodigo { get; set; }
         public DateTime FechaOportunidad { get; set; }
