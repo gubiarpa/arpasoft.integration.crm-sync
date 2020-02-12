@@ -55,7 +55,9 @@ namespace Expertia.Estructura.Controllers
                         /// Envío de CuentaPTA a Salesforce
                         cuentaPta.UnidadNegocio = unidadNegocio.Descripcion;
                         cuentaPta.CodigoError = cuentaPta.MensajeError = string.Empty;
-                        var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaPta.ToSalesforceEntity(), true, token);
+                        var cuentaSf = cuentaPta.ToSalesforceEntity();
+                        QuickLog(cuentaSf, "body_request.json", "Cuenta");
+                        var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaSf, true, token);
                         if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
                         {
                             dynamic jsonReponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaPta.Content);
