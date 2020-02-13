@@ -46,7 +46,9 @@ namespace Expertia.Estructura.Controllers
                 if (cuentasPtas == null || cuentasPtas.ToList().Count.Equals(0)) return Ok(cuentasPtas);
 
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
+                var authSf = RestBase.GetToken();
+                var token = authSf[OutParameter.SF_Token].ToString();
+                var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 foreach (var cuentaPta in cuentasPtas)
                 {
@@ -57,7 +59,7 @@ namespace Expertia.Estructura.Controllers
                         cuentaPta.CodigoError = cuentaPta.MensajeError = string.Empty;
                         var cuentaSf = cuentaPta.ToSalesforceEntity();
                         QuickLog(cuentaSf, "body_request.json", "Cuenta");
-                        var responseCuentaPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaSf, true, token);
+                        var responseCuentaPta = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaSf, true, token);
                         if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
                         {
                             dynamic jsonReponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaPta.Content);

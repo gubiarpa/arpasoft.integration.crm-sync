@@ -194,7 +194,6 @@ namespace Expertia.Estructura.Utils
         #region SalesforceRest
         /// Server
         public const string AuthServer = "AUTH_SERVER";
-        public const string CrmServer = "CRM_SERVER";
         /// Methods
         public const string AuthMethod = "AUTH_METHODNAME";
         public const string SubcodigoMethod = "SUBCODIGO_METHODNAME";
@@ -269,6 +268,9 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF";
         public const string SF_IdCuenta = "ID_CUENTA_SF";
         public const string SF_IdContacto = "ID_CONTACTO_SF";
+
+        public const string SF_Token = "TOKEN";
+        public const string SF_UrlAuth = "URL_AUTHORIZED";
         #endregion
     }
     #endregion
