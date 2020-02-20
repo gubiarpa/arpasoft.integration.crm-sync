@@ -163,6 +163,7 @@
     <Compile Include="Controllers\CuentaPtaController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\OportunidadController.cs" />
+    <Compile Include="Controllers\OportunidadRetailController.cs" />
     <Compile Include="Controllers\RegionCuentaController.cs" />
     <Compile Include="Controllers\SubcodigoController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
