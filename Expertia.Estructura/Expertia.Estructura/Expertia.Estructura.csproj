@@ -153,6 +153,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\CotizacionJYController.cs" />
     <Compile Include="Controllers\FileCTController.cs" />
     <Compile Include="Controllers\Behavior\IClientFeatures.cs" />
     <Compile Include="Controllers\ContactoPtaController.cs" />
