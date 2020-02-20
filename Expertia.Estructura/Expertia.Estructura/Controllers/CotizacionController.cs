@@ -201,6 +201,12 @@ namespace Expertia.Estructura.Controllers
         {
             switch (unidadNegocioKey)
             {
+                case UnidadNegocioKeys.CondorTravel:
+                case UnidadNegocioKeys.CondorTravel_CL:
+                case UnidadNegocioKeys.CondorTravel_BR:
+                case UnidadNegocioKeys.CondorTravel_EC:
+                    _cotizacionRepository_CT = new Cotizacion_CT_Repository(unidadNegocioKey);
+                    break;
                 case UnidadNegocioKeys.DestinosMundiales:
                     _cotizacionRepository_DM = new Cotizacion_DM_Repository(UnidadNegocioKeys.DestinosMundiales);
                     break;
