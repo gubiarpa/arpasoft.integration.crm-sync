@@ -51,7 +51,9 @@ namespace Expertia.Estructura.Controllers
                 if (agenciasPnrs == null || agenciasPnrs.ToList().Count.Equals(0)) return Ok(agenciasPnrs);
 
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
+                var authSf = RestBase.GetToken();
+                var token = authSf[OutParameter.SF_Token].ToString();
+                var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// Procesamos los Files y Boletos de cada Agencia PNR
                 foreach (var agenciaPnr in agenciasPnrs)
@@ -61,7 +63,7 @@ namespace Expertia.Estructura.Controllers
 
                     agenciaPnr.CodigoError = agenciaPnr.MensajeError = string.Empty;
                     if (string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
-                        SendToSalesforce(agenciaPnr, token);
+                        SendToSalesforce(agenciaPnr, token, crmServer);
 
                     /// III. Envío de Files, Boletos a Salesforce
                     if (!string.IsNullOrEmpty(agenciaPnr.IdOportunidad))
@@ -76,8 +78,8 @@ namespace Expertia.Estructura.Controllers
                             try
                             {
                                 /// a. Envío a Salesforce
-                                SendToSalesforce(file, token);
-                                if (EvaluateRetry(file)) SendToSalesforce(file, token);
+                                SendToSalesforce(file, token, crmServer);
+                                if (EvaluateRetry(file)) SendToSalesforce(file, token, crmServer);
 
                                 /// b. Resultado a BD
                                 var operFileUpdate = _fileRepository.UpdateFile(file);
@@ -95,8 +97,8 @@ namespace Expertia.Estructura.Controllers
                             try
                             {
                                 /// a. Envío a Salesforce
-                                SendToSalesforce(boleto, token);
-                                if (EvaluateRetry(boleto)) SendToSalesforce(boleto, token);
+                                SendToSalesforce(boleto, token, crmServer);
+                                if (EvaluateRetry(boleto)) SendToSalesforce(boleto, token, crmServer);
 
                                 /// b. Resultado a BD
                                 var operBoletoUpdate = _fileRepository.UpdateBoleto(boleto);
@@ -129,12 +131,12 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region Send
-        private void SendToSalesforce(AgenciaPnr agenciaPnr, string token)
+        private void SendToSalesforce(AgenciaPnr agenciaPnr, string token, string crmServer)
         {
             try
             {
                 var agenciaPnrSf = ToSalesforceEntity(agenciaPnr);
-                var responsePnr = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
+                var responsePnr = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.PnrMethod, Method.POST, agenciaPnrSf, true, token);
                 if (responsePnr.StatusCode.Equals(HttpStatusCode.OK))
                 {
                     dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePnr.Content);
@@ -155,12 +157,12 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        private void SendToSalesforce(File file, string token)
+        private void SendToSalesforce(File file, string token, string crmServer)
         {
             try
             {
                 var fileSf = ToSalesforceEntity(file);
-                var responseFile = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.FileMethod, Method.POST, fileSf, true, token);
+                var responseFile = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileMethod, Method.POST, fileSf, true, token);
                 if (responseFile.StatusCode.Equals(HttpStatusCode.OK))
                 {
                     dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseFile.Content);
@@ -174,10 +176,10 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        private void SendToSalesforce(Boleto boleto, string token)
+        private void SendToSalesforce(Boleto boleto, string token, string crmServer)
         {
             var boletoSf = ToSalesforceEntity(boleto);
-            var responseBoleto = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.BoletoMethod, Method.POST, boletoSf, true, token);
+            var responseBoleto = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.BoletoMethod, Method.POST, boletoSf, true, token);
             if (responseBoleto.StatusCode.Equals(HttpStatusCode.OK))
             {
                 JsonManager.LoadText(responseBoleto.Content);

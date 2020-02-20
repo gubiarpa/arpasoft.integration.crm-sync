@@ -40,7 +40,9 @@ namespace Expertia.Estructura.Controllers
                 if (contactoPtaList == null || contactoPtaList.ToList().Count.Equals(0)) return Ok(contactoPtaList);
 
                 /// Obtiene Token de envío a Salesforce
-                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
+                var authSf = RestBase.GetToken();
+                var token = authSf[OutParameter.SF_Token].ToString();
+                var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// Por cada Contacto...
                 foreach (var contactoPta in contactoPtaList)
@@ -53,7 +55,7 @@ namespace Expertia.Estructura.Controllers
                             contactoPta.CodigoError = contactoPta.MensajeError = string.Empty;
 
                             //var contactoPtaSf = ToSalesforceEntity(contactoPta);
-                            var responseContactoPta = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.ContactoPtaMethod, Method.POST, contactoPta.ToSalesforceEntity(), true, token);
+                            var responseContactoPta = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.ContactoPtaMethod, Method.POST, contactoPta.ToSalesforceEntity(), true, token);
                             if (responseContactoPta.StatusCode.Equals(HttpStatusCode.OK))
                             {
                                 dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseContactoPta.Content);

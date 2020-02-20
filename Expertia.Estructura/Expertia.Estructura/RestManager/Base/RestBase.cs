@@ -7,11 +7,17 @@ namespace Expertia.Estructura.RestManager.Base
 {
     public static class RestBase
     {
-        #region Methods
-        public static string GetToken(string serverName, string methodName, Method methodType = Method.POST)
+        #region AuthMethods
+        public static Operation GetToken()
         {
             try
             {
+                var operation = new Operation();
+                
+                var serverName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthServer);
+                var methodName = ConfigAccess.GetValueInAppSettings(SalesforceKeys.AuthMethod);
+                var methodType = Method.POST;
+
                 if (!int.TryParse(ConfigAccess.GetValueInAppSettings(SecurityKeys.AuthTimeoutKey), out int authTimeout)) authTimeout = 0;
                 var client = new RestClient(serverName) { Timeout = authTimeout };
                 ServicePointManager.Expect100Continue = true;
@@ -29,23 +35,26 @@ namespace Expertia.Estructura.RestManager.Base
                 request.AddParameter("client_secret", sf_auth_clientsecret);
                 request.AddParameter("username", sf_authusername);
                 request.AddParameter("password", sf_authpassword);
+
                 var response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK && response.ErrorMessage != null) throw new Exception(response.ErrorMessage);
+                
                 var content = response.Content;
-                JsonManager.LoadText(content);
-                return JsonManager.GetSetting("access_token");
+                JsonManager.LoadText(content); // Obtiene el json de response
+
+                operation[OutParameter.SF_Token] = JsonManager.GetSetting("access_token"); // Obtiene el Token
+                operation[OutParameter.SF_UrlAuth] = JsonManager.GetSetting("instance_url"); // Obtiene el URL de la API de Salesforce
+
+                return operation;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+        #endregion
 
-        public static string GetTokenByKey(string serverNameKey, string methodNameKey, Method methodType = Method.POST)
-        {
-            return GetToken(ConfigAccess.GetValueInAppSettings(serverNameKey), ConfigAccess.GetValueInAppSettings(methodNameKey), methodType);
-        }
-
+        #region FunctionalMethods
         public static IRestResponse Execute(string serverName, string methodName, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "", int timeout = -1)
         {
             try
@@ -62,11 +71,13 @@ namespace Expertia.Estructura.RestManager.Base
             }
         }
 
-        public static IRestResponse ExecuteByKey(string serverNameKey, string methodNameKey, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "")
+        public static IRestResponse ExecuteByKeyWithServer(string serverName, string methodNameKey, Method methodType = Method.POST, object body = null, bool isAuth = false, string token = "")
         {
+            var methodName = ConfigAccess.GetValueInAppSettings(methodNameKey);
+
             return Execute(
-                ConfigAccess.GetValueInAppSettings(serverNameKey),
-                ConfigAccess.GetValueInAppSettings(methodNameKey),
+                serverName,
+                methodName,
                 methodType,
                 body,
                 isAuth,

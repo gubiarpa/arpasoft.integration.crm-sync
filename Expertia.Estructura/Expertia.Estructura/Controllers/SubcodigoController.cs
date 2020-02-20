@@ -108,14 +108,16 @@ namespace Expertia.Estructura.Controllers
                 if (subcodigos == null || subcodigos.ToList().Count.Equals(0)) return Ok();
 
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod);
+                var authSf = RestBase.GetToken();
+                var token = authSf[OutParameter.SF_Token].ToString();
+                var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 foreach (var subcodigo in subcodigos)
                 {
                     try
                     {
                         /// Envío de subcodigo a Salesforce
-                        var responseSubcodigo = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigo.ToSalesforceEntity(), true, token);
+                        var responseSubcodigo = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.SubcodigoMethod, Method.POST, subcodigo.ToSalesforceEntity(), true, token);
                         if (responseSubcodigo.StatusCode.Equals(HttpStatusCode.OK))
                         {
                             dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseSubcodigo.Content);

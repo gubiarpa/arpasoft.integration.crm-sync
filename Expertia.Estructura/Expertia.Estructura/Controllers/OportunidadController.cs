@@ -47,7 +47,9 @@ namespace Expertia.Estructura.Controllers
                 if (oportunidades == null || oportunidades.ToList().Count.Equals(0)) return Ok(oportunidades);
 
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
+                var authSf = RestBase.GetToken();
+                var token = authSf[OutParameter.SF_Token].ToString();
+                var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 foreach (var oportunidad in oportunidades)
                 {
@@ -58,7 +60,7 @@ namespace Expertia.Estructura.Controllers
 
                         var oportunidad_SF = oportunidad.ToSalesforceEntity();
                         QuickLog(oportunidad_SF, "body_request.json", "Oportunidad", true); /// ♫ Trace
-                        var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidad_SF, true, token);
+                        var responseOportunidad = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.OportunidadMethod, Method.POST, oportunidad_SF, true, token);
                         if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                         {
                             dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);

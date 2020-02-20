@@ -42,14 +42,16 @@ namespace Expertia.Estructura.Controllers
                     cotizaciones_SF.Add(cotizacion.ToSalesforceEntity());
 
                 /// Obtiene Token para envío a Salesforce
-                var token = RestBase.GetTokenByKey(SalesforceKeys.AuthServer, SalesforceKeys.AuthMethod, Method.POST);
+                var authSf = RestBase.GetToken();
+                var token = authSf[OutParameter.SF_Token].ToString();
+                var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// II. Enviar Oportunidad a Salesforce
                 try
                 {
                     var objEnvio = new { datos = cotizaciones_SF };
                     QuickLog(objEnvio, "body_request.json", "Cotizacion"); /// ♫ Trace
-                    var responseOportunidad = RestBase.ExecuteByKey(SalesforceKeys.CrmServer, SalesforceKeys.CotizacionListMethod, Method.POST, objEnvio, true, token);
+                    var responseOportunidad = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CotizacionListMethod, Method.POST, objEnvio, true, token);
                     if (responseOportunidad.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidad.Content);
