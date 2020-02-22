@@ -10,6 +10,8 @@ using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers.Base
 {
+    public abstract class BaseController : BaseController<object> { }
+
     [BasicAuthentication]
     public abstract class BaseController<T> : ApiController
     {

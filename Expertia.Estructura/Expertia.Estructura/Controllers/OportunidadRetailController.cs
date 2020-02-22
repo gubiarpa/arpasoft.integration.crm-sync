@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace Expertia.Estructura.Controllers
 {
-    public class OportunidadRetailController : BaseController<object>
+    public class OportunidadRetailController : BaseController
     {
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
