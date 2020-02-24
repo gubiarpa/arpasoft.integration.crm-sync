@@ -38,6 +38,7 @@ namespace Expertia.Estructura.Utils
         public const string CuentaB2B = "api/cuentab2b";
         public const string CuentaB2C = "api/cuentab2c";
         public const string Cotizacion = "api/cotizacion";
+        public const string CotizacionJourneyou = "api/cotizacionjyou";
         public const string Subcodigo = "api/subcodigo";
         public const string File = "api/file";
         public const string Oportunidad = "api/oportunidad";
