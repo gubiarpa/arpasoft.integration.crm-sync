@@ -21,6 +21,7 @@ namespace Expertia.Estructura.Controllers
     public class CotizacionController : BaseController<Cotizacion>
     {
         #region Properties
+        private ICotizacion_CT _cotizacionRepository_CT;
         private ICotizacion_DM _cotizacionRepository_DM;
         #endregion
 
