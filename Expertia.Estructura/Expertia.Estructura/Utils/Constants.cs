@@ -46,6 +46,8 @@ namespace Expertia.Estructura.Utils
         public const string ContactoPta = "api/contactopta";
         public const string RegionCuenta = "api/regioncuenta";
         public const string Ventas = "api/ventas";
+        public const string FileRetail = "api/fileretail";
+        public const string FacturacionFileRetail = "api/facturacionfileretail";
     }
 
     public enum ActionMethod

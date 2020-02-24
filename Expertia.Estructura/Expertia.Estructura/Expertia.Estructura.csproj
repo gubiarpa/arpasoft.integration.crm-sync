@@ -154,6 +154,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\CotizacionJYController.cs" />
+    <Compile Include="Controllers\FacturacionFileRetailController.cs" />
     <Compile Include="Controllers\FileCTController.cs" />
     <Compile Include="Controllers\Behavior\IClientFeatures.cs" />
     <Compile Include="Controllers\ContactoPtaController.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Controllers\ContactoController.cs" />
     <Compile Include="Controllers\CuentaPtaController.cs" />
     <Compile Include="Controllers\FileController.cs" />
+    <Compile Include="Controllers\FileRetailController.cs" />
     <Compile Include="Controllers\OportunidadController.cs" />
     <Compile Include="Controllers\OportunidadRetailController.cs" />
     <Compile Include="Controllers\RegionCuentaController.cs" />
@@ -192,6 +194,7 @@
     <Compile Include="Models\Auxiliar\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
     <Compile Include="Models\CuentaPta.cs" />
+    <Compile Include="Models\FacturacionFileRetail.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\FileCT.cs" />
     <Compile Include="Models\Foreign\ForeignKey.cs" />
