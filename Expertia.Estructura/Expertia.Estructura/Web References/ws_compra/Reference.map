@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://ti-qa-webservices.webfarefinder.com/gnm/ws_compra.asmx?wsdl" filename="ws_compra.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://ti-qa-webservices.webfarefinder.com/gnm/ws_compra.asmx?disco" filename="ws_compra.disco" />
+  </Results>
+</DiscoveryClientResultsFile>
