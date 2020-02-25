@@ -204,7 +204,7 @@
     <Compile Include="Models\Auxiliar\Sitio.cs" />
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Oportunidad.cs" />
-    <Compile Include="Models\OportunidadRetail.cs" />
+    <Compile Include="Models\Retail\OportunidadRetail.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />
     <Compile Include="Models\Retail\Personal.cs" />
