@@ -207,6 +207,7 @@
     <Compile Include="Models\OportunidadRetail.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />
+    <Compile Include="Models\Retail\Personal.cs" />
     <Compile Include="Models\Subcodigo.cs" />
     <Compile Include="Models\Ventas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
