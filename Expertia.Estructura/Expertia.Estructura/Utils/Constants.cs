@@ -48,6 +48,7 @@ namespace Expertia.Estructura.Utils
         public const string Ventas = "api/ventas";
         public const string FileRetail = "api/fileretail";
         public const string FacturacionFileRetail = "api/facturacionfileretail";
+        public const string PedidoRetail = "api/pedidoretail";
     }
 
     public enum ActionMethod
@@ -193,6 +194,17 @@ namespace Expertia.Estructura.Utils
         ///Facturacion file retail
         public const string AW_Ins_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_ACTUALIZAR_DATOSFACTURACION";
         public const string AW_Upd_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_DATOSFACTURACION";
+
+        /// Pedido
+        public const string AW_Create_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_INS_PEDIDO";
+        public const string AW_Rpta_SafetyPay = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_RPTA_PAGO_SAFETYPAY";
+        public const string AW_Get_Monedas_PedidoSF = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_MONEDAS_PAGO_SAFETYPAY";
+        public const string AW_Insert_FormaPago_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_INS_FORMA_PAGO_PEDIDO";
+        public const string AW_Update_FechaExpira_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_UPD_FECHAEXPIRA_PEDIDO";
+        public const string AW_Get_Mail_Web = "APPWEBS.PKG_MAIL_LWEB.SP_MW_OBTIENE_X_ID";
+        public const string AW_Get_Datos_Usuario = "APPWEBS.PKG_PERSONAL.SP_OBTIENE_DATOS_X_USUARIO";
+        public const string AW_Insert_Post_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_POST_COT";
+        public const string AW_Update_Estado_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_EST_COT";
         #endregion
     }
 
@@ -240,6 +252,7 @@ namespace Expertia.Estructura.Utils
         public const string IdActualizados = "P_ACTUALIZADOS";
         public const string NumId = "pNumId_out";
         public const string IdDatosFactura = "ID_DATOS_FACTURA";
+        public const string IdPedido = "pNumIdNewPedido_out";
         #endregion
 
         #region Cursors
@@ -255,6 +268,10 @@ namespace Expertia.Estructura.Utils
         public const string CursorCuentaPta = "P_CLIENTE";
         public const string CursorContactoPta = "P_CONTACTO";
         public const string CursorVentas = "P_CUR_RESU_VENTAS";
+        public const string CursorSafetyPay = "pCurResult_out";
+        public const string CursorMonedasPedidoSF = "pCurResult_out";
+        public const string CursorMailWeb = "pCurResult_out";
+        public const string CursorDtosPersonal = "pCurResult_out";
         #endregion
 
         #region Fields
@@ -269,6 +286,7 @@ namespace Expertia.Estructura.Utils
         public const string NombreVendedorCounter = "P_NOMBRE_VENDEDOR_COUNTER";
         public const string NombreVendedorCotizador = "P_NOMBRE_VENDEDOR_COTIZADOR";
         public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
+        public const string NumeroIdPostSRV = "pNumIdNewPost_out";
         #endregion
 
         #region SalesforceParameters
@@ -356,6 +374,60 @@ namespace Expertia.Estructura.Utils
         public const string FileNoExiste = "F2";
         public const string BoletoYaExiste = "B1";
         public const string BoletoNoExiste = "B2";
+    }
+
+    public static class Constantes_SRV
+    {
+        public const string ID_TIPO_POST_SRV_USUARIO = "2";
+
+        #region Estados
+        public const short ID_ESTADO_COT_PENDIENTE_PAGO = 11;
+        #endregion
+    }
+
+    public static class Constantes_Pedido
+    {
+        public const string ID_TIPO_PEDIDO_OTROS = "OTR";
+        public const int ID_CANAL_VENTA_CONTACT_CENTER = 94;
+        public const Int16 ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;
+        public const string CODE_FPAGO_GENERAL = "SF";
+        public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";
+    }
+
+    public static class Constantes_SafetyPay
+    {
+        public const string CurrencyUSD = "USD";
+        public const string CodeSafetyPayOnline = "SF";
+        public const int ID_MAIL_SOLICITUD_PAGO_SERVICIO_SF = 78;
+    }
+
+    public static class Webs_Cid
+    {
+        public const int DM_WEB_ID = 4;
+        public const int NM_WEB_ID = 7;
+        public const int ID_WEB_IA = 3;
+        public const int ID_WEB_NMV_RECEPTIVO = 26;
+        public const int ID_WEB_WEBFAREFINDER = 39;
+    }
+
+    public static class Oficina
+    {
+        public const int ID_OFI_NMV = 23;
+        public const int ID_OFI_NMVCOM = 62;
+    }
+
+    public static class Departamento
+    {
+        public const int ID_DEP_INTERNO = 52;
+        public const int ID_DEP_RECEPTIVO = 10;
+        public const int ID_DEP_OPERACIONES = 20;
+        public const int ID_DEP_COUNTER = 6;
+        public const int ID_DEP_SISTEMAS = 11;
+    }
+
+    public static class UtilityCorreo
+    {
+        public const string ERR_FOLDER_PATH = @"C:\InetPubNM\Webs_Intranet\wwwRootInterAgencias\";
     }
     #endregion
 

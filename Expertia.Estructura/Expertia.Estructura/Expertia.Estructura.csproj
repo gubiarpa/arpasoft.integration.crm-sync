@@ -57,6 +57,7 @@
     <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.5.0\lib\net451\Microsoft.IdentityModel.Tokens.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <HintPath>..\packages\Oracle.ManagedDataAccess.19.3.1\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
@@ -70,6 +71,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.7\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
@@ -82,6 +84,7 @@
     <Reference Include="System.Web.Http.Cors, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.7\lib\net45\System.Web.Http.Cors.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
@@ -167,6 +170,7 @@
     <Compile Include="Controllers\FileRetailController.cs" />
     <Compile Include="Controllers\OportunidadController.cs" />
     <Compile Include="Controllers\OportunidadRetailController.cs" />
+    <Compile Include="Controllers\PedidoRetailController.cs" />
     <Compile Include="Controllers\RegionCuentaController.cs" />
     <Compile Include="Controllers\SubcodigoController.cs" />
     <Compile Include="Controllers\VentaController.cs" />
@@ -207,20 +211,33 @@
     <Compile Include="Models\Retail\OportunidadRetail.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />
+    <Compile Include="Models\Retail\CorreoNM.cs" />
+    <Compile Include="Models\Retail\Pedido.cs" />
     <Compile Include="Models\Retail\Personal.cs" />
+    <Compile Include="Models\Retail\SRV.cs" />
+    <Compile Include="Models\SafetyPay\SafetyPay.cs" />
     <Compile Include="Models\Subcodigo.cs" />
     <Compile Include="Models\Ventas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Repository\AppWebs\ContactoPta_AW_Repository.cs" />
     <Compile Include="Repository\AppWebs\Oportunidad_AW_Repository.cs" />
     <Compile Include="Repository\Base\OracleBase.cs" />
     <Compile Include="Repository\Behavior\IContactoPtaRepository.cs" />
     <Compile Include="Repository\Behavior\ICotizacion.cs" />
+    <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />
+    <Compile Include="Repository\Behavior\IDatosUsuario.cs" />
+    <Compile Include="Repository\Behavior\IEnviarCorreo.cs" />
     <Compile Include="Repository\Behavior\IFileCT.cs" />
     <Compile Include="Repository\Behavior\IFileRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadRepository.cs" />
+    <Compile Include="Repository\Behavior\IPedidoRepository.cs" />
     <Compile Include="Repository\Behavior\IRegionCuentaRepository.cs" />
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
     <Compile Include="Repository\Behavior\ISubcodigoRepository.cs" />
@@ -234,13 +251,17 @@
     <Compile Include="Repository\DestinosMundiales\Contacto_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Cotizacion_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\CuentaB2B_DM_Repository.cs" />
+    <Compile Include="Repository\General\DatosUsuario.cs" />
+    <Compile Include="Repository\General\EnviarCorreo.cs" />
     <Compile Include="Repository\InterAgencias\ContactoPta_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaB2B_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\CuentaPta_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\File_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
+    <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
+    <Compile Include="Repository\Retail\Pedido_RetailRepository.cs" />
     <Compile Include="RestManager\Base\RestBase.cs" />
     <Compile Include="RestManager\RestParse\PtaParse.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
@@ -254,10 +275,126 @@
     <Compile Include="Utils\LogFileManager.cs" />
     <Compile Include="Utils\ExtensionMethods.cs" />
     <Compile Include="Utils\Operation.cs" />
+    <Compile Include="Utils\Retail\EncriptaCadena.cs" />
+    <Compile Include="Utils\Retail\NMMail.cs" />
+    <Compile Include="Utils\Retail\UsuarioLogin.cs" />
+    <Compile Include="Web References\ws_compra\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="View\Index.html" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="Web References\ws_compra\Actualiza_DatosPedidoPagarRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\Actualiza_IdResVue_ResSeguroRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\AtributoPlanSeguro.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\CCB_ReservaDuplicadaRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\CompraAutoRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\CompraHotelRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\CompraPaqueteRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\CompraRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\CompraSeguroRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\ConsultaReservasRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\CotizacionVta.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\DatosAplicaSubvencionRs.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\DatosCompraOnline.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\DatosConfigCompraRs.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\EnvioMailServicioPagadoRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\EnvioMailServicioSRVValidadoRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\FormasPagoConfig.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\GenericBankType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\Inserta_PagoUATPRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\ItemServiceRs.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\ObtieneReservaAutoRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\ObtieneReservaHotelRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\ObtieneReservaPaqueteRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\ObtieneReservaSeguroRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\Obtiene_PedidoPagoOnlineRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\PedidoRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\PermitePagoTarjetaRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\RangoSubvencion.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web References\ws_compra\ReservaFromGDS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\RptaPagoSafetyPay.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\SeguroOnlineCobertura.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\SeguroOnlineRs.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_compra\UsuarioAgencia.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <None Include="Web References\ws_compra\ws_compra.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -266,7 +403,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\DevProfile.pubxml" />
@@ -274,6 +413,23 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\QAProfile.pubxml" />
     <None Include="Properties\PublishProfiles\QAPublising.pubxml" />
+    <None Include="Web References\ws_compra\ws_compra.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://ti-qa-webservices.webfarefinder.com/gnm/ws_compra.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ws_compra\</RelPath>
+      <UpdateFromURL>http://ti-qa-webservices.webfarefinder.com/gnm/ws_compra.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Expertia_Estructura_ws_compra_ws_compra</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
