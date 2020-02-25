@@ -5,10 +5,10 @@ using System.Web;
 
 namespace Expertia.Estructura.Models
 {
-    public class FacturacionFileRetailReq
+    public class FactFileRetailReq
     {
-        private string IdDatosFacturacion { get; set; }
-        private string Estado { get; set; }
+        public int IdDatosFacturacion { get; set; }
+        public string Estado { get; set; }
         public string DK { get; set; }
         public string SubCodigo { get; set; }
         public string Ejecutiva { get; set; }
@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Models
         public string RUC { get; set; }
         public string RAZON { get; set; }
         public string TipoDocumento { get; set; }
-        private string Documento { get; set; }
+        public string Documento { get; set; }
         public string Nombre { get; set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidoMateno { get; set; }
@@ -32,8 +32,8 @@ namespace Expertia.Estructura.Models
         public string Banco { get; set; }
         public string CantidadMillas { get; set; }
         public string MontoMillas { get; set; }
-        private string Observacion { get; set; }
-        private string Doc_cid { get; set; }
+        public string Observacion { get; set; }
+        public string Doc_cid { get; set; }
         private string Descripcion_Doc_Cid { get; set; }
         public List<ReciboDetalle> ReciboDetalle { get; set; }
         public List<TarifaDetalle> TarifaDetalle { get; set; }
@@ -90,7 +90,7 @@ namespace Expertia.Estructura.Models
         public int IdOportunidad_SF { get; set; }
         public int IdCotSrv_SF { get; set; }
     }
-    public class FacturacionFileRetailRes
+    public class FactFileRetailRes
     {
     }
 }
