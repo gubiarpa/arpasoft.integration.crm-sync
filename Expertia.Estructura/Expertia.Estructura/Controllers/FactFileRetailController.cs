@@ -11,7 +11,7 @@ using System.Web.Http;
 namespace Expertia.Estructura.Controllers
 {
     [RoutePrefix(RoutePrefix.FacturacionFileRetail)]
-    public class FacturacionFileRetailController : BaseController
+    public class FactFileRetailController : BaseController
     {
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
@@ -20,7 +20,7 @@ namespace Expertia.Estructura.Controllers
 
         #region PublicMethod
         [Route(RouteAction.Create)]
-        public IHttpActionResult Create(FacturacionFileRetailReq models)
+        public IHttpActionResult Create(FactFileRetailReq models)
         {
             string result = "";
 

@@ -189,6 +189,10 @@ namespace Expertia.Estructura.Utils
         /// Contacto PTA
         public const string AW_Read_ContactoPta = "APPWEBS.CRM_PKG.SP_LISTAR_CONTACTO";
         public const string AW_Update_ContactoPta = "APPWEBS.CRM_PKG.SP_ACTUALIZAR_ENVIO_CONTACTO";
+
+        ///Facturacion file retail
+        public const string AW_Ins_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_ACTUALIZAR_DATOSFACTURACION";
+        public const string AW_Upd_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_DATOSFACTURACION";
         #endregion
     }
 
@@ -234,6 +238,8 @@ namespace Expertia.Estructura.Utils
         public const string IdCotizacion = "P_ID_COTIZACION";
         public const string IdSubcodigo = "P_ID_SUBCODIGO";
         public const string IdActualizados = "P_ACTUALIZADOS";
+        public const string NumId = "pNumId_out";
+        public const string IdDatosFactura = "ID_DATOS_FACTURA";
         #endregion
 
         #region Cursors

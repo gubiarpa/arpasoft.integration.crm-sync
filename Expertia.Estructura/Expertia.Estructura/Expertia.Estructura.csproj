@@ -154,7 +154,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\CotizacionJYController.cs" />
-    <Compile Include="Controllers\FacturacionFileRetailController.cs" />
+    <Compile Include="Controllers\FactFileRetailController.cs" />
     <Compile Include="Controllers\FileCTController.cs" />
     <Compile Include="Controllers\Behavior\IClientFeatures.cs" />
     <Compile Include="Controllers\ContactoPtaController.cs" />
@@ -194,7 +194,7 @@
     <Compile Include="Models\Auxiliar\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
     <Compile Include="Models\CuentaPta.cs" />
-    <Compile Include="Models\FacturacionFileRetail.cs" />
+    <Compile Include="Models\FactFileRetail.cs" />
     <Compile Include="Models\File.cs" />
     <Compile Include="Models\FileCT.cs" />
     <Compile Include="Models\Foreign\ForeignKey.cs" />
@@ -240,6 +240,7 @@
     <Compile Include="Repository\InterAgencias\File_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
+    <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
     <Compile Include="RestManager\Base\RestBase.cs" />
     <Compile Include="RestManager\RestParse\PtaParse.cs" />
     <Compile Include="Utils\Behavior\IFileIO.cs" />
