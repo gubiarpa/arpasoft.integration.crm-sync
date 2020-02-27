@@ -29,5 +29,6 @@ namespace Expertia.Estructura.Repository.Behavior
         void _Update_MontoEstimadoFileBy_IdCotVta(int pIntIdCot, double pDblMontoEstimadoFile);
         void _Insert_FechaSalida_Cot(int pIntIdCot, string pStrFecSalida, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi);
 
+        CotizacionVta Get_Datos_CotizacionVta(int IdCotSRV);
     }
 }

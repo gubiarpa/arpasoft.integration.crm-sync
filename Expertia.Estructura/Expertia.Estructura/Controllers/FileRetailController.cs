@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Expertia.Estructura.Models.Behavior;
+using System.Collections;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -19,6 +20,7 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties               
         private IDatosUsuario _datosUsuario;
+        private ICotizacionSRV_Repository _CotizacionSRV_Repository;        
         #endregion
 
         #region Constructor
@@ -39,17 +41,87 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult AsociateFile(AssociateFile FileAssociate)
         {
             AssociateFileRS _responseAsociate = new AssociateFileRS();
+            CotizacionVta DtsCotizacionVta = new CotizacionVta();
             UsuarioLogin DtsUsuarioLogin = null;
 
-            string ErrorAsociate = string.Empty;
+            List<FilePTACotVta> lstFilesPTACotVta = null;
+            List<FilePTACotVta> lstFilesPTAOld = null;
 
+            Nullable<double> dblMontoEstimadoFile = null;
+
+            ArrayList lstFechasCotVta = new ArrayList(); /*Duda*/
+            bool bolCambioEstado = false; /*Si luego aplica el cambio de estado agregarlo al RQ*/
+
+            /*Datos que se quitaran, solo lo agregamos para tener una mejor vision*/
+            //bool bolEsCounterAdministrativo = objUsuarioSession.EsCounterAdminSRV;
+
+            string ErrorAsociate = string.Empty;
             try
             {
                 /*Validaciones*/
                 validacionAssociate(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin);
                 if (string.IsNullOrEmpty(_responseAsociate.CodigoError) == false) return Ok(_responseAsociate);
 
+                /*Obtenemos los datos del SRV, etc*/
+                DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV_SF);
+
                 /*Realizamos la asociacion*/
+                if(bolCambioEstado == true) { } else{/*Logica si tiene asociado un servicio*/}
+                if (DtsCotizacionVta.IdEstado == Convert.ToInt16(ENUM_ESTADOS_COT_VTA.Facturado))
+                {
+                    lstFilesPTACotVta = new List<FilePTACotVta>();
+                    FilePTACotVta _FilePTACotVta = null;
+
+                    foreach (FileSRV fileSRV in FileAssociate.LstFiles)
+                    {
+                        if (!string.IsNullOrEmpty(fileSRV.IdFilePTA.ToString()))
+                        {
+                            _FilePTACotVta = new FilePTACotVta();
+                            _FilePTACotVta.IdCot = FileAssociate.idCotSRV_SF;
+                            _FilePTACotVta.IdSuc = Convert.ToInt16(fileSRV.Sucursal);
+                            _FilePTACotVta.IdFilePTA = fileSRV.IdFilePTA;
+                            _FilePTACotVta.ImporteFacturado = fileSRV.ImporteFact;
+                            _FilePTACotVta.Moneda = fileSRV.Moneda;
+                            lstFilesPTACotVta.Add(_FilePTACotVta);
+                        }
+                    }
+                    /*Logica si tiene asociado un servicio*/
+
+                    /*Obtenemos los Files anteriores (Si los tiene)*/
+                    lstFilesPTAOld = _CotizacionSRV_Repository._SelectFilesPTABy_IdCot(FileAssociate.idCotSRV_SF, 0, 0, 0);
+
+                    /*Insertamos el POST*/
+                    string strTextoPost = "<span>Se asocio los files a la cotizacion</span>";                    
+                    Post_SRV _PostSRV_RQ = new Post_SRV()
+                    {
+                        IdCot = FileAssociate.idCotSRV_SF,
+                        TipoPost = Convert.ToInt16(Constantes_SRV.ID_TIPO_POST_SRV_USUARIO),
+                        TextoPost = strTextoPost,
+                        IPUsuCrea = "127.0.0.0",
+                        LoginUsuCrea = DtsUsuarioLogin.LoginUsuario,
+                        IdUsuWeb = DtsUsuarioLogin.IdUsuario,
+                        IdDep = DtsUsuarioLogin.IdDep,
+                        IdOfi = DtsUsuarioLogin.IdOfi,
+                        Archivos = null,
+                        LstFilesPTA = lstFilesPTACotVta,
+                        IdEstado = DtsCotizacionVta.IdEstado,
+                        CambioEstado = bolCambioEstado,
+                        LstFechasCotVta = null,
+                        EsAutomatico = false,
+                        ArchivoMail = null,
+                        EsCounterAdmin = DtsUsuarioLogin.EsCounterAdminSRV,
+                        IdUsuWebCounterCrea = (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : DtsUsuarioLogin.IdUsuario),
+                        IdOfiCounterCrea = (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi),
+                        IdDepCounterCrea = (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep),
+                        EsUrgenteEmision = null,
+                        FecPlazoEmision = null,
+                        IdMotivoNoCompro = null,
+                        OtroMotivoNoCompro = null,
+                        MontoEstimadoFile = null
+                    };
+                    _CotizacionSRV_Repository.ProcesosPostCotizacion(_PostSRV_RQ);
+
+                }
 
                 return Ok(_responseAsociate);
             }
@@ -117,6 +189,10 @@ namespace Expertia.Estructura.Controllers
                     if (string.IsNullOrEmpty(fileSRV.Cliente))
                     {
                         mensajeError += "Envie el cliente del registro " + posListFile + " de la lista de files a asociar|";
+                    }
+                    if (string.IsNullOrEmpty(fileSRV.Moneda))
+                    {
+                        mensajeError += "Envie la moneda del registro " + posListFile + " de la lista de files a asociar|";
                     }
 
                     if (string.IsNullOrEmpty(mensajeError) == false) { break; }

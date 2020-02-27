@@ -16,6 +16,30 @@ namespace Expertia.Estructura.Repository.AppWebs
         }
         #endregion
 
+        public CotizacionVta Get_Datos_CotizacionVta(int IdCotSRV)
+        {
+            try
+            {
+                CotizacionVta _CotizacionVta = new CotizacionVta();
+
+                #region Parameter
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, IdCotSRV, ParameterDirection.Input);
+                AddParameter(OutParameter.CursorDtosCotizacion, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+                #endregion
+
+                #region Invoke                
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_Datos_Cotizacion);
+                _CotizacionVta = FillDtsCotizacion(GetDtParameter(OutParameter.CursorDtosCotizacion));                
+                #endregion
+
+                return _CotizacionVta;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public int ProcesosPostCotizacion(Post_SRV RQ_General_PostSRV)
         {
             int IdPostFin = 0;
@@ -24,6 +48,11 @@ namespace Expertia.Estructura.Repository.AppWebs
             if (RQ_General_PostSRV.CambioEstado)
             {
                 UpdateEstadoCotVTA(RQ_General_PostSRV);             
+            }
+
+            if(RQ_General_PostSRV.IdEstado == (Int16)ENUM_ESTADOS_COT_VTA.Facturado)
+            {
+
             }
 
             return IdPostFin;
@@ -487,5 +516,150 @@ namespace Expertia.Estructura.Repository.AppWebs
                 throw ex;
             }
         }
+
+        #region Auxiliares
+        private CotizacionVta FillDtsCotizacion(DataTable dt = null)
+        {
+            try
+            {
+                CotizacionVta cotizacionVta = new CotizacionVta();
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        #region Loading
+                        if(row != null)
+                        {
+                            cotizacionVta.IdCot = Convert.ToInt32(row["COT_ID"]);
+                            cotizacionVta.FechaCot = (DateTime)row["COT_FECHA"];
+                            cotizacionVta.IdModoIng = Convert.ToInt16(row["MODING_ID"]);
+                            cotizacionVta.NomModoIngreso = Convert.ToString(row["MODING_NOM"]);
+                            cotizacionVta.IdCanalVta = Convert.ToInt16(row["CANV_ID"]);
+                            cotizacionVta.NomCanalVta = Convert.ToString(row["CANV_NOM"]);                 
+                            cotizacionVta.TextoSolicitud = (row["COT_TEXT_SOL_CLI"] == null ? string.Empty : Convert.ToString(row["COT_TEXT_SOL_CLI"]));
+                            cotizacionVta.NomCompletoUsuCrea = Convert.ToString(row["COT_NOMC_USU_CREA"]);
+                            cotizacionVta.LoginUsuWeb = Convert.ToString(row["COT_LOGIN_USU_CREA"]);
+                            cotizacionVta.IdEstado = Convert.ToInt16(row["EST_ID"]);
+                            cotizacionVta.NomEstadoCot = Convert.ToString(row["EST_NOM"]);
+                            cotizacionVta.IdCliCot = Convert.ToInt32(row["CLICOT_ID"]);
+                            cotizacionVta.IdUsuWeb = Convert.ToInt32(row["USUWEB_ID_CREA"]);
+                            cotizacionVta.IdOfi = Convert.ToInt32(row["OFI_ID_USU_CREA"]);
+                            cotizacionVta.IdDep = Convert.ToInt32(row["DEP_ID_USU_CREA"]);
+                            cotizacionVta.NomOfi = Convert.ToString(row["OFI_NOM"]);
+                            cotizacionVta.NomDep = Convert.ToString(row["DEP_NOM"]);
+                            cotizacionVta.IdWeb = Convert.ToInt32(row["WEBS_CID"]);
+                            cotizacionVta.IdLang = Convert.ToInt32(row["LANG_CID"]);
+                            cotizacionVta.CantVecesFact = Convert.ToInt16(row["CANT_FACT"]);
+                            cotizacionVta.CodigoIATAPrincipal = (row["COT_IATA_PRINCIPAL"] == null ? string.Empty : Convert.ToString(row["COT_IATA_PRINCIPAL"]));                        
+                            if (row["EMPCOT_ID"] == null)
+                            {
+                                cotizacionVta.IdEmpCot = null;
+                                cotizacionVta.RazSocEmpCot = string.Empty;
+                            }
+                            else
+                            {
+                                cotizacionVta.IdEmpCot = Convert.ToInt32(row["EMPCOT_ID"]);
+                                cotizacionVta.RazSocEmpCot = Convert.ToString(row["EMPCOT_RAZ_SOC"]);
+                            }
+                            if (row["COT_DESTINOS_PREF"] != null)
+                                cotizacionVta.DestinosPref = Convert.ToString(row["COT_DESTINOS_PREF"]);
+                            if (row["COT_FEC_SAL"] != null)
+                                cotizacionVta.FecSalida = (DateTime)row["COT_FEC_SAL"];
+                            if (row["COT_FEC_REG"] != null)
+                                cotizacionVta.FecRegreso = (DateTime)row["COT_FEC_REG"];
+                            if (row["COT_CANT_ADT"] != null)
+                                cotizacionVta.CantPaxAdulto = Convert.ToInt16(row["COT_CANT_ADT"]);
+                            if (row["COT_CANT_CHD"] != null)
+                            {
+                                cotizacionVta.CantPaxNiños = Convert.ToInt16(row["COT_CANT_CHD"]);
+                            }                                
+                            cotizacionVta.EmailUsuWebCrea = Convert.ToString(row["PER_EMAIL"]);
+                            if (row["VUE_RESERVA_ID"] != null)
+                                cotizacionVta.IdReservaVuelos = Convert.ToInt32(row["VUE_RESERVA_ID"]);
+                            if (row["PAQ_RESERVA_SUC"] != null)
+                                cotizacionVta.IdSucursalReservaPaquete = Convert.ToInt16(row["PAQ_RESERVA_SUC"]);
+                            if (row["PAQ_RESERVA_ID"] != null)
+                                cotizacionVta.IdReservaPaquete = Convert.ToInt32(row["PAQ_RESERVA_ID"]);
+                            if (row["PAQ_RESERVA_TIPO"] != null)
+                                cotizacionVta.TipoPaquete = Convert.ToString(row["PAQ_RESERVA_TIPO"]);
+                            if (row["COT_FIRMA_CLI"] != null)
+                            {
+                                if (Convert.ToString(row["COT_FIRMA_CLI"]) == "1")
+                                    cotizacionVta.RequiereFirmaCliente = true;
+                                else
+                                    cotizacionVta.RequiereFirmaCliente = false;
+                            }
+                            if (row["RES_VUE_PNR_MANUAL"] != null)
+                                cotizacionVta.CodReservaVueManual = Convert.ToString(row["RES_VUE_PNR_MANUAL"]);
+                            if (row["RES_VUE_MONTO_MANUAL"] != null)
+                                cotizacionVta.MontoReservaVueManual = Convert.ToDouble(row["RES_VUE_MONTO_MANUAL"]);
+                            if (row["VEND_ID"] != null)
+                                cotizacionVta.IdVendedorPTACrea = Convert.ToString(row["VEND_ID"]);
+                            if (row["ID_MOD_COMPRA"] != null)
+                                cotizacionVta.IdModalidadCompra = Convert.ToInt16(row["ID_MOD_COMPRA"]);
+                            if (row["ES_URGENTE"] != null)
+                            {
+                                if (row["ES_URGENTE"].ToString() == "1")
+                                    cotizacionVta.EsUrgenteEmision = true;
+                                else
+                                    cotizacionVta.EsUrgenteEmision = false;
+                            }
+                            if (row["FECHA_PLAZO_EMISION"] != null)
+                                cotizacionVta.FechaPlazoEmision = (DateTime)row["FECHA_PLAZO_EMISION"];
+                            if (row["USUWEB_ID_CA"] != null)
+                                cotizacionVta.IdUsuWebCA = Convert.ToInt32(row["USUWEB_ID_CA"]);
+                            if (row["USUWEB_LOGIN_CA"] != null)
+                                cotizacionVta.LoginUsuWebCA = Convert.ToString(row["USUWEB_LOGIN_CA"]);
+                            if (row["ES_EMITIDO"] != null)
+                            {
+                                if (row["ES_EMITIDO"].ToString() == "1")
+                                    cotizacionVta.EsEmitido = true;
+                            }
+                            if (row["COMPRA_ID"] != null)
+                                cotizacionVta.IdCompra = Convert.ToInt32(row["COMPRA_ID"]);
+                            if (row["AUTO_RES_ID"] != null)
+                                cotizacionVta.IdReservaAuto = Convert.ToInt32(row["AUTO_RES_ID"]);
+                            if (row["SEGURO_RES_ID"] != null)
+                                cotizacionVta.IdReservaSeguro = Convert.ToInt32(row["SEGURO_RES_ID"]);
+                            if (row["NOM_GRUPO"] != null)
+                                cotizacionVta.NomGrupo = Convert.ToString(row["NOM_GRUPO"]);
+                            if (row["MONTO_ESTIMADO_FILE"] != null)
+                                cotizacionVta.MontoEstimadoFile = Convert.ToDouble(row["MONTO_ESTIMADO_FILE"]);
+
+                            if (row["HOTEL_RES_ID"] != null)
+                                cotizacionVta.IdReservaHotel = Convert.ToInt32(row["HOTEL_RES_ID"]);
+
+                            if (row["ES_AEREO"] != null)
+                                cotizacionVta.EsAereo = Convert.ToInt32(row["ES_AEREO"]);
+                            if (row["ID_OATENCION"] != null)
+                                cotizacionVta.IdOAtencion = Convert.ToInt32(row["ID_OATENCION"]);
+                            if (row["ID_EVENTO"] != null)
+                                cotizacionVta.IdEvento = Convert.ToInt32(row["ID_EVENTO"]);
+                            if (row["IDUSERLOGIN"] != null)
+                            {
+                                if (row["CLICOT_EMAIL"] != null)
+                                    cotizacionVta.CliCod_Mail = Convert.ToString(row["CLICOT_EMAIL"]);
+                            }
+                            if (row["ID_RESERVAMT"] != null)
+                                cotizacionVta.IdReserva2MT = Convert.ToInt32(row["ID_RESERVAMT"]);                           
+                            if (row["ES_PAQ_DINAMIC"] != null)
+                                cotizacionVta.EsPaqDinamico = Convert.ToString(row["ES_PAQ_DINAMIC"]);
+                            if (row["HOTEL_RES_ID"] != null)
+                                cotizacionVta.HotelResId = Convert.ToInt32(row["HOTEL_RES_ID"]);
+                            if (row["METABUSCADOR"] != null)
+                                cotizacionVta.Metabuscador = Convert.ToString(row["METABUSCADOR"]);
+                        }
+                        #endregion                             
+                    }
+                }
+                return cotizacionVta;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion
     }
 }

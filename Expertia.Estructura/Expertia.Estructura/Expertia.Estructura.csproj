@@ -265,6 +265,7 @@
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
+    <Compile Include="Repository\Retail\FileRetailRepository.cs" />
     <Compile Include="Repository\Retail\Pedido_RetailRepository.cs" />
     <Compile Include="RestManager\Base\RestBase.cs" />
     <Compile Include="RestManager\RestParse\PtaParse.cs" />
