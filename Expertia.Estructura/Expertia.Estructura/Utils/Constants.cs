@@ -216,6 +216,12 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_FilesPtaBy_IdCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_FILESPTA_COT";
         public const string AW_Get_Pedidos_Procesados = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_PROCESS_CRM";
         public const string AW_Update_Pedido_Procesado = "APPWEBS.PKG_PAGO_ONLINE.SP_UPDATE_PEDIDO_PROCESS_CRM";
+        public const string AW_Update_Imp_File_Cot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_IMP_FILE_COT";
+        public const string AW_Get_Tipo_Cambio = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_TIPO_CAMBIO";
+        public const string AW_Ins_FilePTA_Cot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_FILEPTA_COT";
+        public const string AW_Update_Monto_Estimado_File = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MONTO_ESTIMADO_FILE";
+        public const string AW_Ins_Fec_Salida_Cot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_FEC_SAL_COT";
+        public const string AW_Update_Facturacion_os_Tkts_Util = "NUEVOMUNDO.UP_FACTURACION_OS_TKTS_UTIL";
         #endregion
     }
 
