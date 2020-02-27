@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.VisualBasic;
 using System.Linq;
 using System.Web;
+using Expertia.Estructura.Models.Behavior;
+using Expertia.Estructura.Models.Auxiliar;
 
 namespace Expertia.Estructura.Models
 {
@@ -48,6 +50,30 @@ namespace Expertia.Estructura.Models
         private string NomArchivo { get; set; }
         private string ExtensionArchivo { get; set; }
         private byte[] Archivo { get; set; }
+    }
+
+    public class AssociateFile
+    {        
+        public int idUsuario { get; set; }
+        public int idoportunidad_SF { get; set; }
+        public int idCotSRV_SF { get; set; }
+        public List<FileSRV> LstFiles { get; set; }
+        /*Duda si agregar comentario y nota de seguimiento (aplica al cambiar de estado a facturado - Informativo)*/
+    }
+
+    public class AssociateFileRS :ICrmApiResponse
+    {
+        public string CodigoError { get; set; }
+        public string MensajeError { get; set; }
+    }
+
+    public class FileSRV
+    {
+        public int IdFilePTA { get; set; }
+        public DateTime Fecha { get; set; }
+        public double Sucursal { get; set; }
+        public string Cliente { get; set; }
+        public double ImporteFact { get; set; }        
     }
 
     public class FilePTACotVta

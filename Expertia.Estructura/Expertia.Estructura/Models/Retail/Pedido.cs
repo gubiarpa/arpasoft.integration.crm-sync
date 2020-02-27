@@ -35,4 +35,13 @@ namespace Expertia.Estructura.Models
         public string CodigoTransaction { get; set; }
         public string CodigoOperacion { get; set; }
     }
+
+    public class PedidosProcesados
+    {
+        public int idPedido { get; set; }
+        public string codigoTransaccion { get; set; } /*Codigo de pago generado por SafetyPay*/
+        public string idSolicitudPago_SF { get; set; } /*Identificador de la solicitud de pago (Oportunidad SaleForce)*/
+        public string estadoPago { get; set; } /*estado de pago*/
+        public string estadoProcess { get; set; }
+    }
 }

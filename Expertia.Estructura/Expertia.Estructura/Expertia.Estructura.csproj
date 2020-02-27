@@ -282,6 +282,7 @@
     <Compile Include="Utils\Retail\EncriptaCadena.cs" />
     <Compile Include="Utils\Retail\NMMail.cs" />
     <Compile Include="Utils\Retail\UsuarioLogin.cs" />
+    <Compile Include="Utils\ValidateProcess.cs" />
     <Compile Include="Web References\ws_compra\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

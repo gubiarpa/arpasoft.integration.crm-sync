@@ -56,6 +56,27 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
+        public Operation GetPedidosProcesados()
+        {
+            var operation = new Operation();
+            try
+            {
+                #region Parameters                
+                AddParameter(OutParameter.CursorPedidosProcesados, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+                #endregion
+
+                #region Invoke              
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_Pedidos_Procesados);
+                operation[OutParameter.CursorPedidosProcesados] = FillPedidosProcess(GetDtParameter(OutParameter.CursorPedidosProcesados));
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return operation;
+        }
+
         public void InsertFormaPagoPedido(Pedido pedidoRQ,PedidoRS pedidoRS)
         {
             try
@@ -93,6 +114,25 @@ namespace Expertia.Estructura.Repository.AppWebs
 
                 #region Invoke
                 ExecuteStoredProcedure(StoredProcedureName.AW_Update_FechaExpira_Pedido);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void Update_Pedido_Process(PedidosProcesados PedidosProccess)
+        {
+            try
+            {
+                #region Parameter
+                AddParameter("pNumIdPedido_in", OracleDbType.Int32, PedidosProccess.idPedido, ParameterDirection.Input);
+                AddParameter("pVarEstadoProcessPed_in", OracleDbType.Char, PedidosProccess.estadoProcess, ParameterDirection.Input,1);                
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Pedido_Procesado);
                 #endregion
             }
             catch (Exception ex)
@@ -158,6 +198,7 @@ namespace Expertia.Estructura.Repository.AppWebs
         }
         #endregion
 
+        #region Auxiliares
         private RptaPagoSafetyPay FillRptaSafetyPay(DataTable dt = null)
         {
             try
@@ -201,5 +242,37 @@ namespace Expertia.Estructura.Repository.AppWebs
                 throw;
             }
         }
+
+        private IEnumerable<PedidosProcesados> FillPedidosProcess(DataTable dt)
+        {
+            try
+            {
+                var pedidosProcesadosList = new List<PedidosProcesados>();
+
+                if(dt != null)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        #region AddingElement
+                        pedidosProcesadosList.Add(new PedidosProcesados()
+                        {
+                            idPedido = (row["NRO_PEDIDO"] != null ? Convert.ToInt32(row["NRO_PEDIDO"]) : 0),
+                            codigoTransaccion = (row["TRANSACTIONIDENTIFIER"] != null ? row["TRANSACTIONIDENTIFIER"].ToString() : string.Empty),
+                            idSolicitudPago_SF = (row["ID_OPORTUNIDAD"] != null ? row["ID_OPORTUNIDAD"].ToString() : string.Empty),
+                            estadoPago = (row["ESTADO"] != null ? row["ESTADO"].ToString() : string.Empty),
+                            estadoProcess = (row["PROCESS_CRM"] != null ? row["PROCESS_CRM"].ToString() : string.Empty)
+                        });
+                        #endregion
+                    }
+                }
+                
+                return pedidosProcesadosList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
     }
 }

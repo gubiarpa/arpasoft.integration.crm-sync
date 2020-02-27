@@ -4,11 +4,17 @@ using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.AppWebs;
 using Expertia.Estructura.Repository.General;
 using Expertia.Estructura.Models.Auxiliar;
+using Expertia.Estructura.RestManager.Base;
+using Expertia.Estructura.RestManager.RestParse;
 using Expertia.Estructura.Utils;
 using System;
 using System.Web.Http;
 using System.Collections.Generic;
 using Expertia.Estructura.ws_compra;
+using System.Linq;
+using RestSharp;
+using System.Net;
+using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -215,7 +221,70 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
-              
+
+        [Route(RouteAction.Send)]
+        public IHttpActionResult Send()
+        {
+            IEnumerable<PedidosProcesados> ListPedidosProcesados = null;
+            string errorEnvio = string.Empty;
+
+            try {                
+                RepositoryByBusiness(null);
+                
+                /*Consulta de pedidos procesados a BD*/
+                ListPedidosProcesados = (IEnumerable<PedidosProcesados>)_pedidoRepository.GetPedidosProcesados()[OutParameter.CursorPedidosProcesados];
+                if (ListPedidosProcesados == null || ListPedidosProcesados.ToList().Count.Equals(0)) return Ok(false);
+
+                /*Obtiene Token de envío a Salesforce*/
+                var authSf = RestBase.GetToken();
+                var token = authSf[OutParameter.SF_Token].ToString();
+                var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
+
+                /*Por cada Pedido...*/
+                foreach (var pedidosProcesados in ListPedidosProcesados)
+                {
+                    try
+                    {
+                        /*Envío de pedidos procesados a Salesforce*/                         
+                        var responsePedidosProcess = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.PedidosProcesadosMethod, Method.POST, pedidosProcesados.ToSalesforceEntity(), true, token);
+                        if (responsePedidosProcess.StatusCode.Equals(HttpStatusCode.OK))
+                        {
+                            dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePedidosProcess.Content);
+
+                            /*Validamos Y Actualizamos en BD*/
+                            if (jsonResponse[OutParameter.SF_CodigoError] == "OK")
+                            {
+                                pedidosProcesados.estadoProcess = "1";                                
+                            }
+                            else
+                            {
+                                pedidosProcesados.estadoProcess = (string.IsNullOrEmpty(pedidosProcesados.estadoProcess) == false && pedidosProcesados.estadoProcess == "0" ? "2" : "0");                                
+                            }
+                            _pedidoRepository.Update_Pedido_Process(pedidosProcesados);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        errorEnvio = errorEnvio + ApiResponseCode.ErrorCode + " - " + ex.Message + " ||.";                        
+                    }
+                }                
+                return Ok(true);
+            }            
+            catch (Exception ex)
+            {
+                errorEnvio = ex.Message;
+                return InternalServerError(ex);
+            }
+            finally
+            {
+                (new
+                {
+                    Request = ListPedidosProcesados,                    
+                    Exception = errorEnvio
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+            }
+        }
+
         private void validacionPedido(ref Pedido _pedido, ref Models.PedidoRS _resultPedido, ref bool _return, ref UsuarioLogin UserLogin)
         {
             string mensajeError = string.Empty;
@@ -255,7 +324,7 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie los datos de su unidad de negocio|";
             }
-            if (string.IsNullOrEmpty(_pedido.IdUsuario) == false && isInt32(_pedido.IdUsuario) == true)
+            if (string.IsNullOrEmpty(_pedido.IdUsuario) == false && ValidateProcess.isInt32(_pedido.IdUsuario) == true)
             {
                 /*Cargamos Datos del Usuario*/
                 _datosUsuario = new DatosUsuario(_pedido.UnidadNegocio.ID);
@@ -290,28 +359,14 @@ namespace Expertia.Estructura.Controllers
                         _pedido.IdWeb = Webs_Cid.ID_WEB_WEBFAREFINDER;
                 }
             }            
-        }
-
-        public bool isInt32(String num)
-        {
-            bool isNum;
-            double retNum;
-
-            try
-            {
-                isNum = Double.TryParse(Convert.ToString(num), System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out retNum);
-                return isNum;            
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        }               
         #endregion
 
         #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
+            unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);
+
             _pedidoRepository = new Pedido_AW_Repository(unidadNegocioKey);            
             return unidadNegocioKey;
         }

@@ -226,5 +226,22 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this PedidosProcesados pedidosProcesados)
+        {
+            try
+            {
+                return new
+                {
+                    codigoTransaccion = pedidosProcesados.codigoTransaccion,
+                    idSolicitudPago_SF = pedidosProcesados.idSolicitudPago_SF,
+                    estadoPago = pedidosProcesados.estadoPago
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
