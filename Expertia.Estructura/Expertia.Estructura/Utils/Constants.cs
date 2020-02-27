@@ -178,6 +178,8 @@ namespace Expertia.Estructura.Utils
         /// Contacto PTA
         public const string IA_Read_ContactoPta = "NUEVOMUNDO.CRM_PKG.SP_LISTAR_CONTACTO";
         public const string IA_Update_ContactoPta = "NUEVOMUNDO.CRM_PKG.SP_ACTUALIZAR_ENVIO_CONTACTO";
+        /// Sucursal PTA
+        public const string IA_Get_SucursalBy_Id = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_SUCURSAL_X_ID";
         #endregion
 
         #region AppWebs
@@ -194,6 +196,11 @@ namespace Expertia.Estructura.Utils
         ///Facturacion file retail
         public const string AW_Ins_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_ACTUALIZAR_DATOSFACTURACION";
         public const string AW_Upd_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_DATOSFACTURACION";
+        public const string AW_Del_DetalleTarifa = "APPWEBS.PKG_Desglose_CA.SP_ELIMINAR_DETALLETARIFA";
+        public const string AW_Del_DetalleRecibos = "APPWEBS.PKG_Desglose_CA.SP_ELIMINAR_DETALLENORECIBOS";
+        public const string AW_Ins_Tarifa = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_TARIFA";
+        public const string AW_Ins_NoRecibo = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_NORECIBO";
+        public const string AW_Get_Datos_Oficina = "APPWEBS.PKG_OFICINA.SP_OFI_OBTIENE_X_ID";
 
         /// Pedido
         public const string AW_Create_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_INS_PEDIDO";
@@ -205,6 +212,8 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_Datos_Usuario = "APPWEBS.PKG_PERSONAL.SP_OBTIENE_DATOS_X_USUARIO";
         public const string AW_Insert_Post_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_POST_COT";
         public const string AW_Update_Estado_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_EST_COT";
+        public const string AW_Update_Motivo_No_Compra = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MOTIVO_NO_COMPRO";
+        public const string AW_Get_FilesPtaBy_IdCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_FILESPTA_COT";
         #endregion
     }
 
@@ -272,6 +281,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorMonedasPedidoSF = "pCurResult_out";
         public const string CursorMailWeb = "pCurResult_out";
         public const string CursorDtosPersonal = "pCurResult_out";
+        public const string CursorDtosOficina = "pCurResult_out";
         #endregion
 
         #region Fields
@@ -382,6 +392,19 @@ namespace Expertia.Estructura.Utils
 
         #region Estados
         public const short ID_ESTADO_COT_PENDIENTE_PAGO = 11;
+        public const short INT_ID_ESTADO_COT_DERIVADO_A_CA = 13;
+        #endregion
+        #region AtributosSesion
+        public const string SES_LISTA_ARCHIVOS_DESGLOSE_CA = "SES_LISTA_ARCHIVOS_DESGLOSE_CA";
+        #endregion
+        #region OficinaDepartamento
+        public const int INT_ID_OFI_CORPORATIVO_VACACIONAL = 34;
+        public const int INT_ID_DEP_COUNTER = 6;
+        public const int INT_ID_OFI_NMV = 23;
+        public const int INT_ID_OFI_CALL_CENTER = 66;
+        public const int INT_ID_DEP_CALL_CENTER = 3;
+        public const int INT_ID_DEP_SISTEMAS = 11;
+        public const int INT_ID_DEP_LARCOMAR = 71;
         #endregion
     }
 

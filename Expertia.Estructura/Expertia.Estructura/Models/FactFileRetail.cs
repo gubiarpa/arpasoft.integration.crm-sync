@@ -43,6 +43,7 @@ namespace Expertia.Estructura.Models
         public string IdOportunidad_SF { get; set; }
         public string IdCotSrv_SF { get; set; }
         public string accion_SF { get; set; }
+        public int IdUsuarioSrv_SF { get; set; }
 
     }
     public class TarifaDetalle
@@ -64,13 +65,13 @@ namespace Expertia.Estructura.Models
     }
     public class ReciboDetalle
     {
-        private int IdDetalleNoRecibo{get;set;}
-        private string Sucursal { get; set; }
+        public int IdDetalleNoRecibo{get;set;}
+        public string Sucursal { get; set; }
         public string NoRecibo { get; set; }
         public double MontoRecibo { get; set; }
         public string IdSucursal { get; set; }
         private int Estado { get; set; }
-        private int IdDatosFacturacion { get; set; }
+        public int IdDatosFacturacion { get; set; }
 
     }
     public class FileRetail

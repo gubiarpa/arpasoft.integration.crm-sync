@@ -130,5 +130,173 @@ namespace Expertia.Estructura.Repository.AppWebs
                 throw ex;
             }
         }
+
+        public bool _Liberar_UsuWeb_CA(int pIntIdCot)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int _Insert_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost, string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, short pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta, bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, int? pIntIdUsuWebCounterCrea, int? pIntIdOfiCounterCrea, int? pIntIdDepCounterCrea, bool? pBolEsUrgenteEmision, DateTime? pDatFecPlazoEmision, short? pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, double? pDblMontoEstimadoFile)
+        {
+            int intIdPost = 0;
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pChrTipoPost_in", OracleDbType.Varchar2, pStrTipoPost, ParameterDirection.Input, 50);
+                AddParameter("pClbTextoPost_in", OracleDbType.Varchar2, pStrTextoPost, ParameterDirection.Input, 20);
+                AddParameter("pVarIPUsuCrea_in", OracleDbType.Varchar2, pStrIPUsuCrea, ParameterDirection.Input, 300);
+                AddParameter("pVarLoginUsuCrea_in", OracleDbType.Int16, pStrLoginUsuCrea, ParameterDirection.Input);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep, ParameterDirection.Input);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                if (pBolCambioEstado)
+                {
+                    AddParameter("pChrCambioEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                    AddParameter("pNumIdEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                }
+                else
+                {
+                    AddParameter("pChrCambioEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                    AddParameter("pNumIdEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                }
+
+                if (pBolEsAutomatico)
+                {
+                    AddParameter("pChrEsAutomatico_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                }
+                else
+                {
+                    AddParameter("pChrEsAutomatico_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                }
+
+                if (pBolEsUrgenteEmision.HasValue)
+                {
+                    if (pBolEsUrgenteEmision.Value)
+                    {
+                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "1", ParameterDirection.Input);
+                    }
+                    else
+                    {
+                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "0", ParameterDirection.Input);
+                    }
+
+                }
+                else
+                {
+                    AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, null, ParameterDirection.Input);
+                }
+
+                if (pDatFecPlazoEmision.HasValue)
+                {
+                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Char, null, ParameterDirection.Input);
+                }
+                else
+                {
+                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Char, null, ParameterDirection.Input);
+                }
+
+                AddParameter("pNumIdNewPost_out", OracleDbType.Int32, null, ParameterDirection.Input);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Insert_Post_Cotizacion);
+                intIdPost = (int)GetOutParameter("pNumIdNewPost_out");
+                #endregion
+
+                return intIdPost;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void _Update_MotivoNoCompro(int pIntIdCot, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro)
+        {
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pNumIdMotivo_in", OracleDbType.Int32, pIntIdMotivoNoCompro, ParameterDirection.Input);
+                AddParameter("pVarOtroMotivo_in", OracleDbType.Varchar2, pStrOtroMotivoNoCompro, ParameterDirection.Input, 100);                
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Motivo_No_Compra);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<FilePTACotVta> _SelectFilesPTABy_IdCot(int pIntIdCotVta, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep)
+        {
+            List<FilePTACotVta> lstFilesPTA = new List<FilePTACotVta>();
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCotVta, ParameterDirection.Input);
+                AddParameter("pCurResult_out", OracleDbType.RefCursor, null, ParameterDirection.Output);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_FilesPtaBy_IdCot);
+                
+                FilePTACotVta objFilePTACotVta;
+                foreach (DataRow row in GetDtParameter("pCurResult_out").Rows)
+                {
+                    objFilePTACotVta = new FilePTACotVta();
+                    objFilePTACotVta.IdCot = pIntIdCotVta;
+                    objFilePTACotVta.IdSuc = (Int16)row["SUC_ID"];
+                    objFilePTACotVta.IdFilePTA = (int)row["FILE_ID"];
+                    objFilePTACotVta.Fecha = (DateTime)row["FPTA_FECHA"];
+                    objFilePTACotVta.Moneda = (string)row["FPTA_MONEDA"];
+                    objFilePTACotVta.ImporteFacturado = (Double)row["FPTA_IMP_FACT"];
+                    objFilePTACotVta.TipoCambio = (Double)row["FPTA_TIPO_CAMBIO"];
+                    objFilePTACotVta.NombreSucursal = _Select_NomSucursal((Int16)row["SUC_ID"]);
+                    lstFilesPTA.Add(objFilePTACotVta);
+                }
+                
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return lstFilesPTA;
+        }
+
+        public string _Select_NomSucursal(int pIntIdSuc)
+        {
+            string strNomSuc = "";
+            try
+            {
+                #region Parameter                
+                AddParameter("pIntIdSucursal_in", OracleDbType.Int16, pIntIdSuc, ParameterDirection.Input);
+                AddParameter("pCurResult_out", OracleDbType.RefCursor, null, ParameterDirection.Output);
+                #endregion
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.IA_Get_SucursalBy_Id);
+                
+                foreach (DataRow row in GetDtParameter("pCurResult_out").Rows)
+                {
+                    if (row["DESCRIPCION"] == null)
+                        strNomSuc = "";
+                    else
+                        strNomSuc = row["DESCRIPCION"].ToString();
+                }
+
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return strNomSuc;
+        }
     }
 }

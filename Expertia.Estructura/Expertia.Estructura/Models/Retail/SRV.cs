@@ -70,6 +70,9 @@ namespace Expertia.Estructura.Models
         private string strDescDK = "";
         private Nullable<Int16> IdSubCodigo { get; set; }
         private string strDescSubCodigo = "";
+        public Double ImporteFacturado { get; set; }
+        public Double TipoCambio { get; set; }
+        public string NombreSucursal { get; set; }
 
 
         public string FormatFechaAlta
