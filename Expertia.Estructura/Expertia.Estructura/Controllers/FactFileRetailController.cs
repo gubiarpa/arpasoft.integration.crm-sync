@@ -297,7 +297,7 @@ namespace Expertia.Estructura.Controllers
                 string str = GenerarHtmlByRender("TemplateDesglose.html");
 
                 //// Template Datos Facturacion
-               
+               ///
                 //str = Replace(str, "[DK]", models.datosFacturacion.DK);
                 //str = Replace(str, "[campania]", models.datosFacturacion.Campania);
                 //str = Replace(str, "[SubCodigo]", models.datosFacturacion.SubCodigo);
