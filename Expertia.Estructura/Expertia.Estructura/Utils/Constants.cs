@@ -214,6 +214,8 @@ namespace Expertia.Estructura.Utils
         public const string AW_Update_Estado_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_EST_COT";
         public const string AW_Update_Motivo_No_Compra = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MOTIVO_NO_COMPRO";
         public const string AW_Get_FilesPtaBy_IdCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_FILESPTA_COT";
+        public const string AW_Get_Pedidos_Procesados = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_PROCESS_CRM";
+        public const string AW_Update_Pedido_Procesado = "APPWEBS.PKG_PAGO_ONLINE.SP_UPDATE_PEDIDO_PROCESS_CRM";
         #endregion
     }
 
@@ -232,6 +234,7 @@ namespace Expertia.Estructura.Utils
         public const string CotizacionListMethod = "COTIZACIONLIST_METHODNAME";
         public const string CuentaPtaMethod = "CUENTAPTA_METHODNAME";
         public const string ContactoPtaMethod = "CONTACTOPTA_METHODNAME";
+        public const string PedidosProcesadosMethod = "POR_DEFINIR_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -297,6 +300,7 @@ namespace Expertia.Estructura.Utils
         public const string NombreVendedorCotizador = "P_NOMBRE_VENDEDOR_COTIZADOR";
         public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
         public const string NumeroIdPostSRV = "pNumIdNewPost_out";
+        public const string CursorPedidosProcesados = "P_PEDIDOS_PROCESADOS";
         #endregion
 
         #region SalesforceParameters
