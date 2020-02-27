@@ -5,6 +5,8 @@ using Expertia.Estructura.Repository.Retail;
 using Expertia.Estructura.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -178,31 +180,124 @@ namespace Expertia.Estructura.Controllers
             if (pIntIdEstado == 5) //ESTADO FACTURADO
             {
                 Update_Importe_FilesPTABy_Cot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
+
+                if (pLstFilesPTA != null)
+                {
+                    if (pLstFilesPTA.Count > 0)
+                    {
+                        bool bolBDNuevoMundo = true;
+
+                        double dblTipoCambio = _CotizacionSRV._Select_TipoCambio(DateTime.Now, "SOL", 1, bolBDNuevoMundo);
+
+                        foreach (FilePTACotVta objFilePTACotVta in pLstFilesPTA)
+                        {
+                            if (pBolEsCounterAdmin)
+                            {
+                                _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWebCounterCrea.Value, pIntIdOfiCounterCrea.Value, pIntIdDepCounterCrea.Value);
+                            }
+                            else
+                            {
+                                _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (pIntIdEstado == 4)
+            {
+                if (pLstFechasCotVta != null)
+                {
+                    for (int intX = 0; intX <= pLstFechasCotVta.Length - 1; intX++)
+                    {
+                        if (pBolEsCounterAdmin)
+                        {
+                            _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWebCounterCrea.Value, pIntIdDepCounterCrea.Value, pIntIdOfiCounterCrea.Value);
+
+                        }
+                        else
+                        {
+
+                            _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWeb, pIntIdDep, pIntIdOfi);
+
+                        }
+                    }
+                }
             }
 
-            return 0;
+            if (pBytArchivoMail != null)//NO ENTRA (SACADO DEL SRV)
+            {
+                _CotizacionSRV._Insert_ArchivoMail_Post_Cot(pIntIdCot, intIdPost, pBytArchivoMail);
+            }
+
+            if (pDblMontoEstimadoFile.HasValue && pDblMontoEstimadoFile.Value > 0)
+            {
+                _CotizacionSRV._Update_MontoEstimadoFileBy_IdCotVta(pIntIdCot, pDblMontoEstimadoFile.Value);
+            }
+
+            return intIdPost;
         }
 
         private void Update_Importe_FilesPTABy_Cot(int pIntIdCot, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep)
         {
-            List<FilePTACotVta> lstFiles = _CotizacionSRV._SelectFilesPTABy_IdCot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
-
-            foreach (FilePTACotVta objTempFilePTA in lstFiles)
+            try
             {
-                //_Update_Importe_FilePTA(pIntIdCot, objTempFilePTA.IdSuc, objTempFilePTA.IdFilePTA, pIntIdUsuWeb, pIntIdOfi, pIntIdDep, "1");
+                List<FilePTACotVta> lstFiles = _CotizacionSRV._SelectFilesPTABy_IdCot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
+
+                foreach (FilePTACotVta objTempFilePTA in lstFiles)
+                {
+                    _Update_Importe_FilePTA(pIntIdCot, objTempFilePTA.IdSuc, objTempFilePTA.IdFilePTA, pIntIdUsuWeb, pIntIdOfi, pIntIdDep, "1");
+                }
             }
-                
+            catch (Exception ex)
+            {
+                throw ex;
+            }   
         }
         #endregion
 
+        private void _Update_Importe_FilePTA(int pIntIdCot, int pIntIdSuc, int pIntIdFile, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep, string pStrEsUpdUsuario)
+        {
+            try
+            {
+                DataTable dtImporteFile = _CotizacionSRV._Select_InfoFile(pIntIdSuc, pIntIdFile);
+
+                if (dtImporteFile.Rows.Count == 0)
+                {
+                    ///Ssegun el srv no hace nada
+                }
+                else
+                {
+                    DataRow drCliente = dtImporteFile.Rows[0];
+                    string strIdMoneda = drCliente["ID_MONEDA"].ToString();
+                    double dblImporteSuma = 0;
+
+                    foreach (DataRow drImporteFile in dtImporteFile.Rows)
+                    {
+                        if ((drImporteFile["ID_MONEDA"])!=null)
+                        {
+                            if (drImporteFile["FLAG"].ToString() == "1")
+                                dblImporteSuma += (double)drImporteFile["IMPORTE_TOTAL"];
+                        }
+                    }
+
+                    _CotizacionSRV._Actualiza_Imp_File_Cot(pIntIdCot, pIntIdSuc, pIntIdFile, strIdMoneda, 
+                                                           dblImporteSuma, pIntIdUsuWeb, pIntIdOfi, pIntIdDep, pStrEsUpdUsuario);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private string TemplateHtml(FactFileRetailReq models, List<FileRetail> lstArchivos)
         {
             try
             {
-                //WebUtility objWebUtility = new WebUtility();
-                string str = "";// objWebUtility.GenerarHtmlByRender("TemplateDesglose.html");
+                string str = GenerarHtmlByRender("TemplateDesglose.html");
 
                 //// Template Datos Facturacion
+               
                 //str = Replace(str, "[DK]", models.datosFacturacion.DK);
                 //str = Replace(str, "[campania]", models.datosFacturacion.Campania);
                 //str = Replace(str, "[SubCodigo]", models.datosFacturacion.SubCodigo);
@@ -273,5 +368,17 @@ namespace Expertia.Estructura.Controllers
                 throw new Exception(ex.ToString());
             }
         }
+        private string GenerarHtmlByRender(string pStrNombreAspx)
+        {
+            string strRpta = "";
+            // Try
+            StringWriter _writer = new StringWriter();
+            System.Web.HttpContext.Current.Server.Execute(pStrNombreAspx, _writer, true);
+            if (!string.IsNullOrEmpty(_writer.ToString()))
+                strRpta = _writer.ToString();
+
+            return strRpta;
+        }
+
     }
 }

@@ -196,7 +196,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                     AddParameter("pDatFecPlazoEmision_in", OracleDbType.Char, null, ParameterDirection.Input);
                 }
 
-                AddParameter("pNumIdNewPost_out", OracleDbType.Int32, null, ParameterDirection.Input);
+                AddParameter("pNumIdNewPost_out", OracleDbType.Int32, null, ParameterDirection.Output);
                 #endregion
 
                 #region Invoke
@@ -297,6 +297,195 @@ namespace Expertia.Estructura.Repository.AppWebs
                 throw ex;
             }
             return strNomSuc;
+        }
+
+        public DataTable _Select_InfoFile(int pIntIdSuc, int pIntIdFile)
+        {
+            try
+            {
+                #region Parameter                
+                AddParameter("v_sucursal", OracleDbType.Int16, pIntIdSuc, ParameterDirection.Input);
+                AddParameter("v_file", OracleDbType.Int32, pIntIdFile, ParameterDirection.Input);
+                AddParameter("cv_1", OracleDbType.RefCursor, null, ParameterDirection.Output);
+                #endregion
+
+                DataTable dtImportesFile = new DataTable();
+                dtImportesFile.Columns.Add(new DataColumn("FECHA_EMISION", typeof(string)));
+                dtImportesFile.Columns.Add(new DataColumn("ID_CLIENTE", typeof(int)));
+                dtImportesFile.Columns.Add(new DataColumn("NOMBRE_CLIENTE", typeof(string)));
+                dtImportesFile.Columns.Add(new DataColumn("ID_MONEDA", typeof(string)));
+                dtImportesFile.Columns.Add(new DataColumn("IMPORTE_TOTAL", typeof(double)));
+                dtImportesFile.Columns.Add(new DataColumn("IMPORTE_AFECTADO", typeof(double)));
+                dtImportesFile.Columns.Add(new DataColumn("FLAG", typeof(string)));
+                DataRow drImporteFile = null;
+
+                using (OracleDataAdapter objDataAdapter = new OracleDataAdapter())
+                {
+                    objDataAdapter.Fill(dtImportesFile);
+
+                }
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Facturacion_os_Tkts_Util);
+                #endregion
+
+
+                return dtImportesFile;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void _Actualiza_Imp_File_Cot(int pIntIdCot, int pIntIdSuc, int pIntIdFile, string strIdMoneda, double dblImporteSuma, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep, string pStrEsUpdUsuario)
+        {
+            int intIdCotNew = 0;
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pNumIdSuc_in", OracleDbType.Int32, pIntIdSuc, ParameterDirection.Input);
+                AddParameter("pNumIdFile_in", OracleDbType.Int32, pIntIdFile, ParameterDirection.Input);
+                AddParameter("pChrIdMoneda_in", OracleDbType.Char, strIdMoneda, ParameterDirection.Input,3);
+                AddParameter("pDecImpFact_in", OracleDbType.Decimal, dblImporteSuma, ParameterDirection.Input);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input, 100);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep, ParameterDirection.Input);
+                AddParameter("pChrEsUpdUsu_in", OracleDbType.Char, pStrEsUpdUsuario, ParameterDirection.Input, 1);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Imp_File_Cot);
+                intIdCotNew = 999;
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public double _Select_TipoCambio(DateTime pDatFecha, string pStrMoneda, short pIntIdEmp, bool pBolEsBDNuevoMundo)
+        {
+            double dblTipoCambio = 0;
+            string strCnx = "";
+
+            try
+            {
+                #region Parameter                
+                AddParameter("pDatFecha_in", OracleDbType.Date, pDatFecha, ParameterDirection.Input);
+                AddParameter("pVarIdMoneda_in", OracleDbType.Varchar2, pStrMoneda, ParameterDirection.Input, 3);
+                AddParameter("pNumIdEmpresa_in", OracleDbType.Int32, pIntIdEmp, ParameterDirection.Input);
+                AddParameter("pNumTipoCambio_out", OracleDbType.Double, null, ParameterDirection.Output);
+                
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_Tipo_Cambio);
+                if (GetOutParameter("pNumIdNewPost_out") == null)
+                {
+                    dblTipoCambio = 0;
+                }
+                else
+                {
+                    dblTipoCambio = (double)GetOutParameter("pNumIdNewPost_out");
+                }
+                #endregion
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
+            return dblTipoCambio;
+        }
+
+        public void _Insert_FilePTA_Cot(int IdCot, int IdSuc, int IdFilePTA, string Moneda, double dblTipoCambio, double ImporteFacturado, int IdUsuWebCounterCrea, int IdOfiCounterCrea, int IdDepCounterCrea)
+        {
+            int intId = 0;
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, IdCot, ParameterDirection.Input);
+                AddParameter("pNumIdSuc_in", OracleDbType.Int32, IdSuc, ParameterDirection.Input);
+                AddParameter("pNumIdFile_in", OracleDbType.Int32, IdFilePTA, ParameterDirection.Input);
+                AddParameter("pChrMoneda_in", OracleDbType.Char, Moneda, ParameterDirection.Input, 3);
+                AddParameter("pDecImpFact_in", OracleDbType.Decimal, ImporteFacturado, ParameterDirection.Input);
+                AddParameter("pDecTipoCambio_in", OracleDbType.Decimal, dblTipoCambio, ParameterDirection.Input, 100);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, IdUsuWebCounterCrea, ParameterDirection.Input);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, IdOfiCounterCrea, ParameterDirection.Input);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, IdDepCounterCrea, ParameterDirection.Input, 1);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Ins_FilePTA_Cot);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void _Insert_ArchivoMail_Post_Cot(int pIntIdCot, int intIdPost, string pBytArchivoMail)
+        {
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pNumIdPost_in", OracleDbType.Int32, intIdPost, ParameterDirection.Input);
+                AddParameter("pBlbArchivoMail_in", OracleDbType.Int32, pBytArchivoMail, ParameterDirection.Input);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Ins_FilePTA_Cot);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void _Update_MontoEstimadoFileBy_IdCotVta(int pIntIdCot, double pDblMontoEstimadoFile)
+        {
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pNumMonto_in", OracleDbType.Int16, pDblMontoEstimadoFile, ParameterDirection.Input);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Monto_Estimado_File);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void _Insert_FechaSalida_Cot(int pIntIdCot, string pStrFecSalida, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi)
+        {
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pVarFecSal_in", OracleDbType.Varchar2, pStrFecSalida, ParameterDirection.Input,10);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep, ParameterDirection.Input);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Ins_Fec_Salida_Cot);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

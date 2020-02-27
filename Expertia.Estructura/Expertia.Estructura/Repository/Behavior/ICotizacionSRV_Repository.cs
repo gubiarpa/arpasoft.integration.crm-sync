@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Utils;
+using System.Data;
 
 namespace Expertia.Estructura.Repository.Behavior
 {
@@ -17,6 +18,16 @@ namespace Expertia.Estructura.Repository.Behavior
         void UpdateEstadoCotVTA(Post_SRV RQ_General_PostSRV);
         void _Update_MotivoNoCompro(int pIntIdCot, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro);
         List<FilePTACotVta> _SelectFilesPTABy_IdCot(int pIntIdCot, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep);
+
+        DataTable _Select_InfoFile(int pIntIdSuc, int pIntIdFile);
+
+        void _Actualiza_Imp_File_Cot(int pIntIdCot, int pIntIdSuc, int pIntIdFile, string strIdMoneda,double dblImporteSuma, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep, string pStrEsUpdUsuario);
+
+        double _Select_TipoCambio(DateTime pDatFecha, string pStrMoneda, Int16 pIntIdEmp, bool pBolEsBDNuevoMundo);
+        void _Insert_FilePTA_Cot(int IdCot, int IdSuc, int IdFilePTA, string Moneda, double dblTipoCambio, double ImporteFacturado, int IdUsuWebCounterCrea, int IdOfiCounterCrea, int IdDepCounterCrea);
+        void _Insert_ArchivoMail_Post_Cot(int pIntIdCot, int intIdPost, string pBytArchivoMail);
+        void _Update_MontoEstimadoFileBy_IdCotVta(int pIntIdCot, double pDblMontoEstimadoFile);
+        void _Insert_FechaSalida_Cot(int pIntIdCot, string pStrFecSalida, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi);
 
     }
 }
