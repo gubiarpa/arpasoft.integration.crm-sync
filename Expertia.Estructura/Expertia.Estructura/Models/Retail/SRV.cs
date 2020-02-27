@@ -73,7 +73,8 @@ namespace Expertia.Estructura.Models
         public DateTime Fecha { get; set; }
         public double Sucursal { get; set; }
         public string Cliente { get; set; }
-        public double ImporteFact { get; set; }        
+        public double ImporteFact { get; set; }
+        public string Moneda { get; set; }
     }
 
     public class FilePTACotVta
@@ -175,4 +176,188 @@ namespace Expertia.Estructura.Models
             }
         }
     }
+
+    public class CotizacionVta
+    {
+        public int IdCot { get; set; }
+        public Nullable<DateTime> FechaCot { get; set; } = null;
+        public Int16 IdModoIng { get; set; }
+        public Int16 IdCanalVta { get; set; }
+        private string strTextoSol = string.Empty;
+        private string strNomUsuCrea = string.Empty;
+        private string strLoginUsuCrea = string.Empty;
+        private string strCodIATAPrincipal = string.Empty;
+        public Int16 IdEstado { get; set; }
+        public int IdCliCot { get; set; }
+        public int IdUsuWeb { get; set; }
+        public int IdDep { get; set; }
+        public int IdOfi { get; set; }
+        public int IdWeb { get; set; }
+        public int IdLang { get; set; }
+        public Nullable<int> IdEmpCot { get; set; }
+        private string strRazSocEmpCot = string.Empty;
+        private string strNomCanalVta = string.Empty;
+        private string strNomEstadoCot = string.Empty;
+        private string strNomDep = string.Empty;
+        private string strNomOfi = string.Empty;
+        private string strNomModoIng = string.Empty;
+        public Int16 CantVecesFact { get; set; }
+        private string strDestinosPref = string.Empty;
+        public Nullable<DateTime> FecSalida { get; set; } = null;
+        public Nullable<DateTime> FecRegreso { get; set; } = null;
+        public Nullable<Int16> CantPaxAdulto { get; set; } = null;
+        public Nullable<Int16> CantPaxNiños { get; set; } = null;
+        private string strEmailUsuWebCrea = string.Empty;
+        public Nullable<int> IdReservaVuelos { get; set; } = null;
+        public Nullable<int> IdReservaPaquete { get; set; } = null;
+        public Nullable<Int16> IdSucursalReservaPaquete { get; set; } = null;
+        public string TipoPaquete { get; set; } = null;
+        public Nullable<int> IdReservaAuto { get; set; } = null;
+        public Nullable<int> IdReservaHotel { get; set; } = null;
+        public Nullable<int> IdReservaSeguro { get; set; } = null;
+        public Nullable<bool> RequiereFirmaCliente { get; set; }
+        private string strCodReservaVueManual = string.Empty;
+        public Nullable<double> MontoReservaVueManual { get; set; } = null;
+        private string strIdVendedorPTACrea = string.Empty;
+        public Nullable<Int16> IdModalidadCompra { get; set; } = null;
+
+        public Nullable<bool> EsUrgenteEmision { get; set; }
+        public Nullable<DateTime> FechaPlazoEmision { get; set; }
+        public Nullable<int> IdUsuWebCA { get; set; }
+        private string strLoginUsuWebCA;
+        public bool EsEmitido { get; set; } = false;
+        public Nullable<int> IdCompra { get; set; }
+        private string strNomGrupo = string.Empty;
+        public Nullable<double> MontoEstimadoFile { get; set; }
+        public int EsAereo { get; set; }
+        public string CliCod_Mail { get; set; } = string.Empty;
+        public string EsPaqDinamico { get; set; } = string.Empty;
+        public Nullable<int> HotelResId { get; set; }
+        public string IPUsuCrea { get; set; }
+        public string[] ArrayServicios { get; set; }
+        public Int16 IdEstOtro { get; set; }
+        public string PaisResidencia { get; set; }
+        public Nullable<int> IdWebPaq { get; set; }
+        public Nullable<decimal> MontoDscto { get; set; }
+        public int IdOAtencion { get; set; }
+        public int IdEvento { get; set; }
+        public string sufijoMT { get; set; }
+        public int IdReserva2MT { get; set; }
+        public string Metabuscador { get; set; }
+        public bool EsComisionable { get; set; }
+        public Nullable<double> PorcIncentivoVentaNoComisionable { get; set; }
+        public Nullable<double> TotlIncentivoVentaNoComisionable { get; set; }
+        public Nullable<double> PorcComisionVentaNoComisionable { get; set; }
+        public Nullable<double> TotlComisionVentaNoComisionable { get; set; }
+               
+        public enum MODO_INGRESO_COT_VTA : short
+        {
+            Teléfono = 1,
+            Email = 2,
+            Presencial = 3,
+            Web = 4
+        }
+               
+        public string NomModoIngreso
+        {
+            get{return strNomModoIng;}
+            set{strNomModoIng = Strings.Trim(value);}
+        }
+
+        public string TextoSolicitud
+        {
+            get{return strTextoSol;}
+            set{strTextoSol = Strings.Trim(value);}
+        }
+
+        public string NomCompletoUsuCrea
+        {
+            get{return strNomUsuCrea;}
+            set{strNomUsuCrea = Strings.Trim(value);}
+        }
+
+        public string LoginUsuWeb
+        {
+            get{return strLoginUsuCrea;}
+            set{strLoginUsuCrea = Strings.Trim(value);}
+        }
+       
+        public string NomEstadoCot
+        {
+            get{return strNomEstadoCot;}
+            set{strNomEstadoCot = Strings.Trim(value);}
+        }
+
+        public string NomDep
+        {
+            get{return strNomDep;}
+            set{strNomDep = Strings.Trim(value);}
+        }
+
+        public string NomOfi
+        {
+            get{return strNomOfi;}
+            set{strNomOfi = Strings.Trim(value);}
+        }
+
+        public string NomPtoVta
+        {
+            get{return strNomOfi + " - " + strNomDep;}
+        }
+                
+        public string NomCanalVta
+        {
+            get{return strNomCanalVta;}
+            set{strNomCanalVta = Strings.Trim(value);}
+        }
+        
+        public string CodigoIATAPrincipal
+        {
+            get{return strCodIATAPrincipal;}
+            set{strCodIATAPrincipal = Strings.Trim(value);}
+        }
+              
+        public string RazSocEmpCot
+        {
+            get{return strRazSocEmpCot;}
+            set{strRazSocEmpCot = Strings.Trim(value);}
+        }
+
+        public string DestinosPref
+        {
+            get{return strDestinosPref;}
+            set{strDestinosPref = Strings.Trim(value);}
+        }
+        
+        public string EmailUsuWebCrea
+        {
+            get{return strEmailUsuWebCrea;}
+            set{strEmailUsuWebCrea = Strings.Trim(value);}
+        }
+        
+        public string CodReservaVueManual
+        {
+            get{return strCodReservaVueManual;}
+            set{strCodReservaVueManual = Strings.Trim(value);}
+        }
+               
+        public string IdVendedorPTACrea
+        {
+            get{return strIdVendedorPTACrea;}
+            set{strIdVendedorPTACrea = Strings.Trim(value);}
+        }
+                
+        public string LoginUsuWebCA
+        {
+            get{return strLoginUsuWebCA;}
+            set{strLoginUsuWebCA = Strings.Trim(value);}
+        }
+               
+        public string NomGrupo
+        {
+            get{return strNomGrupo;}
+            set{strNomGrupo = Strings.Trim(value);}
+        }
+    }
+
 }
