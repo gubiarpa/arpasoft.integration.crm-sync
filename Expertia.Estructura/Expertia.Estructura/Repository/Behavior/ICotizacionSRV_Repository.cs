@@ -17,6 +17,6 @@ namespace Expertia.Estructura.Repository.Behavior
         void UpdateEstadoCotVTA(Post_SRV RQ_General_PostSRV);
         void _Update_MotivoNoCompro(int pIntIdCot, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro);
         List<FilePTACotVta> _SelectFilesPTABy_IdCot(int pIntIdCot, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep);
-
+        CotizacionVta Get_Datos_CotizacionVta(int IdCotSRV);
     }
 }
