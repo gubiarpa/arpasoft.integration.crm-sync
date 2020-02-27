@@ -216,6 +216,9 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_FilesPtaBy_IdCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_FILESPTA_COT";
         public const string AW_Get_Pedidos_Procesados = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_PROCESS_CRM";
         public const string AW_Update_Pedido_Procesado = "APPWEBS.PKG_PAGO_ONLINE.SP_UPDATE_PEDIDO_PROCESS_CRM";
+
+        //Associate File
+        public const string AW_Get_Datos_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF_TEST.SP_OBTIENE_COT_TEST_MT";        
         #endregion
     }
 
@@ -285,6 +288,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorMailWeb = "pCurResult_out";
         public const string CursorDtosPersonal = "pCurResult_out";
         public const string CursorDtosOficina = "pCurResult_out";
+        public const string CursorDtosCotizacion = "pCurResult_out";        
         #endregion
 
         #region Fields
@@ -450,6 +454,20 @@ namespace Expertia.Estructura.Utils
         public const int ID_DEP_OPERACIONES = 20;
         public const int ID_DEP_COUNTER = 6;
         public const int ID_DEP_SISTEMAS = 11;
+    }
+
+    public enum ENUM_ESTADOS_COT_VTA : short
+    {
+        Solicitado = 1,
+        Cotizado = 2,
+        Seguimiento = 3,
+        Reservado = 4,
+        Facturado = 5,
+        Anulado = 6,
+        PrePagado = 7,
+        NoCompro = 8,
+        Reconfirmado = 9,
+        DerivadoCA = 13
     }
 
     public static class UtilityCorreo
