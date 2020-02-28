@@ -21,7 +21,7 @@ namespace Expertia.Estructura.Models.Retail
         public string Area { get; set; }
         public int UsuarioCrea { get; set; }
         public string Comentario { get; set; }
-        public int IdCotSRV { get; set; }
+        public int? IdCotSRV { get; set; }
         public int IdOportunidad_SF { get; set; }
         public int IdUsuarioSrv_SF { get; set; }
         public string Accion_SF { get; set; }

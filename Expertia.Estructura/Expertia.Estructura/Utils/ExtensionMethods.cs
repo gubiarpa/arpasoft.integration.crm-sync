@@ -197,6 +197,18 @@ namespace Expertia.Estructura.Utils
             }
         }
 
+        public static string StringNullParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                return row[fieldName].ToString();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public static int IntParse(this DataRow row, string fieldName)
         {
             try
