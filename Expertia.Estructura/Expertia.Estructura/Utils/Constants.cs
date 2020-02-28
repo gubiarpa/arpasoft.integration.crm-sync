@@ -49,6 +49,7 @@ namespace Expertia.Estructura.Utils
         public const string FileRetail = "api/fileretail";
         public const string FacturacionFileRetail = "api/facturacionfileretail";
         public const string PedidoRetail = "api/pedidoretail";
+        public const string OportunidadRetail = "api/oportunidadretail";
     }
 
     public enum ActionMethod

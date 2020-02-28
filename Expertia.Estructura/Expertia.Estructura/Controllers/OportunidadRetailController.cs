@@ -12,6 +12,7 @@ using Expertia.Estructura.Repository.General;
 
 namespace Expertia.Estructura.Controllers
 {
+    [RoutePrefix(RoutePrefix.OportunidadRetail)]
     public class OportunidadRetailController : BaseController
     {
         #region Properties
@@ -20,6 +21,7 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region PublicMethods
+        [Route(RouteAction.Create)]
         public IHttpActionResult Read(OportunidadRetailReq oportunidadRetail)
         {
             try
