@@ -296,6 +296,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\TemplateDesglose.html" />
     <Content Include="Global.asax" />
     <Content Include="View\Index.html" />
     <None Include="Properties\Settings.settings">

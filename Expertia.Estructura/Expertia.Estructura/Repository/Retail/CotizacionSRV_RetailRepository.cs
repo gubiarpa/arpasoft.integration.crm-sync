@@ -167,67 +167,86 @@ namespace Expertia.Estructura.Repository.AppWebs
 
         public bool _Liberar_UsuWeb_CA(int pIntIdCot)
         {
-            throw new NotImplementedException();
+            bool bolAsignado = false;
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Liberar_Usuweb_CA);
+                bolAsignado = true;
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                bolAsignado = false;
+                throw ex;
+            }
+
+            return bolAsignado;
         }
 
         public int _Insert_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost, string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, short pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta, bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, int? pIntIdUsuWebCounterCrea, int? pIntIdOfiCounterCrea, int? pIntIdDepCounterCrea, bool? pBolEsUrgenteEmision, DateTime? pDatFecPlazoEmision, short? pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, double? pDblMontoEstimadoFile)
         {
+            string valor = "";
             int intIdPost = 0;
             try
             {
                 #region Parameter                
                 AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
-                AddParameter("pChrTipoPost_in", OracleDbType.Varchar2, pStrTipoPost, ParameterDirection.Input, 50);
-                AddParameter("pClbTextoPost_in", OracleDbType.Varchar2, pStrTextoPost, ParameterDirection.Input, 20);
-                AddParameter("pVarIPUsuCrea_in", OracleDbType.Varchar2, pStrIPUsuCrea, ParameterDirection.Input, 300);
-                AddParameter("pVarLoginUsuCrea_in", OracleDbType.Int16, pStrLoginUsuCrea, ParameterDirection.Input);
+                AddParameter("pChrTipoPost_in", OracleDbType.Char, pStrTipoPost, ParameterDirection.Input, 1);
+                AddParameter("pClbTextoPost_in", OracleDbType.Clob, pStrTextoPost, ParameterDirection.Input);
+                AddParameter("pVarIPUsuCrea_in", OracleDbType.Varchar2, pStrIPUsuCrea, ParameterDirection.Input, 20);
+                AddParameter("pVarLoginUsuCrea_in", OracleDbType.Varchar2, pStrLoginUsuCrea, ParameterDirection.Input, 50);
                 AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input);
                 AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep, ParameterDirection.Input);
                 AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
                 if (pBolCambioEstado)
                 {
-                    AddParameter("pChrCambioEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
-                    AddParameter("pNumIdEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                    AddParameter("pChrCambioEst_in", OracleDbType.Char, "S", ParameterDirection.Input, 1);
+                    AddParameter("pNumIdEst_in", OracleDbType.Int32, pIntIdEstado, ParameterDirection.Input);
                 }
                 else
                 {
-                    AddParameter("pChrCambioEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
-                    AddParameter("pNumIdEst_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                    AddParameter("pChrCambioEst_in", OracleDbType.Char, "N", ParameterDirection.Input, 1);
+                    AddParameter("pNumIdEst_in", OracleDbType.Int32, null, ParameterDirection.Input);
                 }
 
                 if (pBolEsAutomatico)
                 {
-                    AddParameter("pChrEsAutomatico_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                    AddParameter("pChrEsAutomatico_in", OracleDbType.Char, "1", ParameterDirection.Input, 1);
                 }
                 else
                 {
-                    AddParameter("pChrEsAutomatico_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                    AddParameter("pChrEsAutomatico_in", OracleDbType.Char, "0", ParameterDirection.Input, 1);
                 }
 
                 if (pBolEsUrgenteEmision.HasValue)
                 {
                     if (pBolEsUrgenteEmision.Value)
                     {
-                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "1", ParameterDirection.Input);
+                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "1", ParameterDirection.Input, 1);
                     }
                     else
                     {
-                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "0", ParameterDirection.Input);
+                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "0", ParameterDirection.Input, 1);
                     }
 
                 }
                 else
                 {
-                    AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, null, ParameterDirection.Input);
+                    AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, null, ParameterDirection.Input, 1);
                 }
 
                 if (pDatFecPlazoEmision.HasValue)
                 {
-                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Char, null, ParameterDirection.Input);
+                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Date, pDatFecPlazoEmision.Value, ParameterDirection.Input);
                 }
                 else
                 {
-                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Char, null, ParameterDirection.Input);
+                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Date, null, ParameterDirection.Input);
                 }
 
                 AddParameter("pNumIdNewPost_out", OracleDbType.Int32, null, ParameterDirection.Output);
@@ -235,7 +254,8 @@ namespace Expertia.Estructura.Repository.AppWebs
 
                 #region Invoke
                 ExecuteStoredProcedure(StoredProcedureName.AW_Insert_Post_Cotizacion);
-                intIdPost = (int)GetOutParameter("pNumIdNewPost_out");
+                valor = GetOutParameter("pNumIdNewPost_out").ToString();
+                intIdPost = Convert.ToInt32(valor);
                 #endregion
 
                 return intIdPost;

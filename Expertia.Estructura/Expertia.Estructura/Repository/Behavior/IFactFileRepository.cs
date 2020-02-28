@@ -9,7 +9,7 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface IFactFileRepository
     {
-        Operation GuardarDatosFacturacion(FactFileRetailReq model);
+        int GuardarDatosFacturacion(FactFileRetailReq model);
         void EliminarDetalleTarifa(int IdDatosFacturacion);
         void EliminarDetalleNoRecibos(int IdDatosFacturacion);
         void GuardarDetalleTarifa(FactFileRetailReq model, int IdDatosFacturacion);

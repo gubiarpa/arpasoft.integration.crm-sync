@@ -194,8 +194,8 @@ namespace Expertia.Estructura.Utils
         public const string AW_Update_ContactoPta = "APPWEBS.CRM_PKG.SP_ACTUALIZAR_ENVIO_CONTACTO";
 
         ///Facturacion file retail
-        public const string AW_Ins_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_ACTUALIZAR_DATOSFACTURACION";
-        public const string AW_Upd_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_DATOSFACTURACION";
+        public const string AW_Upd_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_ACTUALIZAR_DATOSFACTURACION";
+        public const string AW_Ins_factFileRetail = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_DATOSFACTURACION";
         public const string AW_Del_DetalleTarifa = "APPWEBS.PKG_Desglose_CA.SP_ELIMINAR_DETALLETARIFA";
         public const string AW_Del_DetalleRecibos = "APPWEBS.PKG_Desglose_CA.SP_ELIMINAR_DETALLENORECIBOS";
         public const string AW_Ins_Tarifa = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_TARIFA";
@@ -223,6 +223,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Update_Monto_Estimado_File = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MONTO_ESTIMADO_FILE";
         public const string AW_Ins_Fec_Salida_Cot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_FEC_SAL_COT";
         public const string AW_Update_Facturacion_os_Tkts_Util = "NUEVOMUNDO.UP_FACTURACION_OS_TKTS_UTIL";
+        public const string AW_Liberar_Usuweb_CA = "APPWEBS.TEST_PKG_COTIZACION_VTA_WFF.SP_LIBERAR_USUWEB_CA";
 
         //Associate File
         public const string AW_Get_Datos_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF_TEST.SP_OBTIENE_COT_TEST_MT";

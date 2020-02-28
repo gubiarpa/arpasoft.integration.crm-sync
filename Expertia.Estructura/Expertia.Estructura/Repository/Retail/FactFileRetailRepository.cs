@@ -20,68 +20,79 @@ namespace Expertia.Estructura.Repository.Retail
         #endregion
 
         #region PublicMethods
-        public Operation GuardarDatosFacturacion(FactFileRetailReq model)
+        public int GuardarDatosFacturacion(FactFileRetailReq model)
         {
             var operation = new Operation();
+            int numId = 0;
+            string valor = "";
             int IdDatosFactura;
 
-            #region Parameters
-            if (model.IdDatosFacturacion != 0)
+            try
             {
-                AddParameter("pIdDatosFacturacion", OracleDbType.Varchar2, model.IdDatosFacturacion);
+
+                #region Parameters
+                if (model.IdDatosFacturacion != 0)
+                {
+                    AddParameter("pIdDatosFacturacion", OracleDbType.Varchar2, model.IdDatosFacturacion);
+                }
+
+                AddParameter("pEstado", OracleDbType.Int32, model.Estado);
+                AddParameter("pDK", OracleDbType.Varchar2, model.DK);
+                AddParameter("pSubCodigo", OracleDbType.Varchar2, model.SubCodigo);
+                AddParameter("pEjecutiva", OracleDbType.Varchar2, model.Ejecutiva);
+                AddParameter("pNumfileNM", OracleDbType.Varchar2, model.NumFile_NM);
+                AddParameter("pNumfileDM", OracleDbType.Varchar2, model.NUmFile_DM);
+                AddParameter("pCCB", OracleDbType.Varchar2, model.CCB);
+                AddParameter("pRUC", OracleDbType.Varchar2, model.RUC);
+                AddParameter("pRAZON", OracleDbType.Varchar2, model.RAZON);
+                AddParameter("pTipoDocumento", OracleDbType.Varchar2, model.TipoDocumento);
+                AddParameter("PDoc_Cid", OracleDbType.Varchar2, model.Doc_cid);
+                AddParameter("pDOCUMENTO", OracleDbType.Varchar2, model.Documento);
+                AddParameter("pNombre", OracleDbType.Varchar2, model.Nombre);
+                AddParameter("pApellidoP", OracleDbType.Varchar2, model.ApellidoPaterno);
+                AddParameter("pApellidoM", OracleDbType.Varchar2, model.ApellidoMateno);
+                AddParameter("pOARippley", OracleDbType.Varchar2, model.OARipley);
+                AddParameter("pMontoOA", OracleDbType.Decimal, model.MontoOA);
+                AddParameter("pIdUsuario", OracleDbType.Int32, model.IdUsuario);
+                AddParameter("pCot_Id", OracleDbType.Int32, model.Cot_Id);
+                AddParameter("pCampania", OracleDbType.Varchar2, model.Campania);
+                AddParameter("pCorreo", OracleDbType.Varchar2, model.Correo);
+                AddParameter("pBanco", OracleDbType.Varchar2, model.Banco);
+                AddParameter("pCantidadMillas", OracleDbType.Varchar2, model.CantidadMillas);
+                AddParameter("pMontoMillas", OracleDbType.Decimal, model.MontoMillas);
+                AddParameter("pObservacion", OracleDbType.Clob, model.Observacion);
+                if (model.IdDatosFacturacion != 0)
+                {
+                    IdDatosFactura = model.IdDatosFacturacion;
+                }
+                else
+                {
+                    AddParameter("pNumId_out", OracleDbType.Int32, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+
+                }
+                #endregion
+
+                #region Invoke
+                var spName = string.Empty;
+
+                if (model.IdDatosFacturacion != 0)
+                    spName = StoredProcedureName.AW_Upd_factFileRetail;
+                else
+                    spName = StoredProcedureName.AW_Ins_factFileRetail;
+
+
+                ExecuteStoredProcedure(spName);
+
+                valor = GetOutParameter("pNumId_out").ToString();
+                numId = Convert.ToInt32(valor);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
             }
 
-            AddParameter("pEstado", OracleDbType.Int32, model.Estado);
-            AddParameter("pDK", OracleDbType.Varchar2, model.DK);
-            AddParameter("pSubCodigo", OracleDbType.Varchar2, model.SubCodigo);
-            AddParameter("pEjecutiva", OracleDbType.Varchar2, model.Ejecutiva);
-            AddParameter("pNumfileNM", OracleDbType.Varchar2, model.NumFile_NM);
-            AddParameter("pNumfileDM", OracleDbType.Varchar2, model.NUmFile_DM);
-            AddParameter("pCCB", OracleDbType.Varchar2, model.CCB);
-            AddParameter("pRUC", OracleDbType.Varchar2, model.RUC);
-            AddParameter("pRAZON", OracleDbType.Varchar2, model.RAZON);
-            AddParameter("pTipoDocumento", OracleDbType.Varchar2, model.TipoDocumento);
-            AddParameter("PDoc_Cid", OracleDbType.Varchar2, model.Doc_cid);
-            AddParameter("pDOCUMENTO", OracleDbType.Varchar2, model.Documento);
-            AddParameter("pNombre", OracleDbType.Varchar2, model.Nombre);
-            AddParameter("pApellidoP", OracleDbType.Varchar2, model.ApellidoPaterno);
-            AddParameter("pApellidoM", OracleDbType.Varchar2, model.ApellidoMateno);
-            AddParameter("pOARippley", OracleDbType.Varchar2, model.OARipley);
-            AddParameter("pMontoOA", OracleDbType.Decimal, model.MontoOA);
-            AddParameter("pIdUsuario", OracleDbType.Int32, model.IdUsuario);
-            AddParameter("pCot_Id", OracleDbType.Int32, model.Cot_Id);
-            AddParameter("pCampania", OracleDbType.Varchar2, model.Campania);
-            AddParameter("pCorreo", OracleDbType.Varchar2, model.Correo);
-            AddParameter("pBanco", OracleDbType.Varchar2, model.Banco);
-            AddParameter("pCantidadMillas", OracleDbType.Varchar2, model.CantidadMillas);
-            AddParameter("pMontoMillas", OracleDbType.Decimal, model.MontoMillas);
-            AddParameter("pObservacion", OracleDbType.Clob, model.Observacion);
-            if (model.IdDatosFacturacion != 0)
-            {
-                IdDatosFactura = model.IdDatosFacturacion;
-            }
-            else
-            {
-                AddParameter("pNumId_out", OracleDbType.Int32, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-                
-            }
-            #endregion
-
-            #region Invoke
-            var spName = string.Empty;
-            
-            if(model.IdDatosFacturacion!=0)
-                spName = StoredProcedureName.AW_Upd_factFileRetail;
-            else
-                spName = StoredProcedureName.AW_Ins_factFileRetail;
-                    
-            
-            ExecuteStoredProcedure(spName);
-            
-            operation["pNumId_out"] = GetOutParameter("pNumId_out");
-            #endregion
-
-            return operation;
+            return numId;
         }
 
         public void EliminarDetalleTarifa(int IdDatosFacturacion)
@@ -125,17 +136,17 @@ namespace Expertia.Estructura.Repository.Retail
                 {
                     #region parameters
                     AddParameter("pCantidadADT", OracleDbType.Int32, Item.CantidadADT);
-                    AddParameter("pTarifaPorADT", OracleDbType.Decimal, Convert.ToDouble(Item.CantidadADT));
-                    AddParameter("pCatindadCHD", OracleDbType.Int32, Item.CantidadADT);
-                    AddParameter("pTarifaPorCHD", OracleDbType.Decimal, Convert.ToDouble(Item.CantidadADT));
-                    AddParameter("pCantidadINF", OracleDbType.Int32, Item.CantidadADT);
-                    AddParameter("pTarifaPorINF", OracleDbType.Decimal, Convert.ToDouble(Item.CantidadADT));
-                    AddParameter("pIdDatosFacturacion", OracleDbType.Int32, Item.CantidadADT);
-                    AddParameter("pIdGrupoServicio", OracleDbType.Int32, Item.CantidadADT);
-                    AddParameter("pMontoPorADT", OracleDbType.Decimal, Convert.ToDouble(Item.CantidadADT));
-                    AddParameter("pMontoPorCHD", OracleDbType.Decimal, Convert.ToDouble(Item.CantidadADT));
-                    AddParameter("pMontoPorINF", OracleDbType.Decimal, Convert.ToDouble(Item.CantidadADT));
-                    AddParameter("pGrupoServicio", OracleDbType.Varchar2, Item.CantidadADT);
+                    AddParameter("pTarifaPorADT", OracleDbType.Decimal, Convert.ToDouble(Item.TarifaPorADT));
+                    AddParameter("pCatindadCHD", OracleDbType.Int32, Item.CantidadCHD);
+                    AddParameter("pTarifaPorCHD", OracleDbType.Decimal, Convert.ToDouble(Item.TarifaPorCHD));
+                    AddParameter("pCantidadINF", OracleDbType.Int32, Item.CantidadINF);
+                    AddParameter("pTarifaPorINF", OracleDbType.Decimal, Convert.ToDouble(Item.TarifaINF));
+                    AddParameter("pIdDatosFacturacion", OracleDbType.Int32, IdDatosFacturacion);
+                    AddParameter("pIdGrupoServicio", OracleDbType.Int32, Item.IdGrupoServicio);
+                    AddParameter("pMontoPorADT", OracleDbType.Decimal, Convert.ToDouble(Item.MontoPorADT));
+                    AddParameter("pMontoPorCHD", OracleDbType.Decimal, Convert.ToDouble(Item.MontoPorCHD));
+                    AddParameter("pMontoPorINF", OracleDbType.Decimal, Convert.ToDouble(Item.MontoPorINF));
+                    AddParameter("pGrupoServicio", OracleDbType.Varchar2, Item.GrupoServicio);
                     #endregion
                     #region Invoke
                     var spName = string.Empty;
