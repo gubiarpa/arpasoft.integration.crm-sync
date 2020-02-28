@@ -212,6 +212,7 @@
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />
     <Compile Include="Models\Retail\CorreoNM.cs" />
+    <Compile Include="Models\Retail\Oficina.cs" />
     <Compile Include="Models\Retail\Pedido.cs" />
     <Compile Include="Models\Retail\Personal.cs" />
     <Compile Include="Models\Retail\SRV.cs" />
@@ -232,8 +233,10 @@
     <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />
+    <Compile Include="Repository\Behavior\IDatosOficina.cs" />
     <Compile Include="Repository\Behavior\IDatosUsuario.cs" />
     <Compile Include="Repository\Behavior\IEnviarCorreo.cs" />
+    <Compile Include="Repository\Behavior\IFactFileRepository.cs" />
     <Compile Include="Repository\Behavior\IFileCT.cs" />
     <Compile Include="Repository\Behavior\IFileRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadRepository.cs" />
@@ -251,6 +254,7 @@
     <Compile Include="Repository\DestinosMundiales\Contacto_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\Cotizacion_DM_Repository.cs" />
     <Compile Include="Repository\DestinosMundiales\CuentaB2B_DM_Repository.cs" />
+    <Compile Include="Repository\General\DatosOficina.cs" />
     <Compile Include="Repository\General\DatosUsuario.cs" />
     <Compile Include="Repository\General\EnviarCorreo.cs" />
     <Compile Include="Repository\InterAgencias\ContactoPta_IA_Repository.cs" />
@@ -261,6 +265,7 @@
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
+    <Compile Include="Repository\Retail\FileRetailRepository.cs" />
     <Compile Include="Repository\Retail\Pedido_RetailRepository.cs" />
     <Compile Include="RestManager\Base\RestBase.cs" />
     <Compile Include="RestManager\RestParse\PtaParse.cs" />
@@ -278,6 +283,7 @@
     <Compile Include="Utils\Retail\EncriptaCadena.cs" />
     <Compile Include="Utils\Retail\NMMail.cs" />
     <Compile Include="Utils\Retail\UsuarioLogin.cs" />
+    <Compile Include="Utils\ValidateProcess.cs" />
     <Compile Include="Web References\ws_compra\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
