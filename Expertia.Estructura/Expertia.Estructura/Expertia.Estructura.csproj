@@ -208,6 +208,8 @@
     <Compile Include="Models\Auxiliar\Sitio.cs" />
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Oportunidad.cs" />
+    <Compile Include="Models\Retail\ArchivoCliCot.cs" />
+    <Compile Include="Models\Retail\ClienteCot.cs" />
     <Compile Include="Models\Retail\OportunidadRetail.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />
@@ -216,6 +218,8 @@
     <Compile Include="Models\Retail\Pedido.cs" />
     <Compile Include="Models\Retail\Personal.cs" />
     <Compile Include="Models\Retail\SRV.cs" />
+    <Compile Include="Models\Retail\TelefonoCliCot.cs" />
+    <Compile Include="Models\Retail\UsuarioWeb.cs" />
     <Compile Include="Models\SafetyPay\SafetyPay.cs" />
     <Compile Include="Models\Subcodigo.cs" />
     <Compile Include="Models\Ventas.cs" />
@@ -266,6 +270,7 @@
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
     <Compile Include="Repository\Retail\FileRetailRepository.cs" />
+    <Compile Include="Repository\Retail\OportunidadRetailRepository.cs" />
     <Compile Include="Repository\Retail\Pedido_RetailRepository.cs" />
     <Compile Include="RestManager\Base\RestBase.cs" />
     <Compile Include="RestManager\RestParse\PtaParse.cs" />
