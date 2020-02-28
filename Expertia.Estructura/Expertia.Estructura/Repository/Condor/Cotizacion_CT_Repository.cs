@@ -62,27 +62,6 @@ namespace Expertia.Estructura.Repository.Condor
             return operation;
         }
 
-        public Operation GetOperationJourney()
-        {
-            var operation = new Operation();
-
-            #region Parameter
-            /// (01) P_CODIGO_ERROR
-            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (02) P_MENSAJE_ERROR
-            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (03) P_NOMBRE_USUARIO
-            AddParameter(OutParameter.CursorCotizacion, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            #endregion
-
-            #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.CT_Obtiene_NovedadCotizacion);
-
-            operation[OutParameter.CursorCotizacion] = ToCotizacionJY(GetDtParameter(OutParameter.CursorCotizacion));
-            #endregion
-
-            return operation;
-        }
         #endregion
 
         #region Auxiliar
@@ -118,54 +97,6 @@ namespace Expertia.Estructura.Repository.Condor
                         Fecha_Inicio = fecha_Inicio,
                         Fecha_Fin = fecha_Fin
 
-                    });
-                    #endregion
-                }
-                return cotizaciones;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public IEnumerable<CotizacionJYResponse> ToCotizacionJY(DataTable dt)
-        {
-            try
-            {
-                var cotizaciones = new List<CotizacionJYResponse>();
-                foreach (DataRow row in dt.Rows)
-                {
-                    #region Loading
-                    var id_oportunidad_sf = row.StringParse("");
-                    var id_cotizacion_sf = row.StringParse("");
-                    var id_cuenta_sf = row.StringParse("");
-                    var cotizacion = row.StringParse("");
-                    var grupo = row.StringParse("");
-                    var venta_estimada = row.FloatParse("");
-                    var elegida = row.StringParse("").Equals("");
-                    var file_subfile = row.StringParse("");
-                    var venta_file = row.FloatParse("");
-                    var margen_file = row.FloatParse("");
-                    var paxs_file = row.IntParse("");
-                    var estado_file = row.StringParse("");
-                    #endregion
-
-                    #region AddingElement
-                    cotizaciones.Add(new CotizacionJYResponse()
-                    {
-                        IdOportunidadSf = id_oportunidad_sf,
-                        IdCotizacionSf = id_cotizacion_sf,
-                        IdCuentaSf = id_cuenta_sf,
-                        Cotizacion = cotizacion,
-                        Grupo = grupo,
-                        VentaEstimada = venta_estimada,
-                        Elegida = elegida,
-                        FileSubfile = file_subfile,
-                        VentaFile = venta_file,
-                        MargenFile = margen_file,
-                        PaxsFile = paxs_file,
-                        EstadoFile = estado_file
                     });
                     #endregion
                 }

@@ -207,12 +207,14 @@
     <Compile Include="Models\Auxiliar\Participante.cs" />
     <Compile Include="Models\Auxiliar\Sitio.cs" />
     <Compile Include="Models\Auxiliar\Telefono.cs" />
+    <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Retail\ArchivoCliCot.cs" />
     <Compile Include="Models\Retail\ClienteCot.cs" />
     <Compile Include="Models\Retail\OportunidadRetail.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />
+    <Compile Include="Models\Respuesta.cs" />
     <Compile Include="Models\Retail\CorreoNM.cs" />
     <Compile Include="Models\Retail\Oficina.cs" />
     <Compile Include="Models\Retail\Pedido.cs" />
@@ -267,6 +269,7 @@
     <Compile Include="Repository\InterAgencias\File_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
+    <Compile Include="Repository\Journeyou\CotizacionJYRepository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
     <Compile Include="Repository\Retail\FileRetailRepository.cs" />
