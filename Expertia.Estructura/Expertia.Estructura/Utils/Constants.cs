@@ -225,7 +225,9 @@ namespace Expertia.Estructura.Utils
         public const string AW_Update_Facturacion_os_Tkts_Util = "NUEVOMUNDO.UP_FACTURACION_OS_TKTS_UTIL";
 
         //Associate File
-        public const string AW_Get_Datos_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF_TEST.SP_OBTIENE_COT_TEST_MT";        
+        public const string AW_Get_Datos_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF_TEST.SP_OBTIENE_COT_TEST_MT";
+        public const string AW_Get_PedidoXSolicitud = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_X_SOLIC_MT";
+        public const string AW_Get_FormaPagoBy_IdPedido = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_FORMA_PAGO_PEDIDO";
         #endregion
     }
 
@@ -295,7 +297,9 @@ namespace Expertia.Estructura.Utils
         public const string CursorMailWeb = "pCurResult_out";
         public const string CursorDtosPersonal = "pCurResult_out";
         public const string CursorDtosOficina = "pCurResult_out";
-        public const string CursorDtosCotizacion = "pCurResult_out";        
+        public const string CursorDtosCotizacion = "pCurResult_out";
+        public const string CursorPedidosBySolicitud = "pCurResult_out";
+        public const string CursorFormaPagoBy_IdPedido = "pCurResult_out";        
         #endregion
 
         #region Fields
@@ -428,8 +432,9 @@ namespace Expertia.Estructura.Utils
         public const string ID_TIPO_PEDIDO_OTROS = "OTR";
         public const int ID_CANAL_VENTA_CONTACT_CENTER = 94;
         public const Int16 ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;
+        public const Int16 INT_ID_ESTADO_PEDIDO_PAGADO = 2;
         public const string CODE_FPAGO_GENERAL = "SF";
-        public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";
+        public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";        
     }
 
     public static class Constantes_SafetyPay

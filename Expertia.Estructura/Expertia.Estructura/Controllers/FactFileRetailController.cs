@@ -64,8 +64,8 @@ namespace Expertia.Estructura.Controllers
             {
                 bolValor = _CotizacionSRV._Liberar_UsuWeb_CA(models.Cot_Id);
             }
-            
-            Inserta_Post_Cot(models.Cot_Id, "1", pStrTextoPost,
+
+            _CotizacionSRV.Inserta_Post_Cot(models.Cot_Id, "1", pStrTextoPost,
                 strIPUsuCrea, objUsuarioLogin.LoginUsuario, IdUsuario,
                 IdDep, IdOfi, null, null, Constantes_SRV.INT_ID_ESTADO_COT_DERIVADO_A_CA, true, null,
                 false, null, false, IdUsuario, IdOfi,
@@ -120,176 +120,9 @@ namespace Expertia.Estructura.Controllers
                 return true;
             else
                 return false;
-        }
-        
-        private int Inserta_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost, 
-            string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb, 
-            int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, Int16 pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta, 
-            bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, Nullable<int> pIntIdUsuWebCounterCrea, Nullable<int> pIntIdOfiCounterCrea, 
-            Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile)
-        {
-            int intIdPost = 0;
-            
-            intIdPost = _CotizacionSRV._Insert_Post_Cot(pIntIdCot, pStrTipoPost, pStrTextoPost, pStrIPUsuCrea,
-                                    pStrLoginUsuCrea, pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pLstArchivos, pLstFilesPTA, pIntIdEstado,
-                                    pBolCambioEstado, pLstFechasCotVta, pBolEsAutomatico, pBytArchivoMail, pBolEsCounterAdmin,
-                                    pIntIdUsuWebCounterCrea, pIntIdOfiCounterCrea, pIntIdDepCounterCrea, pBolEsUrgenteEmision,
-                                    pDatFecPlazoEmision, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, pDblMontoEstimadoFile);
-
-            if (pLstArchivos != null)
-            {
-                foreach (ArchivoPostCot objArchivoPost in pLstArchivos)
-                {
-
-                }
-            }
-
-            if (pBolCambioEstado)
-            {
-                Post_SRV RQ_General_PostSRV = new Post_SRV();
-                RQ_General_PostSRV.IdCot = pIntIdCot;
-                RQ_General_PostSRV.LoginUsuCrea = pStrLoginUsuCrea;
-                RQ_General_PostSRV.IPUsuCrea = pStrIPUsuCrea;
-                RQ_General_PostSRV.IdEstado = pIntIdEstado;
-                if (pBolEsCounterAdmin)
-                {
-                    RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWebCounterCrea;
-                    RQ_General_PostSRV.IdDepCounterCrea = pIntIdDepCounterCrea;
-                    RQ_General_PostSRV.IdOfiCounterCrea = pIntIdOfiCounterCrea;
-                    RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
-                    RQ_General_PostSRV.IdUsuWeb = pIntIdUsuWeb;
-                    _CotizacionSRV.UpdateEstadoCotVTA(RQ_General_PostSRV);
-                }
-                else
-                {
-                    RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWeb;
-                    RQ_General_PostSRV.IdDepCounterCrea = pIntIdDep;
-                    RQ_General_PostSRV.IdOfiCounterCrea = pIntIdOfi;
-                    RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
-                    RQ_General_PostSRV.IdUsuWeb = 0;
-                    _CotizacionSRV.UpdateEstadoCotVTA(RQ_General_PostSRV);
-
-                }
-            }
-
-            if (pIntIdEstado == 8 && pIntIdMotivoNoCompro.HasValue) // ESTADO NO COMPRO
-            {
-                _CotizacionSRV._Update_MotivoNoCompro(pIntIdCot, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro);
-            }
-
-            if (pIntIdEstado == 5) //ESTADO FACTURADO
-            {
-                Update_Importe_FilesPTABy_Cot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
-
-                if (pLstFilesPTA != null)
-                {
-                    if (pLstFilesPTA.Count > 0)
-                    {
-                        bool bolBDNuevoMundo = true;
-
-                        double dblTipoCambio = _CotizacionSRV._Select_TipoCambio(DateTime.Now, "SOL", 1, bolBDNuevoMundo);
-
-                        foreach (FilePTACotVta objFilePTACotVta in pLstFilesPTA)
-                        {
-                            if (pBolEsCounterAdmin)
-                            {
-                                _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWebCounterCrea.Value, pIntIdOfiCounterCrea.Value, pIntIdDepCounterCrea.Value);
-                            }
-                            else
-                            {
-                                _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
-                            }
-                        }
-                    }
-                }
-            }
-            else if (pIntIdEstado == 4)
-            {
-                if (pLstFechasCotVta != null)
-                {
-                    for (int intX = 0; intX <= pLstFechasCotVta.Length - 1; intX++)
-                    {
-                        if (pBolEsCounterAdmin)
-                        {
-                            _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWebCounterCrea.Value, pIntIdDepCounterCrea.Value, pIntIdOfiCounterCrea.Value);
-
-                        }
-                        else
-                        {
-
-                            _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWeb, pIntIdDep, pIntIdOfi);
-
-                        }
-                    }
-                }
-            }
-
-            if (pBytArchivoMail != null)//NO ENTRA (SACADO DEL SRV)
-            {
-                _CotizacionSRV._Insert_ArchivoMail_Post_Cot(pIntIdCot, intIdPost, pBytArchivoMail);
-            }
-
-            if (pDblMontoEstimadoFile.HasValue && pDblMontoEstimadoFile.Value > 0)
-            {
-                _CotizacionSRV._Update_MontoEstimadoFileBy_IdCotVta(pIntIdCot, pDblMontoEstimadoFile.Value);
-            }
-
-            return intIdPost;
-        }
-
-        private void Update_Importe_FilesPTABy_Cot(int pIntIdCot, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep)
-        {
-            try
-            {
-                List<FilePTACotVta> lstFiles = _CotizacionSRV._SelectFilesPTABy_IdCot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
-
-                foreach (FilePTACotVta objTempFilePTA in lstFiles)
-                {
-                    _Update_Importe_FilePTA(pIntIdCot, objTempFilePTA.IdSuc, objTempFilePTA.IdFilePTA, pIntIdUsuWeb, pIntIdOfi, pIntIdDep, "1");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }   
-        }
+        }       
         #endregion
 
-        private void _Update_Importe_FilePTA(int pIntIdCot, int pIntIdSuc, int pIntIdFile, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep, string pStrEsUpdUsuario)
-        {
-            try
-            {
-                DataTable dtImporteFile = _CotizacionSRV._Select_InfoFile(pIntIdSuc, pIntIdFile);
-
-                if (dtImporteFile.Rows.Count == 0)
-                {
-                    ///Ssegun el srv no hace nada
-                }
-                else
-                {
-                    DataRow drCliente = dtImporteFile.Rows[0];
-                    string strIdMoneda = drCliente["ID_MONEDA"].ToString();
-                    double dblImporteSuma = 0;
-
-                    foreach (DataRow drImporteFile in dtImporteFile.Rows)
-                    {
-                        if ((drImporteFile["ID_MONEDA"])!=null)
-                        {
-                            if (drImporteFile["FLAG"].ToString() == "1")
-                                dblImporteSuma += (double)drImporteFile["IMPORTE_TOTAL"];
-                        }
-                    }
-
-                    _CotizacionSRV._Actualiza_Imp_File_Cot(pIntIdCot, pIntIdSuc, pIntIdFile, strIdMoneda, 
-                                                           dblImporteSuma, pIntIdUsuWeb, pIntIdOfi, pIntIdDep, pStrEsUpdUsuario);
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         private string TemplateHtml(FactFileRetailReq models, List<FileRetail> lstArchivos)
         {
             try

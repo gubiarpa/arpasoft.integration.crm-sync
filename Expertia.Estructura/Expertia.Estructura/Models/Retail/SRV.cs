@@ -55,6 +55,7 @@ namespace Expertia.Estructura.Models
     public class AssociateFile
     {        
         public int idUsuario { get; set; }
+        public bool ModalidadCompra { get; set; }
         public int idoportunidad_SF { get; set; }
         public int idCotSRV_SF { get; set; }
         public List<FileSRV> LstFiles { get; set; }

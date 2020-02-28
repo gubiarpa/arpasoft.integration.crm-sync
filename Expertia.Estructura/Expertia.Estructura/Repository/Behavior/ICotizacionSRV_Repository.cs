@@ -30,5 +30,11 @@ namespace Expertia.Estructura.Repository.Behavior
         void _Insert_FechaSalida_Cot(int pIntIdCot, string pStrFecSalida, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi);
 
         CotizacionVta Get_Datos_CotizacionVta(int IdCotSRV);
+
+        int Inserta_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost,
+            string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb,
+            int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, Int16 pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta,
+            bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, Nullable<int> pIntIdUsuWebCounterCrea, Nullable<int> pIntIdOfiCounterCrea,
+            Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile);
     }
 }
