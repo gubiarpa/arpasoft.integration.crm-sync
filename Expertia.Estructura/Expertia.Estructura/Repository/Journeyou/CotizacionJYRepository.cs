@@ -71,20 +71,23 @@ namespace Expertia.Estructura.Repository.Journeyou
             {
                 var cotizaciones = new List<CotizacionJYResponse>();
 
-                foreach (DataRow row in dt.Rows)
+                if (dt != null && dt.Rows.Count > 0)
                 {
-                    cotizaciones.Add(new CotizacionJYResponse()
+                    foreach (DataRow row in dt.Rows)
                     {
-                        Grupo = row.StringParse("Grupo"),
-                        Estado = row.StringParse("Estado"),
-                        VentaEstimada = row.FloatParse("Venta_Estimada"),
-                        FileSubfile = row.StringParse("File_SubFile"),
-                        VentaFile = row.FloatParse("Venta_File"),
-                        MargenFile = row.FloatParse("Margen_File"),
-                        PaxsFile = row.IntParse("Paxs_File"),
-                        EstadoFile = row.StringParse("Estado_File"),
-                        FechaInicioViaje = row.DateTimeParse("Fecha_Inicio_Viaje")
-                    });
+                        cotizaciones.Add(new CotizacionJYResponse()
+                        {
+                            Grupo = row.StringParse("Grupo"),
+                            Estado = row.StringParse("Estado"),
+                            VentaEstimada = row.FloatParse("Venta_Estimada"),
+                            FileSubfile = row.StringParse("File_SubFile"),
+                            VentaFile = row.FloatParse("Venta_File"),
+                            MargenFile = row.FloatParse("Margen_File"),
+                            PaxsFile = row.IntParse("Paxs_File"),
+                            EstadoFile = row.StringParse("Estado_File"),
+                            FechaInicioViaje = row.DateTimeParse("Fecha_Inicio_Viaje")
+                        });
+                    }
                 }
                 return cotizaciones;
             }

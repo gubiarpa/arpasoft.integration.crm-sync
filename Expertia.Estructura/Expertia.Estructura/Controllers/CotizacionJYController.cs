@@ -25,14 +25,19 @@ namespace Expertia.Estructura.Controllers
         {
             try
             {
-                RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry());
+                if (RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry()) != null)
+                {
+                    var operation = _cotizacionRepository.GetCotizaciones(cotizacion);
+                    var cotizaciones = (List<CotizacionJYResponse>)operation["P_CUR_COTIZACION_ASOCIADA"];
+                    if (cotizaciones.Count.Equals(0)) return NotFound();
 
-                var operation = _cotizacionRepository.GetCotizaciones(cotizacion);
-                var cotizacionResponse = ((List<CotizacionJYResponse>)operation["P_CUR_COTIZACION_ASOCIADA"]).ElementAt(0);
-                cotizacionResponse.CodigoError = operation[OutParameter.CodigoError].ToString();
-                cotizacionResponse.MensajeError = operation[OutParameter.MensajeError].ToString();
-                
-                return Ok(cotizacionResponse);
+                    var cotizacionResponse = cotizaciones.ElementAt(0);
+                    cotizacionResponse.CodigoError = operation[OutParameter.CodigoError].ToString();
+                    cotizacionResponse.MensajeError = operation[OutParameter.MensajeError].ToString();
+                    
+                    return Ok(cotizacionResponse);
+                }
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -130,7 +135,10 @@ namespace Expertia.Estructura.Controllers
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
-            _cotizacionRepository = new CotizacionJYRepository(unidadNegocioKey);
+            if (unidadNegocioKey != null)
+            {
+                _cotizacionRepository = new CotizacionJYRepository(unidadNegocioKey);
+            }
             return unidadNegocioKey; // Devuelve el mismo parámetro
         }
 
