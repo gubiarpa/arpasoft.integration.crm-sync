@@ -121,7 +121,9 @@ namespace Expertia.Estructura.Utils
 
         #region JourneyYou
         /// Cotización
-        public const string CT_Obtiene_NovedadCotizacion = "CONDOR.CRM_PKG.";
+        public const string CT_Obtiene_NovedadCotizacion = "CONDOR.CRM_PKG.SP_CONSULTAR_COTIZACION_B2C";
+        public const string CT_Lista_CotizacionB2C = "CONDOR.CRM_PKG.SP_LISTAR_COTIZACION_B2C";
+        public const string CT_Actualziar_EnvioCotizacionB2C = "CONDOR.CRM_PKG.SP_ACTUALIZAR_ENVIO_COTI_B2C";
         #endregion
 
         #region DestinosMundiales
@@ -249,6 +251,7 @@ namespace Expertia.Estructura.Utils
         public const string CuentaPtaMethod = "CUENTAPTA_METHODNAME";
         public const string ContactoPtaMethod = "CONTACTOPTA_METHODNAME";
         public const string PedidosProcesadosMethod = "POR_DEFINIR_METHODNAME";
+        public const string CotizacionJYUpdMethod = "COTIZACIONJYUPD_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -301,7 +304,9 @@ namespace Expertia.Estructura.Utils
         public const string CursorDtosOficina = "pCurResult_out";
         public const string CursorDtosCotizacion = "pCurResult_out";
         public const string CursorPedidosBySolicitud = "pCurResult_out";
-        public const string CursorFormaPagoBy_IdPedido = "pCurResult_out";        
+        public const string CursorFormaPagoBy_IdPedido = "pCurResult_out";
+        public const string CursorCotizacionAsociada = "P_CUR_COTIZACION_ASOCIADA";
+        public const string CursorCotizacionB2C = "P_CUR_COTIZACION_B2C";
         #endregion
 
         #region Fields
@@ -318,6 +323,7 @@ namespace Expertia.Estructura.Utils
         public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
         public const string NumeroIdPostSRV = "pNumIdNewPost_out";
         public const string CursorPedidosProcesados = "P_PEDIDOS_PROCESADOS";
+        public const string NumeroActualizados = "P_ACTUALIZADOS";
         #endregion
 
         #region SalesforceParameters
@@ -326,6 +332,10 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF";
         public const string SF_IdCuenta = "ID_CUENTA_SF";
         public const string SF_IdContacto = "ID_CONTACTO_SF";
+        public const string SF_CodigoRetorno = "CODIGO_RETORNO";
+        public const string SF_MensajeRetorno = "MENSAJE_RETORNO";
+        public const string SF_File_SubFile = "FILE_SUBFILE";
+        public const string SF_Cotizacion = "COTIZACION";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";
