@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.VisualBasic;
 using System.Net.Mail;
 using Expertia.Estructura.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Expertia.Estructura.Utils
 {
@@ -349,5 +350,52 @@ namespace Expertia.Estructura.Utils
             }
         }
 
+        public void Mail_AgregaEmailListaBoletinNMV(int pIntIdWeb, int pIntIdLang, string pStrNomUsu, string pStrEmailUsu, string pStrNomLista, bool pBolSuscribe)
+        {
+            var objNMMail = new NMMail();
+            try
+            {
+                string strTipoAccion = string.Empty;
+                // objNMMail.MailServer = "172.20.3.19"
+                objNMMail.MailServer = "smtp.office365.com";
+                objNMMail.AddMailFrom = "info@expertiatravel.com";
+                objNMMail.AddMailsTo = "MDaemon@mktg.gruponuevomundo.com.pe";
+
+                if (pBolSuscribe)
+                {
+                    if (!string.IsNullOrEmpty(pStrNomUsu))
+                    {
+                        pStrNomUsu = pStrNomUsu.ToUpper();
+                        try
+                        {
+                            System.Text.RegularExpressions.Regex objRegEx = new System.Text.RegularExpressions.Regex("^[a-zA-Z ]*$");
+                            if (!objRegEx.IsMatch(pStrNomUsu)) pStrNomUsu = string.Empty;
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    strTipoAccion = "SUBSCRIBE";
+                    pStrNomUsu = "{" + pStrNomUsu + "}";
+                }
+                else
+                {
+                    strTipoAccion = "UNSUBSCRIBE";
+                    pStrNomUsu = string.Empty;
+                }
+
+                objNMMail.MailSubject = strTipoAccion + " " + pStrNomLista + " " + pStrEmailUsu + " " + pStrNomUsu;
+                objNMMail.MailBody = string.Empty;
+                objNMMail.SendMail("info@expertiatravel.com", "Fad29692");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                objNMMail = null/* TODO Change to default(_) if this is not a reference type */;
+            }
+        }
     }
 }

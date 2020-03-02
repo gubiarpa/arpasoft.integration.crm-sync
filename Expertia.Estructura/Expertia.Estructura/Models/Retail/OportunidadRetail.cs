@@ -17,7 +17,7 @@ namespace Expertia.Estructura.Models.Retail
         public string EmailCli { get; set; }
         public string IdDestino { get; set; }
         public string EnviarPromociones { get; set; }
-        public int MotivoCrea { get; set; }
+        public short MotivoCrea { get; set; }
         public string Area { get; set; }
         public int UsuarioCrea { get; set; }
         public string Comentario { get; set; }

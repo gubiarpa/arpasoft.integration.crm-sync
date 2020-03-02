@@ -257,6 +257,61 @@ namespace Expertia.Estructura.Repository.Retail
         {
             return null;
         }
+
+        public bool ValidarEnvioPromociones(
+            int pIntIdOcurrencia,
+            string pEnviaPromo_in)
+        {
+            return true;
+        }
+
+        public void EnviarPromociones(
+            Personal objPersonal,
+            OportunidadRetailReq oportunidadRetailReq,
+            bool chEnviarPromociones,
+            string strNomCli,
+            string strApeCli,
+            string strEmailCli
+            )
+        {
+            /*
+            UsuarioSession objUsuarioSession = (UsuarioSession)Session(NMConstantesUtility.SES_OBJ_USUARIO);
+            NuevoMundoBusiness.SuscripcionBoletinBO objSuscriptBoletinBO = new NuevoMundoBusiness.SuscripcionBoletinBO();
+            NMWebUtility objNMWebUtility = new NMWebUtility();
+            int intIdOfi = objPersonal.IdOficina; // objUsuarioSession.IdOfi;
+            int intIdDep = objPersonal.IdDepartamento;  // objUsuarioSession.IdDep;
+            try
+            {
+                if (Trim(hdRecibeProm.Value) == "0" & chEnviarPromociones)
+                {
+                    if (intIdDep != NMConstantesUtility.INT_ID_DEP_INTERNO || intIdDep != NMConstantesUtility.INT_ID_DEP_RECEPTIVO)
+                        objSuscriptBoletinBO.Mail_AgregaEmailListaBoletinNMV(7, 1, objNMWebUtility.ReemplazarTildesVocales(strNomCli + " " + strApeCli), strEmailCli, ConstantesWeb.EMAIL_BOLETIN_NMV, true);
+
+                    if ((intIdOfi == NMConstantesUtility.INT_ID_OFI_CORPORATIVO_VACACIONAL & intIdDep == NMConstantesUtility.INT_ID_DEP_COUNTER) | (intIdOfi == NMConstantesUtility.INT_ID_OFI_NMV & intIdDep == NMConstantesUtility.INT_ID_DEP_COUNTER))
+                        objSuscriptBoletinBO.Mail_AgregaEmailListaBoletinNMV(7, 1, objNMWebUtility.ReemplazarTildesVocales(strNomCli + " " + strApeCli), strEmailCli, ConstantesWeb.EMAIL_BOLETIN_CORPORATIVO_VACACIONAL, true);
+                }
+                else if (Trim(hdRecibeProm.Value) == "1" & !chEnviarPromociones)
+                {
+                    // Estaba suscrito y ahora ya no lo va a estar
+                    objSuscriptBoletinBO.Mail_AgregaEmailListaBoletinNMV(7, 1, objNMWebUtility.ReemplazarTildesVocales(strNomCli + " " + strApeCli), strEmailCli, ConstantesWeb.EMAIL_BOLETIN_NMV, false);
+
+                    if ((intIdOfi == NMConstantesUtility.INT_ID_OFI_CORPORATIVO_VACACIONAL & intIdDep == NMConstantesUtility.INT_ID_DEP_COUNTER) | (intIdOfi == NMConstantesUtility.INT_ID_OFI_NMV & intIdDep == NMConstantesUtility.INT_ID_DEP_COUNTER))
+                        objSuscriptBoletinBO.Mail_AgregaEmailListaBoletinNMV(7, 1, objNMWebUtility.ReemplazarTildesVocales(strNomCli + " " + strApeCli), strEmailCli, ConstantesWeb.EMAIL_BOLETIN_CORPORATIVO_VACACIONAL, false);
+                }
+                else if (Trim(hdRecibeProm.Value) == "" & chEnviarPromociones)
+                {
+                    if (intIdDep != NMConstantesUtility.INT_ID_DEP_INTERNO || intIdDep != NMConstantesUtility.INT_ID_DEP_RECEPTIVO)
+                        objSuscriptBoletinBO.Mail_AgregaEmailListaBoletinNMV(7, 1, objNMWebUtility.ReemplazarTildesVocales(strNomCli + " " + strApeCli), strEmailCli, ConstantesWeb.EMAIL_BOLETIN_NMV, true);
+
+                    if ((intIdOfi == NMConstantesUtility.INT_ID_OFI_CORPORATIVO_VACACIONAL & intIdDep == NMConstantesUtility.INT_ID_DEP_COUNTER) | (intIdOfi == NMConstantesUtility.INT_ID_OFI_NMV & intIdDep == NMConstantesUtility.INT_ID_DEP_COUNTER))
+                        objSuscriptBoletinBO.Mail_AgregaEmailListaBoletinNMV(7, 1, objNMWebUtility.ReemplazarTildesVocales(strNomCli + " " + strApeCli), strEmailCli, ConstantesWeb.EMAIL_BOLETIN_CORPORATIVO_VACACIONAL, true);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            */
+        }
         #endregion
 
         #region Parse

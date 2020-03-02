@@ -83,12 +83,12 @@ namespace Expertia.Estructura.Controllers
                         oportunidadRetail.IdDestino = oportunidadRetail.IdDestino.Substring(0, 3);
 
                     #region RegistraCotizacion
-                    var intIdCotVta = _repository.InsertaCotizacionVenta(
+                    var intIdCotVta = (long?)_repository.InsertaCotizacionVenta(
                         3,
                         null,
                         objPersonal.NomCompletoPer,
                         objUsuarioWeb.LoginUsuWeb,
-                        "",
+                        "", // Consultar con Gustavo IP
                         intIdCliCot ?? 0,
                         intIdUsuWeb,
                         objPersonal.IdDepartamento,
@@ -115,7 +115,42 @@ namespace Expertia.Estructura.Controllers
                         null,
                         null,
                         null,
-                        null);
+                        null
+                        )[""];
+                    #endregion
+
+                    #region RegistraIngresoCliente
+                    var intIdOcurrencias = (int)_repository.InsertaIngresoCliente(
+                        DateTime.Now,
+                        objPersonal.NomCompletoPer,
+                        objPersonal.ApePatPer,
+                        objPersonal.ApeMatPer,
+                        objPersonal.EmailPer,
+                        oportunidadRetail.MotivoCrea, 
+                        null,
+                        oportunidadRetail.IdDestino,
+                        intIdUsuWeb,
+                        objPersonal.IdOficina,
+                        objPersonal.IdDepartamento, 
+                        DateTime.Now,
+                        intIdUsuWeb,
+                        objPersonal.IdOficina,
+                        objPersonal.IdDepartamento,
+                        oportunidadRetail.Comentario,
+                        "", // Consultar con Gustavo IP,
+                        intIdCotVta, 
+                        intIdCliCot,
+                        oportunidadRetail.IdTipoDoc,
+                        oportunidadRetail.Numdoc,
+                        null
+                        )["pNumIdOcurr_out"];
+                    #endregion
+
+                    #region EnvioPromociones
+                    if (_repository.ValidarEnvioPromociones(intIdOcurrencias, oportunidadRetail.EnviarPromociones))
+                    {
+                        
+                    }
                     #endregion
                 }
                 else

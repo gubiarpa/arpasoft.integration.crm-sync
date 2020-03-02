@@ -480,6 +480,12 @@ namespace Expertia.Estructura.Utils
         public const int ID_DEP_SISTEMAS = 11;
     }
 
+    public static class ConstantesOportunidadRetail
+    {
+        public const int INT_ID_DEP_INTERNO = 52;
+        public const int INT_ID_DEP_RECEPTIVO = 10;
+    }
+
     public enum ENUM_ESTADOS_COT_VTA : short
     {
         Solicitado = 1,
