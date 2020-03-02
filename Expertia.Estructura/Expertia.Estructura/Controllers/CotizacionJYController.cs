@@ -32,9 +32,8 @@ namespace Expertia.Estructura.Controllers
                 {
                     var operation = _cotizacionRepository.GetCotizaciones(cotizacion);
                     var cotizaciones = (List<CotizacionJYResponse>)operation["P_CUR_COTIZACION_ASOCIADA"];
-                    if (cotizaciones.Count.Equals(0)) return NotFound();
 
-                    var cotizacionResponse = cotizaciones.ElementAt(0);
+                    var cotizacionResponse = cotizaciones.Count.Equals(0) ? new CotizacionJYResponse() : cotizaciones.ElementAt(0);
                     cotizacionResponse.CodigoError = operation[OutParameter.CodigoError].ToString();
                     cotizacionResponse.MensajeError = operation[OutParameter.MensajeError].ToString();
                     
