@@ -26,17 +26,17 @@ namespace Expertia.Estructura.Repository.Journeyou
             /// (02) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (03) P_ID_OPORTUNIDAD_SF
-            AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, cotizacion.IdOportunidad_sf);
+            AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, cotizacion.Id_Oportunidad_Sf);
             /// (04) P_ID_COTIZACION_SF
-            AddParameter("P_ID_COTIZACION_SF", OracleDbType.Varchar2, cotizacion.IdCotizacionSf);
+            AddParameter("P_ID_COTIZACION_SF", OracleDbType.Varchar2, cotizacion.Id_Cotizacion_Sf);
             /// (05) P_ID_CUENTA_SF
-            AddParameter("P_ID_CUENTA_SF", OracleDbType.Varchar2, cotizacion.IdCuentaSf);
+            AddParameter("P_ID_CUENTA_SF", OracleDbType.Varchar2, cotizacion.Id_Cuenta_Sf);
             /// (06) P_USUARIO
             AddParameter("P_USUARIO", OracleDbType.Varchar2, cotizacion.Usuario);
             /// (07) P_ACCION
             AddParameter("P_ACCION", OracleDbType.Varchar2, cotizacion.Accion);
             /// (08) P_TIPO_DOCUMENTO
-            AddParameter("P_TIPO_DOCUMENTO", OracleDbType.Varchar2, cotizacion.TipoDocumento);
+            AddParameter("P_TIPO_DOCUMENTO", OracleDbType.Varchar2, cotizacion.Tipo_Documento);
             /// (09) P_DOCUMENTO
             AddParameter("P_DOCUMENTO", OracleDbType.Varchar2, cotizacion.Documento);
             /// (10) P_CORREO
@@ -46,7 +46,7 @@ namespace Expertia.Estructura.Repository.Journeyou
             /// (12) P_FILE
             AddParameter("P_FILE", OracleDbType.Varchar2, cotizacion.File);
             /// (13) P_NUMERO_PAXS
-            AddParameter("P_NUMERO_PAXS", OracleDbType.Varchar2, cotizacion.NumeroPaxs);
+            AddParameter("P_NUMERO_PAXS", OracleDbType.Varchar2, cotizacion.Numero_Paxs);
             /// (14) P_CUR_COTIZACION_ASOCIADA
             AddParameter(OutParameter.CursorCotizacionAsociada, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
 

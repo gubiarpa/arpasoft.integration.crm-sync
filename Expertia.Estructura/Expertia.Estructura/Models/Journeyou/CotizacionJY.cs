@@ -8,18 +8,18 @@ namespace Expertia.Estructura.Models.Journeyou
 {
     public class Cotizacion_JY
     {
-        public string IdOportunidad_sf { get; set; }
-        public string IdCotizacionSf { get; set; }
-        public string IdCuentaSf { get; set; }
+        public string Id_Oportunidad_Sf { get; set; }
+        public string Id_Cotizacion_Sf { get; set; }
+        public string Id_Cuenta_Sf { get; set; }
         public string Usuario { get; set; }
         public string Accion { get; set; }
-        public string TipoDocumento { get; set; }
+        public string Tipo_Documento { get; set; }
         public string Documento { get; set; }
         public string Correo { get; set; }
         public string Region { get; set; }
         public string Cotizacion { get; set; }
         public string File { get; set; }
-        public int NumeroPaxs { get; set; }
+        public int Numero_Paxs { get; set; }
     }
 
     public class CotizacionJYResponse : ICrmApiResponse
