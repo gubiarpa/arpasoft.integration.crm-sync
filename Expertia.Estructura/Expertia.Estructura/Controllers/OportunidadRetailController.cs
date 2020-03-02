@@ -22,8 +22,20 @@ namespace Expertia.Estructura.Controllers
 
         #region PublicMethods
         [Route(RouteAction.Create)]
-        public IHttpActionResult Read(OportunidadRetailReq oportunidadRetail)
+        public IHttpActionResult Create(OportunidadRetailReq oportunidadRetail)
         {
+            if (DateTime.Now.Hour >= 0) // Data Provisional
+            {
+                return Ok(new OportunidadRetailRes()
+                {
+                    CodigoError = "OK",
+                    MensajeError = "La oportunidad se creó correctamente",
+                    IdOportunidad_SF = oportunidadRetail.IdOportunidad_SF,
+                    IdCotSrv = new Random().Next(100000, 999999),
+                    FechaCreacion = DateTime.Now.AddHours(- new Random().Next(0, 240)).ToString("dd/MM/yyyy")
+                });
+            }
+
             try
             {
                 var intIdUsuWeb = oportunidadRetail.IdUsuarioSrv_SF;
