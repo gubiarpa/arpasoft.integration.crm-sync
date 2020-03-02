@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Controllers.Base;
 using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Journeyou;
 using Expertia.Estructura.Repository.Journeyou;
 using Expertia.Estructura.RestManager.Base;
@@ -48,13 +49,12 @@ namespace Expertia.Estructura.Controllers
 
 
 
-        [Route(RouteAction.Update)]
-        public IHttpActionResult Update()
+        [Route(RouteAction.Send)]
+        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             try
             {
-                //RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry());
-                RepositoryByBusiness(UnidadNegocioKeys.CondorTravel);
+                var _unidadNegocioKey = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocioByCountry());
 
                 var operation = _cotizacionRepository.Lista_CotizacionB2C();
                 Respuesta Rpta = new Respuesta();
@@ -62,26 +62,23 @@ namespace Expertia.Estructura.Controllers
                 Rpta.MensajeError = operation[OutParameter.MensajeError].ToString();
                 var cotizacionJYUpdResponse = ((List<CotizacionJYUpdResponse>)operation[OutParameter.CursorCotizacionB2C]);
 
-
-
-
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
                 var token = authSf[OutParameter.SF_Token].ToString();
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// Envío de cotizacion a Salesforce
-                var CotizacionSF = new List<object>();
-                foreach (var Cotizacion in cotizacionJYUpdResponse)
+                var cotizacionSF = new List<object>();
+                foreach (var cotizacion in cotizacionJYUpdResponse)
                 {
-                    CotizacionSF.Add(ToSalesforceEntity(Cotizacion));
+                    cotizacionSF.Add(ToSalesforceEntity(cotizacion));
                 }
 
                 try
                 {
-                    
-                       
-                    var objEnvio = new { cotizaciones = CotizacionSF };
+                    ClearQuickLog("body_request.json", "CotizacionJY"); /// ♫ Trace
+                    var objEnvio = new { cotizaciones = cotizacionSF };
+                    QuickLog(objEnvio, "body_request.json", "CotizacionJY"); /// ♫ Trace
                     var response = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CotizacionJYUpdMethod, Method.POST, objEnvio, true, token);
                     if (response.StatusCode.Equals(HttpStatusCode.OK))
                     {

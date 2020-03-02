@@ -120,7 +120,6 @@ namespace Expertia.Estructura.Repository.Journeyou
             operation[OutParameter.CursorCotizacionB2C] = ToCotizacionJYUpd(GetDtParameter(OutParameter.CursorCotizacionB2C));
             #endregion
 
-
             return operation;
         }
 
