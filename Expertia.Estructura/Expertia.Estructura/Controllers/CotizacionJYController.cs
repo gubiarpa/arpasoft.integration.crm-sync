@@ -24,9 +24,11 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(Cotizacion_JY cotizacion)
         {
+            UnidadNegocioKeys? _unidadNegocio = null;
+            string exceptionMsg = string.Empty;
             try
             {
-                if (RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry()) != null)
+                if ((_unidadNegocio = RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry())) != null)
                 {
                     var operation = _cotizacionRepository.GetCotizaciones(cotizacion);
                     var cotizaciones = (List<CotizacionJYResponse>)operation["P_CUR_COTIZACION_ASOCIADA"];
@@ -42,7 +44,17 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
+                exceptionMsg = ex.Message;
                 return InternalServerError(ex);
+            }
+            finally
+            {
+                (new
+                {
+                    UnidadNegocio = _unidadNegocio.ToLongName(),
+                    cotizacion.Region,
+                    Exception = exceptionMsg
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
 
@@ -52,9 +64,11 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
+            string exceptionMsg = string.Empty;
+            UnidadNegocioKeys? _unidadNegocioKey = null;
             try
             {
-                var _unidadNegocioKey = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocioByCountry());
+                _unidadNegocioKey = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocioByCountry());
 
                 var operation = _cotizacionRepository.Lista_CotizacionB2C();
                 Respuesta Rpta = new Respuesta();
@@ -97,7 +111,7 @@ namespace Expertia.Estructura.Controllers
                                         File = jsResponse[OutParameter.SF_File_SubFile],
                                         Es_Atencion = jsResponse[OutParameter.SF_CodigoRetorno],
                                         Descripcion = jsResponse[OutParameter.SF_MensajeRetorno]
-                                };
+                                    };
 
                                     /// Actualización de estado de subcodigo a PTA
                                     operation = _cotizacionRepository.Actualizar_EnvioCotizacionB2C(cotizacionJYUpd);
@@ -114,15 +128,21 @@ namespace Expertia.Estructura.Controllers
                 {
                     Rpta.CodigoError = ApiResponseCode.ErrorCode;
                     Rpta.MensajeError = ex.Message;
+                    exceptionMsg = ex.Message;
                 }
-
                 return Ok(Rpta);
             }
-          
-            
             catch (Exception ex)
             {
                 return InternalServerError(ex);
+            }
+            finally
+            {
+                (new
+                {
+                    UnidadNegocio = _unidadNegocioKey.ToLongName(),
+                    Exception = exceptionMsg
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
