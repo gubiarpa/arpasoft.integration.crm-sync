@@ -85,7 +85,7 @@ namespace Expertia.Estructura.Repository.Journeyou
                             MargenFile = row.FloatParse("Margen_File"),
                             PaxsFile = row.IntParse("Paxs_File"),
                             EstadoFile = row.StringParse("Estado_File"),
-                            FechaInicioViaje = row.DateTimeParse("Fecha_Inicio_Viaje")
+                            FechaInicioViaje = row.DateTimeParse("Fecha_Inicio_Viaje").ToString("dd/MM/yyyy")
                         });
                     }
                 }
