@@ -69,6 +69,7 @@ namespace Expertia.Estructura.Controllers
                     #region IdClienteCotización
                     if (hdIdCli.Equals("0")) // ◄ String.IsNullOrEmpty(Trim(hdIdCli.Value))
                     {
+                        /// (i) Inserta Cliente
                         intIdCliCot = (int?)_repository.InsertaClienteCotizacion(
                             usuarioLogin.NomCompletoUsuario,
                             usuarioLogin.ApePatUsuario,
@@ -87,6 +88,9 @@ namespace Expertia.Estructura.Controllers
                             null,
                             null
                             )["pNumIdNewCliCot_out"];
+
+                        /// (ii) Inserta Teléfonos
+                        /// (iii) Inserta Archivos
                     }
                     else
                     {

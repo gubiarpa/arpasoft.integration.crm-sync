@@ -185,6 +185,19 @@ namespace Expertia.Estructura.Utils
         #endregion
 
         #region Rows
+        public static bool BoolParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                if (!bool.TryParse(row[fieldName].ToString(), out bool result)) result = false;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static string StringParse(this DataRow row, string fieldName)
         {
             try
