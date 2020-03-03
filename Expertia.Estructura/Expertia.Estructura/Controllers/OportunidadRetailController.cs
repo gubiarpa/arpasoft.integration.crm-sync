@@ -16,8 +16,16 @@ namespace Expertia.Estructura.Controllers
     public class OportunidadRetailController : BaseController
     {
         #region Properties
+        private UnidadNegocioKeys? _unidadNegocioKey;
         private OportunidadRetailRepository _repository;
         private DatosUsuario _datosUsuario;
+        #endregion
+
+        #region Constructor
+        public OportunidadRetailController()
+        {
+            _unidadNegocioKey = RepositoryByBusiness(UnidadNegocioKeys.AppWebs);
+        }
         #endregion
 
         #region PublicMethods
@@ -100,7 +108,7 @@ namespace Expertia.Estructura.Controllers
                         null,
                         objPersonal.NomCompletoPer,
                         objUsuarioWeb.LoginUsuWeb,
-                        "", // Consultar con Gustavo IP
+                        Constantes_SRV.IP_GENERAL,
                         intIdCliCot ?? 0,
                         intIdUsuWeb,
                         objPersonal.IdDepartamento,
@@ -149,7 +157,7 @@ namespace Expertia.Estructura.Controllers
                         objPersonal.IdOficina,
                         objPersonal.IdDepartamento,
                         oportunidadRetail.Comentario,
-                        "", // Consultar con Gustavo IP,
+                        Constantes_SRV.IP_GENERAL,
                         intIdCotVta, 
                         intIdCliCot,
                         oportunidadRetail.IdTipoDoc,
@@ -161,8 +169,47 @@ namespace Expertia.Estructura.Controllers
                     #region EnvioPromociones
                     if (_repository.ValidarEnvioPromociones(intIdOcurrencias, oportunidadRetail.EnviarPromociones))
                     {
-                        
+                        _repository.EnviarPromociones(
+                            objPersonal,
+                            oportunidadRetail,
+                            oportunidadRetail.EnviarPromociones.Equals("SI"),
+                            objPersonal.NomCompletoPer,
+                            objPersonal.ApePatPer,
+                            objPersonal.EmailPer);
                     }
+                    #endregion
+
+                    var strCommentAttCli = string.IsNullOrEmpty(oportunidadRetail.Comentario) ?
+                        "<br /><br /><strong>Comentarios: " + oportunidadRetail.Comentario + "</strong>" :
+                        string.Empty;
+
+                    #region InsertaPost
+                    _repository.Inserta_Post_Cot(
+                        (int)intIdCotVta,
+                        Constantes_SRV.ID_TIPO_POST_SRV_USUARIO,
+                        "Asignado por " + usuarioLogin.LoginUsuario + strCommentAttCli,
+                        Constantes_SRV.IP_GENERAL,
+                        usuarioLogin.LoginUsuario,
+                        intIdUsuWeb,
+                        objPersonal.IdDepartamento,
+                        objPersonal.IdOficina,
+                        null,
+                        null,
+                        (short)ENUM_ESTADOS_COT_VTA.Solicitado,
+                        true,
+                        null,
+                        false,
+                        null,
+                        false,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                        );
                     #endregion
                 }
                 else
@@ -182,6 +229,7 @@ namespace Expertia.Estructura.Controllers
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             _repository = new OportunidadRetailRepository(unidadNegocioKey);
+            _datosUsuario = new DatosUsuario(unidadNegocioKey);
             return unidadNegocioKey;
         }
     }

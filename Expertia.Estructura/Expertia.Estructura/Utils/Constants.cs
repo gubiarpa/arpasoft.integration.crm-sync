@@ -419,6 +419,7 @@ namespace Expertia.Estructura.Utils
 
     public static class Constantes_SRV
     {
+        public const string IP_GENERAL = "127.0.0.0";
         public const string ID_TIPO_POST_SRV_USUARIO = "2";
 
         #region Estados
