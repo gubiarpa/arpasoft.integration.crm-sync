@@ -51,6 +51,7 @@ namespace Expertia.Estructura.Controllers
                 (new
                 {
                     UnidadNegocio = _unidadNegocio.ToLongName(),
+                    Body = cotizacion,
                     cotizacion.Region,
                     Exception = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
