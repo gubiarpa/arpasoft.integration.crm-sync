@@ -210,7 +210,9 @@
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Retail\ArchivoCliCot.cs" />
+    <Compile Include="Models\Retail\ArchivoPostCot.cs" />
     <Compile Include="Models\Retail\ClienteCot.cs" />
+    <Compile Include="Models\Retail\FilePTACotVta.cs" />
     <Compile Include="Models\Retail\OportunidadRetail.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />

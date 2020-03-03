@@ -3,6 +3,7 @@ using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -311,6 +312,36 @@ namespace Expertia.Estructura.Repository.Retail
             {
             }
             */
+        }
+
+        public int Inserta_Post_Cot(
+            int pIntIdCot,
+            string pStrTipoPost,
+            string pStrTextoPost,
+            string pStrIPUsuCrea,
+            string pStrLoginUsuCrea,
+            int pIntIdUsuWeb,
+            int pIntIdDep,
+            int pIntIdOfi,
+            List<ArchivoPostCot> pLstArchivos,
+            List<FilePTACotVta> pLstFilesPTA,
+            short pIntIdEstado,
+            bool pBolCambioEstado,
+            ArrayList pLstFechasCotVta,
+            bool pBolEsAutomatico,
+            byte[] pBytArchivoMail,
+            bool pBolEsCounterAdmin,
+            int? pIntIdUsuWebCounterCrea,
+            int? pIntIdOfiCounterCrea,
+            int? pIntIdDepCounterCrea,
+            bool? pBolEsUrgenteEmision,
+            DateTime? pDatFecPlazoEmision,
+            short? pIntIdMotivoNoCompro,
+            string pStrOtroMotivoNoCompro,
+            double? pDblMontoEstimadoFile
+            )
+        {
+            return 0;
         }
         #endregion
 
