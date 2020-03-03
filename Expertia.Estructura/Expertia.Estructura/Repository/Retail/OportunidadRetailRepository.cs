@@ -67,13 +67,46 @@ namespace Expertia.Estructura.Repository.Retail
             string pStrTipoDoc,
             string pStrNumDoc)
         {
-            return null;
+            try
+            {
+                var operation = new Operation();
+
+                AddParameter("pVarIdTipoDoc_in", OracleDbType.Varchar2, pStrTipoDoc, ParameterDirection.Input, 3);
+                AddParameter("pVarNumDoc_in", OracleDbType.Varchar2, pStrNumDoc, ParameterDirection.Input, 30);
+                AddParameter("pCurResult_out", OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+
+                ExecuteStoredProcedure("APPWEBS.PKG_CLIENTE_COT.SP_GET_X_DOC");
+
+                operation["pCurResult_out"] = ToClienteCot(GetDtParameter("pCurResult_out"));
+
+                return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public Operation SelectByEmail(
             string strCorreo)
         {
-            return null;
+            try
+            {
+                var operation = new Operation();
+
+                AddParameter("pMail_in", OracleDbType.Varchar2, strCorreo);
+                AddParameter("pCurResult_out", OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+
+                ExecuteStoredProcedure("APPWEBS.PKG_CLIENTE_COT.SP_GET_X_MAIL");
+
+                operation["pCurResult_out"] = ToClienteCot(GetDtParameter("pCurResult_out"));
+
+                return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public Operation InsertaClienteCotizacion(
@@ -135,6 +168,8 @@ namespace Expertia.Estructura.Repository.Retail
         {
             try
             {
+                var operation = new Operation();
+
                 AddParameter("pNumIdCliCot_in", OracleDbType.Int32, pIntIdCliCot);
                 AddParameter("pVarNumTelf_in", OracleDbType.Varchar2, pStrNumTelf);
                 AddParameter("pVarNumAnexoTelf_in", OracleDbType.Varchar2, pStrAnexoTelf);
@@ -145,7 +180,7 @@ namespace Expertia.Estructura.Repository.Retail
 
                 ExecuteStoredProcedure("APPWEBS.PKG_CLIENTE_COT.SP_INSERTA_TELF_CLI");
 
-                return null;
+                return operation;
             }
             catch (Exception ex)
             {
@@ -164,6 +199,8 @@ namespace Expertia.Estructura.Repository.Retail
         {
             try
             {
+                var operation = new Operation();
+
                 AddParameter("pNumIdCliCot_in", OracleDbType.Int32, pIntIdCliCot);
                 AddParameter("pVarRutaServArchivo_in", OracleDbType.Varchar2, pStrRutaServArchivo);
                 AddParameter("pVarRutaURLArchivo_in", OracleDbType.Varchar2, pStrRutaURLArchivo);
@@ -174,7 +211,7 @@ namespace Expertia.Estructura.Repository.Retail
 
                 ExecuteStoredProcedure("APPWEBS.PKG_CLIENTE_COT.SP_INSERTA_ARCHIVO_CLI");
                 
-                return null;
+                return operation;
             }
             catch (Exception ex)
             {
@@ -188,13 +225,32 @@ namespace Expertia.Estructura.Repository.Retail
             string pStrApeCliCot,
             string pStrApeMatCliCot,
             string pStrEmailCliCot,
-            int pIntIdUsuWeb)
+            int pIntIdUsuWeb
+            )
         {
-            return null;
+            try
+            {
+                var operation = new Operation();
+
+                AddParameter("pNumIdCliCot_in", OracleDbType.Int32, pIntIdCliCot);
+                AddParameter("pVarNomCliCot_in", OracleDbType.Varchar2, pStrNomCliCot);
+                AddParameter("pVarApeCliCot_in", OracleDbType.Varchar2, pStrApeCliCot);
+                AddParameter("pVarApeMatCliCot_in", OracleDbType.Varchar2, pStrApeMatCliCot);
+                AddParameter("pVarEmailCliCot_in", OracleDbType.Varchar2, pStrEmailCliCot);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb);
+
+                ExecuteStoredProcedure("APPWEBS.PKG_CLIENTE_COT.SP_UPD_CLI_2");
+
+                return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public Operation InsertaCotizacionVenta(
-            Int16 pIntModoIng,
+            short pIntModoIng,
             string pStrTextoSol,
             string pStrNomUsuCrea,
             string pStrLoginUsuCrea,
@@ -205,16 +261,16 @@ namespace Expertia.Estructura.Repository.Retail
             int pIntIdOfi,
             int pIntIdWeb,
             int pIntIdLang,
-            Int16 pIntIdCanalVta,
+            short pIntIdCanalVta,
             string[] pStrArrayServicios,
             string pStrCodIATAPrinc,
             int? pIntIdEmpCot,
-            Int16 pIntIdEstOtro,
+            short pIntIdEstOtro,
             string pStrDestinosPref,
             DateTime? pDatFecSalida,
             DateTime? pDatFecRegreso,
-            Int16? pIntCantPaxAdulto,
-            Int16? pIntCantPaxNino,
+            short? pIntCantPaxAdulto,
+            short? pIntCantPaxNino,
             string pStrPaisResidencia,
             int? pIntIdReservaVuelos,
             short? pIntIdSucursalPaq,
@@ -227,9 +283,53 @@ namespace Expertia.Estructura.Repository.Retail
             string pStrNomGrupo,
             decimal? pNumMontoDscto,
             int pIntIdOAtencion = 0,
-            int pIntIdEvento = 0)
+            int pIntIdEvento = 0
+            )
         {
-            return null;
+            try
+            {
+                var operation = new Operation();
+
+                AddParameter("pChrModoIng_in", OracleDbType.Int16, pIntModoIng);
+                AddParameter("pClbTextSol_in", OracleDbType.Clob, pStrTextoSol);
+                AddParameter("pVarNomUsuCrea_in", OracleDbType.Varchar2, pStrNomUsuCrea);
+                AddParameter("pVarLoginUsuCrea_in", OracleDbType.Varchar2, pStrLoginUsuCrea);
+                AddParameter("pVarIPUsuCrea_in", OracleDbType.Varchar2, pStrIPUsuCrea);
+                AddParameter("pNumIdCliCot_in", OracleDbType.Int32, pIntIdCliCotVta);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi);
+                AddParameter("pNumIdWeb_in", OracleDbType.Int32, pIntIdWeb);
+                AddParameter("pNumIdLang_in", OracleDbType.Int32, pIntIdLang);
+                AddParameter("pNumIdCanalVta_in", OracleDbType.Int16, pIntIdCanalVta);
+                AddParameter("pChrIATAPrinc_in", OracleDbType.Char, pStrCodIATAPrinc);
+                AddParameter("pNumIdEmpCot_in", OracleDbType.Int32, pIntIdEmpCot);
+                AddParameter("pNumIdEstOtro_in", OracleDbType.Int16, pIntIdEstOtro);
+                AddParameter("pVarDestinosPref_in", OracleDbType.Varchar2, pStrDestinosPref);
+                AddParameter("pDatFecSalida_in", OracleDbType.Date, pDatFecSalida);
+                AddParameter("pDatFecRegreso_in", OracleDbType.Date, pDatFecRegreso);
+                AddParameter("pNumCantPaxAdulto_in", OracleDbType.Int16, pIntCantPaxAdulto.Value);
+                AddParameter("pNumCantPaxNino_in", OracleDbType.Int16, pIntCantPaxNino);
+                AddParameter("pVarPaisResidencia_in", OracleDbType.Varchar2, pStrPaisResidencia);
+                AddParameter("pNumIdReservaVue_in", OracleDbType.Int32, pIntIdReservaVuelos);
+                AddParameter("pNumIdSucPaq_in", OracleDbType.Int16, pIntIdSucursalPaq);
+                AddParameter("pNumIdWebPaq_in", OracleDbType.Int32, pIntIdWebPaq);
+                AddParameter("pNumIdCotResPaq_in", OracleDbType.Int32, pintIdCotResPaq);
+                AddParameter("pVarTipoPaq_in", OracleDbType.Varchar2, pStrTipoPaq);
+                AddParameter("pVarNomGrupo_in", OracleDbType.Varchar2, pStrNomGrupo);
+                AddParameter("pNumMontoDscto_in", OracleDbType.Double, pNumMontoDscto);
+                AddParameter("pNumIdNewCot_out", OracleDbType.Int64, null, ParameterDirection.Output);
+
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_COT");
+
+                operation["pNumIdNewCot_out"] = GetOutParameter("pNumIdNewCot_out");
+
+                return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public Operation InsertaIngresoCliente(
@@ -422,6 +522,34 @@ namespace Expertia.Estructura.Repository.Retail
                 }
 
                 return usuarioWebList;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private IEnumerable<ClienteCot> ToClienteCot(DataTable dt)
+        {
+            try
+            {
+                var clienteCotList = new List<ClienteCot>();
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    clienteCotList.Add(new ClienteCot()
+                    {
+                        IdCliCot = row.IntParse("CLICOT_ID"),
+                        NomCliCot = row.StringParse("CLICOT_NOM"),
+                        ApeCliCot = row.StringParse("CLICOT_APE"),
+                        EmailCliCot = row.StringParse("CLICOT_EMAIL"),
+                        ApeMatCliCot = row.StringParse("CLICOT_APE_MAT"),
+                        RecibePromo = row.BoolParse("CLICOT_RECIBIR_PROMO")
+                    });
+                }
+
+                return clienteCotList;
             }
             catch (Exception)
             {
