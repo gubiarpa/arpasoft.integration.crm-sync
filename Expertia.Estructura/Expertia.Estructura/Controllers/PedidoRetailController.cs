@@ -48,7 +48,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     _resultpedido.IdPedido = Convert.ToInt32(operation[OutParameter.IdPedido].ToString());
                     //Actualizamos el campo solicitado por CRM SalesForce asociado al numero de pedido
-                    //_pedidoRepository.Update_Pedido_SolicitudPago_SF(_resultpedido.IdPedido, pedido.IdCotVta, pedido.IdOportunidad_SF, pedido.IdSolicitudpago_SF)
+                    _pedidoRepository.Update_Pedido_SolicitudPago_SF(_resultpedido.IdPedido, pedido.IdCotVta, pedido.IdOportunidad_SF, pedido.IdSolicitudpago_SF);
                 }
                 else
                 {
@@ -105,7 +105,7 @@ namespace Expertia.Estructura.Controllers
                     _resultpedido.CodigoTransaction = response.TransaccionIdentifier;
 
                     _resultpedido.CodigoError = "OK";
-                    _resultpedido.MensajeError = "Se generó el código de pago.";
+                    _resultpedido.MensajeError = "Se generó el código de pedido.";
                 }
                 else
                 {
@@ -342,12 +342,20 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie el ID del Usuario correctamente|";
             }
+            if (string.IsNullOrEmpty(_pedido.IdOportunidad_SF))
+            {
+                mensajeError += "Envie el IdOportunidad_SF|";
+            }
+            if (string.IsNullOrEmpty(_pedido.IdSolicitudpago_SF))
+            {
+                mensajeError += "Envie el IdSolicitudpago_SF";
+            }
 
             if (string.IsNullOrEmpty(mensajeError) == false)
             {
                 _return = true;
-                _resultPedido.CodigoError = "VP";
-                _resultPedido.MensajeError = mensajeError;
+                _resultPedido.CodigoError = "ER";
+                _resultPedido.MensajeError = "VP - " + mensajeError;
             }
             else
             {
