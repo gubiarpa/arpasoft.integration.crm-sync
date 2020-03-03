@@ -12,7 +12,7 @@ namespace Expertia.Estructura.Models
     {
         public string IdUsuario { get; set; }
         public int? IdLang { get; set; }
-        public int? IdWeb { get; set; }       
+        public int? IdWeb { get; set; }
         public string IPUsuario { get; set; }
         public string Browser { get; set; }
         public string DetalleServicio { get; set; }
@@ -23,8 +23,10 @@ namespace Expertia.Estructura.Models
         public int IdCotVta { get; set; }
         public int? IdCanalVta { get; set; }
         public string NombreClienteCot { get; set; }
-        public string ApellidoClienteCot { get; set; }       
+        public string ApellidoClienteCot { get; set; }
         public UnidadNegocio UnidadNegocio { get; set; }
+        public string IdOportunidad_SF {get;set;}
+        public string IdSolicitudpago_SF { get; set; }
     }
 
     public class PedidoRS : ICrmApiResponse
