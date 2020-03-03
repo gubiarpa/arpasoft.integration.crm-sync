@@ -103,7 +103,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    Request = "",
+                    Request = models,
                     Response = response,
                     Exception = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
@@ -139,7 +139,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw ex;
             }
 
         }
@@ -400,7 +400,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                throw ex;
             }
         }
         private string GenerarHtmlByRender(string pStrNombreAspx)
