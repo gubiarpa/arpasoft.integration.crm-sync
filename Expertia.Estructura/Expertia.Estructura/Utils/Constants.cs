@@ -219,6 +219,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_FilesPtaBy_IdCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_FILESPTA_COT";
         public const string AW_Get_Pedidos_Procesados = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_PROCESS_CRM";
         public const string AW_Update_Pedido_Procesado = "APPWEBS.PKG_PAGO_ONLINE.SP_UPDATE_PEDIDO_PROCESS_CRM";
+        public const string AW_Update_Pedido_SolicitudPago_SF = "APPWEBS.PKG_PAGO_ONLINE.SP_UPD_PEDIDO_SOLPAGO_CRM";
 
         public const string AW_Update_Imp_File_Cot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_IMP_FILE_COT";
         public const string AW_Get_Tipo_Cambio = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_TIPO_CAMBIO";

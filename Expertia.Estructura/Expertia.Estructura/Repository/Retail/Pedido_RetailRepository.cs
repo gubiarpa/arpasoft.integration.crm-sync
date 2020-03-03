@@ -141,6 +141,27 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
+        public void Update_Pedido_SolicitudPago_SF(int idPedido, int idSrv, string IdOportunidad_SF, string IdSolicitudpago_SF)
+        {
+            try
+            {
+                #region Parameter
+                AddParameter("pNumIdPedido_in", OracleDbType.Int32, idPedido, ParameterDirection.Input);
+                AddParameter("pCotSrvId_in", OracleDbType.Int32, idSrv, ParameterDirection.Input);
+                AddParameter("pIdOportunidad_in", OracleDbType.Varchar2, IdOportunidad_SF, ParameterDirection.Input);
+                AddParameter("pIdSolicitudPago_in", OracleDbType.Varchar2, IdSolicitudpago_SF, ParameterDirection.Input);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Pedido_SolicitudPago_SF);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public RptaPagoSafetyPay Get_Rpta_SagetyPay(int IdPedido)
         {
             try

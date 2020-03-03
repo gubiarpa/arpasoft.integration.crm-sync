@@ -34,7 +34,7 @@ namespace Expertia.Estructura.Models.Journeyou
         public float MargenFile { get; set; }
         public int PaxsFile { get; set; }
         public string EstadoFile { get; set; }
-        public DateTime FechaInicioViaje { get; set; }
+        public string FechaInicioViaje { get; set; }
     }
 
     public class CotizacionJYUpdResponse

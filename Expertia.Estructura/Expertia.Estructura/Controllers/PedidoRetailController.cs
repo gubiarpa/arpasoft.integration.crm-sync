@@ -47,10 +47,13 @@ namespace Expertia.Estructura.Controllers
                 if(operation[Operation.Result].ToString() == ResultType.Success.ToString() && Convert.ToInt32(operation[OutParameter.IdPedido].ToString()) > 0)
                 {
                     _resultpedido.IdPedido = Convert.ToInt32(operation[OutParameter.IdPedido].ToString());
+                    //Actualizamos el campo solicitado por CRM SalesForce asociado al numero de pedido
+                    //_pedidoRepository.Update_Pedido_SolicitudPago_SF(_resultpedido.IdPedido, pedido.IdCotVta, pedido.IdOportunidad_SF, pedido.IdSolicitudpago_SF)
                 }
                 else
                 {
-                    _resultpedido.CodigoError = "GP"; _resultpedido.MensajeError = "Error al intentar generar el pedido";
+                    //_resultpedido.CodigoError = "GP"; _resultpedido.MensajeError = "Error al intentar generar el pedido";
+                    _resultpedido.CodigoError = "ER"; _resultpedido.MensajeError = "GP - Error al intentar generar el pedido";
                     return Ok(_resultpedido);
                 }
 
@@ -100,10 +103,14 @@ namespace Expertia.Estructura.Controllers
                 {
                     _resultpedido.CodigoOperacion = response.OperationId;
                     _resultpedido.CodigoTransaction = response.TransaccionIdentifier;
+
+                    _resultpedido.CodigoError = "OK";
+                    _resultpedido.MensajeError = "Se generó el código de pago.";
                 }
                 else
                 {
-                    _resultpedido.CodigoError = "GP"; _resultpedido.MensajeError = "Error al intentar generar el CIP";
+                    //_resultpedido.CodigoError = "GP"; _resultpedido.MensajeError = "Error al intentar generar el CIP";
+                    _resultpedido.CodigoError = "ER"; _resultpedido.MensajeError = "GP - Error al intentar generar el CIP";
                     return Ok(_resultpedido);
                 }
 
