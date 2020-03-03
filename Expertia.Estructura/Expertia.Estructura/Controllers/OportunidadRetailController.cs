@@ -50,10 +50,12 @@ namespace Expertia.Estructura.Controllers
                 var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(intIdUsuWeb);
                 int? intIdCliCot = null;
 
+                int intIdOcurrencias;
+                var objPersonal = (Personal)_repository.ObtienePersonalXId_TrustWeb(intIdUsuWeb)[""];
+                var objUsuarioWeb = (UsuarioWeb)_repository.ObtieneUsuarioWebXId(intIdUsuWeb)[""];
+
                 if (oportunidadRetail.IdCotSRV == null) // Nuevo SRV
                 {
-                    var objPersonal = (Personal)_repository.ObtienePersonalXId_TrustWeb(intIdUsuWeb)[""];
-                    var objUsuarioWeb = (UsuarioWeb)_repository.ObtieneUsuarioWebXId(intIdUsuWeb)[""];
                     List<ClienteCot> clientes;
 
                     #region Get_HdIdCli
@@ -64,6 +66,7 @@ namespace Expertia.Estructura.Controllers
                     var hdIdCli = clientes.ElementAt(0).IdCliCot;
                     #endregion
 
+                    #region IdClienteCotización
                     if (hdIdCli.Equals("0")) // ◄ String.IsNullOrEmpty(Trim(hdIdCli.Value))
                     {
                         intIdCliCot = (int?)_repository.InsertaClienteCotizacion(
@@ -89,6 +92,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         intIdCliCot = hdIdCli;
                     }
+                    #endregion
 
                     _repository.ActualizaClienteCotizacion(
                         intIdCliCot ?? 0,
@@ -140,7 +144,7 @@ namespace Expertia.Estructura.Controllers
                     #endregion
 
                     #region RegistraIngresoCliente
-                    var intIdOcurrencias = (int)_repository.InsertaIngresoCliente(
+                    intIdOcurrencias = (int)_repository.InsertaIngresoCliente(
                         DateTime.Now,
                         objPersonal.NomCompletoPer,
                         objPersonal.ApePatPer,
@@ -214,7 +218,45 @@ namespace Expertia.Estructura.Controllers
                 }
                 else
                 {
+                    #region RegistraIngresoCliente
+                    intIdOcurrencias = (int)_repository.InsertaIngresoCliente(
+                        DateTime.Now,
+                        objPersonal.NomCompletoPer,
+                        objPersonal.ApePatPer,
+                        objPersonal.ApeMatPer,
+                        objPersonal.EmailPer,
+                        oportunidadRetail.MotivoCrea,
+                        null,
+                        oportunidadRetail.IdDestino,
+                        intIdUsuWeb,
+                        objPersonal.IdOficina,
+                        objPersonal.IdDepartamento,
+                        null,
+                        intIdUsuWeb,
+                        objPersonal.IdOficina,
+                        objPersonal.IdDepartamento,
+                        oportunidadRetail.Comentario,
+                        Constantes_SRV.IP_GENERAL,
+                        null,
+                        null,
+                        oportunidadRetail.IdTipoDoc,
+                        oportunidadRetail.Numdoc,
+                        null
+                        )["pNumIdOcurr_out"];
+                    #endregion
 
+                    #region EnvioPromociones
+                    if (_repository.ValidarEnvioPromociones(intIdOcurrencias, oportunidadRetail.EnviarPromociones))
+                    {
+                        _repository.EnviarPromociones(
+                            objPersonal,
+                            oportunidadRetail,
+                            oportunidadRetail.EnviarPromociones.Equals("SI"),
+                            objPersonal.NomCompletoPer,
+                            objPersonal.ApePatPer,
+                            objPersonal.EmailPer);
+                    }
+                    #endregion
                 }
 
                 return null;
