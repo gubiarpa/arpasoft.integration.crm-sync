@@ -350,7 +350,7 @@ namespace Expertia.Estructura.Utils
             }
         }
 
-        public void Mail_AgregaEmailListaBoletinNMV(int pIntIdWeb, int pIntIdLang, string pStrNomUsu, string pStrEmailUsu, string pStrNomLista, bool pBolSuscribe)
+        public static void Mail_AgregaEmailListaBoletinNMV(int pIntIdWeb, int pIntIdLang, string pStrNomUsu, string pStrEmailUsu, string pStrNomLista, bool pBolSuscribe)
         {
             var objNMMail = new NMMail();
             try

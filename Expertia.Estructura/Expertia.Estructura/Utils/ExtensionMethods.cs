@@ -184,7 +184,40 @@ namespace Expertia.Estructura.Utils
         }
         #endregion
 
+        #region Replace
+        public static string ReplaceSpecialChars(this string cadena)
+        {
+            try
+            {
+                return cadena
+                    .Replace('ñ', 'n').Replace('Ñ', 'N')
+                    .Replace('á', 'a').Replace('Á', 'A')
+                    .Replace('é', 'e').Replace('É', 'E')
+                    .Replace('í', 'i').Replace('Í', 'I')
+                    .Replace('ó', 'o').Replace('Ó', 'O')
+                    .Replace('ú', 'u').Replace('Ú', 'U');
+            }
+            catch
+            {
+                return cadena;
+            }
+        }
+        #endregion
+
         #region Rows
+        public static bool BoolParse(this DataRow row, string fieldName)
+        {
+            try
+            {
+                if (!bool.TryParse(row[fieldName].ToString(), out bool result)) result = false;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public static string StringParse(this DataRow row, string fieldName)
         {
             try

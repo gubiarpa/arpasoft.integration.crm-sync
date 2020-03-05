@@ -453,6 +453,13 @@ namespace Expertia.Estructura.Utils
         public const string CODE_FPAGO_GENERAL = "SF";
         public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";        
     }
+    
+    public static class Constantes_Mail
+    {
+        public const string EMAIL_BOLETIN_NMV = "boletin@mktg.viajesnuevomundo.com";
+        public const string EMAIL_BOLETIN_CORPORATIVO_VACACIONAL = "boletincorpvac@mktg.gruponuevomundo.com.pe";
+        public const string EMAIL_BOLETIN_RIPLEY = "viajesripley@mktg.gruponuevomundo.com.pe";
+    }
 
     public static class Constantes_SafetyPay
     {

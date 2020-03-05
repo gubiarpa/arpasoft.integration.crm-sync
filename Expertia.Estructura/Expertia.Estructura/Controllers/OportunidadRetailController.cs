@@ -32,6 +32,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(OportunidadRetailReq oportunidadRetail)
         {
+            /*
             if (DateTime.Now.Hour >= 0) // Data Provisional
             {
                 return Ok(new OportunidadRetailRes()
@@ -43,6 +44,7 @@ namespace Expertia.Estructura.Controllers
                     FechaCreacion = DateTime.Now.AddHours(- new Random().Next(0, 240)).ToString("dd/MM/yyyy")
                 });
             }
+            */
 
             try
             {
@@ -51,8 +53,8 @@ namespace Expertia.Estructura.Controllers
                 int? intIdCliCot = null;
 
                 int intIdOcurrencias;
-                var objPersonal = (Personal)_repository.ObtienePersonalXId_TrustWeb(intIdUsuWeb)[""];
-                var objUsuarioWeb = (UsuarioWeb)_repository.ObtieneUsuarioWebXId(intIdUsuWeb)[""];
+                var objPersonal = (Personal)_repository.ObtienePersonalXId_TrustWeb(intIdUsuWeb)["pCurResult_out"];
+                var objUsuarioWeb = (UsuarioWeb)_repository.ObtieneUsuarioWebXId(intIdUsuWeb)["pCurResult_out"];
 
                 if (oportunidadRetail.IdCotSRV == null) // Nuevo SRV
                 {
@@ -60,20 +62,21 @@ namespace Expertia.Estructura.Controllers
 
                     #region Get_HdIdCli
                     if ((new List<string> { "DNI", "PSP", "CEX" }).Contains(oportunidadRetail.IdTipoDoc))
-                        clientes = (List<ClienteCot>)_repository.SelectByDocumento(oportunidadRetail.IdTipoDoc, oportunidadRetail.Numdoc)[""];
+                        clientes = (List<ClienteCot>)_repository.SelectByDocumento(oportunidadRetail.IdTipoDoc, oportunidadRetail.Numdoc)["pCurResult_out"];
                     else
                         clientes = (List<ClienteCot>)_repository.SelectByEmail(oportunidadRetail.EmailCli)[""];
-                    var hdIdCli = clientes.ElementAt(0).IdCliCot;
+                    var hdIdCli = clientes != null && clientes.Count > 0 ? clientes.ElementAt(0).IdCliCot : 0;
                     #endregion
 
                     #region IdClienteCotización
-                    if (hdIdCli.Equals("0")) // ◄ String.IsNullOrEmpty(Trim(hdIdCli.Value))
+                    if (hdIdCli.Equals(0)) // ◄ String.IsNullOrEmpty(Trim(hdIdCli.Value))
                     {
-                        intIdCliCot = (int?)_repository.InsertaClienteCotizacion(
-                            usuarioLogin.NomCompletoUsuario,
-                            usuarioLogin.ApePatUsuario,
-                            usuarioLogin.ApeMatUsuario,
-                            usuarioLogin.EmailUsuario,
+                        /// (i) Inserta Cliente
+                        intIdCliCot = (int)(_repository.InsertaClienteCotizacion(
+                            oportunidadRetail.NombreCli,
+                            oportunidadRetail.ApePatCli,
+                            oportunidadRetail.ApeMatCli,
+                            oportunidadRetail.EmailCli,
                             null,
                             null,
                             oportunidadRetail.EnviarPromociones.Equals("1"),
@@ -86,7 +89,10 @@ namespace Expertia.Estructura.Controllers
                             false,
                             null,
                             null
-                            )["pNumIdNewCliCot_out"];
+                            )["pNumIdNewCliCot_out"]);
+
+                        /// (ii) Inserta Teléfonos
+                        /// (iii) Inserta Archivos
                     }
                     else
                     {
@@ -96,10 +102,10 @@ namespace Expertia.Estructura.Controllers
 
                     _repository.ActualizaClienteCotizacion(
                         intIdCliCot ?? 0,
-                        usuarioLogin.NomCompletoUsuario,
-                        usuarioLogin.ApePatUsuario,
-                        usuarioLogin.ApeMatUsuario,
-                        usuarioLogin.EmailUsuario,
+                        oportunidadRetail.NombreCli/*usuarioLogin.NomCompletoUsuario*/,
+                        oportunidadRetail.ApePatCli/*usuarioLogin.ApePatUsuario*/,
+                        oportunidadRetail.ApeMatCli/*usuarioLogin.ApeMatUsuario*/,
+                        oportunidadRetail.EmailCli/*usuarioLogin.EmailUsuario*/,
                         intIdUsuWeb
                         );
 
@@ -107,7 +113,7 @@ namespace Expertia.Estructura.Controllers
                         oportunidadRetail.IdDestino = oportunidadRetail.IdDestino.Substring(0, 3);
 
                     #region RegistraCotizacion
-                    var intIdCotVta = (long?)_repository.InsertaCotizacionVenta(
+                    var intIdCotVta = (int)_repository.InsertaCotizacionVenta(
                         3,
                         null,
                         objPersonal.NomCompletoPer,
@@ -119,7 +125,7 @@ namespace Expertia.Estructura.Controllers
                         objPersonal.IdOficina,
                         39,
                         1,
-                        0 /*oportunidadRetail.IdCanalVenta*/, // ◄ Consultar con Gustavo por la especificación
+                        oportunidadRetail.IdCanalVenta,
                         null,
                         oportunidadRetail.IdDestino,
                         null,
@@ -140,7 +146,7 @@ namespace Expertia.Estructura.Controllers
                         null,
                         null,
                         null
-                        )[""];
+                        )["pNumIdNewCot_out"];
                     #endregion
 
                     #region RegistraIngresoCliente
