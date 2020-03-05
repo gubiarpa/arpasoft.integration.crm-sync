@@ -10,7 +10,7 @@ namespace Expertia.Estructura.Models.Retail
     {
         public string Numdoc { get; set; }
         public string IdTipoDoc { get; set; }
-        public string IdCanalVenta { get; set; }
+        public short IdCanalVenta { get; set; }
         public string NombreCli { get; set; }
         public string ApePatCli { get; set; }
         public string ApeMatCli { get; set; }
