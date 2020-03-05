@@ -66,6 +66,9 @@ namespace Expertia.Estructura.Models
     {
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
+        public int NumFile { get; set; }
+        public string Cliente { get; set; }
+        public string Importe { get; set; }
     }
 
     public class FileSRV
@@ -76,6 +79,7 @@ namespace Expertia.Estructura.Models
         public string Cliente { get; set; }
         public double ImporteFact { get; set; }
         public string Moneda { get; set; }
+        public string accion_SF { get; set; }
     }
 
     public class FilePTACotVta
