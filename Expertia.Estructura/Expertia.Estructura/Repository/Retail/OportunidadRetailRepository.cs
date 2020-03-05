@@ -438,9 +438,6 @@ namespace Expertia.Estructura.Repository.Retail
             string strEmailCli
             )
         {
-            //UsuarioSession objUsuarioSession = (UsuarioSession)Session(NMConstantesUtility.SES_OBJ_USUARIO);
-            //NuevoMundoBusiness.SuscripcionBoletinBO objSuscriptBoletinBO = new NuevoMundoBusiness.SuscripcionBoletinBO();
-            //NMWebUtility objNMWebUtility = new NMWebUtility();
             int intIdOfi = objPersonal.IdOficina; // objUsuarioSession.IdOfi;
             int intIdDep = objPersonal.IdDepartamento;  // objUsuarioSession.IdDep;
             try
@@ -487,6 +484,7 @@ namespace Expertia.Estructura.Repository.Retail
             }
             catch (Exception ex)
             {
+                throw ex;
             }
         }
 
@@ -517,7 +515,104 @@ namespace Expertia.Estructura.Repository.Retail
             double? pDblMontoEstimadoFile
             )
         {
-            return 0;
+            try
+            {
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot);
+                AddParameter("pChrTipoPost_in", OracleDbType.Char, pStrTipoPost);
+                AddParameter("pClbTextoPost_in", OracleDbType.Clob, pStrTextoPost);
+                AddParameter("pVarIPUsuCrea_in", OracleDbType.Varchar2, pStrIPUsuCrea);
+                AddParameter("pVarLoginUsuCrea_in", OracleDbType.Varchar2, pStrLoginUsuCrea);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi);
+                AddParameter("pChrCambioEst_in", OracleDbType.Char, pBolCambioEstado ? "S" : "N");
+                AddParameter("pNumIdEst_in", OracleDbType.Int16, pBolCambioEstado ? (int?)pIntIdEstado : null);
+                AddParameter("pChrEsAutomatico_in", OracleDbType.Char, pBolEsAutomatico ? "1" : "0");
+                AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, pBolEsUrgenteEmision != null ? ((bool)pBolEsUrgenteEmision ? "1" : "0") : null);
+                if (pDatFecPlazoEmision.HasValue) AddParameter("pDatFecPlazoEmision_in", OracleDbType.Date, pDatFecPlazoEmision);
+                AddParameter("pNumIdNewPost_out", OracleDbType.Int32, null, ParameterDirection.Output);
+
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_POST_COT");
+
+                if (!int.TryParse(GetOutParameter("pNumIdOcurr_out").ToString(), out int pNumIdOcurr_out)) pNumIdOcurr_out = 0;
+                return pNumIdOcurr_out;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void Inserta_Archivo_Post_Cot(
+            int pIntIdCot,
+            int pIntIdPost,
+            string pStrRutaArchivo,
+            string pStrNomArchivo,
+            string pStrExtArchivo,
+            byte[] pBytArchivo
+            )
+        {
+
+        }
+
+        public void Update_Estado_Cot_Vta(
+            int pIntIdCot,
+            string pStrLoginUsuCrea,
+            string pStrIPUsuCrea,
+            short pIntIdEstado,
+            int pIntIdUsuWeb,
+            int pIntIdDep,
+            int pIntIdOfi,
+            bool pBolEsAutomatico,
+            int? pIntIdUsuWebCounterAdmin
+            )
+        {
+            try
+            {
+                string strDetalleAccion = string.Empty;
+                if (pBolEsAutomatico)
+                    strDetalleAccion = "Usuario " + pIntIdUsuWeb + " cambia estado de cotización '" + pIntIdCot + "' a " + pIntIdEstado + "(automático)";
+                else
+                    if (pIntIdUsuWebCounterAdmin.HasValue)
+                    strDetalleAccion = "Usuario " + pIntIdUsuWebCounterAdmin.Value + " cambia estado de cotización '" + pIntIdCot + "' a " + pIntIdEstado;
+                else
+                    strDetalleAccion = "Usuario " + pIntIdUsuWeb + " cambia estado de cotización '" + pIntIdCot + "' a " + pIntIdEstado;
+
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pVarLoginUsuCrea_in", OracleDbType.Varchar2, pStrLoginUsuCrea, ParameterDirection.Input, 50);
+                AddParameter("pVarIPUsuCrea_in", OracleDbType.Varchar2, pStrIPUsuCrea, ParameterDirection.Input, 20);
+                AddParameter("pVarDetAccion_in", OracleDbType.Varchar2, strDetalleAccion, ParameterDirection.Input, 300);
+                AddParameter("pNumIdEstado_in", OracleDbType.Int16, pIntIdEstado, ParameterDirection.Input);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep, ParameterDirection.Input);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_EST_COT");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void Update_MotivoNoCompro(
+            int pIntIdCot,
+            short? pIntIdMotivoNoCompro,
+            string pStrOtroMotivoNoCompro
+            )
+        {
+            try
+            {
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pNumIdMotivo_in", OracleDbType.Int32, pIntIdMotivoNoCompro, ParameterDirection.Input);
+                AddParameter("pVarOtroMotivo_in", OracleDbType.Varchar2, pStrOtroMotivoNoCompro, ParameterDirection.Input, 100);
+
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MOTIVO_NO_COMPRO");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
 
