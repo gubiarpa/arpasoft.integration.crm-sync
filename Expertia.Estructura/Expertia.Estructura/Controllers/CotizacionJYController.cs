@@ -66,6 +66,7 @@ namespace Expertia.Estructura.Controllers
         {
             string exceptionMsg = string.Empty;
             UnidadNegocioKeys? _unidadNegocioKey = null;
+            object objEnvio = null;
             try
             {
                 _unidadNegocioKey = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocioByCountry());
@@ -91,7 +92,7 @@ namespace Expertia.Estructura.Controllers
                 try
                 {
                     ClearQuickLog("body_request.json", "CotizacionJY"); /// ♫ Trace
-                    var objEnvio = new { cotizaciones = cotizacionSF };
+                    objEnvio = new { cotizaciones = cotizacionSF };
                     QuickLog(objEnvio, "body_request.json", "CotizacionJY"); /// ♫ Trace
                     var response = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CotizacionJYUpdMethod, Method.POST, objEnvio, true, token);
                     if (response.StatusCode.Equals(HttpStatusCode.OK))
@@ -140,6 +141,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Body = objEnvio,
                     UnidadNegocio = _unidadNegocioKey.ToLongName(),
                     Exception = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
