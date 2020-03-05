@@ -32,7 +32,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(OportunidadRetailReq oportunidadRetail)
         {
-            /*
+
             if (DateTime.Now.Hour >= 0) // Data Provisional
             {
                 return Ok(new OportunidadRetailRes()
@@ -41,10 +41,10 @@ namespace Expertia.Estructura.Controllers
                     MensajeError = "La oportunidad se creó correctamente",
                     IdOportunidad_SF = oportunidadRetail.IdOportunidad_SF,
                     IdCotSrv = new Random().Next(100000, 999999),
-                    FechaCreacion = DateTime.Now.AddHours(- new Random().Next(0, 240)).ToString("dd/MM/yyyy")
+                    FechaCreacion = DateTime.Now.AddHours(-new Random().Next(0, 240)).ToString("dd/MM/yyyy")
                 });
             }
-            */
+
 
             try
             {
