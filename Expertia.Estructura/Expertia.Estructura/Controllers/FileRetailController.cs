@@ -72,10 +72,25 @@ namespace Expertia.Estructura.Controllers
                 //_responseAsociate.NumFile = FileAssociate.LstFiles[0].IdFilePTA;
                 //_responseAsociate.Importe = Convert.ToString(FileAssociate.LstFiles[0].ImporteFact);
 
-                _responseAsociate.CodigoError = "ER";
-                _responseAsociate.MensajeError = "No se ha encontrado información con el número de file ingresado en la sucursal seleccionada.";
-                _responseAsociate.NumFile = FileAssociate.LstFiles[0].IdFilePTA;
-                _responseAsociate.Importe = Convert.ToString(FileAssociate.LstFiles[0].ImporteFact);
+                if (FileAssociate.LstFiles[0].IdFilePTA == 896798)
+                {
+                    _responseAsociate.CodigoError = "OK";
+                    _responseAsociate.MensajeError = "Informacion del numero de file.";
+                    _responseAsociate.NumFile = FileAssociate.LstFiles[0].IdFilePTA;
+                    _responseAsociate.Importe = 287.48;
+                    _responseAsociate.Cliente = "ELENA PAUCAR IBAÑEZ";
+                }
+                else
+                {
+                    _responseAsociate.CodigoError = "ER";
+                    _responseAsociate.MensajeError = "No se ha encontrado información con el número de file ingresado en la sucursal seleccionada.";
+                    if (_responseAsociate.CodigoError == "ER")
+                    {
+                        _responseAsociate.Cliente = "";
+                    }
+                    _responseAsociate.NumFile = FileAssociate.LstFiles[0].IdFilePTA;
+                    _responseAsociate.Importe = FileAssociate.LstFiles[0].ImporteFact;
+                }
 
 
                 /*Obtenemos los datos del SRV, etc*/
