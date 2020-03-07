@@ -34,7 +34,7 @@ namespace Expertia.Estructura.Repository.Base
             _parameters.Add(parameterName, parameter);
         }
 
-        protected void ExecuteStoredProcedure(string SPName)
+        protected void ExecuteStoredProcedure(string SPName, bool withCommit = false)
         {
             try
             {
@@ -58,8 +58,12 @@ namespace Expertia.Estructura.Repository.Base
                             cmd.Parameters.Add(_parameters[key]);
                         }
 
+                        OracleTransaction trx = null;
+                        if (withCommit) trx = conn.BeginTransaction();
+
                         // Ejecutamos el SP
                         cmd.ExecuteNonQuery();
+                        
 
                         // Volcamos en parámetros resultantes
                         foreach (var key in _parameters.Keys)
@@ -83,6 +87,8 @@ namespace Expertia.Estructura.Repository.Base
                                 }
                             }
                         }
+
+                        if (withCommit) trx.Commit();
                     }
                 }
             }
