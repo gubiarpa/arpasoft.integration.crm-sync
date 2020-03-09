@@ -251,7 +251,7 @@ namespace Expertia.Estructura.Utils
         public const string CotizacionListMethod = "COTIZACIONLIST_METHODNAME";
         public const string CuentaPtaMethod = "CUENTAPTA_METHODNAME";
         public const string ContactoPtaMethod = "CONTACTOPTA_METHODNAME";
-        public const string PedidosProcesadosMethod = "POR_DEFINIR_METHODNAME";
+        public const string PedidosProcesadosMethod = "PEDIDOSPROCESADOS_METHODNAME";
         public const string CotizacionJYUpdMethod = "COTIZACIONJYUPD_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
@@ -337,6 +337,9 @@ namespace Expertia.Estructura.Utils
         public const string SF_MensajeRetorno = "MENSAJE_RETORNO";
         public const string SF_File_SubFile = "FILE_SUBFILE";
         public const string SF_Cotizacion = "COTIZACION";
+        public const string SF_Codigo = "codigo";
+        public const string SF_Mensaje = "mensaje";
+        public const string SF_IdSolicitudPago = "idSolicitudPago_SF";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";
@@ -495,6 +498,12 @@ namespace Expertia.Estructura.Utils
         public const int INT_ID_DEP_RECEPTIVO = 10;
     }
 
+    public static class ConstantesPedidoProcesado
+    {
+        public const string Cod_Retorno = "100";
+        public const string Pagado = "Pagado";
+        public const string Pendiente = "Pendiente";
+    }
     public enum ENUM_ESTADOS_COT_VTA : short
     {
         Solicitado = 1,

@@ -248,38 +248,44 @@ namespace Expertia.Estructura.Controllers
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /*Por cada Pedido...*/
+                var PedidosProcesadosSF = new List<object>();
                 foreach (var pedidosProcesados in ListPedidosProcesados)
-                {
-                    try
-                    {
-                        /*Envío de pedidos procesados a Salesforce*/                         
-                        var responsePedidosProcess = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.PedidosProcesadosMethod, Method.POST, pedidosProcesados.ToSalesforceEntity(), true, token);
-                        if (responsePedidosProcess.StatusCode.Equals(HttpStatusCode.OK))
-                        {
-                            dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePedidosProcess.Content);
+                    PedidosProcesadosSF.Add(pedidosProcesados.ToSalesforceEntity());
 
-                            /*Validamos Y Actualizamos en BD*/
-                            if (jsonResponse[OutParameter.SF_CodigoError] == "OK")
+                try
+                {
+                    var objEnvio = new { info = PedidosProcesadosSF };
+                    /*Envío de pedidos procesados a Salesforce*/
+                    var responsePedidosProcess = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.PedidosProcesadosMethod, Method.POST, objEnvio, true, token);
+                    if (responsePedidosProcess.StatusCode.Equals(HttpStatusCode.OK))
+                    {
+                        dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePedidosProcess.Content);
+                        foreach (var pedidosProcesados in ListPedidosProcesados)
+                        {
+                            foreach (var jsResponse in jsonResponse["Solicitudes"])
                             {
-                                pedidosProcesados.estadoProcess = "1";                                
+                                if (pedidosProcesados.idSolicitudPago_SF == jsResponse[OutParameter.SF_IdSolicitudPago])
+                                {
+                                    /*Validamos Y Actualizamos en BD*/
+                                    if (jsResponse[OutParameter.SF_Codigo] == "OK")
+                                        pedidosProcesados.estadoProcess = "1";
+                                    else
+                                        pedidosProcesados.estadoProcess = (string.IsNullOrEmpty(pedidosProcesados.estadoProcess) == false && pedidosProcesados.estadoProcess == "0" ? "2" : "0");
+                                    _pedidoRepository.Update_Pedido_Process(pedidosProcesados);
+                                }                                
                             }
-                            else
-                            {
-                                pedidosProcesados.estadoProcess = (string.IsNullOrEmpty(pedidosProcesados.estadoProcess) == false && pedidosProcesados.estadoProcess == "0" ? "2" : "0");                                
-                            }
-                            _pedidoRepository.Update_Pedido_Process(pedidosProcesados);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        errorEnvio = errorEnvio + ApiResponseCode.ErrorCode + " - " + ex.Message + " ||.";                        
-                    }
-                }                
+                }
+                catch (Exception ex)
+                {
+                    errorEnvio = errorEnvio + ApiResponseCode.ErrorCode + " - " + ex.Message + " ||.";                        
+                }             
                 return Ok(true);
             }            
             catch (Exception ex)
             {
-                errorEnvio = ex.Message;
+                errorEnvio = errorEnvio + " / " + ex.Message;
                 return InternalServerError(ex);
             }
             finally

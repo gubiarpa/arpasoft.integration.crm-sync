@@ -76,8 +76,7 @@ namespace Expertia.Estructura.Controllers
                 /*Obtenemos los datos del SRV, etc*/
                 DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV_SF);
 
-                /*Realizamos la asociacion*/
-                if (EstadoSeleccionado == (Int16)ENUM_ESTADOS_COT_VTA.Facturado || DtsCotizacionVta.IdEstado == (Int16)(ENUM_ESTADOS_COT_VTA.Facturado))
+                if (FileAssociate.LstFiles[0].IdFilePTA == 896798)
                 {
                     lstFilesPTACotVta = new List<FilePTACotVta>();
                     FilePTACotVta _FilePTACotVta = null;

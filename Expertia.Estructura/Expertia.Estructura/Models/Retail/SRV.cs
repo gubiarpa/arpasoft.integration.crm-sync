@@ -55,8 +55,8 @@ namespace Expertia.Estructura.Models
     public class AssociateFile
     {        
         public int idUsuario { get; set; }
-        public bool ModalidadCompra { get; set; }
-        public int idoportunidad_SF { get; set; }
+        private bool ModalidadCompra { get; set; }
+        public string idoportunidad_SF { get; set; }
         public int idCotSRV_SF { get; set; }
         public List<FileSRV> LstFiles { get; set; }
         /*Duda si agregar comentario y nota de seguimiento (aplica al cambiar de estado a facturado - Informativo)*/
@@ -66,16 +66,20 @@ namespace Expertia.Estructura.Models
     {
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
+        public int NumFile { get; set; }
+        public string Cliente { get; set; }
+        public double Importe { get; set; }
     }
 
     public class FileSRV
     {
         public int IdFilePTA { get; set; }
-        public DateTime Fecha { get; set; }
+        private DateTime Fecha { get; set; }
         public double Sucursal { get; set; }
         public string Cliente { get; set; }
         public double ImporteFact { get; set; }
         public string Moneda { get; set; }
+        public string accion_SF { get; set; }
     }
 
     public class FilePTACotVta

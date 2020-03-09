@@ -235,7 +235,8 @@ namespace Expertia.Estructura.RestManager.RestParse
                 {
                     codigoTransaccion = pedidosProcesados.codigoTransaccion,
                     idSolicitudPago_SF = pedidosProcesados.idSolicitudPago_SF,
-                    estadoPago = pedidosProcesados.estadoPago
+                    estadoPago = pedidosProcesados.estadoPago == ConstantesPedidoProcesado.Cod_Retorno ? ConstantesPedidoProcesado.Pagado : ConstantesPedidoProcesado.Pendiente,
+                    tipoSolicitud = true
                 };
             }
             catch (Exception ex)

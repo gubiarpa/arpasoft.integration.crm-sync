@@ -662,7 +662,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                         {
                             idPedido = (row["NRO_PEDIDO"] != null ? Convert.ToInt32(row["NRO_PEDIDO"]) : 0),
                             codigoTransaccion = (row["TRANSACTIONIDENTIFIER"] != null ? row["TRANSACTIONIDENTIFIER"].ToString() : string.Empty),
-                            idSolicitudPago_SF = (row["ID_OPORTUNIDAD"] != null ? row["ID_OPORTUNIDAD"].ToString() : string.Empty),
+                            idSolicitudPago_SF = (row["IDSOLICITUDPAGO_CRM"] != null ? row["IDSOLICITUDPAGO_CRM"].ToString() : string.Empty),
                             estadoPago = (row["ESTADO"] != null ? row["ESTADO"].ToString() : string.Empty),
                             estadoProcess = (row["PROCESS_CRM"] != null ? row["PROCESS_CRM"].ToString() : string.Empty)
                         });
