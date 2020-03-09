@@ -33,27 +33,13 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(OportunidadRetailReq oportunidadRetail)
         {
-            /*
-            if (DateTime.Now.Hour >= 0) // Data Provisional
-            {
-                return Ok(new OportunidadRetailRes()
-                {
-                    CodigoError = "OK",
-                    MensajeError = "La oportunidad se creó correctamente",
-                    IdOportunidad_SF = oportunidadRetail.IdOportunidad_SF,
-                    IdCotSrv = new Random().Next(100000, 999999),
-                    FechaCreacion = DateTime.Now.AddHours(- new Random().Next(0, 240)).ToString("dd/MM/yyyy")
-                });
-            }
-            */
-
             try
             {
                 var intIdUsuWeb = oportunidadRetail.IdUsuarioSrv_SF;
                 var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(intIdUsuWeb);
                 int? intIdCliCot = null;
 
-                int intIdOcurrencias;
+                int intIdOcurrencias, pIntIdCot = 0;
                 var objPersonal = (Personal)_repository.ObtienePersonalXId_TrustWeb(intIdUsuWeb)["pCurResult_out"];
                 var objUsuarioWeb = (UsuarioWeb)_repository.ObtieneUsuarioWebXId(intIdUsuWeb)["pCurResult_out"];
 
@@ -195,7 +181,7 @@ namespace Expertia.Estructura.Controllers
                         string.Empty;
 
                     #region InsertaPostCot
-                    int pIntIdCot = intIdCotVta;
+                    pIntIdCot = intIdCotVta;
                     string pStrTipoPost = Constantes_SRV.ID_TIPO_POST_SRV_USUARIO;
                     string pStrTextoPost = "Asignado por " + usuarioLogin.LoginUsuario + strCommentAttCli;
                     string pStrIPUsuCrea = Constantes_SRV.IP_GENERAL;
@@ -247,16 +233,19 @@ namespace Expertia.Estructura.Controllers
                         pDblMontoEstimadoFile
                         );
 
-                    foreach (var objArchivoPost in pLstArchivos)
+                    if (pLstArchivos != null)
                     {
-                        _repository.Inserta_Archivo_Post_Cot(
-                            pIntIdCot,
-                            intIdPost,
-                            objArchivoPost.RutaArchivo,
-                            objArchivoPost.NombreArchivo,
-                            objArchivoPost.ExtensionArchivo,
-                            objArchivoPost.Archivo
-                            );
+                        foreach (var objArchivoPost in pLstArchivos)
+                        {
+                            _repository.Inserta_Archivo_Post_Cot(
+                                pIntIdCot,
+                                intIdPost,
+                                objArchivoPost.RutaArchivo,
+                                objArchivoPost.NombreArchivo,
+                                objArchivoPost.ExtensionArchivo,
+                                objArchivoPost.Archivo
+                                );
+                        }
                     }
 
 
@@ -340,11 +329,29 @@ namespace Expertia.Estructura.Controllers
                     #endregion
                 }
 
-                return null;
+                var oportunidadRetailRes = new OportunidadRetailRes()
+                {
+                    CodigoError = "OK",
+                    MensajeError = "Se agregó correctamente",
+                    IdOportunidad_SF = oportunidadRetail.IdOportunidad_SF,
+                    IdCotSrv = pIntIdCot,
+                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
+                };
+
+                return Ok(oportunidadRetailRes);
             }
             catch (Exception ex)
             {
-                throw ex;
+                var oportunidadRetailResError = new OportunidadRetailRes()
+                {
+                    CodigoError = "ER",
+                    MensajeError = ex.Message,
+                    IdOportunidad_SF = oportunidadRetail.IdOportunidad_SF,
+                    IdCotSrv = null,
+                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
+                };
+
+                return Ok(oportunidadRetailResError);
             }
         }
         #endregion

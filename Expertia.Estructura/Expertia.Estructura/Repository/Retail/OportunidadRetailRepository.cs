@@ -529,12 +529,12 @@ namespace Expertia.Estructura.Repository.Retail
                 AddParameter("pNumIdEst_in", OracleDbType.Int16, pBolCambioEstado ? (int?)pIntIdEstado : null);
                 AddParameter("pChrEsAutomatico_in", OracleDbType.Char, pBolEsAutomatico ? "1" : "0");
                 AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, pBolEsUrgenteEmision != null ? ((bool)pBolEsUrgenteEmision ? "1" : "0") : null);
-                if (pDatFecPlazoEmision.HasValue) AddParameter("pDatFecPlazoEmision_in", OracleDbType.Date, pDatFecPlazoEmision);
+                AddParameter("pDatFecPlazoEmision_in", OracleDbType.Date, pDatFecPlazoEmision);
                 AddParameter("pNumIdNewPost_out", OracleDbType.Int32, null, ParameterDirection.Output);
 
-                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_POST_COT");
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_POST_COT", true);
 
-                if (!int.TryParse(GetOutParameter("pNumIdOcurr_out").ToString(), out int pNumIdOcurr_out)) pNumIdOcurr_out = 0;
+                if (!int.TryParse(GetOutParameter("pNumIdNewPost_out").ToString(), out int pNumIdOcurr_out)) pNumIdOcurr_out = 0;
                 return pNumIdOcurr_out;
             }
             catch (Exception ex)
@@ -587,7 +587,7 @@ namespace Expertia.Estructura.Repository.Retail
                 AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep, ParameterDirection.Input);
                 AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
 
-                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_EST_COT");
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_EST_COT", true);
             }
             catch (Exception ex)
             {
