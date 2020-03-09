@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.Retail;
 using Expertia.Estructura.Utils;
 using System;
 
@@ -237,6 +238,78 @@ namespace Expertia.Estructura.RestManager.RestParse
                     idSolicitudPago_SF = pedidosProcesados.idSolicitudPago_SF,
                     estadoPago = pedidosProcesados.estadoPago == ConstantesPedidoProcesado.Cod_Retorno ? ConstantesPedidoProcesado.Pagado : ConstantesPedidoProcesado.Pendiente,
                     tipoSolicitud = true
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static object ToSalesforceEntity(this FilesAsociadosSRV filesAsociadosSRV)
+        {
+            try
+            {
+                return new
+                {
+                    idOportunidad_SF = filesAsociadosSRV.id_oportunidad,
+                    idCotSrv_SF = filesAsociadosSRV.cot_id,
+                    idFile = filesAsociadosSRV.file_id,
+                    Importe = filesAsociadosSRV.fpta_imp_fact,
+                    Sucursal = filesAsociadosSRV.suc_id,
+                    Fecha = filesAsociadosSRV.fpta_fecha
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static object ToSalesforceEntity(this Lead lead)
+        {
+            try
+            {
+                return new
+                {
+                    lead.IdLeads_SF,
+                    lead.PrimerNombre,
+                    lead.SegundoNombre,
+                    lead.apellidoPaterno,
+                    lead.apellidoMaterno,
+                    lead.Titulo_profesional,
+                    lead.Email,
+                    lead.Telefono,
+                    lead.Celular,
+                    lead.Fax,
+                    lead.Comentarios_Lead,
+                    lead.Nombre_empresa,
+                    lead.Cliente_de,
+                    lead.Idioma_preferencia,
+                    lead.Cliente_Trabajado,
+                    lead.Fuente,
+                    lead.Address,
+                    lead.Are_you,
+                    lead.Best_Time,
+                    lead.Country_Residence,
+                    lead.Country_Visit,
+                    lead.Departure_City,
+                    lead.Departure_Date,
+                    lead.Duration_Trip,
+                    lead.Group_Private,
+                    lead.Nivel_acomodacion,
+                    lead.Ideal_Budget,
+                    lead.Ubicacion_IP,
+                    lead.Numero_Adultos,
+                    lead.num_kids0_24m,
+                    lead.num_kids2_5y,
+                    lead.num_kids6_12,
+                    lead.Referring_URL,
+                    lead.Skype,
+                    lead.Touchpoint,
+                    lead.Tour_Interest,
+                    lead.Propietario_oportunidad,
+                    lead.Ejecutivo
                 };
             }
             catch (Exception ex)

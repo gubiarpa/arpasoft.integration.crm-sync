@@ -50,6 +50,8 @@ namespace Expertia.Estructura.Utils
         public const string FacturacionFileRetail = "api/facturacionfileretail";
         public const string PedidoRetail = "api/pedidoretail";
         public const string OportunidadRetail = "api/oportunidadretail";
+        public const string FileSRVRetail = "api/filesrvretail";
+        public const string CondorJourneyou = "api/condorjourneyou";
     }
 
     public enum ActionMethod
@@ -205,6 +207,9 @@ namespace Expertia.Estructura.Utils
         public const string AW_Ins_NoRecibo = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_NORECIBO";
         public const string AW_Get_Datos_Oficina = "APPWEBS.PKG_OFICINA.SP_OFI_OBTIENE_X_ID";
 
+        ///File SRV retail
+        public const string AW_Read_FileAsociadosSRV = "APPWEBS.PKG_COTIZACION_RETAIL_CRM.SP_GET_FILES_ASOCIADOS_SRV";
+
         /// Pedido
         public const string AW_Create_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_INS_PEDIDO";
         public const string AW_Rpta_SafetyPay = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_RPTA_PAGO_SAFETYPAY";
@@ -253,6 +258,7 @@ namespace Expertia.Estructura.Utils
         public const string ContactoPtaMethod = "CONTACTOPTA_METHODNAME";
         public const string PedidosProcesadosMethod = "PEDIDOSPROCESADOS_METHODNAME";
         public const string CotizacionJYUpdMethod = "COTIZACIONJYUPD_METHODNAME";
+        public const string LeadCreateMethod = "LEADCREATE_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -308,6 +314,8 @@ namespace Expertia.Estructura.Utils
         public const string CursorFormaPagoBy_IdPedido = "pCurResult_out";
         public const string CursorCotizacionAsociada = "P_CUR_COTIZACION_ASOCIADA";
         public const string CursorCotizacionB2C = "P_CUR_COTIZACION_B2C";
+        public const string CursorPedidosProcesados = "P_PEDIDOS_PROCESADOS";
+        public const string CursorFilesAsociadosSRV = "P_FILES_ASOCIADOS_SRV";
         #endregion
 
         #region Fields
@@ -323,7 +331,6 @@ namespace Expertia.Estructura.Utils
         public const string NombreVendedorCotizador = "P_NOMBRE_VENDEDOR_COTIZADOR";
         public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
         public const string NumeroIdPostSRV = "pNumIdNewPost_out";
-        public const string CursorPedidosProcesados = "P_PEDIDOS_PROCESADOS";
         public const string NumeroActualizados = "P_ACTUALIZADOS";
         #endregion
 
@@ -340,6 +347,7 @@ namespace Expertia.Estructura.Utils
         public const string SF_Codigo = "codigo";
         public const string SF_Mensaje = "mensaje";
         public const string SF_IdSolicitudPago = "idSolicitudPago_SF";
+        public const string SF_IdLead = "ID_LEAD_SF";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";

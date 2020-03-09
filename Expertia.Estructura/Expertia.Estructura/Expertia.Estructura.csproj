@@ -156,6 +156,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Controllers\CotizacionJYController.cs" />
     <Compile Include="Controllers\FactFileRetailController.cs" />
     <Compile Include="Controllers\FileCTController.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="Controllers\FileRetailController.cs" />
     <Compile Include="Controllers\OportunidadController.cs" />
     <Compile Include="Controllers\OportunidadRetailController.cs" />
+    <Compile Include="Controllers\FileSRVRetailController.cs" />
     <Compile Include="Controllers\PedidoRetailController.cs" />
     <Compile Include="Controllers\RegionCuentaController.cs" />
     <Compile Include="Controllers\SubcodigoController.cs" />
@@ -208,11 +210,13 @@
     <Compile Include="Models\Auxiliar\Sitio.cs" />
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
+    <Compile Include="Models\Lead.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Retail\ArchivoCliCot.cs" />
     <Compile Include="Models\Retail\ArchivoPostCot.cs" />
     <Compile Include="Models\Retail\ClienteCot.cs" />
     <Compile Include="Models\Retail\FilePTACotVta.cs" />
+    <Compile Include="Models\Retail\FileSRVRetail.cs" />
     <Compile Include="Models\Retail\OportunidadRetail.cs" />
     <Compile Include="Models\Pago.cs" />
     <Compile Include="Models\RegionCuenta.cs" />
@@ -248,6 +252,7 @@
     <Compile Include="Repository\Behavior\IFileCT.cs" />
     <Compile Include="Repository\Behavior\IFileRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadRepository.cs" />
+    <Compile Include="Repository\Behavior\IFileSRVRetailRepository.cs" />
     <Compile Include="Repository\Behavior\IPedidoRepository.cs" />
     <Compile Include="Repository\Behavior\IRegionCuentaRepository.cs" />
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
@@ -273,6 +278,7 @@
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Journeyou\CotizacionJYRepository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
+    <Compile Include="Repository\Retail\FileSRVRetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
     <Compile Include="Repository\Retail\FileRetailRepository.cs" />
     <Compile Include="Repository\Retail\OportunidadRetailRepository.cs" />
