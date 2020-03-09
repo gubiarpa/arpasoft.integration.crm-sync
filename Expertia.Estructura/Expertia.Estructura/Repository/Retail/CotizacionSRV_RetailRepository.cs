@@ -359,31 +359,15 @@ namespace Expertia.Estructura.Repository.AppWebs
             {
                 #region Parameter                
                 AddParameter("v_sucursal", OracleDbType.Int16, pIntIdSuc, ParameterDirection.Input);
-                AddParameter("v_file", OracleDbType.Int32, pIntIdFile, ParameterDirection.Input);
+                AddParameter("v_file", OracleDbType.Int64, pIntIdFile, ParameterDirection.Input);
                 AddParameter("cv_1", OracleDbType.RefCursor, null, ParameterDirection.Output);
                 #endregion
 
-                DataTable dtImportesFile = new DataTable();
-                dtImportesFile.Columns.Add(new DataColumn("FECHA_EMISION", typeof(string)));
-                dtImportesFile.Columns.Add(new DataColumn("ID_CLIENTE", typeof(int)));
-                dtImportesFile.Columns.Add(new DataColumn("NOMBRE_CLIENTE", typeof(string)));
-                dtImportesFile.Columns.Add(new DataColumn("ID_MONEDA", typeof(string)));
-                dtImportesFile.Columns.Add(new DataColumn("IMPORTE_TOTAL", typeof(double)));
-                dtImportesFile.Columns.Add(new DataColumn("IMPORTE_AFECTADO", typeof(double)));
-                dtImportesFile.Columns.Add(new DataColumn("FLAG", typeof(string)));
-                DataRow drImporteFile = null;
-
-                using (OracleDataAdapter objDataAdapter = new OracleDataAdapter())
-                {
-                    objDataAdapter.Fill(dtImportesFile);
-
-                }
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Facturacion_os_Tkts_Util);
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Facturacion_os_Tkts_Util, true);
                 #endregion
 
-
-                return dtImportesFile;
+                return GetDtParameter("cv_1");
             }
             catch (Exception ex)
             {

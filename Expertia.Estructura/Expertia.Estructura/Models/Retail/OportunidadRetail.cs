@@ -32,7 +32,7 @@ namespace Expertia.Estructura.Models.Retail
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
         public string IdOportunidad_SF { get; set; }
-        public int IdCotSrv { get; set; }
+        public int? IdCotSrv { get; set; }
         public string FechaCreacion { get; set; }
 
     }

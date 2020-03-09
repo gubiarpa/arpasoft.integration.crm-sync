@@ -9,6 +9,7 @@ using System.Web.Http;
 using Expertia.Estructura.Models.Retail;
 using Expertia.Estructura.Repository.Retail;
 using Expertia.Estructura.Repository.General;
+using System.Collections;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -52,7 +53,7 @@ namespace Expertia.Estructura.Controllers
                 var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(intIdUsuWeb);
                 int? intIdCliCot = null;
 
-                int intIdOcurrencias;
+                int intIdOcurrencias, pIntIdCot = 0;
                 var objPersonal = (Personal)_repository.ObtienePersonalXId_TrustWeb(intIdUsuWeb)["pCurResult_out"];
                 var objUsuarioWeb = (UsuarioWeb)_repository.ObtieneUsuarioWebXId(intIdUsuWeb)["pCurResult_out"];
 
@@ -189,39 +190,116 @@ namespace Expertia.Estructura.Controllers
                     }
                     #endregion
 
-                    var strCommentAttCli = string.IsNullOrEmpty(oportunidadRetail.Comentario) ?
+                    var strCommentAttCli = !string.IsNullOrEmpty(oportunidadRetail.Comentario) ?
                         "<br /><br /><strong>Comentarios: " + oportunidadRetail.Comentario + "</strong>" :
                         string.Empty;
 
-                    #region InsertaPost
-                    _repository.Inserta_Post_Cot(
-                        (int)intIdCotVta,
-                        Constantes_SRV.ID_TIPO_POST_SRV_USUARIO,
-                        "Asignado por " + usuarioLogin.LoginUsuario + strCommentAttCli,
-                        Constantes_SRV.IP_GENERAL,
-                        usuarioLogin.LoginUsuario,
-                        intIdUsuWeb,
-                        objPersonal.IdDepartamento,
-                        objPersonal.IdOficina,
-                        null,
-                        null,
-                        (short)ENUM_ESTADOS_COT_VTA.Solicitado,
-                        true,
-                        null,
-                        false,
-                        null,
-                        false,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
+                    #region InsertaPostCot
+                    pIntIdCot = intIdCotVta;
+                    string pStrTipoPost = Constantes_SRV.ID_TIPO_POST_SRV_USUARIO;
+                    string pStrTextoPost = "Asignado por " + usuarioLogin.LoginUsuario + strCommentAttCli;
+                    string pStrIPUsuCrea = Constantes_SRV.IP_GENERAL;
+                    string pStrLoginUsuCrea = usuarioLogin.LoginUsuario;
+                    int pIntIdUsuWeb = intIdUsuWeb;
+                    int pIntIdDep = objPersonal.IdDepartamento;
+                    int pIntIdOfi = objPersonal.IdOficina;
+                    List<ArchivoPostCot> pLstArchivos = null;
+                    List<FilePTACotVta> pLstFilesPTA = null;
+                    Int16 pIntIdEstado = (short)ENUM_ESTADOS_COT_VTA.Solicitado;
+                    bool pBolCambioEstado = true;
+                    ArrayList pLstFechasCotVta = null;
+                    bool pBolEsAutomatico = false;
+                    byte[] pBytArchivoMail = null;
+                    bool pBolEsCounterAdmin = false;
+                    int? pIntIdUsuWebCounterCrea = null;
+                    int? pIntIdOfiCounterCrea = null;
+                    int? pIntIdDepCounterCrea = null;
+                    bool? pBolEsUrgenteEmision = null;
+                    DateTime? pDatFecPlazoEmision = null;
+                    Int16? pIntIdMotivoNoCompro = null;
+                    string pStrOtroMotivoNoCompro = null;
+                    double? pDblMontoEstimadoFile = null;
+
+                    var intIdPost = _repository.Inserta_Post_Cot(
+                        pIntIdCot,
+                        pStrTipoPost,
+                        pStrTextoPost,
+                        pStrIPUsuCrea,
+                        pStrLoginUsuCrea,
+                        pIntIdUsuWeb,
+                        pIntIdDep,
+                        pIntIdOfi,
+                        pLstArchivos,
+                        pLstFilesPTA,
+                        pIntIdEstado,
+                        pBolCambioEstado,
+                        pLstFechasCotVta,
+                        pBolEsAutomatico,
+                        pBytArchivoMail,
+                        pBolEsCounterAdmin,
+                        pIntIdUsuWebCounterCrea,
+                        pIntIdOfiCounterCrea,
+                        pIntIdDepCounterCrea,
+                        pBolEsUrgenteEmision,
+                        pDatFecPlazoEmision,
+                        pIntIdMotivoNoCompro,
+                        pStrOtroMotivoNoCompro,
+                        pDblMontoEstimadoFile
                         );
-                    #endregion
+
+                    if (pLstArchivos != null)
+                    {
+                        foreach (var objArchivoPost in pLstArchivos)
+                        {
+                            _repository.Inserta_Archivo_Post_Cot(
+                                pIntIdCot,
+                                intIdPost,
+                                objArchivoPost.RutaArchivo,
+                                objArchivoPost.NombreArchivo,
+                                objArchivoPost.ExtensionArchivo,
+                                objArchivoPost.Archivo
+                                );
+                        }
+                    }
+
+
+                    if (pBolCambioEstado)
+                    {
+                        if (pBolEsCounterAdmin)
+                        {
+                            _repository.Update_Estado_Cot_Vta(
+                                pIntIdCot,
+                                pStrLoginUsuCrea,
+                                pStrIPUsuCrea,
+                                pIntIdEstado,
+                                pIntIdUsuWebCounterCrea.Value,
+                                pIntIdDepCounterCrea.Value,
+                                pIntIdOfiCounterCrea.Value,
+                                pBolEsAutomatico,
+                                pIntIdUsuWeb
+                                );
+                        }
+                        else
+                        {
+                            _repository.Update_Estado_Cot_Vta(
+                                pIntIdCot,
+                                pStrLoginUsuCrea,
+                                pStrIPUsuCrea,
+                                pIntIdEstado,
+                                pIntIdUsuWeb,
+                                pIntIdDep,
+                                pIntIdOfi,
+                                pBolEsAutomatico,
+                                null);
+                            }
+                    }
+
+                    if (pIntIdEstado == 8 && pIntIdMotivoNoCompro.HasValue)
+                    {
+                        _repository.Update_MotivoNoCompro(pIntIdCot, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro);
+                    }
                 }
+                #endregion
                 else
                 {
                     #region RegistraIngresoCliente
@@ -265,11 +343,29 @@ namespace Expertia.Estructura.Controllers
                     #endregion
                 }
 
-                return null;
+                var oportunidadRetailRes = new OportunidadRetailRes()
+                {
+                    CodigoError = "OK",
+                    MensajeError = "Se agregó correctamente",
+                    IdOportunidad_SF = oportunidadRetail.IdOportunidad_SF,
+                    IdCotSrv = pIntIdCot,
+                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
+                };
+
+                return Ok(oportunidadRetailRes);
             }
             catch (Exception ex)
             {
-                throw ex;
+                var oportunidadRetailResError = new OportunidadRetailRes()
+                {
+                    CodigoError = "ER",
+                    MensajeError = ex.Message,
+                    IdOportunidad_SF = oportunidadRetail.IdOportunidad_SF,
+                    IdCotSrv = null,
+                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
+                };
+
+                return Ok(oportunidadRetailResError);
             }
         }
         #endregion
