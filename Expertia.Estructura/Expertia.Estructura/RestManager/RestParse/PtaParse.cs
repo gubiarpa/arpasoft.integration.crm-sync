@@ -252,12 +252,15 @@ namespace Expertia.Estructura.RestManager.RestParse
             {
                 return new
                 {
-                    idOportunidad_SF = filesAsociadosSRV.id_oportunidad,
-                    idCotSrv_SF = filesAsociadosSRV.cot_id,
-                    idFile = filesAsociadosSRV.file_id,
-                    Importe = filesAsociadosSRV.fpta_imp_fact,
-                    Sucursal = filesAsociadosSRV.suc_id,
-                    Fecha = filesAsociadosSRV.fpta_fecha
+                    info = new
+                    {
+                        idOportunidad = filesAsociadosSRV.id_oportunidad,
+                        //idCotSrv_SF = filesAsociadosSRV.cot_id,
+                        numeroFile = filesAsociadosSRV.file_id,
+                        importe = filesAsociadosSRV.fpta_imp_fact,
+                        sucursal = filesAsociadosSRV.suc_id,
+                        fecha = filesAsociadosSRV.fpta_fecha
+                    }
                 };
             }
             catch (Exception ex)

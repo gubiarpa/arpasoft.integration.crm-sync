@@ -76,6 +76,8 @@ namespace Expertia.Estructura.Controllers
                 Rpta.CodigoError = operation[OutParameter.CodigoError].ToString();
                 Rpta.MensajeError = operation[OutParameter.MensajeError].ToString();
                 var cotizacionJYUpdResponse = ((List<CotizacionJYUpdResponse>)operation[OutParameter.CursorCotizacionB2C]);
+                if (cotizacionJYUpdResponse == null || cotizacionJYUpdResponse.ToList().Count.Equals(0)) return Ok(Rpta);
+
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -141,8 +143,8 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    Body = objEnvio,
-                    UnidadNegocio = _unidadNegocioKey.ToLongName(),
+                    Body = objEnvio.Stringify(true, false),
+                    UnidadNegocio = _unidadNegocioKey.ToString(),
                     Exception = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

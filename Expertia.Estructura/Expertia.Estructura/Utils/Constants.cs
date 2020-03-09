@@ -259,6 +259,7 @@ namespace Expertia.Estructura.Utils
         public const string PedidosProcesadosMethod = "PEDIDOSPROCESADOS_METHODNAME";
         public const string CotizacionJYUpdMethod = "COTIZACIONJYUPD_METHODNAME";
         public const string LeadCreateMethod = "LEADCREATE_METHODNAME";
+        public const string OportunidadAsocMethod = "OPORTUNIDADASOCIACION_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
