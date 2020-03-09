@@ -259,7 +259,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                         numeroFile = filesAsociadosSRV.file_id,
                         importe = filesAsociadosSRV.fpta_imp_fact,
                         sucursal = filesAsociadosSRV.suc_id,
-                        fecha = filesAsociadosSRV.fpta_fecha
+                        fecha = filesAsociadosSRV.fpta_fecha.ToString("dd/MM/yyyy")
                     }
                 };
             }

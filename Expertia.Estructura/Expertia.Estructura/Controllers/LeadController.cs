@@ -16,7 +16,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
-    [RoutePrefix(RoutePrefix.CondorJourneyou)]
+    [RoutePrefix(RoutePrefix.LeadCT)]
     public class LeadController : BaseController
     {
         #region PublicMethods

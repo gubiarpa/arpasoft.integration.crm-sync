@@ -51,7 +51,7 @@ namespace Expertia.Estructura.Utils
         public const string PedidoRetail = "api/pedidoretail";
         public const string OportunidadRetail = "api/oportunidadretail";
         public const string FileSRVRetail = "api/filesrvretail";
-        public const string CondorJourneyou = "api/condorjourneyou";
+        public const string LeadCT = "api/leadct";
     }
 
     public enum ActionMethod
