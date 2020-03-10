@@ -143,7 +143,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    Body = objEnvio.Stringify(true, false),
+                    Body = objEnvio,
                     UnidadNegocio = _unidadNegocioKey.ToString(),
                     Exception = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
