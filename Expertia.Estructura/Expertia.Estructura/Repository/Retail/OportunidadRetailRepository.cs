@@ -614,6 +614,17 @@ namespace Expertia.Estructura.Repository.Retail
                 throw ex;
             }
         }
+
+        public void RegistraOportunidad(
+            string idOportunidad,
+            int idCot
+            )
+        {
+            AddParameter("P_ID_OPORTUNIDAD", OracleDbType.NVarchar2, idOportunidad);
+            AddParameter("P_ID_COT", OracleDbType.Int32, idCot);
+
+            ExecuteStoredProcedure("APPWEBS.CRM_PKG.SP_REGISTRAR_OPORTUNIDAD", true);
+        }
         #endregion
 
         #region Parse

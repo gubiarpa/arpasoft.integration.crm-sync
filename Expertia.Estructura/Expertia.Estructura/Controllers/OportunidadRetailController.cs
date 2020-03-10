@@ -33,6 +33,8 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(OportunidadRetailReq oportunidadRetail)
         {
+            string exMessage = string.Empty;
+            int idCotizacion = 0;
             try
             {
                 var intIdUsuWeb = /*oportunidadRetail.IdUsuarioSrv_SF*/oportunidadRetail.UsuarioCrea;
@@ -329,6 +331,8 @@ namespace Expertia.Estructura.Controllers
                     #endregion
                 }
 
+                _repository.RegistraOportunidad(oportunidadRetail.IdOportunidad_SF, pIntIdCot);
+                idCotizacion = pIntIdCot;
                 var oportunidadRetailRes = new OportunidadRetailRes()
                 {
                     CodigoError = "OK",
@@ -351,7 +355,18 @@ namespace Expertia.Estructura.Controllers
                     FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
                 };
 
+                exMessage = ex.Message;
+
                 return Ok(oportunidadRetailResError);
+            }
+            finally
+            {
+                (new
+                {
+                    Body = oportunidadRetail,
+                    IdCotSrv = idCotizacion,
+                    Error = exMessage
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
