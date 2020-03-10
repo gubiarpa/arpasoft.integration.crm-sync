@@ -209,6 +209,7 @@ namespace Expertia.Estructura.Utils
 
         ///File SRV retail
         public const string AW_Read_FileAsociadosSRV = "APPWEBS.PKG_COTIZACION_RETAIL_CRM.SP_GET_FILES_ASOCIADOS_SRV";
+        public const string AW_Upd_EnvioCotRetail = "APPWEBS.PKG_COTIZACION_RETAIL_CRM.SP_ACTUALIZAR_ENVIO_COT_RETAIL";
 
         /// Pedido
         public const string AW_Create_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_INS_PEDIDO";

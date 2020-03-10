@@ -34,7 +34,9 @@ namespace Expertia.Estructura.Controllers
         {
             IEnumerable<FilesAsociadosSRV> ListFilesAsociadosSRV = null;
             List<FilesAsociadosSRVResponse> ListFileAsociadosSRVResponse = new List<FilesAsociadosSRVResponse>();
+            List<Respuesta> ListRpta = new List<Respuesta>();
             string errorEnvio = string.Empty;
+            
 
             try 
             {                
@@ -87,6 +89,7 @@ namespace Expertia.Estructura.Controllers
                     try
                     {
                         var responseFilesAsociados = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.OportunidadAsocMethod, Method.POST, fileAsociado.ToSalesforceEntity(), true, token);
+                        
                         if (responseFilesAsociados.StatusCode.Equals(HttpStatusCode.OK))
                         {
                             dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseFilesAsociados.Content);
@@ -95,20 +98,17 @@ namespace Expertia.Estructura.Controllers
                             FileAsociadosSRVResponse.codigo_error = jsonResponse[OutParameter.SF_CodigoError];
                             FileAsociadosSRVResponse.mensaje_error = jsonResponse[OutParameter.SF_MensajeError];
                             ListFileAsociadosSRVResponse.Add(FileAsociadosSRVResponse);
-                        }
-                        else
-                        {
-                            dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseFilesAsociados.Content);
-                            FilesAsociadosSRVResponse FileAsociadosSRVResponse = new FilesAsociadosSRVResponse();
-                            FileAsociadosSRVResponse.id_oportunidad_sf = jsonResponse[OutParameter.SF_IdOportunidad];
-                            FileAsociadosSRVResponse.codigo_error = jsonResponse[OutParameter.SF_CodigoError];
-                            FileAsociadosSRVResponse.mensaje_error = jsonResponse[OutParameter.SF_MensajeError];
-                            ListFileAsociadosSRVResponse.Add(FileAsociadosSRVResponse);
+                            /// Actualización de estado File Oportundad
+                            var operation = _fileSrvRetailRepository.Actualizar_EnvioCotRetail(FileAsociadosSRVResponse);
+                            Respuesta Rpta = new Respuesta();
+                            Rpta.CodigoError = operation[OutParameter.CodigoError].ToString();
+                            Rpta.MensajeError = operation[OutParameter.MensajeError].ToString();
+                            Rpta.Numero_Afectados = operation[OutParameter.NumeroActualizados].ToString();
+                            ListRpta.Add(Rpta);
                         }
                     }
                     catch (Exception ex)
                     {
-
                         errorEnvio = ex.Message;
                     }
                    
@@ -127,6 +127,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     Request = ListFilesAsociadosSRV,                    
                     Response = ListFileAsociadosSRVResponse,
+                    Rpta = ListRpta,
                     Exception = errorEnvio
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
