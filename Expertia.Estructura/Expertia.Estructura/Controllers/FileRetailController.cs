@@ -110,376 +110,376 @@ namespace Expertia.Estructura.Controllers
                 }
 
                 /*Logica RC*/
-                //bool bolGeneroRC_OK = false;
-                //try
-                //{
-                //    bool bolGenerarRC = false;
-                //    StringBuilder sbDatosGeneraRC = new StringBuilder();
+                bool bolGeneroRC_OK = false;
+                try
+                {
+                    bool bolGenerarRC = false;
+                    StringBuilder sbDatosGeneraRC = new StringBuilder();
 
-                //    if (bolCambioEstado && (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi) == 62)
-                //    {
-                //        List<PasarelaPago_Pedido> lstPedidos = _PedidoRetail_Repository.Get_Pedido_XSolicitud(null, null, null, null, FileAssociate.idCotSRV_SF, null, null);
+                    if (bolCambioEstado && (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi) == 62)
+                    {
+                        List<PasarelaPago_Pedido> lstPedidos = _PedidoRetail_Repository.Get_Pedido_XSolicitud(null, null, null, null, FileAssociate.idCotSRV_SF, null, null);
 
-                //        /*********VARIABLES POR REVISAR Y TRATAR********/
-                //        double dblMontoPedido = 0;
-                //        double dblMontoPedidoRound = 0;
-                //        string strNroTarjeta = "";
-                //        string strNroTarjetaBaneado = "";
-                //        string strIdForma = "";
-                //        string strIdValor = "";
-                //        double dblTopeRC_UATP = System.Convert.ToDouble(ConfigurationManager.AppSettings("DBL_TOPE_GENERAR_RC_UATP"));
-                //        bool bolEsRutaSelva = false;
-                //        bool bolEsTarifaPublicada = false;
+                        /*********VARIABLES POR REVISAR Y TRATAR********/
+                        double dblMontoPedido = 0;
+                        double dblMontoPedidoRound = 0;
+                        string strNroTarjeta = "";
+                        string strNroTarjetaBaneado = "";
+                        string strIdForma = "";
+                        string strIdValor = "";
+                        double dblTopeRC_UATP = System.Convert.ToDouble(ConfigAccess.GetValueInAppSettings("DBL_TOPE_GENERAR_RC_UATP"));
+                        bool bolEsRutaSelva = false;
+                        bool bolEsTarifaPublicada = false;
 
-                //        bool bolExisteSoloUnPedidoPagado = true;
-                //        Int16 intCantPedidosPagados = 0; /*CANTIDAD DE PEDIDOS QUE ESTÁN PAGADOS. SOLO SI TIENE UN PEDIDO PAGADO SE GENERA RC*/
+                        bool bolExisteSoloUnPedidoPagado = true;
+                        Int16 intCantPedidosPagados = 0; /*CANTIDAD DE PEDIDOS QUE ESTÁN PAGADOS. SOLO SI TIENE UN PEDIDO PAGADO SE GENERA RC*/
 
-                //        foreach (PasarelaPago_Pedido objPasarelaPago_Pedido in lstPedidos)
-                //        {
-                //            if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_Pedido.INT_ID_ESTADO_PEDIDO_PAGADO)
-                //                intCantPedidosPagados += 1;
-                //            if (intCantPedidosPagados > 1)
-                //            {
-                //                bolExisteSoloUnPedidoPagado = false;
-                //                break;
-                //            }
-                //        }
+                        foreach (PasarelaPago_Pedido objPasarelaPago_Pedido in lstPedidos)
+                        {
+                            if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_Pedido.INT_ID_ESTADO_PEDIDO_PAGADO)
+                                intCantPedidosPagados += 1;
+                            if (intCantPedidosPagados > 1)
+                            {
+                                bolExisteSoloUnPedidoPagado = false;
+                                break;
+                            }
+                        }
 
-                //        foreach (PasarelaPago_Pedido objPasarelaPago_Pedido in lstPedidos)
-                //        {
-                //            FormaPagoPedido objFormaPagoPedido = _PedidoRetail_Repository.Get_FormaPagoBy_IdPedido(objPasarelaPago_Pedido.IdPedido);
+                        //foreach (PasarelaPago_Pedido objPasarelaPago_Pedido in lstPedidos)
+                        //{
+                        //    FormaPagoPedido objFormaPagoPedido = _PedidoRetail_Repository.Get_FormaPagoBy_IdPedido(objPasarelaPago_Pedido.IdPedido);
 
-                //            /*********CODIGO POR REVISAR Y TRATAR********/
-                //            if (objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_PAGADO)
-                //            {
-                //                if (objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_SAFETYPAY_CASH || objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE || objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_SOLO_TARJETA)
-                //                {
-                //                    dblMontoPedido = objPasarelaPago_Pedido.MontoTarjeta;
-                //                    dblMontoPedidoRound = objPasarelaPago_Pedido.MontoTarjeta;
+                        //    /*********CODIGO POR REVISAR Y TRATAR********/
+                        //    if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                        //    {
+                        //        if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA)
+                        //        {
+                        //            dblMontoPedido = objPasarelaPago_Pedido.MontoTarjeta;
+                        //            dblMontoPedidoRound = objPasarelaPago_Pedido.MontoTarjeta;
 
-                //                    if (objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_SAFETYPAY_CASH)
-                //                    {
-                //                        strIdForma = NMConstantesUtility.STR_ID_FORMA_PTA_SAFETYPAY;
-                //                        strIdValor = NMConstantesUtility.STR_ID_VALOR_PTA_USD;
-                //                        if (objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_PAGADO)
-                //                            bolGenerarRC = true;
-                //                    }
-                //                    else if (objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE)
-                //                    {
-                //                        strIdForma = NMConstantesUtility.STR_ID_FORMA_PTA_PAGOEFECTIVO;
-                //                        strIdValor = NMConstantesUtility.STR_ID_VALOR_PTA_USD;
-                //                        if (objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_PAGADO)
-                //                            bolGenerarRC = true;
-                //                    }
-                //                    else if (objFormaPagoPedido.IdFormaPago == NMConstantesUtility.INT_ID_FORMA_PAGO_SOLO_TARJETA)
-                //                    {
-                //                        if (objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == NMConstantesUtility.INT_ID_ESTADO_PEDIDO_PAGADO)
-                //                            bolGenerarRC = false;
-                //                        if (objFormaPagoPedido.IdTipoTarjeta == NMConstantesUtility.STR_ID_TIPO_TARJETA_VISA)
-                //                        {
-                //                            strIdForma = NMConstantesUtility.STR_ID_FORMA_PTA_VISA;
-                //                            strIdValor = NMConstantesUtility.STR_ID_VALOR_PTA_UATP;
-                //                        }
-                //                        else if (objFormaPagoPedido.IdTipoTarjeta == NMConstantesUtility.STR_ID_TIPO_TARJETA_MASTERCARD || objFormaPagoPedido.IdTipoTarjeta == NMConstantesUtility.STR_ID_TIPO_TARJETA_MASTERCARD_CA)
-                //                        {
-                //                            strIdForma = NMConstantesUtility.STR_ID_FORMA_PTA_MASTERCARD;
-                //                            strIdValor = NMConstantesUtility.STR_ID_VALOR_PTA_UATP;
-                //                        }
-                //                        else if (objFormaPagoPedido.IdTipoTarjeta == NMConstantesUtility.STR_ID_TIPO_TARJETA_AMERICAN_EXPRESS)
-                //                        {
-                //                            strIdForma = NMConstantesUtility.STR_ID_FORMA_PTA_AMERICAN;
-                //                            strIdValor = NMConstantesUtility.STR_ID_VALOR_PTA_UATP;
-                //                        }
-                //                        else if (objFormaPagoPedido.IdTipoTarjeta == NMConstantesUtility.STR_ID_TIPO_TARJETA_DINERS)
-                //                        {
-                //                            strIdForma = NMConstantesUtility.STR_ID_FORMA_PTA_DINERS;
-                //                            strIdValor = NMConstantesUtility.STR_ID_VALOR_PTA_UATP;
-                //                        }
-                //                    }
+                        //            if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH)
+                        //            {
+                        //                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_SAFETYPAY;
+                        //                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_USD;
+                        //                if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                        //                    bolGenerarRC = true;
+                        //            }
+                        //            else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE)
+                        //            {
+                        //                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_PAGOEFECTIVO;
+                        //                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_USD;
+                        //                if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                        //                    bolGenerarRC = true;
+                        //            }
+                        //            else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA)
+                        //            {
+                        //                if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                        //                    bolGenerarRC = false;
+                        //                if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_VISA)
+                        //                {
+                        //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_VISA;
+                        //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                        //                }
+                        //                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD || objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD_CA)
+                        //                {
+                        //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_MASTERCARD;
+                        //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                        //                }
+                        //                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_AMERICAN_EXPRESS)
+                        //                {
+                        //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_AMERICAN;
+                        //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                        //                }
+                        //                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_DINERS)
+                        //                {
+                        //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_DINERS;
+                        //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                        //                }
+                        //            }
 
-                //                    if (ConfigurationManager.AppSettings("STR_GENERAR_RC_PTA") == "1")
-                //                    {
-                //                        if (bolGenerarRC && bolExisteSoloUnPedidoPagado && objPasarelaPago_Pedido.IdCotSRV.HasValue && lstFilesPTACotVta.Count > 0)
-                //                        {
-                //                            CotizacionVta objCotizacionVta = objCotizacionVentaBO.ObtieneCotizacionXId(objPasarelaPago_Pedido.IdCotSRV.Value);
-                //                            ReservaVuelosBO objReservaVuelosBO = new ReservaVuelosBO();
-                //                            string strIdCiudadTmp = "";
+                        //            if (ConfigAccess.GetValueInAppSettings("STR_GENERAR_RC_PTA").Equals("1"))
+                        //            {
+                        //                if (bolGenerarRC && bolExisteSoloUnPedidoPagado && objPasarelaPago_Pedido.IdCotSRV.HasValue && lstFilesPTACotVta.Count > 0)
+                        //                {
+                        //                    CotizacionVta objCotizacionVta = objCotizacionVentaBO.ObtieneCotizacionXId(objPasarelaPago_Pedido.IdCotSRV.Value);
+                        //                    ReservaVuelosBO objReservaVuelosBO = new ReservaVuelosBO();
+                        //                    string strIdCiudadTmp = "";
 
-                //                            if (objCotizacionVta.IdReservaVuelos.HasValue)
-                //                            {
-                //                                // GENERAR RC SOLO PARA LOS DESTINOS QUE NO SON PUERTO MALDONADO, NI IQUITOS
-                //                                try
-                //                                {
-                //                                    using (DataSet dtsReserva = objReservaVuelosBO.ObtieneReservaXId(objCotizacionVta.IdReservaVuelos.Value))
-                //                                    {
-                //                                        using (DataTable dtReserva = dtsReserva.Tables("RESERVA"))
-                //                                        {
-                //                                            if (dtReserva.Rows.Count > 0)
-                //                                            {
-                //                                                DataRow drReserva = dtReserva.Rows(0);
-                //                                                if (!IsDBNull(drReserva("ES_NEGOCIADA")) && drReserva("ES_NEGOCIADA").ToString == "0")
-                //                                                    bolEsTarifaPublicada = true;
-                //                                            }
-                //                                        }
-                //                                        using (DataTable dtSegementos = dtsReserva.Tables("SEGMENTO"))
-                //                                        {
-                //                                            foreach (DataRow drSegmento in dtSegementos.Rows)
-                //                                            {
-                //                                                if (!IsDBNull(drSegmento("CIT_CIDSRC")))
-                //                                                    strIdCiudadTmp = drSegmento("CIT_CIDSRC");
-                //                                                DateTime datFecActual = DateTime.Now;
-                //                                                if ((DateTime)datFecActual.ToString("dd/MM/yyyy") >= (DateTime)"01/01/2019")
-                //                                                {
-                //                                                    if (strIdCiudadTmp.ToUpper().Contains("PEM"))
-                //                                                    {
-                //                                                        bolEsRutaSelva = true;
-                //                                                        // fcondor: se comenta para generar RC para ruta selva
-                //                                                        // bolGenerarRC = False 
-                //                                                        bolGenerarRC = true;
-                //                                                        break;
-                //                                                    }
-                //                                                }
-                //                                                else if (strIdCiudadTmp.ToUpper().Contains("PEM") || strIdCiudadTmp.ToUpper().Contains("IQT"))
-                //                                                {
-                //                                                    bolEsRutaSelva = true;
-                //                                                    // fcondor: se comenta para generar RC para ruta selva
-                //                                                    // bolGenerarRC = False 
-                //                                                    bolGenerarRC = true;
-                //                                                    break;
-                //                                                }
-
-
-
-                //                                                if (!IsDBNull(drSegmento("CIT_CIDTGT")))
-                //                                                    strIdCiudadTmp = drSegmento("CIT_CIDTGT");
-                //                                                if ((DateTime)datFecActual.ToString("dd/MM/yyyy") >= (DateTime)"01/01/2019")
-                //                                                {
-                //                                                    if (strIdCiudadTmp.ToUpper().Contains("PEM"))
-                //                                                    {
-                //                                                        bolEsRutaSelva = true;
-                //                                                        // fcondor: se comenta para generar RC para ruta selva
-                //                                                        // bolGenerarRC = False
-                //                                                        bolGenerarRC = true;
-                //                                                        break;
-                //                                                    }
-                //                                                }
-                //                                                else if (strIdCiudadTmp.ToUpper().Contains("PEM") || strIdCiudadTmp.ToUpper().Contains("IQT"))
-                //                                                {
-                //                                                    bolEsRutaSelva = true;
-                //                                                    // fcondor: se comenta para generar RC para ruta selva
-                //                                                    // bolGenerarRC = False
-                //                                                    bolGenerarRC = true;
-                //                                                    break;
-                //                                                }
-                //                                            }
-                //                                        }
-                //                                    }
-                //                                }
-                //                                catch (Exception ex)
-                //                                {
-                //                                    string strIPUsuario = "";
-                //                                    if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                //                                        strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                //                                    else
-                //                                        strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
-                //                                    // 'PROYALERTA
-                //                                    NMailAlerta oNMailAlerta = new NMailAlerta();
-                //                                    oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Genera RC en PTA - ObtieneReservaXId");
-                //                                    oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
-                //                                }
-                //                            }
-
-                //                            if (bolGenerarRC)
-                //                            {
-                //                                // GENERAR RC SOLO PARA LOS DESTINOS QUE NO SON PUERTO MALDONADO, NI IQUITOS
-                //                                // fcondor: se comento para generar RC ruta selva
-                //                                // If objCotizacionVta.DestinosPref.ToUpper.Contains("PEM") OrElse _
-                //                                // objCotizacionVta.CodigoIATAPrincipal.ToUpper.Contains("PEM") OrElse _
-                //                                // objCotizacionVta.DestinosPref.ToUpper.Contains("IQT") OrElse _
-                //                                // objCotizacionVta.CodigoIATAPrincipal.ToUpper.Contains("IQT") Then
-                //                                // Dim objEnviarCorreo As New EnviarCorreo
-                //                                // objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() & _
-                //                                // "<br><br><strong>Error: ruta selva<BR>intIdEstadoSelect:" & intIdEstadoSelect & "<br>bolCambioEstado=" & bolCambioEstado & "</strong>", True, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), _
-                //                                // "RC_NO_OK_SRV_" & intIdCotVta)
-                //                                // Exit For
-                //                                // Else
-                //                                // lreque: se comenta para que se respete el monto tal cual se cobró al cliente
-                //                                // If objPasarelaPago_Pedido.Pedido_RptaPagoSafetyPay IsNot Nothing Then
-                //                                // Dim objRptaPagoSafetyPayTmp As RptaPagoSafetyPay = objPasarelaPagoBO.Obtiene_Rpta_SafetyPay(objPasarelaPago_Pedido.IdPedido)
-                //                                // Dim dblMontoPagarTmp As Double = objPasarelaPago_Pedido.MontoTarjeta.Value
-                //                                // If objRptaPagoSafetyPayTmp.lst_AmountType IsNot Nothing Then
-                //                                // For Each objAmountType As NuevoMundoUtility.AmountType In objRptaPagoSafetyPayTmp.lst_AmountType
-                //                                // If objAmountType.CurrencyID = "150" Then
-                //                                // dblMontoPedidoRound = objAmountType.Value
-                //                                // Exit For
-                //                                // End If
-                //                                // Next
-                //                                // End If
-                //                                // End If
-                //                                if (objPasarelaPago_Pedido.Pedido_RptaPagoUATP != null)
-                //                                    strNroTarjetaBaneado = objNMWebUtility.Obtiene_NroTarjeta_Baneado(objPasarelaPago_Pedido.Pedido_RptaPagoUATP.NroTarjeta);
-
-                //                                foreach (FilePTACotVta objFilePTACotVtaTmp in lstFilesPTACotVta)
-                //                                    sbDatosGeneraRC.Append("File: " + objFilePTACotVtaTmp.IdFilePTA + " - " + objFilePTACotVtaTmp.IdSucursal + " / Monto: " + objFilePTACotVtaTmp.Moneda + " - " + objFilePTACotVtaTmp.ImporteFacturado + " <br>");
-                //                                sbDatosGeneraRC.Append("EsUATP: " + objPasarelaPago_Pedido.EsUATP + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("IdPedido: " + objPasarelaPago_Pedido.IdPedido + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("dblMontoPedido: " + dblMontoPedido + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("dblMontoPedidoRound: " + dblMontoPedidoRound + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("strNroTarjeta: " + strNroTarjetaBaneado + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("strIdForma: " + strIdForma + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("strIdValor: " + strIdValor + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("FechaPedido: " + objPasarelaPago_Pedido.FechaPedido + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("dblTopeRC_UATP: " + dblTopeRC_UATP + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("IdCotSRV: " + intIdCotVta + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("EsRutaSelva: " + bolEsRutaSelva + "<br>" + Constants.vbCrLf);
-                //                                sbDatosGeneraRC.Append("EsTarifaPublicada: " + bolEsTarifaPublicada + "<br>" + Constants.vbCrLf);
-
-                //                                if (objPasarelaPago_Pedido.EsUATP)
-                //                                {
-                //                                    if (dblMontoPedido > dblTopeRC_UATP)
-                //                                    {
-                //                                        sbDatosGeneraRC.Append("<strong>No generar RC por tope</strong><br>" + Constants.vbCrLf);
-                //                                        bolGenerarRC = false;
-                //                                    }
-                //                                    // lreque:
-                //                                    // 26/08 TEMPORAL HASTA VALIDAR BIEN LOS CASOS
-                //                                    bolGenerarRC = false;
-                //                                }
-                //                                else
-                //                                    bolGenerarRC = true;
-
-                //                                if (bolGenerarRC)
-                //                                {
-                //                                    ArrayList alstResult = null/* TODO Change to default(_) if this is not a reference type */;
-                //                                    string strMsgError = "";
-                //                                    try
-                //                                    {
-                //                                        bool intInsertaReciboReserva = false;
-                //                                        if (bolEsRutaSelva)
-                //                                        {
-                //                                            if (bolEsTarifaPublicada)
-                //                                                // alstResult = objPTABO.Inserta_ReciboCaja_Prueba(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, _
-                //                                                // objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, _
-                //                                                // strIdForma, strIdValor, "cajawebPUB", objPasarelaPago_Pedido.FechaPedido, Nothing, bolEsRutaSelva, bolEsTarifaPublicada)
+                        //                    if (objCotizacionVta.IdReservaVuelos.HasValue)
+                        //                    {
+                        //                        // GENERAR RC SOLO PARA LOS DESTINOS QUE NO SON PUERTO MALDONADO, NI IQUITOS
+                        //                        try
+                        //                        {
+                        //                            using (DataSet dtsReserva = objReservaVuelosBO.ObtieneReservaXId(objCotizacionVta.IdReservaVuelos.Value))
+                        //                            {
+                        //                                using (DataTable dtReserva = dtsReserva.Tables("RESERVA"))
+                        //                                {
+                        //                                    if (dtReserva.Rows.Count > 0)
+                        //                                    {
+                        //                                        DataRow drReserva = dtReserva.Rows(0);
+                        //                                        if (!IsDBNull(drReserva("ES_NEGOCIADA")) && drReserva("ES_NEGOCIADA").ToString == "0")
+                        //                                            bolEsTarifaPublicada = true;
+                        //                                    }
+                        //                                }
+                        //                                using (DataTable dtSegementos = dtsReserva.Tables("SEGMENTO"))
+                        //                                {
+                        //                                    foreach (DataRow drSegmento in dtSegementos.Rows)
+                        //                                    {
+                        //                                        if (!IsDBNull(drSegmento("CIT_CIDSRC")))
+                        //                                            strIdCiudadTmp = drSegmento("CIT_CIDSRC");
+                        //                                        DateTime datFecActual = DateTime.Now;
+                        //                                        if ((DateTime)datFecActual.ToString("dd/MM/yyyy") >= (DateTime)"01/01/2019")
+                        //                                        {
+                        //                                            if (strIdCiudadTmp.ToUpper().Contains("PEM"))
+                        //                                            {
+                        //                                                bolEsRutaSelva = true;
+                        //                                                // fcondor: se comenta para generar RC para ruta selva
+                        //                                                // bolGenerarRC = False 
+                        //                                                bolGenerarRC = true;
+                        //                                                break;
+                        //                                            }
+                        //                                        }
+                        //                                        else if (strIdCiudadTmp.ToUpper().Contains("PEM") || strIdCiudadTmp.ToUpper().Contains("IQT"))
+                        //                                        {
+                        //                                            bolEsRutaSelva = true;
+                        //                                            // fcondor: se comenta para generar RC para ruta selva
+                        //                                            // bolGenerarRC = False 
+                        //                                            bolGenerarRC = true;
+                        //                                            break;
+                        //                                        }
 
 
 
+                        //                                        if (!IsDBNull(drSegmento("CIT_CIDTGT")))
+                        //                                            strIdCiudadTmp = drSegmento("CIT_CIDTGT");
+                        //                                        if ((DateTime)datFecActual.ToString("dd/MM/yyyy") >= (DateTime)"01/01/2019")
+                        //                                        {
+                        //                                            if (strIdCiudadTmp.ToUpper().Contains("PEM"))
+                        //                                            {
+                        //                                                bolEsRutaSelva = true;
+                        //                                                // fcondor: se comenta para generar RC para ruta selva
+                        //                                                // bolGenerarRC = False
+                        //                                                bolGenerarRC = true;
+                        //                                                break;
+                        //                                            }
+                        //                                        }
+                        //                                        else if (strIdCiudadTmp.ToUpper().Contains("PEM") || strIdCiudadTmp.ToUpper().Contains("IQT"))
+                        //                                        {
+                        //                                            bolEsRutaSelva = true;
+                        //                                            // fcondor: se comenta para generar RC para ruta selva
+                        //                                            // bolGenerarRC = False
+                        //                                            bolGenerarRC = true;
+                        //                                            break;
+                        //                                        }
+                        //                                    }
+                        //                                }
+                        //                            }
+                        //                        }
+                        //                        catch (Exception ex)
+                        //                        {
+                        //                            string strIPUsuario = "";
+                        //                            if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
+                        //                                strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
+                        //                            else
+                        //                                strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
+                        //                            // 'PROYALERTA
+                        //                            NMailAlerta oNMailAlerta = new NMailAlerta();
+                        //                            oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Genera RC en PTA - ObtieneReservaXId");
+                        //                            oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
+                        //                        }
+                        //                    }
 
-                //                                                // ultimo comentado
+                        //                    if (bolGenerarRC)
+                        //                    {
+                        //                        // GENERAR RC SOLO PARA LOS DESTINOS QUE NO SON PUERTO MALDONADO, NI IQUITOS
+                        //                        // fcondor: se comento para generar RC ruta selva
+                        //                        // If objCotizacionVta.DestinosPref.ToUpper.Contains("PEM") OrElse _
+                        //                        // objCotizacionVta.CodigoIATAPrincipal.ToUpper.Contains("PEM") OrElse _
+                        //                        // objCotizacionVta.DestinosPref.ToUpper.Contains("IQT") OrElse _
+                        //                        // objCotizacionVta.CodigoIATAPrincipal.ToUpper.Contains("IQT") Then
+                        //                        // Dim objEnviarCorreo As New EnviarCorreo
+                        //                        // objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() & _
+                        //                        // "<br><br><strong>Error: ruta selva<BR>intIdEstadoSelect:" & intIdEstadoSelect & "<br>bolCambioEstado=" & bolCambioEstado & "</strong>", True, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), _
+                        //                        // "RC_NO_OK_SRV_" & intIdCotVta)
+                        //                        // Exit For
+                        //                        // Else
+                        //                        // lreque: se comenta para que se respete el monto tal cual se cobró al cliente
+                        //                        // If objPasarelaPago_Pedido.Pedido_RptaPagoSafetyPay IsNot Nothing Then
+                        //                        // Dim objRptaPagoSafetyPayTmp As RptaPagoSafetyPay = objPasarelaPagoBO.Obtiene_Rpta_SafetyPay(objPasarelaPago_Pedido.IdPedido)
+                        //                        // Dim dblMontoPagarTmp As Double = objPasarelaPago_Pedido.MontoTarjeta.Value
+                        //                        // If objRptaPagoSafetyPayTmp.lst_AmountType IsNot Nothing Then
+                        //                        // For Each objAmountType As NuevoMundoUtility.AmountType In objRptaPagoSafetyPayTmp.lst_AmountType
+                        //                        // If objAmountType.CurrencyID = "150" Then
+                        //                        // dblMontoPedidoRound = objAmountType.Value
+                        //                        // Exit For
+                        //                        // End If
+                        //                        // Next
+                        //                        // End If
+                        //                        // End If
+                        //                        if (objPasarelaPago_Pedido.Pedido_RptaPagoUATP != null)
+                        //                            strNroTarjetaBaneado = objNMWebUtility.Obtiene_NroTarjeta_Baneado(objPasarelaPago_Pedido.Pedido_RptaPagoUATP.NroTarjeta);
 
-                //                                                alstResult = objPTABO.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajawebPUB", objPasarelaPago_Pedido.FechaPedido, null/* TODO Change to default(_) if this is not a reference type */, bolEsRutaSelva, bolEsTarifaPublicada);
-                //                                            else
-                //                                                intInsertaReciboReserva = false;
-                //                                        }
-                //                                        else
-                //                                            // ultimo comentado
+                        //                        foreach (FilePTACotVta objFilePTACotVtaTmp in lstFilesPTACotVta)
+                        //                            sbDatosGeneraRC.Append("File: " + objFilePTACotVtaTmp.IdFilePTA + " - " + objFilePTACotVtaTmp.IdSucursal + " / Monto: " + objFilePTACotVtaTmp.Moneda + " - " + objFilePTACotVtaTmp.ImporteFacturado + " <br>");
+                        //                        sbDatosGeneraRC.Append("EsUATP: " + objPasarelaPago_Pedido.EsUATP + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("IdPedido: " + objPasarelaPago_Pedido.IdPedido + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("dblMontoPedido: " + dblMontoPedido + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("dblMontoPedidoRound: " + dblMontoPedidoRound + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("strNroTarjeta: " + strNroTarjetaBaneado + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("strIdForma: " + strIdForma + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("strIdValor: " + strIdValor + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("FechaPedido: " + objPasarelaPago_Pedido.FechaPedido + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("dblTopeRC_UATP: " + dblTopeRC_UATP + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("IdCotSRV: " + intIdCotVta + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("EsRutaSelva: " + bolEsRutaSelva + "<br>" + Constants.vbCrLf);
+                        //                        sbDatosGeneraRC.Append("EsTarifaPublicada: " + bolEsTarifaPublicada + "<br>" + Constants.vbCrLf);
 
-                //                                            alstResult = objPTABO.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajaweb", objPasarelaPago_Pedido.FechaPedido, null/* TODO Change to default(_) if this is not a reference type */, bolEsRutaSelva, bolEsTarifaPublicada);
-                //                                    }
-                //                                    catch (Exception ex)
-                //                                    {
-                //                                        strMsgError = ex.ToString();
+                        //                        if (objPasarelaPago_Pedido.EsUATP)
+                        //                        {
+                        //                            if (dblMontoPedido > dblTopeRC_UATP)
+                        //                            {
+                        //                                sbDatosGeneraRC.Append("<strong>No generar RC por tope</strong><br>" + Constants.vbCrLf);
+                        //                                bolGenerarRC = false;
+                        //                            }
+                        //                            // lreque:
+                        //                            // 26/08 TEMPORAL HASTA VALIDAR BIEN LOS CASOS
+                        //                            bolGenerarRC = false;
+                        //                        }
+                        //                        else
+                        //                            bolGenerarRC = true;
 
-                //                                        string strIPUsuario = "";
-                //                                        if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                //                                            strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                //                                        else
-                //                                            strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
-                //                                        // 'PROYALERTA
-                //                                        NMailAlerta oNMailAlerta = new NMailAlerta();
-                //                                        oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
-                //                                        oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
-                //                                    }
+                        //                        if (bolGenerarRC)
+                        //                        {
+                        //                            ArrayList alstResult = null/* TODO Change to default(_) if this is not a reference type */;
+                        //                            string strMsgError = "";
+                        //                            try
+                        //                            {
+                        //                                bool intInsertaReciboReserva = false;
+                        //                                if (bolEsRutaSelva)
+                        //                                {
+                        //                                    if (bolEsTarifaPublicada)
+                        //                                        // alstResult = objPTABO.Inserta_ReciboCaja_Prueba(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, _
+                        //                                        // objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, _
+                        //                                        // strIdForma, strIdValor, "cajawebPUB", objPasarelaPago_Pedido.FechaPedido, Nothing, bolEsRutaSelva, bolEsTarifaPublicada)
 
-                //                                    string strLog = "";
-                //                                    EnviarCorreo objEnviarCorreo = new EnviarCorreo();
-                //                                    if (alstResult != null && alstResult.Count > 0)
-                //                                    {
-                //                                        if (alstResult(0) == "1")
-                //                                            bolGeneroRC_OK = true;
 
-                //                                        try
-                //                                        {
-                //                                            strLog = alstResult(2);
-                //                                        }
-                //                                        catch (Exception ex)
-                //                                        {
-                //                                        }
 
-                //                                        if (bolGeneroRC_OK)
-                //                                        {
-                //                                            string strIdsRCTmp = alstResult(1);
 
-                //                                            string strIdsRC = "";
+                        //                                        // ultimo comentado
 
-                //                                            StringBuilder sbInfo = new StringBuilder();
-                //                                            sbInfo.Append("Se han generado los siguientes RC para el pedido nro. <strong>" + objPasarelaPago_Pedido.IdPedido + "</strong>:<br><br>" + Constants.vbCrLf);
+                        //                                        alstResult = objPTABO.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajawebPUB", objPasarelaPago_Pedido.FechaPedido, null/* TODO Change to default(_) if this is not a reference type */, bolEsRutaSelva, bolEsTarifaPublicada);
+                        //                                    else
+                        //                                        intInsertaReciboReserva = false;
+                        //                                }
+                        //                                else
+                        //                                    // ultimo comentado
 
-                //                                            foreach (string strIdRC in strIdsRCTmp.Split(";"))
-                //                                            {
-                //                                                if (!string.IsNullOrEmpty(strIdRC))
-                //                                                {
-                //                                                    strIdsRC += strIdRC + ",";
-                //                                                    sbInfo.Append("-RC " + strIdRC + "<br>" + Constants.vbCrLf);
-                //                                                }
-                //                                            }
-                //                                            if (strIdsRC.Length > 0)
-                //                                                strIdsRC = strIdsRC.Substring(0, strIdsRC.Length - 1);
+                        //                                    alstResult = objPTABO.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajaweb", objPasarelaPago_Pedido.FechaPedido, null/* TODO Change to default(_) if this is not a reference type */, bolEsRutaSelva, bolEsTarifaPublicada);
+                        //                            }
+                        //                            catch (Exception ex)
+                        //                            {
+                        //                                strMsgError = ex.ToString();
 
-                //                                            objEnviarCorreo.Enviar_Log("Log: se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br>" + "Generación automática de RC nro. " + strIdsRC + "<br><br>" + sbInfo.ToString(), true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_OK_SRV_" + intIdCotVta + "_" + strIdsRC.Replace(",", "-"));
+                        //                                string strIPUsuario = "";
+                        //                                if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
+                        //                                    strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
+                        //                                else
+                        //                                    strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
+                        //                                // 'PROYALERTA
+                        //                                NMailAlerta oNMailAlerta = new NMailAlerta();
+                        //                                oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
+                        //                                oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
+                        //                            }
 
-                //                                            objEnviarCorreo.Enviar_CajaWeb(Application("WEB_CODIGO"), 1, 128, sbInfo.ToString(), "Generación automática de RC nro. " + strIdsRC, null/* TODO Change to default(_) if this is not a reference type */);
-                //                                        }
-                //                                        else
-                //                                        {
-                //                                            objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
-                //                                            try
-                //                                            {
-                //                                                MyAlert(strLog);
-                //                                                string strIPUsuario = "";
-                //                                                if (HttpContext.Current.Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                //                                                    strIPUsuario = HttpContext.Current.Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                //                                                else
-                //                                                    strIPUsuario = HttpContext.Current.Request.ServerVariables("REMOTE_ADDR");
-                //                                                objCotizacionVentaBO.Inserta_Post_Cot(intIdCotVta, NuevoMundoUtility.ConstantesUtility.STR_ID_TIPO_POST_SRV_USUARIO, strLog, strIPUsuario, objUsuarioSession.LoginUsuario, objUsuarioSession.IdUsuario, objUsuarioSession.IdDep, objUsuarioSession.IdOfi, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, objPasarelaPago_Pedido.IdEstadoPedido, true, null/* TODO Change to default(_) if this is not a reference type */, true, null/* TODO Change to default(_) if this is not a reference type */, false, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */);
-                //                                            }
-                //                                            catch (Exception ex)
-                //                                            {
-                //                                            }
-                //                                        }
-                //                                    }
-                //                                    else
-                //                                        objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
-                //                                    break;
-                //                                }
-                //                                else
-                //                                {
-                //                                    EnviarCorreo objEnviarCorreo = new EnviarCorreo();
-                //                                    objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br><strong>Error: validaciones internas</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
-                //                                }
-                //                            }
-                //                            // PARA QUE NO GENERE OTRO RC
-                //                            bolGenerarRC = false;
-                //                        }
-                //                    }
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    /*********CODIGO POR REVISAR Y TRATAR********/
-                //    string strIPUsuario = "";
-                //    if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                //        strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                //    else
-                //        strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
-                //    // 'PROYALERTA
-                //    NMailAlerta oNMailAlerta = new NMailAlerta();
-                //    oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
-                //    oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
-                //}
+                        //                            string strLog = "";
+                        //                            EnviarCorreo objEnviarCorreo = new EnviarCorreo();
+                        //                            if (alstResult != null && alstResult.Count > 0)
+                        //                            {
+                        //                                if (alstResult(0) == "1")
+                        //                                    bolGeneroRC_OK = true;
+
+                        //                                try
+                        //                                {
+                        //                                    strLog = alstResult(2);
+                        //                                }
+                        //                                catch (Exception ex)
+                        //                                {
+                        //                                }
+
+                        //                                if (bolGeneroRC_OK)
+                        //                                {
+                        //                                    string strIdsRCTmp = alstResult(1);
+
+                        //                                    string strIdsRC = "";
+
+                        //                                    StringBuilder sbInfo = new StringBuilder();
+                        //                                    sbInfo.Append("Se han generado los siguientes RC para el pedido nro. <strong>" + objPasarelaPago_Pedido.IdPedido + "</strong>:<br><br>" + Constants.vbCrLf);
+
+                        //                                    foreach (string strIdRC in strIdsRCTmp.Split(";"))
+                        //                                    {
+                        //                                        if (!string.IsNullOrEmpty(strIdRC))
+                        //                                        {
+                        //                                            strIdsRC += strIdRC + ",";
+                        //                                            sbInfo.Append("-RC " + strIdRC + "<br>" + Constants.vbCrLf);
+                        //                                        }
+                        //                                    }
+                        //                                    if (strIdsRC.Length > 0)
+                        //                                        strIdsRC = strIdsRC.Substring(0, strIdsRC.Length - 1);
+
+                        //                                    objEnviarCorreo.Enviar_Log("Log: se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br>" + "Generación automática de RC nro. " + strIdsRC + "<br><br>" + sbInfo.ToString(), true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_OK_SRV_" + intIdCotVta + "_" + strIdsRC.Replace(",", "-"));
+
+                        //                                    objEnviarCorreo.Enviar_CajaWeb(Application("WEB_CODIGO"), 1, 128, sbInfo.ToString(), "Generación automática de RC nro. " + strIdsRC, null/* TODO Change to default(_) if this is not a reference type */);
+                        //                                }
+                        //                                else
+                        //                                {
+                        //                                    objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
+                        //                                    try
+                        //                                    {
+                        //                                        MyAlert(strLog);
+                        //                                        string strIPUsuario = "";
+                        //                                        if (HttpContext.Current.Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
+                        //                                            strIPUsuario = HttpContext.Current.Request.ServerVariables("HTTP_X_FORWARDED_FOR");
+                        //                                        else
+                        //                                            strIPUsuario = HttpContext.Current.Request.ServerVariables("REMOTE_ADDR");
+                        //                                        objCotizacionVentaBO.Inserta_Post_Cot(intIdCotVta, NuevoMundoUtility.ConstantesUtility.STR_ID_TIPO_POST_SRV_USUARIO, strLog, strIPUsuario, objUsuarioSession.LoginUsuario, objUsuarioSession.IdUsuario, objUsuarioSession.IdDep, objUsuarioSession.IdOfi, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, objPasarelaPago_Pedido.IdEstadoPedido, true, null/* TODO Change to default(_) if this is not a reference type */, true, null/* TODO Change to default(_) if this is not a reference type */, false, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */);
+                        //                                    }
+                        //                                    catch (Exception ex)
+                        //                                    {
+                        //                                    }
+                        //                                }
+                        //                            }
+                        //                            else
+                        //                                objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
+                        //                            break;
+                        //                        }
+                        //                        else
+                        //                        {
+                        //                            EnviarCorreo objEnviarCorreo = new EnviarCorreo();
+                        //                            objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br><strong>Error: validaciones internas</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
+                        //                        }
+                        //                    }
+                        //                    // PARA QUE NO GENERE OTRO RC
+                        //                    bolGenerarRC = false;
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ///*********CODIGO POR REVISAR Y TRATAR********/
+                    //string strIPUsuario = "";
+                    //if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
+                    //    strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
+                    //else
+                    //    strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
+                    //// 'PROYALERTA
+                    //NMailAlerta oNMailAlerta = new NMailAlerta();
+                    //oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
+                    //oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
+                }
 
                 return Ok(_responseAsociate);
             }

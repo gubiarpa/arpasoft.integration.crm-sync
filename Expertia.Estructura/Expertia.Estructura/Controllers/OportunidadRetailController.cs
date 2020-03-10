@@ -51,7 +51,7 @@ namespace Expertia.Estructura.Controllers
                     if ((new List<string> { "DNI", "PSP", "CEX" }).Contains(oportunidadRetail.IdTipoDoc))
                         clientes = (List<ClienteCot>)_repository.SelectByDocumento(oportunidadRetail.IdTipoDoc, oportunidadRetail.Numdoc)["pCurResult_out"];
                     else
-                        clientes = (List<ClienteCot>)_repository.SelectByEmail(oportunidadRetail.EmailCli)[""];
+                        clientes = (List<ClienteCot>)_repository.SelectByEmail(oportunidadRetail.EmailCli)["pCurResult_out"];
                     var hdIdCli = clientes != null && clientes.Count > 0 ? clientes.ElementAt(0).IdCliCot : 0;
                     #endregion
 

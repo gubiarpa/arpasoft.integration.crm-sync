@@ -477,6 +477,30 @@ namespace Expertia.Estructura.Utils
         public const int ID_MAIL_SOLICITUD_PAGO_SERVICIO_SF = 78;
     }
 
+    public static class Constantes_FileRetail
+    {
+        public const short INT_ID_ESTADO_PEDIDO_VALIDADO = 5;
+        public const short INT_ID_ESTADO_PEDIDO_PAGADO = 2;
+        public const short INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;
+        public const short INT_ID_FORMA_PAGO_SAFETYPAY_CASH = 7;
+        public const string STR_ID_FORMA_PTA_SAFETYPAY = "35";
+        public const string STR_ID_VALOR_PTA_USD = "08";
+        public const short INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC = 5;
+        public const short INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE = 8;
+        public const short INT_ID_FORMA_PAGO_SOLO_TARJETA = 3;
+        public const string STR_ID_FORMA_PTA_PAGOEFECTIVO = "34";
+        public const string STR_ID_TIPO_TARJETA_VISA = "VI";
+        public const string STR_ID_FORMA_PTA_VISA = "03";
+        public const string STR_ID_VALOR_PTA_UATP = "55";
+        public const string STR_ID_TIPO_TARJETA_MASTERCARD = "MC";
+        public const string STR_ID_TIPO_TARJETA_MASTERCARD_CA = "CA";
+        public const string STR_ID_FORMA_PTA_MASTERCARD = "06";
+        public const string STR_ID_TIPO_TARJETA_AMERICAN_EXPRESS = "AX";
+        public const string STR_ID_FORMA_PTA_AMERICAN = "04";
+        public const string STR_ID_TIPO_TARJETA_DINERS = "DN";
+        public const string STR_ID_FORMA_PTA_DINERS = "05";
+    }
+
     public static class Webs_Cid
     {
         public const int DM_WEB_ID = 4;
