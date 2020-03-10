@@ -330,7 +330,7 @@ namespace Expertia.Estructura.Repository.Retail
                 AddParameter("pNumMontoDscto_in", OracleDbType.Double, pNumMontoDscto);
                 AddParameter("pNumIdNewCot_out", OracleDbType.Double, null, ParameterDirection.Output);
 
-                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_COT_CRM");
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_COT");
 
                 if (!int.TryParse(GetOutParameter("pNumIdNewCot_out").ToString(), out int pNumIdNewCliCot_out)) pNumIdNewCliCot_out = 0;
                 operation["pNumIdNewCot_out"] = pNumIdNewCliCot_out;
