@@ -33,9 +33,11 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(OportunidadRetailReq oportunidadRetail)
         {
+            string exMessage = string.Empty;
+            int idCotizacion = 0;
             try
             {
-                var intIdUsuWeb = oportunidadRetail.IdUsuarioSrv_SF;
+                var intIdUsuWeb = /*oportunidadRetail.IdUsuarioSrv_SF*/oportunidadRetail.UsuarioCrea;
                 var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(intIdUsuWeb);
                 int? intIdCliCot = null;
 
@@ -89,10 +91,10 @@ namespace Expertia.Estructura.Controllers
 
                     _repository.ActualizaClienteCotizacion(
                         intIdCliCot ?? 0,
-                        oportunidadRetail.NombreCli/*usuarioLogin.NomCompletoUsuario*/,
-                        oportunidadRetail.ApePatCli/*usuarioLogin.ApePatUsuario*/,
-                        oportunidadRetail.ApeMatCli/*usuarioLogin.ApeMatUsuario*/,
-                        oportunidadRetail.EmailCli/*usuarioLogin.EmailUsuario*/,
+                        oportunidadRetail.NombreCli,
+                        oportunidadRetail.ApePatCli,
+                        oportunidadRetail.ApeMatCli,
+                        oportunidadRetail.EmailCli,
                         intIdUsuWeb
                         );
 
@@ -139,10 +141,10 @@ namespace Expertia.Estructura.Controllers
                     #region RegistraIngresoCliente
                     intIdOcurrencias = (int)_repository.InsertaIngresoCliente(
                         DateTime.Now,
-                        objPersonal.NomCompletoPer,
-                        objPersonal.ApePatPer,
-                        objPersonal.ApeMatPer,
-                        objPersonal.EmailPer,
+                        oportunidadRetail.NombreCli,
+                        oportunidadRetail.ApePatCli,
+                        oportunidadRetail.ApeMatCli,
+                        oportunidadRetail.EmailCli,
                         oportunidadRetail.MotivoCrea, 
                         null,
                         oportunidadRetail.IdDestino,
@@ -150,7 +152,7 @@ namespace Expertia.Estructura.Controllers
                         objPersonal.IdOficina,
                         objPersonal.IdDepartamento, 
                         DateTime.Now,
-                        intIdUsuWeb,
+                        oportunidadRetail.UsuarioCrea,
                         objPersonal.IdOficina,
                         objPersonal.IdDepartamento,
                         oportunidadRetail.Comentario,
@@ -329,6 +331,8 @@ namespace Expertia.Estructura.Controllers
                     #endregion
                 }
 
+                _repository.RegistraOportunidad(oportunidadRetail.IdOportunidad_SF, pIntIdCot);
+                idCotizacion = pIntIdCot;
                 var oportunidadRetailRes = new OportunidadRetailRes()
                 {
                     CodigoError = "OK",
@@ -351,7 +355,18 @@ namespace Expertia.Estructura.Controllers
                     FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
                 };
 
+                exMessage = ex.Message;
+
                 return Ok(oportunidadRetailResError);
+            }
+            finally
+            {
+                (new
+                {
+                    Body = oportunidadRetail,
+                    IdCotSrv = idCotizacion,
+                    Error = exMessage
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion

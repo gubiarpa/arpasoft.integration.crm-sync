@@ -249,7 +249,7 @@ namespace Expertia.Estructura.Repository.Retail
                 AddParameter("pVarEmailCliCot_in", OracleDbType.Varchar2, pStrEmailCliCot);
                 AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb);
 
-                ExecuteStoredProcedure("APPWEBS.PKG_CLIENTE_COT.SP_UPD_CLI_2");
+                ExecuteStoredProcedure("APPWEBS.PKG_CLIENTE_COT.SP_UPD_CLI_2", true);
 
                 return operation;
             }
@@ -330,7 +330,7 @@ namespace Expertia.Estructura.Repository.Retail
                 AddParameter("pNumMontoDscto_in", OracleDbType.Double, pNumMontoDscto);
                 AddParameter("pNumIdNewCot_out", OracleDbType.Double, null, ParameterDirection.Output);
 
-                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_COT");
+                ExecuteStoredProcedure("APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_COT", true);
 
                 if (!int.TryParse(GetOutParameter("pNumIdNewCot_out").ToString(), out int pNumIdNewCliCot_out)) pNumIdNewCliCot_out = 0;
                 operation["pNumIdNewCot_out"] = pNumIdNewCliCot_out;
@@ -613,6 +613,17 @@ namespace Expertia.Estructura.Repository.Retail
             {
                 throw ex;
             }
+        }
+
+        public void RegistraOportunidad(
+            string idOportunidad,
+            int idCot
+            )
+        {
+            AddParameter("P_ID_OPORTUNIDAD", OracleDbType.NVarchar2, idOportunidad);
+            AddParameter("P_ID_COT", OracleDbType.Int32, idCot);
+
+            ExecuteStoredProcedure("APPWEBS.CRM_PKG.SP_REGISTRAR_OPORTUNIDAD", true);
         }
         #endregion
 
