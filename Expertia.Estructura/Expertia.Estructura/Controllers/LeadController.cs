@@ -41,9 +41,9 @@ namespace Expertia.Estructura.Controllers
 
                 try
                 {
-                    //ClearQuickLog("body_request.json", "CotizacionJY"); /// ♫ Trace
+                    ClearQuickLog("body_request.json", "Lead"); /// ♫ Trace
                     objEnvio = new { datos = leadSF };
-                    //QuickLog(objEnvio, "body_request.json", "CotizacionJY"); /// ♫ Trace
+                    QuickLog(objEnvio, "body_request.json", "Lead"); /// ♫ Trace
                     var response = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.LeadCreateMethod, Method.POST, objEnvio, true, token);
                     if (response.StatusCode.Equals(HttpStatusCode.OK))
                     {
