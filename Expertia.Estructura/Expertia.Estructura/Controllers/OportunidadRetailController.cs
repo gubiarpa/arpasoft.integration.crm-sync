@@ -171,7 +171,7 @@ namespace Expertia.Estructura.Controllers
                         _repository.EnviarPromociones(
                             objPersonal,
                             oportunidadRetail,
-                            oportunidadRetail.EnviarPromociones.Equals("SI"),
+                            oportunidadRetail.EnviarPromociones.Equals("1"),
                             objPersonal.NomCompletoPer,
                             objPersonal.ApePatPer,
                             objPersonal.EmailPer);
