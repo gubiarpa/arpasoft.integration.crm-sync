@@ -98,8 +98,8 @@ namespace Expertia.Estructura.Controllers
                         intIdUsuWeb
                         );
 
-                    if (string.IsNullOrEmpty(oportunidadRetail.IdDestino) && oportunidadRetail.IdDestino.Length >= 3)
-                        oportunidadRetail.IdDestino = oportunidadRetail.IdDestino.Substring(0, 3);
+                    //if (string.IsNullOrEmpty(oportunidadRetail.IdDestino) && oportunidadRetail.IdDestino.Length >= 3)
+                    //    oportunidadRetail.IdDestino = oportunidadRetail.IdDestino.Substring(0, 3);
 
                     #region RegistraCotizacion
                     var intIdCotVta = (int)_repository.InsertaCotizacionVenta(
@@ -116,7 +116,7 @@ namespace Expertia.Estructura.Controllers
                         1,
                         oportunidadRetail.IdCanalVenta,
                         null,
-                        oportunidadRetail.IdDestino,
+                        oportunidadRetail.IdDestino.Substring(0, 3),
                         null,
                         1,
                         null,
