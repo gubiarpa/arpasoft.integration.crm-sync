@@ -156,6 +156,7 @@
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\CuentaNMController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Controllers\CotizacionJYController.cs" />
     <Compile Include="Controllers\FactFileRetailController.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Models\CuentaB2C.cs" />
     <Compile Include="Models\Auxiliar\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
+    <Compile Include="Models\CuentaNM.cs" />
     <Compile Include="Models\CuentaPta.cs" />
     <Compile Include="Models\FactFileRetail.cs" />
     <Compile Include="Models\File.cs" />
@@ -244,6 +246,8 @@
     <Compile Include="Repository\Behavior\ICotizacion.cs" />
     <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
+    <Compile Include="Repository\Behavior\IOportunidadNMRepository.cs" />
+    <Compile Include="Repository\Behavior\ICuentaNMRepository.cs" />
     <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />
     <Compile Include="Repository\Behavior\IDatosOficina.cs" />
     <Compile Include="Repository\Behavior\IDatosUsuario.cs" />
@@ -277,6 +281,8 @@
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Journeyou\CotizacionJYRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\OportunidadNMRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\CuentaNMRepository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FileSRVRetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
@@ -454,6 +460,7 @@
       <CachedSettingsPropName>Expertia_Estructura_ws_compra_ws_compra</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

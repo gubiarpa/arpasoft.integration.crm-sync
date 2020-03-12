@@ -236,7 +236,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                 {
                     codigoTransaccion = pedidosProcesados.codigoTransaccion,
                     idSolicitudPago_SF = pedidosProcesados.idSolicitudPago_SF,
-                    estadoPago = pedidosProcesados.estadoPago == ConstantesPedidoProcesado.Cod_Retorno ? ConstantesPedidoProcesado.Pagado : ConstantesPedidoProcesado.Pendiente,
+                    estadoPago = pedidosProcesados.estadoPago,
                     tipoSolicitud = true
                 };
             }
@@ -313,6 +313,41 @@ namespace Expertia.Estructura.RestManager.RestParse
                     lead.Tour_Interest,
                     lead.Propietario_oportunidad,
                     lead.Ejecutivo
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static object ToSalesforceEntity(this CuentaNM cuentaNM)
+        {
+            try
+            {
+                return new
+                {
+                    cuentaNM.nombreCli,
+                    cuentaNM.apePatCli,
+                    cuentaNM.apeMatCli,
+                    cuentaNM.idCuenta_Sf,
+                    cuentaNM.eMailCli,
+                    cuentaNM.enviarPromociones,
+                    cuentaNM.tipoTelefono1,
+                    cuentaNM.codPais1,
+                    cuentaNM.numero1,
+                    cuentaNM.tipoTelefono2,
+                    cuentaNM.codPais2,
+                    cuentaNM.numero2,
+                    cuentaNM.tipoTelefono3,
+                    cuentaNM.codPais3,
+                    cuentaNM.numero3,
+                    cuentaNM.direccion,
+                    cuentaNM.razonSocial,
+                    cuentaNM.aceptarPoliticas,
+                    cuentaNM.ruc,
+                    cuentaNM.idUsuarioSrv_Sf,
+                    cuentaNM.accion_Sf
                 };
             }
             catch (Exception ex)
