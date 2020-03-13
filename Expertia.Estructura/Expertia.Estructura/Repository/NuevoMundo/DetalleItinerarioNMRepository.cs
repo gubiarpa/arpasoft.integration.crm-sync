@@ -28,14 +28,14 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             /// (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (3) P_CUENTANM
-            AddParameter(OutParameter.CursorCuentaNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+            AddParameter(OutParameter.CursorDetalleItinerarioNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Get_CuentaNM);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_DetalleItinerarioNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CursorCuentaNM] = ToDetalleItinerarioNM(GetDtParameter(OutParameter.CursorCuentaNM));
+            operation[OutParameter.CursorDetalleItinerarioNM] = ToDetalleItinerarioNM(GetDtParameter(OutParameter.CursorDetalleItinerarioNM));
             #endregion
 
             return operation;
@@ -43,22 +43,22 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<CuentaNM> ToDetalleItinerarioNM(DataTable dt)
+        private IEnumerable<DetalleItinerarioNM> ToDetalleItinerarioNM(DataTable dt)
         {
             try
             {
-                var cuentaNMList = new List<CuentaNM>();
+                var detalleItinerarioNMList = new List<DetalleItinerarioNM>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    cuentaNMList.Add(new CuentaNM()
+                    detalleItinerarioNMList.Add(new DetalleItinerarioNM()
                     {
-                        nombreCli = row.StringParse("ACCION"),
-                        apePatCli = row.StringParse("DK_CUENTA")
+                        lAerea = row.StringParse("ACCION"),
+                        origen = row.StringParse("DK_CUENTA")
                     });
                 }
 
-                return cuentaNMList;
+                return detalleItinerarioNMList;
             }
             catch (Exception ex)
             {

@@ -157,6 +157,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\CuentaNMController.cs" />
+    <Compile Include="Controllers\DetalleItinerarioController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Controllers\CotizacionJYController.cs" />
     <Compile Include="Controllers\FactFileRetailController.cs" />
