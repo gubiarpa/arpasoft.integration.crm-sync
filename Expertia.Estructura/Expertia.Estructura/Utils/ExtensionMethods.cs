@@ -119,6 +119,7 @@ namespace Expertia.Estructura.Utils
                     case UnidadNegocioKeys.DestinosMundiales: return ConnectionKeys.DMConnKey;
                     case UnidadNegocioKeys.Interagencias: return ConnectionKeys.IAConnKey;
                     case UnidadNegocioKeys.AppWebs: return ConnectionKeys.AWConnKey;
+                    case UnidadNegocioKeys.NuevoMundo: return ConnectionKeys.NMConnKey;
                     default: return null;
                 }
             }

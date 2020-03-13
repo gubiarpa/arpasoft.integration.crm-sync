@@ -79,7 +79,7 @@ namespace Expertia.Estructura.Controllers
                     bolValor = _CotizacionSRV._Liberar_UsuWeb_CA(models.Cot_Id);
                 }
 
-                Inserta_Post_Cot(models.Cot_Id, "1", pStrTextoPost,
+                _CotizacionSRV.Inserta_Post_Cot(models.Cot_Id, "1", pStrTextoPost,
                     strIPUsuCrea, objUsuarioLogin.LoginUsuario, IdUsuario,
                     IdDep, IdOfi, null, null, Constantes_SRV.INT_ID_ESTADO_COT_DERIVADO_A_CA, true, null,
                     false, null, false, IdUsuario, IdOfi,
@@ -157,122 +157,122 @@ namespace Expertia.Estructura.Controllers
                 return false;
         }
 
-        private int Inserta_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost,
-            string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb,
-            int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, Int16 pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta,
-            bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, Nullable<int> pIntIdUsuWebCounterCrea, Nullable<int> pIntIdOfiCounterCrea,
-            Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile)
-        {
-            int intIdPost = 0;
+        //private int Inserta_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost,
+        //    string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb,
+        //    int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, Int16 pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta,
+        //    bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, Nullable<int> pIntIdUsuWebCounterCrea, Nullable<int> pIntIdOfiCounterCrea,
+        //    Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile)
+        //{
+        //    int intIdPost = 0;
 
-            intIdPost = _CotizacionSRV._Insert_Post_Cot(pIntIdCot, pStrTipoPost, pStrTextoPost, pStrIPUsuCrea,
-                                    pStrLoginUsuCrea, pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pLstArchivos, pLstFilesPTA, pIntIdEstado,
-                                    pBolCambioEstado, pLstFechasCotVta, pBolEsAutomatico, pBytArchivoMail, pBolEsCounterAdmin,
-                                    pIntIdUsuWebCounterCrea, pIntIdOfiCounterCrea, pIntIdDepCounterCrea, pBolEsUrgenteEmision,
-                                    pDatFecPlazoEmision, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, pDblMontoEstimadoFile);
+        //    intIdPost = _CotizacionSRV._Insert_Post_Cot(pIntIdCot, pStrTipoPost, pStrTextoPost, pStrIPUsuCrea,
+        //                            pStrLoginUsuCrea, pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pLstArchivos, pLstFilesPTA, pIntIdEstado,
+        //                            pBolCambioEstado, pLstFechasCotVta, pBolEsAutomatico, pBytArchivoMail, pBolEsCounterAdmin,
+        //                            pIntIdUsuWebCounterCrea, pIntIdOfiCounterCrea, pIntIdDepCounterCrea, pBolEsUrgenteEmision,
+        //                            pDatFecPlazoEmision, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, pDblMontoEstimadoFile);
 
-            if (pLstArchivos != null)
-            {
-                foreach (ArchivoPostCot objArchivoPost in pLstArchivos)
-                {
+        //    if (pLstArchivos != null)
+        //    {
+        //        foreach (ArchivoPostCot objArchivoPost in pLstArchivos)
+        //        {
 
-                }
-            }
+        //        }
+        //    }
 
-            if (pBolCambioEstado)
-            {
-                Post_SRV RQ_General_PostSRV = new Post_SRV();
-                RQ_General_PostSRV.IdCot = pIntIdCot;
-                RQ_General_PostSRV.LoginUsuCrea = pStrLoginUsuCrea;
-                RQ_General_PostSRV.IPUsuCrea = pStrIPUsuCrea;
-                RQ_General_PostSRV.IdEstado = pIntIdEstado;
-                RQ_General_PostSRV.IdDep = pIntIdDep;
-                RQ_General_PostSRV.IdOfi = pIntIdOfi;
-                if (pBolEsCounterAdmin)
-                {
-                    RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWebCounterCrea;
-                    RQ_General_PostSRV.IdDepCounterCrea = pIntIdDepCounterCrea;
-                    RQ_General_PostSRV.IdOfiCounterCrea = pIntIdOfiCounterCrea;
-                    RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
-                    RQ_General_PostSRV.IdUsuWeb = pIntIdUsuWeb;
-                    _CotizacionSRV.UpdateEstadoCotVTA(RQ_General_PostSRV);
-                }
-                else
-                {
-                    RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWeb;
-                    RQ_General_PostSRV.IdDepCounterCrea = pIntIdDep;
-                    RQ_General_PostSRV.IdOfiCounterCrea = pIntIdOfi;
-                    RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
-                    RQ_General_PostSRV.IdUsuWeb = pIntIdUsuWeb;
-                    _CotizacionSRV.UpdateEstadoCotVTA(RQ_General_PostSRV);
+        //    if (pBolCambioEstado)
+        //    {
+        //        Post_SRV RQ_General_PostSRV = new Post_SRV();
+        //        RQ_General_PostSRV.IdCot = pIntIdCot;
+        //        RQ_General_PostSRV.LoginUsuCrea = pStrLoginUsuCrea;
+        //        RQ_General_PostSRV.IPUsuCrea = pStrIPUsuCrea;
+        //        RQ_General_PostSRV.IdEstado = pIntIdEstado;
+        //        RQ_General_PostSRV.IdDep = pIntIdDep;
+        //        RQ_General_PostSRV.IdOfi = pIntIdOfi;
+        //        if (pBolEsCounterAdmin)
+        //        {
+        //            RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWebCounterCrea;
+        //            RQ_General_PostSRV.IdDepCounterCrea = pIntIdDepCounterCrea;
+        //            RQ_General_PostSRV.IdOfiCounterCrea = pIntIdOfiCounterCrea;
+        //            RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
+        //            RQ_General_PostSRV.IdUsuWeb = pIntIdUsuWeb;
+        //            _CotizacionSRV.UpdateEstadoCotVTA(RQ_General_PostSRV);
+        //        }
+        //        else
+        //        {
+        //            RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWeb;
+        //            RQ_General_PostSRV.IdDepCounterCrea = pIntIdDep;
+        //            RQ_General_PostSRV.IdOfiCounterCrea = pIntIdOfi;
+        //            RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
+        //            RQ_General_PostSRV.IdUsuWeb = pIntIdUsuWeb;
+        //            _CotizacionSRV.UpdateEstadoCotVTA(RQ_General_PostSRV);
 
-                }
-            }
+        //        }
+        //    }
 
-            if (pIntIdEstado == 8 && pIntIdMotivoNoCompro.HasValue) // ESTADO NO COMPRO
-            {
-                _CotizacionSRV._Update_MotivoNoCompro(pIntIdCot, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro);
-            }
+        //    if (pIntIdEstado == 8 && pIntIdMotivoNoCompro.HasValue) // ESTADO NO COMPRO
+        //    {
+        //        _CotizacionSRV._Update_MotivoNoCompro(pIntIdCot, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro);
+        //    }
 
-            if (pIntIdEstado == 5) //ESTADO FACTURADO
-            {
-                Update_Importe_FilesPTABy_Cot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
+        //    if (pIntIdEstado == 5) //ESTADO FACTURADO
+        //    {
+        //        Update_Importe_FilesPTABy_Cot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
 
-                if (pLstFilesPTA != null)
-                {
-                    if (pLstFilesPTA.Count > 0)
-                    {
-                        bool bolBDNuevoMundo = true;
+        //        if (pLstFilesPTA != null)
+        //        {
+        //            if (pLstFilesPTA.Count > 0)
+        //            {
+        //                bool bolBDNuevoMundo = true;
 
-                        double dblTipoCambio = _CotizacionSRV._Select_TipoCambio(DateTime.Now, "SOL", 1, bolBDNuevoMundo);
+        //                double dblTipoCambio = _CotizacionSRV._Select_TipoCambio(DateTime.Now, "SOL", 1, bolBDNuevoMundo);
 
-                        foreach (FilePTACotVta objFilePTACotVta in pLstFilesPTA)
-                        {
-                            if (pBolEsCounterAdmin)
-                            {
-                                _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWebCounterCrea.Value, pIntIdOfiCounterCrea.Value, pIntIdDepCounterCrea.Value);
-                            }
-                            else
-                            {
-                                _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
-                            }
-                        }
-                    }
-                }
-            }
-            else if (pIntIdEstado == 4)
-            {
-                if (pLstFechasCotVta != null)
-                {
-                    for (int intX = 0; intX <= pLstFechasCotVta.Length - 1; intX++)
-                    {
-                        if (pBolEsCounterAdmin)
-                        {
-                            _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWebCounterCrea.Value, pIntIdDepCounterCrea.Value, pIntIdOfiCounterCrea.Value);
+        //                foreach (FilePTACotVta objFilePTACotVta in pLstFilesPTA)
+        //                {
+        //                    if (pBolEsCounterAdmin)
+        //                    {
+        //                        _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWebCounterCrea.Value, pIntIdOfiCounterCrea.Value, pIntIdDepCounterCrea.Value);
+        //                    }
+        //                    else
+        //                    {
+        //                        _CotizacionSRV._Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else if (pIntIdEstado == 4)
+        //    {
+        //        if (pLstFechasCotVta != null)
+        //        {
+        //            for (int intX = 0; intX <= pLstFechasCotVta.Length - 1; intX++)
+        //            {
+        //                if (pBolEsCounterAdmin)
+        //                {
+        //                    _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWebCounterCrea.Value, pIntIdDepCounterCrea.Value, pIntIdOfiCounterCrea.Value);
 
-                        }
-                        else
-                        {
+        //                }
+        //                else
+        //                {
 
-                            _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWeb, pIntIdDep, pIntIdOfi);
+        //                    _CotizacionSRV._Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWeb, pIntIdDep, pIntIdOfi);
 
-                        }
-                    }
-                }
-            }
+        //                }
+        //            }
+        //        }
+        //    }
 
-            if (pBytArchivoMail != null)//NO ENTRA (SACADO DEL SRV)
-            {
-                _CotizacionSRV._Insert_ArchivoMail_Post_Cot(pIntIdCot, intIdPost, pBytArchivoMail);
-            }
+        //    if (pBytArchivoMail != null)//NO ENTRA (SACADO DEL SRV)
+        //    {
+        //        _CotizacionSRV._Insert_ArchivoMail_Post_Cot(pIntIdCot, intIdPost, pBytArchivoMail);
+        //    }
 
-            if (pDblMontoEstimadoFile.HasValue && pDblMontoEstimadoFile.Value > 0)
-            {
-                _CotizacionSRV._Update_MontoEstimadoFileBy_IdCotVta(pIntIdCot, pDblMontoEstimadoFile.Value);
-            }
+        //    if (pDblMontoEstimadoFile.HasValue && pDblMontoEstimadoFile.Value > 0)
+        //    {
+        //        _CotizacionSRV._Update_MontoEstimadoFileBy_IdCotVta(pIntIdCot, pDblMontoEstimadoFile.Value);
+        //    }
 
-            return intIdPost;
-        }
+        //    return intIdPost;
+        //}
 
         private void Update_Importe_FilesPTABy_Cot(int pIntIdCot, int pIntIdUsuWeb, int pIntIdOfi, int pIntIdDep)
         {

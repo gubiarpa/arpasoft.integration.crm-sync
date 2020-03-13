@@ -14,6 +14,10 @@ using Expertia.Estructura.Models.Behavior;
 using System.Collections;
 using System.Text;
 using System.Data;
+using Microsoft.VisualBasic;
+using Expertia.Estructura.Repository.Retail;
+using EnvioAlertas;
+using System.Configuration;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -23,6 +27,7 @@ namespace Expertia.Estructura.Controllers
         #region Properties               
         private IDatosUsuario _datosUsuario;
         private ICotizacionSRV_Repository _CotizacionSRV_Repository;
+        private IFileSRVRetailRepository _FileSRVRetailRepository;
         private IPedidoRepository _PedidoRetail_Repository;
         #endregion
 
@@ -45,11 +50,15 @@ namespace Expertia.Estructura.Controllers
         {
             AssociateFileRS _responseAsociate = new AssociateFileRS();
             CotizacionVta DtsCotizacionVta = new CotizacionVta();
-            UsuarioLogin DtsUsuarioLogin = null;
-            CotizacionSRV_AW_Repository _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
+            UsuarioLogin DtsUsuarioLogin = null;                         
+            
+            _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
+            _FileSRVRetailRepository = new FileSRVRetailRepository();
+            _PedidoRetail_Repository = new Pedido_AW_Repository();
 
             List<FilePTACotVta> lstFilesPTACotVta = null;
             List<FilePTACotVta> lstFilesPTAOld = null;
+            List<FileSRV> ListFile_Info = null;
 
             ArrayList lstFechasCotVta = new ArrayList(); /*Duda*/
 
@@ -67,53 +76,51 @@ namespace Expertia.Estructura.Controllers
             {
                 if (FileAssociate.LstFiles[0].accion_SF == asociar)
                 {
-                    /*Validaciones*/
-                    validacionAssociate(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin);
+                    /*Validaciones*/                    
+                    validacionAssociate(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info);
                     if (string.IsNullOrEmpty(_responseAsociate.CodigoError) == false) return Ok(_responseAsociate);
-
-                    UsuarioLogin objUsuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(FileAssociate.idUsuario);
-
-                    /*Cargar InfoFile*/
-
-                    FileSRV inforFile = CargarInfoFile((int)FileAssociate.LstFiles[0].Sucursal, FileAssociate.LstFiles[0].IdFilePTA);
-
+                    
                     /*Obtenemos los datos del SRV, etc*/
                     DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV_SF);
 
-                    if (FileAssociate.LstFiles[0].IdFilePTA == 896798)
-                    {
-                        lstFilesPTACotVta = new List<FilePTACotVta>();
-                        FilePTACotVta _FilePTACotVta = null;
+                    lstFilesPTACotVta = new List<FilePTACotVta>();
+                    FilePTACotVta _FilePTACotVta = null;
+                    bool UpdateResponse = true;
 
-                        foreach (FileSRV fileSRV in FileAssociate.LstFiles)
+                    foreach (FileSRV fileSRV in ListFile_Info)
+                    {
+                        if (!string.IsNullOrEmpty(fileSRV.IdFilePTA.ToString()))
                         {
-                            if (!string.IsNullOrEmpty(fileSRV.IdFilePTA.ToString()))
+                            _FilePTACotVta = new FilePTACotVta();
+                            _FilePTACotVta.IdCot = FileAssociate.idCotSRV_SF;
+                            _FilePTACotVta.IdSuc = Convert.ToInt16(fileSRV.Sucursal);
+                            _FilePTACotVta.IdFilePTA = fileSRV.IdFilePTA;
+                            _FilePTACotVta.ImporteFacturado = fileSRV.ImporteFact;
+                            _FilePTACotVta.Moneda = fileSRV.Moneda;
+                            lstFilesPTACotVta.Add(_FilePTACotVta);
+
+                            if(UpdateResponse == true)/*Cargamos algunos valores al Response*/
                             {
-                                _FilePTACotVta = new FilePTACotVta();
-                                _FilePTACotVta.IdCot = FileAssociate.idCotSRV_SF;
-                                _FilePTACotVta.IdSuc = Convert.ToInt16(fileSRV.Sucursal);
-                                _FilePTACotVta.IdFilePTA = fileSRV.IdFilePTA;
-                                _FilePTACotVta.ImporteFacturado = fileSRV.ImporteFact;
-                                _FilePTACotVta.Moneda = fileSRV.Moneda;
-                                lstFilesPTACotVta.Add(_FilePTACotVta);
+                                _responseAsociate.NumFile = fileSRV.IdFilePTA;
+                                _responseAsociate.Cliente = fileSRV.Cliente;
+                                _responseAsociate.Importe = fileSRV.ImporteFact;
+                                UpdateResponse = false;
                             }
                         }
-                        /*Logica si tiene asociado un servicio*/
-
-                        /*Obtenemos los Files anteriores (Si los tiene)*/
-                        lstFilesPTAOld = _CotizacionSRV_Repository._SelectFilesPTABy_IdCot(FileAssociate.idCotSRV_SF, 0, 0, 0);
-
-                        /*Insertamos el POST*/
-                        string strTextoPost = "<span class='texto_cambio_estado'>Cambio de estado a <strong>Facturado</strong> y asociación de Files a la cotización</span><br><br>";
-                        _CotizacionSRV_Repository.Inserta_Post_Cot(FileAssociate.idCotSRV_SF, Constantes_SRV.ID_TIPO_POST_SRV_USUARIO, strTextoPost,
-                            "127.0.0.0", DtsUsuarioLogin.LoginUsuario, DtsUsuarioLogin.IdUsuario, DtsUsuarioLogin.IdDep, DtsUsuarioLogin.IdOfi, null, lstFilesPTACotVta,
-                            EstadoSeleccionado, bolCambioEstado, null, false, null, DtsUsuarioLogin.EsCounterAdminSRV,
-                            (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : DtsUsuarioLogin.IdUsuario),
-                            (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi),
-                            (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null);
                     }
+                                       
+                    /*Obtenemos los Files anteriores (Si los tiene)*/
+                    lstFilesPTAOld = _CotizacionSRV_Repository._SelectFilesPTABy_IdCot(FileAssociate.idCotSRV_SF, 0, 0, 0);
 
-                    /*Logica RC*/
+                    /*Insertamos el POST*/
+                    string strTextoPost = "<span class='texto_cambio_estado'>Cambio de estado a <strong>Facturado</strong> y asociación de Files a la cotización</span><br><br>";
+                    _CotizacionSRV_Repository.Inserta_Post_Cot(FileAssociate.idCotSRV_SF, Constantes_SRV.ID_TIPO_POST_SRV_USUARIO, strTextoPost,
+                        "127.0.0.0", DtsUsuarioLogin.LoginUsuario, DtsUsuarioLogin.IdUsuario, DtsUsuarioLogin.IdDep, DtsUsuarioLogin.IdOfi, null, lstFilesPTACotVta,
+                        EstadoSeleccionado, bolCambioEstado, null, false, null, DtsUsuarioLogin.EsCounterAdminSRV,
+                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : DtsUsuarioLogin.IdUsuario),
+                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi),
+                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null);
+                  
                     bool bolGeneroRC_OK = false;
                     try
                     {
@@ -124,11 +131,10 @@ namespace Expertia.Estructura.Controllers
                         {
                             List<PasarelaPago_Pedido> lstPedidos = _PedidoRetail_Repository.Get_Pedido_XSolicitud(null, null, null, null, FileAssociate.idCotSRV_SF, null, null);
 
-                            /*********VARIABLES POR REVISAR Y TRATAR********/
                             double dblMontoPedido = 0;
                             double dblMontoPedidoRound = 0;
                             string strNroTarjeta = "";
-                            string strNroTarjetaBaneado = "";
+                            string strNroTarjetaBaneado = string.Empty;
                             string strIdForma = "";
                             string strIdValor = "";
                             double dblTopeRC_UATP = System.Convert.ToDouble(ConfigAccess.GetValueInAppSettings("DBL_TOPE_GENERAR_RC_UATP"));
@@ -149,344 +155,325 @@ namespace Expertia.Estructura.Controllers
                                 }
                             }
 
-                            //foreach (PasarelaPago_Pedido objPasarelaPago_Pedido in lstPedidos)
-                            //{
-                            //    FormaPagoPedido objFormaPagoPedido = _PedidoRetail_Repository.Get_FormaPagoBy_IdPedido(objPasarelaPago_Pedido.IdPedido);
+                            foreach (PasarelaPago_Pedido objPasarelaPago_Pedido in lstPedidos)
+                            {
+                                FormaPagoPedido objFormaPagoPedido = _PedidoRetail_Repository.Get_FormaPagoBy_IdPedido(objPasarelaPago_Pedido.IdPedido);
+                                                                
+                                if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                                {
+                                    if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA)
+                                    {
+                                        dblMontoPedido = (double)objPasarelaPago_Pedido.MontoTarjeta;
+                                        dblMontoPedidoRound = (double)objPasarelaPago_Pedido.MontoTarjeta;
 
-                            //    /*********CODIGO POR REVISAR Y TRATAR********/
-                            //    if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
-                            //    {
-                            //        if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA)
-                            //        {
-                            //            dblMontoPedido = objPasarelaPago_Pedido.MontoTarjeta;
-                            //            dblMontoPedidoRound = objPasarelaPago_Pedido.MontoTarjeta;
+                                        if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH)
+                                        {
+                                            strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_SAFETYPAY;
+                                            strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_USD;
+                                            if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                                                bolGenerarRC = true;
+                                        }
+                                        else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE)
+                                        {
+                                            strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_PAGOEFECTIVO;
+                                            strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_USD;
+                                            if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                                                bolGenerarRC = true;
+                                        }
+                                        else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA)
+                                        {
+                                            if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
+                                                bolGenerarRC = false;
+                                            if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_VISA)
+                                            {
+                                                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_VISA;
+                                                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                                            }
+                                            else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD || objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD_CA)
+                                            {
+                                                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_MASTERCARD;
+                                                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                                            }
+                                            else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_AMERICAN_EXPRESS)
+                                            {
+                                                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_AMERICAN;
+                                                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                                            }
+                                            else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_DINERS)
+                                            {
+                                                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_DINERS;
+                                                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
+                                            }
+                                        }
 
-                            //            if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH)
-                            //            {
-                            //                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_SAFETYPAY;
-                            //                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_USD;
-                            //                if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
-                            //                    bolGenerarRC = true;
-                            //            }
-                            //            else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE)
-                            //            {
-                            //                strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_PAGOEFECTIVO;
-                            //                strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_USD;
-                            //                if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
-                            //                    bolGenerarRC = true;
-                            //            }
-                            //            else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA)
-                            //            {
-                            //                if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_VALIDADO || objPasarelaPago_Pedido.IdEstadoPedido == Constantes_FileRetail.INT_ID_ESTADO_PEDIDO_PAGADO)
-                            //                    bolGenerarRC = false;
-                            //                if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_VISA)
-                            //                {
-                            //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_VISA;
-                            //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
-                            //                }
-                            //                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD || objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD_CA)
-                            //                {
-                            //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_MASTERCARD;
-                            //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
-                            //                }
-                            //                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_AMERICAN_EXPRESS)
-                            //                {
-                            //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_AMERICAN;
-                            //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
-                            //                }
-                            //                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_DINERS)
-                            //                {
-                            //                    strIdForma = Constantes_FileRetail.STR_ID_FORMA_PTA_DINERS;
-                            //                    strIdValor = Constantes_FileRetail.STR_ID_VALOR_PTA_UATP;
-                            //                }
-                            //            }
+                                        if (ConfigAccess.GetValueInAppSettings("STR_GENERAR_RC_PTA").Equals("1"))
+                                        {
+                                            if (bolGenerarRC && bolExisteSoloUnPedidoPagado && objPasarelaPago_Pedido.IdCotSRV.HasValue && lstFilesPTACotVta.Count > 0)
+                                            {                                               
+                                                if (bolGenerarRC)
+                                                {
+                                                    foreach (FilePTACotVta objFilePTACotVtaTmp in lstFilesPTACotVta)
+                                                    {
+                                                        sbDatosGeneraRC.Append("File: " + objFilePTACotVtaTmp.IdFilePTA + " - " + objFilePTACotVtaTmp.IdSuc + " / Monto: " + objFilePTACotVtaTmp.Moneda + " - " + objFilePTACotVtaTmp.ImporteFacturado + " <br>");
+                                                    }
+                                                        
+                                                    sbDatosGeneraRC.Append("EsUATP: " + objPasarelaPago_Pedido.EsUATP + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("IdPedido: " + objPasarelaPago_Pedido.IdPedido + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("dblMontoPedido: " + dblMontoPedido + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("dblMontoPedidoRound: " + dblMontoPedidoRound + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("strNroTarjeta: " + strNroTarjetaBaneado + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("strIdForma: " + strIdForma + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("strIdValor: " + strIdValor + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("FechaPedido: " + objPasarelaPago_Pedido.FechaPedido + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("dblTopeRC_UATP: " + dblTopeRC_UATP + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("IdCotSRV: " + DtsCotizacionVta.IdCot + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("EsRutaSelva: " + bolEsRutaSelva + "<br>" + Constants.vbCrLf);
+                                                    sbDatosGeneraRC.Append("EsTarifaPublicada: " + bolEsTarifaPublicada + "<br>" + Constants.vbCrLf);
 
-                            //            if (ConfigAccess.GetValueInAppSettings("STR_GENERAR_RC_PTA").Equals("1"))
-                            //            {
-                            //                if (bolGenerarRC && bolExisteSoloUnPedidoPagado && objPasarelaPago_Pedido.IdCotSRV.HasValue && lstFilesPTACotVta.Count > 0)
-                            //                {
-                            //                    CotizacionVta objCotizacionVta = objCotizacionVentaBO.ObtieneCotizacionXId(objPasarelaPago_Pedido.IdCotSRV.Value);
-                            //                    ReservaVuelosBO objReservaVuelosBO = new ReservaVuelosBO();
-                            //                    string strIdCiudadTmp = "";
+                                                    if (objPasarelaPago_Pedido.EsUATP)
+                                                    {
+                                                        if (dblMontoPedido > dblTopeRC_UATP)
+                                                        {
+                                                            sbDatosGeneraRC.Append("<strong>No generar RC por tope</strong><br>" + Constants.vbCrLf);
+                                                            bolGenerarRC = false;
+                                                        }                                               
+                                                        bolGenerarRC = false;
+                                                    }
+                                                    else
+                                                    {
+                                                        bolGenerarRC = true;
+                                                    }   
 
-                            //                    if (objCotizacionVta.IdReservaVuelos.HasValue)
-                            //                    {
-                            //                        // GENERAR RC SOLO PARA LOS DESTINOS QUE NO SON PUERTO MALDONADO, NI IQUITOS
-                            //                        try
-                            //                        {
-                            //                            using (DataSet dtsReserva = objReservaVuelosBO.ObtieneReservaXId(objCotizacionVta.IdReservaVuelos.Value))
-                            //                            {
-                            //                                using (DataTable dtReserva = dtsReserva.Tables("RESERVA"))
-                            //                                {
-                            //                                    if (dtReserva.Rows.Count > 0)
-                            //                                    {
-                            //                                        DataRow drReserva = dtReserva.Rows(0);
-                            //                                        if (!IsDBNull(drReserva("ES_NEGOCIADA")) && drReserva("ES_NEGOCIADA").ToString == "0")
-                            //                                            bolEsTarifaPublicada = true;
-                            //                                    }
-                            //                                }
-                            //                                using (DataTable dtSegementos = dtsReserva.Tables("SEGMENTO"))
-                            //                                {
-                            //                                    foreach (DataRow drSegmento in dtSegementos.Rows)
-                            //                                    {
-                            //                                        if (!IsDBNull(drSegmento("CIT_CIDSRC")))
-                            //                                            strIdCiudadTmp = drSegmento("CIT_CIDSRC");
-                            //                                        DateTime datFecActual = DateTime.Now;
-                            //                                        if ((DateTime)datFecActual.ToString("dd/MM/yyyy") >= (DateTime)"01/01/2019")
-                            //                                        {
-                            //                                            if (strIdCiudadTmp.ToUpper().Contains("PEM"))
-                            //                                            {
-                            //                                                bolEsRutaSelva = true;
-                            //                                                // fcondor: se comenta para generar RC para ruta selva
-                            //                                                // bolGenerarRC = False 
-                            //                                                bolGenerarRC = true;
-                            //                                                break;
-                            //                                            }
-                            //                                        }
-                            //                                        else if (strIdCiudadTmp.ToUpper().Contains("PEM") || strIdCiudadTmp.ToUpper().Contains("IQT"))
-                            //                                        {
-                            //                                            bolEsRutaSelva = true;
-                            //                                            // fcondor: se comenta para generar RC para ruta selva
-                            //                                            // bolGenerarRC = False 
-                            //                                            bolGenerarRC = true;
-                            //                                            break;
-                            //                                        }
+                                                    if (bolGenerarRC)
+                                                    {
+                                                        ArrayList alstResult = null;
+                                                        string strMsgError = "";
 
+                                                        try
+                                                        {
+                                                            bool intInsertaReciboReserva = false;
+                                                            if (bolEsRutaSelva)
+                                                            {
+                                                                if (bolEsTarifaPublicada)
+                                                                {
+                                                                    alstResult = _FileSRVRetailRepository.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajawebPUB", objPasarelaPago_Pedido.FechaPedido, null, bolEsRutaSelva, bolEsTarifaPublicada);
+                                                                }
+                                                                else
+                                                                {
+                                                                    intInsertaReciboReserva = false;
+                                                                }
+                                                            }
+                                                            else {
+                                                                alstResult = _FileSRVRetailRepository.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajaweb", objPasarelaPago_Pedido.FechaPedido, null, bolEsRutaSelva, bolEsTarifaPublicada);
+                                                            }                                                                
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            strMsgError = ex.ToString();
+                                                            string strIPUsuario = "127.0.0.0";                                                          
+                                                            NMailAlerta oNMailAlerta = new NMailAlerta();
+                                                            oNMailAlerta.EnvioCorreoRegistrarError("Error de " + Constantes_SRV.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
+                                                            oNMailAlerta = null;
+                                                        }
 
+                                                        string strLog = "";
+                                                        EnviarCorreo objEnviarCorreo = new EnviarCorreo();
+                                                        if (alstResult != null && alstResult.Count > 0)
+                                                        {
+                                                            if (alstResult[0].ToString() == "1") { bolGeneroRC_OK = true; }
+                                                            try
+                                                            {
+                                                                strLog = alstResult[2].ToString();
+                                                            }
+                                                            catch (Exception ex){}
 
-                            //                                        if (!IsDBNull(drSegmento("CIT_CIDTGT")))
-                            //                                            strIdCiudadTmp = drSegmento("CIT_CIDTGT");
-                            //                                        if ((DateTime)datFecActual.ToString("dd/MM/yyyy") >= (DateTime)"01/01/2019")
-                            //                                        {
-                            //                                            if (strIdCiudadTmp.ToUpper().Contains("PEM"))
-                            //                                            {
-                            //                                                bolEsRutaSelva = true;
-                            //                                                // fcondor: se comenta para generar RC para ruta selva
-                            //                                                // bolGenerarRC = False
-                            //                                                bolGenerarRC = true;
-                            //                                                break;
-                            //                                            }
-                            //                                        }
-                            //                                        else if (strIdCiudadTmp.ToUpper().Contains("PEM") || strIdCiudadTmp.ToUpper().Contains("IQT"))
-                            //                                        {
-                            //                                            bolEsRutaSelva = true;
-                            //                                            // fcondor: se comenta para generar RC para ruta selva
-                            //                                            // bolGenerarRC = False
-                            //                                            bolGenerarRC = true;
-                            //                                            break;
-                            //                                        }
-                            //                                    }
-                            //                                }
-                            //                            }
-                            //                        }
-                            //                        catch (Exception ex)
-                            //                        {
-                            //                            string strIPUsuario = "";
-                            //                            if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                            //                                strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                            //                            else
-                            //                                strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
-                            //                            // 'PROYALERTA
-                            //                            NMailAlerta oNMailAlerta = new NMailAlerta();
-                            //                            oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Genera RC en PTA - ObtieneReservaXId");
-                            //                            oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
-                            //                        }
-                            //                    }
+                                                            if (bolGeneroRC_OK)
+                                                            {
+                                                                string strIdsRCTmp = alstResult[1].ToString();
+                                                                string strIdsRC = "";
 
-                            //                    if (bolGenerarRC)
-                            //                    {
-                            //                        // GENERAR RC SOLO PARA LOS DESTINOS QUE NO SON PUERTO MALDONADO, NI IQUITOS
-                            //                        // fcondor: se comento para generar RC ruta selva
-                            //                        // If objCotizacionVta.DestinosPref.ToUpper.Contains("PEM") OrElse _
-                            //                        // objCotizacionVta.CodigoIATAPrincipal.ToUpper.Contains("PEM") OrElse _
-                            //                        // objCotizacionVta.DestinosPref.ToUpper.Contains("IQT") OrElse _
-                            //                        // objCotizacionVta.CodigoIATAPrincipal.ToUpper.Contains("IQT") Then
-                            //                        // Dim objEnviarCorreo As New EnviarCorreo
-                            //                        // objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() & _
-                            //                        // "<br><br><strong>Error: ruta selva<BR>intIdEstadoSelect:" & intIdEstadoSelect & "<br>bolCambioEstado=" & bolCambioEstado & "</strong>", True, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), _
-                            //                        // "RC_NO_OK_SRV_" & intIdCotVta)
-                            //                        // Exit For
-                            //                        // Else
-                            //                        // lreque: se comenta para que se respete el monto tal cual se cobró al cliente
-                            //                        // If objPasarelaPago_Pedido.Pedido_RptaPagoSafetyPay IsNot Nothing Then
-                            //                        // Dim objRptaPagoSafetyPayTmp As RptaPagoSafetyPay = objPasarelaPagoBO.Obtiene_Rpta_SafetyPay(objPasarelaPago_Pedido.IdPedido)
-                            //                        // Dim dblMontoPagarTmp As Double = objPasarelaPago_Pedido.MontoTarjeta.Value
-                            //                        // If objRptaPagoSafetyPayTmp.lst_AmountType IsNot Nothing Then
-                            //                        // For Each objAmountType As NuevoMundoUtility.AmountType In objRptaPagoSafetyPayTmp.lst_AmountType
-                            //                        // If objAmountType.CurrencyID = "150" Then
-                            //                        // dblMontoPedidoRound = objAmountType.Value
-                            //                        // Exit For
-                            //                        // End If
-                            //                        // Next
-                            //                        // End If
-                            //                        // End If
-                            //                        if (objPasarelaPago_Pedido.Pedido_RptaPagoUATP != null)
-                            //                            strNroTarjetaBaneado = objNMWebUtility.Obtiene_NroTarjeta_Baneado(objPasarelaPago_Pedido.Pedido_RptaPagoUATP.NroTarjeta);
+                                                                StringBuilder sbInfo = new StringBuilder();
+                                                                sbInfo.Append("Se han generado los siguientes RC para el pedido nro. <strong>" + objPasarelaPago_Pedido.IdPedido + "</strong>:<br><br>" + Constants.vbCrLf);
 
-                            //                        foreach (FilePTACotVta objFilePTACotVtaTmp in lstFilesPTACotVta)
-                            //                            sbDatosGeneraRC.Append("File: " + objFilePTACotVtaTmp.IdFilePTA + " - " + objFilePTACotVtaTmp.IdSucursal + " / Monto: " + objFilePTACotVtaTmp.Moneda + " - " + objFilePTACotVtaTmp.ImporteFacturado + " <br>");
-                            //                        sbDatosGeneraRC.Append("EsUATP: " + objPasarelaPago_Pedido.EsUATP + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("IdPedido: " + objPasarelaPago_Pedido.IdPedido + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("dblMontoPedido: " + dblMontoPedido + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("dblMontoPedidoRound: " + dblMontoPedidoRound + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("strNroTarjeta: " + strNroTarjetaBaneado + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("strIdForma: " + strIdForma + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("strIdValor: " + strIdValor + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("FechaPedido: " + objPasarelaPago_Pedido.FechaPedido + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("dblTopeRC_UATP: " + dblTopeRC_UATP + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("IdCotSRV: " + intIdCotVta + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("EsRutaSelva: " + bolEsRutaSelva + "<br>" + Constants.vbCrLf);
-                            //                        sbDatosGeneraRC.Append("EsTarifaPublicada: " + bolEsTarifaPublicada + "<br>" + Constants.vbCrLf);
+                                                                foreach (string strIdRC in strIdsRCTmp.Split(';'))
+                                                                {
+                                                                    if (!string.IsNullOrEmpty(strIdRC))
+                                                                    {
+                                                                        strIdsRC += strIdRC + ",";
+                                                                        sbInfo.Append("-RC " + strIdRC + "<br>" + Constants.vbCrLf);
+                                                                    }
+                                                                }
+                                                                if (strIdsRC.Length > 0)
+                                                                    strIdsRC = strIdsRC.Substring(0, strIdsRC.Length - 1);
 
-                            //                        if (objPasarelaPago_Pedido.EsUATP)
-                            //                        {
-                            //                            if (dblMontoPedido > dblTopeRC_UATP)
-                            //                            {
-                            //                                sbDatosGeneraRC.Append("<strong>No generar RC por tope</strong><br>" + Constants.vbCrLf);
-                            //                                bolGenerarRC = false;
-                            //                            }
-                            //                            // lreque:
-                            //                            // 26/08 TEMPORAL HASTA VALIDAR BIEN LOS CASOS
-                            //                            bolGenerarRC = false;
-                            //                        }
-                            //                        else
-                            //                            bolGenerarRC = true;
+                                                                objEnviarCorreo.Enviar_Log("Log: se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br>" + "Generación automática de RC nro. " + strIdsRC + "<br><br>" + sbInfo.ToString(), true, ConfigurationManager.AppSettings["STR_PATH_FILES_RC_WEB"], "RC_OK_SRV_" + DtsCotizacionVta.IdCot + "_" + strIdsRC.Replace(",", "-"));
 
-                            //                        if (bolGenerarRC)
-                            //                        {
-                            //                            ArrayList alstResult = null/* TODO Change to default(_) if this is not a reference type */;
-                            //                            string strMsgError = "";
-                            //                            try
-                            //                            {
-                            //                                bool intInsertaReciboReserva = false;
-                            //                                if (bolEsRutaSelva)
-                            //                                {
-                            //                                    if (bolEsTarifaPublicada)
-                            //                                        // alstResult = objPTABO.Inserta_ReciboCaja_Prueba(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, _
-                            //                                        // objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, _
-                            //                                        // strIdForma, strIdValor, "cajawebPUB", objPasarelaPago_Pedido.FechaPedido, Nothing, bolEsRutaSelva, bolEsTarifaPublicada)
+                                                                objEnviarCorreo.Enviar_CajaWeb(Webs_Cid.ID_WEB_WEBFAREFINDER, 1, 128, sbInfo.ToString(), "Generación automática de RC nro. " + strIdsRC, null);
+                                                            }
+                                                            else
+                                                            {
+                                                                objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, ConfigurationManager.AppSettings["STR_PATH_FILES_RC_WEB"], "RC_NO_OK_SRV_" + DtsCotizacionVta.IdCot);
+                                                                try
+                                                                {                                                                    
+                                                                    string strIPUsuario = "127.0.0.0";                                                                 
+                                                                    _CotizacionSRV_Repository.Inserta_Post_Cot(DtsCotizacionVta.IdCot, Constantes_SRV.ID_TIPO_POST_SRV_USUARIO, strLog, strIPUsuario, DtsUsuarioLogin.LoginUsuario, DtsUsuarioLogin.IdUsuario, DtsUsuarioLogin.IdDep, DtsUsuarioLogin.IdOfi, null, null, objPasarelaPago_Pedido.IdEstadoPedido, true, null, true, null, false, null, null, null, null, null, null, null, null);
+                                                                }
+                                                                catch (Exception ex)
+                                                                {
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                            objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, ConfigurationManager.AppSettings["STR_PATH_FILES_RC_WEB"], "RC_NO_OK_SRV_" + DtsCotizacionVta.IdCot);
+                                                        break;
+                                                    }
+                                                    else
+                                                    {
+                                                        EnviarCorreo objEnviarCorreo = new EnviarCorreo();
+                                                        objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br><strong>Error: validaciones internas</strong>", true, ConfigurationManager.AppSettings["STR_PATH_FILES_RC_WEB"], "RC_NO_OK_SRV_" + DtsCotizacionVta.IdCot);
+                                                    }
+                                                }                                                
+                                                bolGenerarRC = false; /*Para que no genere otro RC*/
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {                    
+                        string strIPUsuario = "127.0.0.0";                       
+                        NMailAlerta oNMailAlerta = new NMailAlerta();
+                        oNMailAlerta.EnvioCorreoRegistrarError("Error de " + Constantes_SRV.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
+                        oNMailAlerta = null;
+                    }
 
+                    if (!bolGeneroRC_OK)
+                    {
+                        if (EstadoSeleccionado == (Int16)ENUM_ESTADOS_COT_VTA.Facturado && bolCambioEstado)
+                        {
+                            Enviar_MailCajaWeb(DtsCotizacionVta.IdCot, EstadoSeleccionado, DtsUsuarioLogin.EmailUsuario, DtsUsuarioLogin);
+                        }                            
+                    }
 
+                    try
+                    {
+                        Nullable<bool> bolUATPExoneradoFirmaCliente = default(Boolean?);
 
+                        /*Si en el SRV es verdadero, en PTA es falso y viceversa*/
+                        bolUATPExoneradoFirmaCliente = true;
+                        string hdMuestraModCompra = "1";
+                        bool rbModCompraPresencial = false; bool rbModCompraNoPresencial = true;
 
-                            //                                        // ultimo comentado
+                        if (hdMuestraModCompra == "1")
+                        {
+                            Int16 intIdModalidadCompra = -1;
+                            if (rbModCompraPresencial == true)
+                                intIdModalidadCompra = 1;
+                            else if (rbModCompraNoPresencial == true)
+                                intIdModalidadCompra = 0;
+                            if (intIdModalidadCompra >= 0)
+                                _CotizacionSRV_Repository._Update_ModalidadCompra(DtsCotizacionVta.IdCot, intIdModalidadCompra);
+                        }
 
-                            //                                        alstResult = objPTABO.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajawebPUB", objPasarelaPago_Pedido.FechaPedido, null/* TODO Change to default(_) if this is not a reference type */, bolEsRutaSelva, bolEsTarifaPublicada);
-                            //                                    else
-                            //                                        intInsertaReciboReserva = false;
-                            //                                }
-                            //                                else
-                            //                                    // ultimo comentado
+                        if (EstadoSeleccionado == (short)ENUM_ESTADOS_COT_VTA.Facturado || DtsCotizacionVta.IdEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
+                        {                            
+                            if (lstFilesPTACotVta != null)
+                            {                                
+                                List<FilePTACotVta> lstFilesPTANew = null;
+                                if (lstFilesPTAOld != null)
+                                {                                    
+                                    bool bolEsFileNuevo = true;
+                                    lstFilesPTANew = new List<FilePTACotVta>();
+                                    foreach (FilePTACotVta objFilePTANew in lstFilesPTACotVta)
+                                    {                                 
+                                        bolEsFileNuevo = true;
+                                        foreach (FilePTACotVta objFilePTAOld in lstFilesPTAOld)
+                                        {
+                                            if (objFilePTANew.IdFilePTA == objFilePTAOld.IdFilePTA & objFilePTANew.IdSuc == objFilePTAOld.IdSuc)
+                                                bolEsFileNuevo = false;
+                                        }
+                                        if (bolEsFileNuevo)
+                                        {
+                                            lstFilesPTANew.Add(objFilePTANew);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    lstFilesPTANew = lstFilesPTACotVta;
+                                }
 
-                            //                                    alstResult = objPTABO.Inserta_ReciboCaja(lstFilesPTACotVta, objPasarelaPago_Pedido.EsUATP, objPasarelaPago_Pedido.IdPedido, dblMontoPedido, dblMontoPedidoRound, strNroTarjeta, strIdForma, strIdValor, "cajaweb", objPasarelaPago_Pedido.FechaPedido, null/* TODO Change to default(_) if this is not a reference type */, bolEsRutaSelva, bolEsTarifaPublicada);
-                            //                            }
-                            //                            catch (Exception ex)
-                            //                            {
-                            //                                strMsgError = ex.ToString();
-
-                            //                                string strIPUsuario = "";
-                            //                                if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                            //                                    strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                            //                                else
-                            //                                    strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
-                            //                                // 'PROYALERTA
-                            //                                NMailAlerta oNMailAlerta = new NMailAlerta();
-                            //                                oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
-                            //                                oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
-                            //                            }
-
-                            //                            string strLog = "";
-                            //                            EnviarCorreo objEnviarCorreo = new EnviarCorreo();
-                            //                            if (alstResult != null && alstResult.Count > 0)
-                            //                            {
-                            //                                if (alstResult(0) == "1")
-                            //                                    bolGeneroRC_OK = true;
-
-                            //                                try
-                            //                                {
-                            //                                    strLog = alstResult(2);
-                            //                                }
-                            //                                catch (Exception ex)
-                            //                                {
-                            //                                }
-
-                            //                                if (bolGeneroRC_OK)
-                            //                                {
-                            //                                    string strIdsRCTmp = alstResult(1);
-
-                            //                                    string strIdsRC = "";
-
-                            //                                    StringBuilder sbInfo = new StringBuilder();
-                            //                                    sbInfo.Append("Se han generado los siguientes RC para el pedido nro. <strong>" + objPasarelaPago_Pedido.IdPedido + "</strong>:<br><br>" + Constants.vbCrLf);
-
-                            //                                    foreach (string strIdRC in strIdsRCTmp.Split(";"))
-                            //                                    {
-                            //                                        if (!string.IsNullOrEmpty(strIdRC))
-                            //                                        {
-                            //                                            strIdsRC += strIdRC + ",";
-                            //                                            sbInfo.Append("-RC " + strIdRC + "<br>" + Constants.vbCrLf);
-                            //                                        }
-                            //                                    }
-                            //                                    if (strIdsRC.Length > 0)
-                            //                                        strIdsRC = strIdsRC.Substring(0, strIdsRC.Length - 1);
-
-                            //                                    objEnviarCorreo.Enviar_Log("Log: se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br>" + "Generación automática de RC nro. " + strIdsRC + "<br><br>" + sbInfo.ToString(), true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_OK_SRV_" + intIdCotVta + "_" + strIdsRC.Replace(",", "-"));
-
-                            //                                    objEnviarCorreo.Enviar_CajaWeb(Application("WEB_CODIGO"), 1, 128, sbInfo.ToString(), "Generación automática de RC nro. " + strIdsRC, null/* TODO Change to default(_) if this is not a reference type */);
-                            //                                }
-                            //                                else
-                            //                                {
-                            //                                    objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
-                            //                                    try
-                            //                                    {
-                            //                                        MyAlert(strLog);
-                            //                                        string strIPUsuario = "";
-                            //                                        if (HttpContext.Current.Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                            //                                            strIPUsuario = HttpContext.Current.Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                            //                                        else
-                            //                                            strIPUsuario = HttpContext.Current.Request.ServerVariables("REMOTE_ADDR");
-                            //                                        objCotizacionVentaBO.Inserta_Post_Cot(intIdCotVta, NuevoMundoUtility.ConstantesUtility.STR_ID_TIPO_POST_SRV_USUARIO, strLog, strIPUsuario, objUsuarioSession.LoginUsuario, objUsuarioSession.IdUsuario, objUsuarioSession.IdDep, objUsuarioSession.IdOfi, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, objPasarelaPago_Pedido.IdEstadoPedido, true, null/* TODO Change to default(_) if this is not a reference type */, true, null/* TODO Change to default(_) if this is not a reference type */, false, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */, null/* TODO Change to default(_) if this is not a reference type */);
-                            //                                    }
-                            //                                    catch (Exception ex)
-                            //                                    {
-                            //                                    }
-                            //                                }
-                            //                            }
-                            //                            else
-                            //                                objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br>Log:" + strLog + "<br><br><strong>Error:" + strMsgError + "</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
-                            //                            break;
-                            //                        }
-                            //                        else
-                            //                        {
-                            //                            EnviarCorreo objEnviarCorreo = new EnviarCorreo();
-                            //                            objEnviarCorreo.Enviar_Log("Log: no se generó RC", sbDatosGeneraRC.ToString() + "<br><br><strong>Error: validaciones internas</strong>", true, System.Configuration.ConfigurationManager.AppSettings("STR_PATH_FILES_RC_WEB"), "RC_NO_OK_SRV_" + intIdCotVta);
-                            //                        }
-                            //                    }
-                            //                    // PARA QUE NO GENERE OTRO RC
-                            //                    bolGenerarRC = false;
-                            //                }
-                            //            }
-                            //        }
-                            //    }
-                            //}
+                                if (lstFilesPTANew.Count > 0)
+                                {
+                                    try
+                                    {
+                                        if (DtsUsuarioLogin.EsCounterAdminSRV || DtsUsuarioLogin.EsSupervisorSRV)
+                                        {
+                                            // objUsuarioSession.IdUsuario = NMConstantesUtility.INT_ID_USUWEB_OCAYO OrElse _
+                                            // objUsuarioSession.IdUsuario = NMConstantesUtility.INT_ID_USUWEB_YCASAVERDE Then
+                                            // strLog &= "5,"
+                                            if (!string.IsNullOrEmpty(DtsUsuarioLogin.IdVendedorPTA) & !string.IsNullOrEmpty(DtsCotizacionVta.IdVendedorPTACrea))
+                                            {
+                                                // strLog &= "6,"
+                                                // If (objUsuarioSession.IdOfi = NMConstantesUtility.INT_ID_OFI_NMVCOM Or _
+                                                // objUsuarioSession.IdDep = NMConstantesUtility.INT_ID_DEP_SISTEMAS) And _
+                                                // (CInt(hdIdOfiCot.Value) = NMConstantesUtility.INT_ID_OFI_NMVCOM Or _
+                                                // CInt(hdIdDepCot.Value) = NMConstantesUtility.INT_ID_DEP_SISTEMAS) Then
+                                                // strLog &= "3,"
+                                                // objPTAFileBO.Actualiza_FechaCierreVenta(lstFilesPTANew, NMConstantesUtility.INT_ID_EMPRESA_GNM_NM, _
+                                                // objUsuarioSession.IdVendedorPTA, hdIdVendCreaCot.Value, objUsuarioSession.LoginUsuario, _
+                                                // bolUATPExoneradoFirmaCliente, litNomUsuCreaCot.Text)
+                                                // strLog &= "4,"
+                                                // End If
+                                                // strLog &= "Vend: " & hdIdVendCreaCot.Value
+                                                //NuevoMundoBusiness.Vendedor_RepMetaBO objVendedor_RepMetaBO = new NuevoMundoBusiness.Vendedor_RepMetaBO();
+                                                if (_FileSRVRetailRepository._Existe_Vendedor_SubArea(Constantes_SRV.INT_ID_AREA_NMVCOM_METAS, Constantes_SRV.INT_ID_SUBAREA_NMVCOM_BOLETOS_METAS, DtsCotizacionVta.IdVendedorPTACrea))
+                                                    _FileSRVRetailRepository._Update_FechaCierreVenta(lstFilesPTANew, IdEmpresas.INT_ID_EMPRESA_GNM_NM, DtsUsuarioLogin.IdVendedorPTA, DtsCotizacionVta.IdVendedorPTACrea, DtsUsuarioLogin.LoginUsuario, bolUATPExoneradoFirmaCliente, DtsCotizacionVta.NomCompletoUsuCrea,false);
+                                                else if (_FileSRVRetailRepository._Existe_Vendedor_SubArea(Constantes_SRV.INT_ID_AREA_NMVCOM_METAS, Constantes_SRV.INT_ID_SUBAREA_NMVCOM_PERSONAL_PAQUETE, DtsCotizacionVta.IdVendedorPTACrea))
+                                                    _FileSRVRetailRepository._Update_FechaCierreVenta(lstFilesPTANew, IdEmpresas.INT_ID_EMPRESA_GNM_NM, DtsUsuarioLogin.IdVendedorPTA, DtsCotizacionVta.IdVendedorPTACrea, DtsUsuarioLogin.LoginUsuario, bolUATPExoneradoFirmaCliente, DtsCotizacionVta.NomCompletoUsuCrea,false);                                                
+                                            }
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        string strIPUsuario = "127.0.0.0";
+                                        NMailAlerta oNMailAlerta = new NMailAlerta();
+                                        oNMailAlerta.EnvioCorreoRegistrarError("Error de " + Constantes_SRV.APP_NAME, this, ex, strIPUsuario + "|Actualiza_FechaCierreVenta en " + DtsCotizacionVta.IdCot);
+                                        oNMailAlerta = null;
+                                    }
+                                }
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        ///*********CODIGO POR REVISAR Y TRATAR********/
-                        //string strIPUsuario = "";
-                        //if (Request.ServerVariables("HTTP_X_FORWARDED_FOR") != null)
-                        //    strIPUsuario = Request.ServerVariables("HTTP_X_FORWARDED_FOR");
-                        //else
-                        //    strIPUsuario = Request.ServerVariables("REMOTE_ADDR");
-                        //// 'PROYALERTA
-                        //NMailAlerta oNMailAlerta = new NMailAlerta();
-                        //oNMailAlerta.EnvioCorreoRegistrarError("Error de " + ConstantesWeb.APP_NAME, this, ex, strIPUsuario + "|Inserta_ReciboCaja");
-                        //oNMailAlerta = null/* TODO Change to default(_) if this is not a reference type */;
+                        string strIPUsuario = "127.0.0.0";                       
+                        NMailAlerta oNMailAlerta = new NMailAlerta();
+                        oNMailAlerta.EnvioCorreoRegistrarError("Error de " + Constantes_SRV.APP_NAME, this, ex, strIPUsuario + "|Actualiza_FechaCierreVenta");
+                        oNMailAlerta = null;
                     }
 
+                    try
+                    {
+                        if (lstFilesPTACotVta != null)
+                        {
+                            foreach (FilePTACotVta objFilePTACotVta in lstFilesPTACotVta)
+                            {
+                                _FileSRVRetailRepository._Insert_TextoFile(objFilePTACotVta.IdFilePTA, objFilePTACotVta.IdSuc, "Código Cotización SRV: " + DtsCotizacionVta.IdCot, DtsUsuarioLogin.LoginUsuario, ConstantesWeb_Codigos.INT_ID_EMP_PTA_NMV);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {                       
+                        string strIPUsuario = "127.0.0.0";                       
+                        NMailAlerta oNMailAlerta = new NMailAlerta();
+                        oNMailAlerta.EnvioCorreoRegistrarError("Error de " + Constantes_SRV.APP_NAME, this, ex, strIPUsuario + "|Inserta_TextoFile");
+                        oNMailAlerta = null;
+                    }
 
-
+                    _responseAsociate.CodigoError = "OK";                    
                 }
                 else if (FileAssociate.LstFiles[0].accion_SF == desasociar)
                 {
@@ -513,10 +500,490 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region Auxiliares
-        private void validacionAssociate(ref AssociateFile _fileAssociate, ref AssociateFileRS _responseFile, ref UsuarioLogin UserLogin)
+        private void Enviar_MailCajaWeb(int pIntIdCotVta, int pIntIdEstado, string pStrEmailCounter, UsuarioLogin _usuarioLogin)
         {
-            string mensajeError = string.Empty;
-            //_pedido.IdLang = 1; _pedido.IdWeb = 0;
+            UsuarioLogin objUsuarioSession = _usuarioLogin;
+            //PasarelaPagoBO objPasarelaPagoBO = new PasarelaPagoBO();
+            string strIPUsuCrea = "127.0.0.0";
+            try
+            {                
+                List<PasarelaPago_Pedido> lstPedidos = _PedidoRetail_Repository.Get_Pedido_XSolicitud(null, null, null, null, pIntIdCotVta, null, null);
+
+                StringBuilder sbHTMLDatosPedidos = new StringBuilder();
+                FormaPagoPedido objFormaPagoPedido = null;RptaPagoEfectivoEC objRptaPagoEfectivoEC = null;RptaPagoSafetyPay objRptaPagoSafetyPay = null;
+
+                string strLinkPago = "";
+                bool bolTienePedido = false;
+
+                sbHTMLDatosPedidos.Append("<strong>Pedidos del SRV " + pIntIdCotVta + "</strong><br /><br />" + Constants.vbCrLf);
+                sbHTMLDatosPedidos.Append("<table>" + Constants.vbCrLf);
+                foreach (PasarelaPago_Pedido objPasarelaPago_Pedido in lstPedidos)
+                {
+                    if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_Pedido.INT_ID_ESTADO_PEDIDO_PAGADO)
+                    {
+                        objFormaPagoPedido = objPasarelaPago_Pedido.FormaPagoPedido;
+                        if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE)
+                        {
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td colspan='2' class='titulo_datos_pago'>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("PEDIDO NRO. " + objPasarelaPago_Pedido.IdPedido + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<a name='pedido" + objPasarelaPago_Pedido.IdPedido + "'></a>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+
+                            objRptaPagoEfectivoEC = objPasarelaPago_Pedido.RptaPagoEfectivoEC;
+                            objRptaPagoSafetyPay = objPasarelaPago_Pedido.RptaPagoSafetyPay;
+
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td colspan='2'>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<table width='690' border='1' cellpadding='2' cellspacing='0' style='border-collapse:collapse'>" + Constants.vbCrLf);
+
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td width='100'><strong>Pasarela:</strong></td>" + Constants.vbCrLf);
+                            if (objFormaPagoPedido == null)
+                                sbHTMLDatosPedidos.Append("<td colspan='3'>-</td>" + Constants.vbCrLf);
+                            else
+                            {
+                                string strIdioma = "";                                
+                                if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_VISA)
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>Visa Online</strong> " + strIdioma + "</td>" + Constants.vbCrLf);
+                                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD || objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_MASTERCARD_CA)
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>Mastercard Online</strong> " + strIdioma + "</td>" + Constants.vbCrLf);
+                                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_DINERS)
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>Diners Online</strong> " + strIdioma + "</td>" + Constants.vbCrLf);
+                                else if (objFormaPagoPedido.IdTipoTarjeta == Constantes_FileRetail.STR_ID_TIPO_TARJETA_AMERICAN_EXPRESS)
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>American Express Online</strong> " + strIdioma + "</td>" + Constants.vbCrLf);
+                                else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE)
+                                {
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<table>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<strong>" + objFormaPagoPedido.NomFormaPago + " " + strIdioma + "</strong></td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td><img src='http://www.webfarefinder.com/resources/imgs/pay/pago-efectivo-ec.jpg' alt='' width='29' height='19'/>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                                    if (objRptaPagoEfectivoEC != null)
+                                    {
+                                        sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                        sbHTMLDatosPedidos.Append("<td>CIP: " + "</td>" + Constants.vbCrLf);
+                                        if (string.IsNullOrEmpty(objRptaPagoEfectivoEC.CIP))
+                                            sbHTMLDatosPedidos.Append("<td><strong>No se generó el CIP</strong></td>" + Constants.vbCrLf);
+                                        else
+                                            sbHTMLDatosPedidos.Append("<td><strong>" + objRptaPagoEfectivoEC.CIP + "</strong></td>" + Constants.vbCrLf);
+                                        if (string.IsNullOrEmpty(objRptaPagoEfectivoEC.CIP))
+                                            sbHTMLDatosPedidos.Append("<td>&nbsp;</td>" + Constants.vbCrLf);
+                                        else if (objRptaPagoEfectivoEC.FechaExpiraPago.HasValue)
+                                        {
+                                            if (objRptaPagoEfectivoEC.EstadoCIP != Constantes_SafetyPay.STR_NOM_ESTADO_CIP_CANCELADO)
+                                            {
+                                                sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                                string strEstiloExpirado = "";
+                                                if (objRptaPagoEfectivoEC.FechaExpiraPago.Value > DateTime.Now)
+                                                    strEstiloExpirado = "class='tx_autorizada'";
+                                                else
+                                                    strEstiloExpirado = "class='tx_denegada'";
+                                                sbHTMLDatosPedidos.Append("<td>Expiración: <span " + strEstiloExpirado + ">" + objRptaPagoEfectivoEC.FechaExpiraPago.Value.ToString("dd/MM/yyyy HH:mm") + "</span></td>" + Constants.vbCrLf);
+                                            }
+                                        }
+                                    }
+                                    sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                    // sbHTMLDatosPedidos.Append("<td><a href='http://nuevomundoviajes.pe/safetypay/info-establecimientos-pago.aspx' target='_blank'>Acerca de SafetyPay</a></td>" & vbCrLf)
+                                    sbHTMLDatosPedidos.Append("<td></td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</table>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                                }
+                                else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH)
+                                {
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<table>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<strong>Efectivo " + strIdioma + "</strong></td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td><img src='http://www.webfarefinder.com/resources/imgs/pay/safetypay2.jpg' alt=''/>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+
+                                    if (objRptaPagoSafetyPay != null)
+                                    {
+                                        sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                        sbHTMLDatosPedidos.Append("<td><strong>Código de Pago:</strong></td>" + Constants.vbCrLf);
+                                        if (string.IsNullOrEmpty(objRptaPagoSafetyPay.TransaccionIdentifier))
+                                            sbHTMLDatosPedidos.Append("<td><strong>No se generó Código de Pago</strong></td>" + Constants.vbCrLf);
+                                        else
+                                            sbHTMLDatosPedidos.Append("<td><strong>" + objRptaPagoSafetyPay.TransaccionIdentifier + "</strong></td>" + Constants.vbCrLf);
+                                        if (string.IsNullOrEmpty(objRptaPagoSafetyPay.ExpirationDateTime))
+                                            sbHTMLDatosPedidos.Append("<td>&nbsp;</td>" + Constants.vbCrLf);
+                                        else
+                                        {
+                                            sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                            string strExpirationDateTime = objRptaPagoSafetyPay.ExpirationDateTime;
+                                            string[] arrExpirationDateTime = strExpirationDateTime.Split('(');
+                                            sbHTMLDatosPedidos.Append("<td>Expiración:</td><td><span class='tx_denegada'>" + arrExpirationDateTime[0].ToString() + "</span></td>" + Constants.vbCrLf);
+                                        }
+                                    }
+                                    sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                    // sbHTMLDatosPedidos.Append("<td><a href='http://nuevomundoviajes.pe/pago-efectivo/info-establecimientos-pago.aspx' target='_blank'>Acerca de SafetyPay</a></td>" & vbCrLf)
+                                    sbHTMLDatosPedidos.Append("<td></td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</table>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                                }
+                                else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE)
+                                {
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<table>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<strong>Online " + strIdioma + "</strong></td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td><img src='http://www.webfarefinder.com/resources/imgs/pay/safetypay2.jpg' alt=''/>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+
+                                    if (objRptaPagoSafetyPay != null)
+                                    {
+                                        sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                        sbHTMLDatosPedidos.Append("<td style='text-align: center;'><strong>Código de Pago:</strong></td>" + Constants.vbCrLf);
+                                        if (string.IsNullOrEmpty(objRptaPagoSafetyPay.TransaccionIdentifier))
+                                            sbHTMLDatosPedidos.Append("<td><strong>No se generó Código de Pago</strong></td>" + Constants.vbCrLf);
+                                        else
+                                            sbHTMLDatosPedidos.Append("<td><strong>" + objRptaPagoSafetyPay.TransaccionIdentifier + "</strong></td>" + Constants.vbCrLf);
+                                        if (string.IsNullOrEmpty(objRptaPagoSafetyPay.ExpirationDateTime))
+                                            sbHTMLDatosPedidos.Append("<td>&nbsp;</td>" + Constants.vbCrLf);
+                                        else
+                                        {
+                                            sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                            string strExpirationDateTime = objRptaPagoSafetyPay.ExpirationDateTime;
+                                            string[] arrExpirationDateTime = strExpirationDateTime.Split('(');
+                                            sbHTMLDatosPedidos.Append("<td>Expiración:</td><td><span class='tx_denegada'>" + arrExpirationDateTime[0].ToString() + "</span></td>" + Constants.vbCrLf);
+                                        }
+                                    }
+                                    sbHTMLDatosPedidos.Append("<td>&nbsp;&nbsp;</td>" + Constants.vbCrLf);
+                                    // sbHTMLDatosPedidos.Append("<td><a href='http://nuevomundoviajes.pe/pago-efectivo/info-establecimientos-pago.aspx' target='_blank'>Acerca de SafetyPay</a></td>" & vbCrLf)
+                                    sbHTMLDatosPedidos.Append("<td></td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</table>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                                }
+                                else if (objPasarelaPago_Pedido.EsFonoPago)
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>FonoPago</strong></td>" + Constants.vbCrLf);
+                                else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_PUNTOS)
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>Canje de Puntos</strong></td>" + Constants.vbCrLf);
+                                else
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>-</strong></td>" + Constants.vbCrLf);
+                            }
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td><strong>Estado::</strong></td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td colspan='3'>" + Constants.vbCrLf);
+                            switch (objPasarelaPago_Pedido.IdEstadoPedido)
+                            {
+                                case Constantes_Pedido.INT_ID_ESTADO_PEDIDO_PAGADO:
+                                    {
+                                        sbHTMLDatosPedidos.Append("<span class='tx_autorizada'>" + Constants.vbCrLf);
+                                        break;
+                                    }
+
+                                case Constantes_Pedido.INT_ID_ESTADO_PEDIDO_PENDIENTE:
+                                case Constantes_Pedido.INT_ID_ESTADO_PEDIDO_EN_PROCESO:
+                                    {
+                                        sbHTMLDatosPedidos.Append("<span class='tx_denegada'>" + Constants.vbCrLf);
+                                        break;
+                                    }
+
+                                default:
+                                    {
+                                        sbHTMLDatosPedidos.Append("<span class='tx_denegada'>" + Constants.vbCrLf);
+                                        break;
+                                    }
+                            }
+
+                            if (objRptaPagoEfectivoEC == null)
+                                sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + Constants.vbCrLf);
+                            else if (objRptaPagoEfectivoEC.FechaCancelado.HasValue)
+                            {
+                                if (objRptaPagoEfectivoEC.EstadoCIP == Constantes_SafetyPay.STR_NOM_ESTADO_CIP_CANCELADO)
+                                {
+                                    if (objRptaPagoEfectivoEC.FechaCancelado.HasValue)
+                                    {
+                                        /*DateDiff(DateInterval.Minute, objRptaPagoEfectivoEC.FechaCancelado.Value, DateTime.Now)*/
+                                        if (DateTime.Now.Subtract(objRptaPagoEfectivoEC.FechaCancelado.Value).TotalMinutes > 15)
+                                            sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + " <strong>(hace m&aacute;s de 15 min).</strong>" + Constants.vbCrLf);
+                                        else
+                                            sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + " <strong>(hace " + DateTime.Now.Subtract(objRptaPagoEfectivoEC.FechaCancelado.Value).TotalMinutes + " min).</strong>" + Constants.vbCrLf);
+                                    }
+                                    else
+                                        sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + Constants.vbCrLf);
+                                }
+                                else if (objRptaPagoEfectivoEC.EnvioRpta.HasValue)
+                                    sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + " <img src='http://www.webfarefinder.com/resources/imgs/alarm.gif'/> <span class='texto_resaltado'>PagoEfectivo s&iacute; envi&oacute; respuesta.</span>" + Constants.vbCrLf);
+                                else
+                                    sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + Constants.vbCrLf);
+                            }
+                            else if (objPasarelaPago_Pedido.IdEstadoPedido == Constantes_Pedido.INT_ID_ESTADO_PEDIDO_PENDIENTE && objRptaPagoEfectivoEC.EnvioRpta.HasValue)
+                                sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + " <img src='http://www.webfarefinder.com/resources/imgs/alarm.gif'/> <span class='texto_resaltado'>PagoEfectivo s&iacute; envi&oacute; respuesta.</span>" + Constants.vbCrLf);
+                            else
+                                sbHTMLDatosPedidos.Append(objPasarelaPago_Pedido.NomEstadoPedido + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</span>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td><strong>Resultado:</strong></td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td colspan='3'>" + Constants.vbCrLf);
+
+                            if (objFormaPagoPedido == null)
+                                sbHTMLDatosPedidos.Append("-");
+                            else if (objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC || objFormaPagoPedido.IdFormaPago == Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE)
+                            {
+                                if (objPasarelaPago_Pedido.TipoMotor == Constantes_Pedido.ID_TIPO_PEDIDO_OTROS & objRptaPagoEfectivoEC == null)
+                                    sbHTMLDatosPedidos.Append("El CIP está pendiente de pago." + Constants.vbCrLf);
+                                else if (objRptaPagoEfectivoEC != null)
+                                {
+                                    if (objRptaPagoEfectivoEC.Estado == "1")
+                                    {
+                                        if (string.IsNullOrEmpty(objRptaPagoEfectivoEC.EstadoCIP))
+                                            // sbHTMLDatosPedidos.Append("El estado del CIP es: <span class='tx_denegada'><strong>Generado (Pendiente)</strong></span>." & vbCrLf)
+                                            sbHTMLDatosPedidos.Append("El CIP está pendiente de pago." + Constants.vbCrLf);
+                                        else if (objRptaPagoEfectivoEC.EstadoCIP == Constantes_SafetyPay.STR_NOM_ESTADO_CIP_GENERADO | objRptaPagoEfectivoEC.EstadoCIP == Constantes_SafetyPay.STR_NOM_ESTADO_CIP_GENERADA)
+                                        {
+                                            // sbHTMLDatosPedidos.Append("El estado del CIP es: <strong>GENERADO (Pendiente)</strong>." & vbCrLf)
+                                            if (objRptaPagoEfectivoEC.FechaExtorno.HasValue)
+                                                sbHTMLDatosPedidos.Append("El CIP está pendiente de pago por extorno. Se extornó el : " + objRptaPagoEfectivoEC.FechaExtorno.Value.ToString("dd/MM/yyyy HH:mm") + "." + Constants.vbCrLf);
+                                            else
+                                                sbHTMLDatosPedidos.Append("El CIP está pendiente de pago." + Constants.vbCrLf);
+                                        }
+                                        else if (objRptaPagoEfectivoEC.EstadoCIP == Constantes_SafetyPay.STR_NOM_ESTADO_CIP_EXPIRADO)
+                                            sbHTMLDatosPedidos.Append("El CIP ha expirado." + Constants.vbCrLf);
+                                        else if (objRptaPagoEfectivoEC.EstadoCIP == Constantes_SafetyPay.STR_NOM_ESTADO_CIP_CANCELADO)
+                                        {
+                                            // sbHTMLDatosPedidos.Append("El estado del CIP es: <span class='tx_autorizada'><strong>" & objRptaPagoEfectivoEC.EstadoCIP.ToUpper & "</strong></span>." & vbCrLf)
+                                            if (objRptaPagoEfectivoEC.FechaCancelado.HasValue)
+                                                sbHTMLDatosPedidos.Append("El CIP ha sido pagado el <strong>" + objRptaPagoEfectivoEC.FechaCancelado.Value + "</strong>" + Constants.vbCrLf);
+                                            else
+                                                sbHTMLDatosPedidos.Append("El CIP ha sido pagado." + Constants.vbCrLf);
+                                        }
+                                        else
+                                            sbHTMLDatosPedidos.Append("El estado del CIP es: <span class='tx_denegada'><strong>" + objRptaPagoEfectivoEC.EstadoCIP.ToLower().ToUpper() + "</strong></span>." + Constants.vbCrLf);
+                                    }
+                                    else
+                                        sbHTMLDatosPedidos.Append("Ha ocurrido un error: " + objRptaPagoEfectivoEC.MensajeRpta + "." + Constants.vbCrLf);
+                                }
+                                else
+                                    sbHTMLDatosPedidos.Append("No se registró el CIP." + Constants.vbCrLf);
+                            }
+                            else
+                                sbHTMLDatosPedidos.Append("-" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</td>");
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td><strong>Fecha Pedido:</strong></td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td colspan='3'>" + objPasarelaPago_Pedido.FechaPedido + "</td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                            if (objPasarelaPago_Pedido.TipoMotor == Constantes_Pedido.ID_TIPO_PEDIDO_OTROS)
+                            {
+                                if (!objPasarelaPago_Pedido.EsFonoPago)
+                                {
+                                    sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td valign='top'><strong>Detalle:</strong></td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'>" + objPasarelaPago_Pedido.DetalleServicio + "</td>" + Constants.vbCrLf);
+                                    sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                                }
+                            }
+
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td><strong>Monto a pagar:</strong></td>" + Constants.vbCrLf);
+
+                            if (string.IsNullOrEmpty(objPasarelaPago_Pedido.IdLAValidadora))
+                            {
+                                if (objPasarelaPago_Pedido.MontoTarjeta.HasValue)
+                                {
+                                    if (objRptaPagoSafetyPay != null)
+                                    {
+                                        // Se retira validación, ya que se debe considerar el monto del pedido tal cual
+                                        // Dim objRptaPagoSafetyPayTmp As RptaPagoSafetyPay = objPasarelaPagoBO.Obtiene_Rpta_SafetyPay(objPasarelaPago_Pedido.IdPedido)
+                                        double dblMontoPagarTmp = objPasarelaPago_Pedido.MontoTarjeta.Value;
+                                        // If objRptaPagoSafetyPayTmp.lst_AmountType IsNot Nothing Then
+                                        // For Each objAmountType As NuevoMundoUtility.AmountType In objRptaPagoSafetyPayTmp.lst_AmountType
+                                        // If objAmountType.CurrencyID = "150" Then
+                                        // dblMontoPagarTmp = objAmountType.Value
+                                        // Exit For
+                                        // End If
+                                        // Next
+                                        // End If
+                                        sbHTMLDatosPedidos.Append("<td colspan='3'><strong>" + dblMontoPagarTmp.ToString("#0.00") + "</strong></td>" + Constants.vbCrLf);
+                                    }
+                                    else
+                                        sbHTMLDatosPedidos.Append("<td colspan='3'><strong>" + objPasarelaPago_Pedido.MontoTarjeta.Value.ToString("#0.00") + "</strong></td>" + Constants.vbCrLf);
+                                }
+                                else
+                                    sbHTMLDatosPedidos.Append("<td colspan='3'><strong>-</strong></td>" + Constants.vbCrLf);
+                            }
+                            else
+                            {
+                                if (objPasarelaPago_Pedido.MontoTarjeta.HasValue)
+                                    sbHTMLDatosPedidos.Append("<td width='200'><strong>" + objPasarelaPago_Pedido.MontoTarjeta.Value.ToString("#0.00") + "</strong></td>" + Constants.vbCrLf);
+                                else
+                                    sbHTMLDatosPedidos.Append("<td width='200'><strong>-</strong></td>" + Constants.vbCrLf);
+                                sbHTMLDatosPedidos.Append("<td width='150'><strong>Línea Aérea Validadora:</strong></td>" + Constants.vbCrLf);
+                                sbHTMLDatosPedidos.Append("<td>" + objPasarelaPago_Pedido.IdLAValidadora + "</td>" + Constants.vbCrLf);
+                            }
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+
+                            if (objPasarelaPago_Pedido.TipoMotor == Constantes_Pedido.ID_TIPO_PEDIDO_OTROS)
+                            {
+                                if (objFormaPagoPedido != null)
+                                {
+                                    if (!objPasarelaPago_Pedido.EsFonoPago && objFormaPagoPedido.IdFormaPago != Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC && objFormaPagoPedido.IdFormaPago != Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC_ONLINE && objFormaPagoPedido.IdFormaPago != Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_CASH && objFormaPagoPedido.IdFormaPago != Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE && objFormaPagoPedido.IdFormaPago != Constantes_FileRetail.INT_ID_FORMA_PAGO_SAFETYPAY_INTERNAC)
+                                    {
+                                        sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                                        sbHTMLDatosPedidos.Append("<td><strong>Link Pago:</strong></td>" + Constants.vbCrLf);
+                                        /*strLinkPago = Obtiene_LinkPago(objPasarelaPago_Pedido.IdWeb, objPasarelaPago_Pedido.IdPedido, objPasarelaPago_Pedido.IdCotSRV.Value);*/
+                                        sbHTMLDatosPedidos.Append("<td colspan='3'><a href='" + strLinkPago + "' target='_blank'>" + strLinkPago + "</a></td>" + Constants.vbCrLf);
+                                        sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                                    }
+                                }
+                            }
+
+                            sbHTMLDatosPedidos.Append("<tr>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td width='95'><strong>Forma de Pago:</strong></td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td width='180'>" + Constants.vbCrLf);
+                            if (objFormaPagoPedido == null)
+                                sbHTMLDatosPedidos.Append("-");
+                            else
+                                sbHTMLDatosPedidos.Append("<strong>" + objFormaPagoPedido.NomFormaPago + "</strong>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+
+                            sbHTMLDatosPedidos.Append("<td width='125'></td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("<td width='280'>" + Constants.vbCrLf);    
+                            
+                            sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                           
+                            sbHTMLDatosPedidos.Append("</table>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</td>" + Constants.vbCrLf);
+                            sbHTMLDatosPedidos.Append("</tr>" + Constants.vbCrLf);
+                            bolTienePedido = true;
+                        }
+                    }
+                }
+                sbHTMLDatosPedidos.Append("</table>" + Constants.vbCrLf);
+
+                if (bolTienePedido)
+                {
+                    _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
+                    _FileSRVRetailRepository = new FileSRVRetailRepository();
+                    List<FilePTACotVta> lstFilesPTA = _CotizacionSRV_Repository._SelectFilesPTABy_IdCot(pIntIdCotVta,0,0,0);
+
+                    StringBuilder sbListado = new StringBuilder();
+                    sbListado.Append("<strong>Comprobantes y Boletos por File</strong><br /><br />" + Constants.vbCrLf);
+                    sbListado.Append("<table cellspacing='0' cellpadding='4' border='0' style='border-collapse:collapse;'>" + Constants.vbCrLf);
+                    sbListado.Append("<tr style='color:White;background-color:#1F5ABD;font-weight:bold;'>" + Constants.vbCrLf);
+                    sbListado.Append("<td class='dato_comp'>File</td>" + Constants.vbCrLf);
+                    sbListado.Append("<td class='dato_comp'>Sucursal</td>" + Constants.vbCrLf);
+                    sbListado.Append("<td class='dato_comp'>Comprobante</td>" + Constants.vbCrLf);
+                    sbListado.Append("<td class='dato_comp'>Nro. Boleto</td>" + Constants.vbCrLf);
+                    sbListado.Append("</tr>" + Constants.vbCrLf);
+
+                    string strLinkBoletoHTML = "";
+                    string strFileAnterior = "";
+                    string strComprobanteAnterior = "";
+                    Int16 intX;
+                    string strEstiloFile = "";
+                    string strEstiloComprobante = "";
+                    bool bolExistenComprobantesBoletos = false;
+
+                    foreach (FilePTACotVta objFilePTA in lstFilesPTA)
+                    {
+                        strFileAnterior = "";
+                        strComprobanteAnterior = "";
+                        intX = 1;
+                        using (DataTable dtComprobantesBoletos = _FileSRVRetailRepository._Get_ComprobantesBoletosBy_IdFile(objFilePTA.IdFilePTA, objFilePTA.IdSuc))
+                        {
+                            foreach (DataRow drComprobantesBoletos in dtComprobantesBoletos.Rows)
+                            {
+                                sbListado.Append("<tr>" + Constants.vbCrLf);
+                                if (!bolExistenComprobantesBoletos)
+                                    bolExistenComprobantesBoletos = true;
+                                if (strFileAnterior != objFilePTA.IdFilePTA.ToString() + objFilePTA.IdSuc.ToString())
+                                {
+                                    if (intX >= dtComprobantesBoletos.Rows.Count)
+                                        strEstiloFile = "dato_comp_ultimo1";
+                                    else
+                                        strEstiloFile = "dato_file";
+                                    sbListado.Append("<td class='" + strEstiloFile + "'>" + objFilePTA.IdFilePTA + "</td>" + Constants.vbCrLf);
+                                    sbListado.Append("<td class='" + strEstiloFile + "'>" + objFilePTA.NombreSucursal + "</td>" + Constants.vbCrLf);
+                                    strFileAnterior = objFilePTA.IdFilePTA.ToString() + objFilePTA.IdSuc.ToString();
+                                }
+                                else
+                                {
+                                    if (intX >= dtComprobantesBoletos.Rows.Count)
+                                        strEstiloFile = "dato_comp_ultimo2";
+                                    else
+                                        strEstiloFile = "dato_file_leftright";
+                                    sbListado.Append("<td class='" + strEstiloFile + "'></td>" + Constants.vbCrLf);
+                                    sbListado.Append("<td class='" + strEstiloFile + "'></td>" + Constants.vbCrLf);
+                                }
+                                if (strComprobanteAnterior != drComprobantesBoletos["ID_TIPO_DE_COMPROBANTE"].ToString() + drComprobantesBoletos["ID_FACTURA_CABEZA"].ToString() + drComprobantesBoletos["ID_SUCURSAL"].ToString() + drComprobantesBoletos["NUMERO_SERIE"].ToString())
+                                {
+                                    if (intX >= dtComprobantesBoletos.Rows.Count)
+                                        strEstiloComprobante = "dato_comp_ultimo1";
+                                    else
+                                        strEstiloComprobante = "dato_comp";
+                                    // pStrTipoComp & "-" & pStrNroSerie.PadLeft(3, "0") & "-" & pStrNroComp
+                                    sbListado.Append("<td class='" + strEstiloComprobante + "'>" + Constants.vbCrLf);
+                                    sbListado.Append(drComprobantesBoletos["ID_TIPO_DE_COMPROBANTE"].ToString() + "-" + drComprobantesBoletos["NUMERO_SERIE"].ToString() + "-" + drComprobantesBoletos["ID_FACTURA_CABEZA"].ToString() + Constants.vbCrLf);
+                                    sbListado.Append("</td>" + Constants.vbCrLf);
+
+                                    strComprobanteAnterior = drComprobantesBoletos["ID_TIPO_DE_COMPROBANTE"].ToString() + drComprobantesBoletos["ID_FACTURA_CABEZA"].ToString() + drComprobantesBoletos["ID_SUCURSAL"].ToString() + drComprobantesBoletos["NUMERO_SERIE"].ToString();
+                                }
+                                else
+                                {
+                                    if (intX >= dtComprobantesBoletos.Rows.Count)
+                                        strEstiloComprobante = "dato_comp_ultimo2";
+                                    else
+                                        strEstiloComprobante = "dato_comp_leftright";
+                                    sbListado.Append("<td class='" + strEstiloComprobante + "'></td>" + Constants.vbCrLf);
+                                }
+
+                                if (Convert.IsDBNull(drComprobantesBoletos["PNR_CODE"]))
+                                    strLinkBoletoHTML = drComprobantesBoletos["NRO_BOLETO"].ToString();
+                                else
+                                    strLinkBoletoHTML = drComprobantesBoletos["NRO_BOLETO"].ToString();
+                                sbListado.Append("<td class='dato_boleto'>" + strLinkBoletoHTML + "</td>" + Constants.vbCrLf);
+                                sbListado.Append("</tr>" + Constants.vbCrLf);
+                                intX += 1;
+                            }
+                        }
+                    }
+                    sbListado.Append("</table>" + Constants.vbCrLf);
+
+                    int intIdWeb = Webs_Cid.ID_WEB_WEBFAREFINDER;
+                    Int16 intIdLang = Lang_Cid.IdLangSpa;
+
+                    if (bolExistenComprobantesBoletos)
+                    {
+                        EnviarCorreo objEnviarCorreo = new EnviarCorreo();
+                        objEnviarCorreo.Enviar_CajaWeb(intIdWeb, intIdLang, 128, sbListado.ToString() + "<br /><br />" + sbHTMLDatosPedidos.ToString(), "Pedidos pagados del SRV " + pIntIdCotVta, pStrEmailCounter);
+                    }
+                    else
+                    {
+                        EnviarCorreo objEnviarCorreo = new EnviarCorreo();
+                        objEnviarCorreo.Enviar_CajaWeb(intIdWeb, intIdLang, 128, sbHTMLDatosPedidos.ToString(), "Pedidos pagados del SRV " + pIntIdCotVta, pStrEmailCounter);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                NMailAlerta oNMailAlerta = new NMailAlerta();
+                oNMailAlerta.EnvioCorreoRegistrarError("Error de " + Constantes_SRV.APP_NAME, this, ex, "127.0.0.0" + "|Enviar_MailCajaWeb - SRV ");
+                oNMailAlerta = null;
+            }
+        }
+
+
+        private void validacionAssociate(ref AssociateFile _fileAssociate, ref AssociateFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV)
+        {
+            string mensajeError = string.Empty;            
 
             if (_fileAssociate.idCotSRV_SF <= 0)
             {
@@ -537,7 +1004,8 @@ namespace Expertia.Estructura.Controllers
             else
             {
                 int posListFile = 0;
-                foreach (FileSRV fileSRV in _fileAssociate.LstFiles) /*Aqui se tendra que validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
+                FileSRV _fileSRV_Info = null;
+                foreach (FileSRVRQ fileSRV in _fileAssociate.LstFiles) /*Aqui se tendra que validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
                 {
                     if (fileSRV == null)
                     {
@@ -548,22 +1016,34 @@ namespace Expertia.Estructura.Controllers
                     {
                         mensajeError += "Envie el IdFile del registro " + posListFile + " de la lista de files a asociar|";
                     }
-                    /*if (fileSRV.Fecha == null)
+                    if (string.IsNullOrEmpty(mensajeError) == false) { break; }
+
+                    /*Realizamos la conexion a la BD*/
+                    _fileSRV_Info = new FileSRV();
+                    _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, fileSRV.IdFilePTA);
+
+                    if(_fileSRV_Info != null)
                     {
-                        mensajeError += "Envie la Fecha del registro " + posListFile + " de la lista de files a asociar|";
+                        if(ListFile_InfoSRV == null) { ListFile_InfoSRV = new List<FileSRV>(); }
+                        ListFile_InfoSRV.Add(_fileSRV_Info);
+                        //if (_fileSRV_Info.ImporteFact > 0)
+                        //{
+                        //    mensajeError += "No se tiene el importe del registro " + posListFile + " de la lista de files a asociar|";
+                        //}
+                        //if (string.IsNullOrEmpty(_fileSRV_Info.Cliente))
+                        //{
+                        //    mensajeError += "No se tiene el cliente del registro " + posListFile + " de la lista de files a asociar|";
+                        //}
+                        //if (string.IsNullOrEmpty(_fileSRV_Info.Moneda))
+                        //{
+                        //    mensajeError += "No se tiene la moneda del registro " + posListFile + " de la lista de files a asociar|";
+                        //}
                     }
-                    if (fileSRV.ImporteFact > 0)
+                    else
                     {
-                        mensajeError += "Envie el importe del registro " + posListFile + " de la lista de files a asociar|";
-                    }*/
-                    if (string.IsNullOrEmpty(fileSRV.Cliente))
-                    {
-                        mensajeError += "Envie el cliente del registro " + posListFile + " de la lista de files a asociar|";
+                        mensajeError += "No hay informacion con los datos proporcionados del File " + posListFile + "|";
+                        break;
                     }
-                    /*if (string.IsNullOrEmpty(fileSRV.Moneda))
-                    {
-                        mensajeError += "Envie la moneda del registro " + posListFile + " de la lista de files a asociar|";
-                    }*/
 
                     if (string.IsNullOrEmpty(mensajeError) == false) { break; }
                     posListFile++;
@@ -589,47 +1069,18 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        public FileSRV CargarInfoFile(int sucursal, int idfile)
+        private FileSRV CargarInfoFile(int sucursal, int idfile)
         {
             _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
             FileSRV fileSRV = new FileSRV();
-
             string strIdFile = Convert.ToString(idfile);
-            string strNumFile = "1"; // Si es el File 1, 2 o 3
-            string strIdEstCot = "1";
-            string strTipo = "1";
-
+         
             strIdFile = strIdFile.Replace(",", "");
-
             DataTable dtImporteFile;
-            int intIdOfiCotVta = 23;//CAMBIAR POR LA OFICINA 
-
-            if (intIdOfiCotVta == 6)//si corresponde a destinos mundiales(6)
-            {
-                dtImporteFile = null;//dtImporteFile = objPTAFileBO.Obtiene_InfoFile_DM(sucursal, idfile);
-            }
-            else
-            {
-                dtImporteFile = _CotizacionSRV_Repository._Select_InfoFile(sucursal, idfile);
-            }
-
-            if (dtImporteFile == null)
-            {
-                //aca retornar el el codigo 'ER' y mensaje "lo que muestra este aviso"
-
-                //objNMWebUtility.ExecuteJavaScript(this, "sin_info1", "<script>alert('No se ha encontrado información con el número de file ingresado en la sucursal seleccionada.'); </script>");
-                //objNMWebUtility = null;
-                //LimpiarDatosFile();
-                //btnConfirmFile.Disabled = true;
-            }
-            else if (dtImporteFile.Rows.Count == 0)
-            {
-                //aca retornar el el codigo 'ER' y mensaje "lo que muestra este aviso"
-                //objNMWebUtility.ExecuteJavaScript(this, "sin_info2", "<script>alert('No se ha encontrado información con el número de file ingresado en la sucursal seleccionada.'); </script>");
-                //objNMWebUtility = null;
-                //LimpiarDatosFile();
-                //btnConfirmFile.Disabled = true;
-            }
+            dtImporteFile = _CotizacionSRV_Repository._Select_InfoFile(sucursal, idfile);
+           
+            if (dtImporteFile == null){}
+            else if (dtImporteFile.Rows.Count == 0){}
             else
             {
                 DataRow drCliente = dtImporteFile.Rows[0];
@@ -637,8 +1088,7 @@ namespace Expertia.Estructura.Controllers
                 double dblImporteSumaSOL = 0;
                 string cliente = "";
                 double monto = 0;
-                string moneda = "";
-                // Dim dblImporteRestaUSD As Double = 0
+                string moneda = "";                
                 string strIdMoneda = drCliente["ID_MONEDA"].ToString();
 
                 foreach (DataRow drImporteFile in dtImporteFile.Rows)
@@ -661,12 +1111,9 @@ namespace Expertia.Estructura.Controllers
                         }
                     }
                 }
-
-                // este dato sirve para devolver en el response
+                                
                 cliente = drCliente["NOMBRE_CLIENTE"].ToString();
 
-
-                //monto se devuelve como dato al response
                 if (strIdMoneda == "USD")
                 {
                     monto = dblImporteSumaUSD;
@@ -675,13 +1122,14 @@ namespace Expertia.Estructura.Controllers
                 {
                     monto = dblImporteSumaSOL;
                 }
-
-                //moneda se devuelve como dato al response
+                                
                 moneda = drCliente["ID_MONEDA"].ToString();
-
+                /*string fecha = Convert.ToDateTime(drCliente["FECHA_EMISION"]).ToShortDateString();*/
                 fileSRV.Cliente = cliente;
                 fileSRV.ImporteFact = monto;
                 fileSRV.Moneda = moneda;
+                fileSRV.IdFilePTA = idfile;
+                fileSRV.Sucursal = sucursal;
             }
 
             return fileSRV;
