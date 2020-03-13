@@ -230,14 +230,15 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Send)]
-        public IHttpActionResult Send()
+        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<PedidosProcesados> ListPedidosProcesados = null;
             string errorEnvio = string.Empty;
             object mResponse = null;
+            object objEnvio = null;
 
             try {                
-                RepositoryByBusiness(null);
+                RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
                 
                 /*Consulta de pedidos procesados a BD*/
                 ListPedidosProcesados = (IEnumerable<PedidosProcesados>)_pedidoRepository.GetPedidosProcesados()[OutParameter.CursorPedidosProcesados];
@@ -255,7 +256,7 @@ namespace Expertia.Estructura.Controllers
 
                 try
                 {
-                    var objEnvio = new { info = PedidosProcesadosSF };
+                    objEnvio = new { info = PedidosProcesadosSF };
                     /*Envío de pedidos procesados a Salesforce*/
                     var responsePedidosProcess = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.PedidosProcesadosMethod, Method.POST, objEnvio, true, token);
                     if (responsePedidosProcess.StatusCode.Equals(HttpStatusCode.OK))
@@ -296,6 +297,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     Request = ListPedidosProcesados,      
                     Response = mResponse,
+                    EnvioSF = objEnvio,
                     Exception = errorEnvio
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

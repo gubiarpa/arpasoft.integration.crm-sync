@@ -17,18 +17,18 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
-    [RoutePrefix(RoutePrefix.CuentaNM)]
-    public class CuentaNMController : BaseController<object>
+    [RoutePrefix(RoutePrefix.DetalleItinerarioNM)]
+    public class DetalleItinerarioController : BaseController<object>
     {
         #region Properties
-        private ICuentaNMRepository _cuentaNMRepository;
+        private IDetalleItinerarioNMRepository _detalleItinerarioNMRepository;
         #endregion
 
         #region PublicMethods
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            IEnumerable<CuentaNM> cuentasNMs = null;
+            IEnumerable<DetalleItinerarioNM> detalleItinerarioNMs = null;
             string error = string.Empty;
             object objEnvio = null;
 
@@ -38,9 +38,9 @@ namespace Expertia.Estructura.Controllers
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
-                /// I. Consulta de Cuentas NM
-                cuentasNMs = (IEnumerable<CuentaNM>)(_cuentaNMRepository.Read(_unidadNegocio))[OutParameter.CursorCuentaPta];
-                if (cuentasNMs == null || cuentasNMs.ToList().Count.Equals(0)) return Ok(cuentasNMs);
+                /// I. Consulta de Detalle Itinerario NM
+                detalleItinerarioNMs = (IEnumerable<DetalleItinerarioNM>)(_detalleItinerarioNMRepository.Send(_unidadNegocio))[OutParameter.CursorDetalleItinerarioNM];
+                if (detalleItinerarioNMs == null || detalleItinerarioNMs.ToList().Count.Equals(0)) return Ok(detalleItinerarioNMs);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -48,33 +48,34 @@ namespace Expertia.Estructura.Controllers
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// preparación de cuenta para envio a Salesforce
-                var cuentaNMSF = new List<object>();
-                foreach (var cuenta in cuentasNMs)
+                var detalleItinerarioNMSF = new List<object>();
+                foreach (var detalleItinerario in detalleItinerarioNMs)
                 {
-                    cuentaNMSF.Add(cuenta.ToSalesforceEntity());
+                    detalleItinerarioNMSF.Add(detalleItinerario.ToSalesforceEntity());
                 }
 
 
                 try
                 {
                     /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "CuentaNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = cuentaNMSF };
-                    QuickLog(objEnvio, "body_request.json", "CuentaNM"); /// ♫ Trace
+                    ClearQuickLog("body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
+                    objEnvio = new { cotizaciones = detalleItinerarioNMSF };
+                    QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
 
 
-                    var responseCuentaNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CuentaNMMethod, Method.POST, objEnvio, true, token);
+                    var responseCuentaNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleItinerarioNMMethod, Method.POST, objEnvio, true, token);
                     if (responseCuentaNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaNM.Content);
 
-                        foreach (var cuentaNM in cuentasNMs)
+                        foreach (var detalleItinerarioNM in detalleItinerarioNMs)
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
-                                cuentaNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                cuentaNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                cuentaNM.idCuentaCrm = jsResponse[OutParameter.SF_IdCuenta];
+                                detalleItinerarioNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
+                                detalleItinerarioNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                detalleItinerarioNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
+                                detalleItinerarioNM.idItinerario_SF = jsResponse[OutParameter.SF_IdDetalleItinerario];
 
                                 ///// Actualización de estado de Cuenta NM hacia ???????
                                 //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
@@ -91,8 +92,8 @@ namespace Expertia.Estructura.Controllers
                 {
                     error = ex.Message;
                 }
-                
-                return Ok(new { CuentasNM = cuentasNMs });
+
+                return Ok(new { DetalleItinerarioNM = detalleItinerarioNMs });
             }
             catch (Exception ex)
             {
@@ -105,20 +106,17 @@ namespace Expertia.Estructura.Controllers
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
-                    LegacySystems = cuentasNMs
+                    LegacySystems = detalleItinerarioNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
         #endregion
 
-        #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);
-            _cuentaNMRepository = new CuentaNMRepository(unidadNegocioKey);
+            _detalleItinerarioNMRepository = new DetalleItinerarioNMRepository(unidadNegocioKey);
             return unidadNegocioKey;
         }
-        #endregion
-
     }
 }

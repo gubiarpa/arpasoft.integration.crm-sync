@@ -55,6 +55,7 @@ namespace Expertia.Estructura.Utils
         public const string LeadCT = "api/leadct";
         public const string CuentaNM = "api/cuentanm";
         public const string OportunidadNM = "api/oportunidadNM";
+        public const string DetalleItinerarioNM = "api/detalleitinerarioNM";
     }
 
     public enum ActionMethod
@@ -262,6 +263,8 @@ namespace Expertia.Estructura.Utils
         /// Cuenta Nuevo Mundo
         public const string AW_Get_CuentaNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS CUENTAS NUEVAS";
         public const string AW_Get_OportunidadNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS OPORTUNIDADES NUEVAS";
+        public const string AW_Get_DetalleItinerarioNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE ITINERARIO NUEVAS";
+        public const string AW_Get_DetallePasajerosNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
         #endregion
     }
 
@@ -286,6 +289,7 @@ namespace Expertia.Estructura.Utils
         public const string OportunidadAsocMethod = "OPORTUNIDADASOCIACION_METHODNAME";
         public const string CuentaNMMethod = "CUENTANM_METHODNAME";
         public const string OportunidadNMMethod = "OPORTUNIDADNM_METHODNAME";
+        public const string DetalleItinerarioNMMethod = "DETALLEITINERARIONM_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -345,6 +349,8 @@ namespace Expertia.Estructura.Utils
         public const string CursorFilesAsociadosSRV = "P_FILES_ASOCIADOS_SRV";
         public const string CursorCuentaNM = "x definir";
         public const string CursorOportunidadNM = "x definir";
+        public const string CursorDetalleItinerarioNM = "x definir";
+        public const string CursorDetallePasajerosNM = "x definir";
         #endregion
 
         #region Fields
@@ -377,6 +383,7 @@ namespace Expertia.Estructura.Utils
         public const string SF_Mensaje = "mensaje";
         public const string SF_IdSolicitudPago = "idSolicitudPago_SF";
         public const string SF_IdLead = "ID_LEAD_SF";
+        public const string SF_IdDetalleItinerario = "idItinerario_SF";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";

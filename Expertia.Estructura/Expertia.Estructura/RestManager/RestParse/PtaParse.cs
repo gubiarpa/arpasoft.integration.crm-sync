@@ -401,5 +401,30 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this DetalleItinerarioNM detalleItinerarioNM)
+        {
+            try
+            {
+                return new
+                {
+                    detalleItinerarioNM.idOportunidad_SF,
+                    detalleItinerarioNM.lAerea,
+                    detalleItinerarioNM.origen,
+                    detalleItinerarioNM.salida,
+                    detalleItinerarioNM.destino,
+                    detalleItinerarioNM.llegada,
+                    detalleItinerarioNM.numeroVuelo,
+                    detalleItinerarioNM.clase,
+                    detalleItinerarioNM.fareBasis,
+                    detalleItinerarioNM.operadoPor,
+                    detalleItinerarioNM.accion_SF
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

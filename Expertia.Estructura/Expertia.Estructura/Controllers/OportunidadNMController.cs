@@ -62,12 +62,12 @@ namespace Expertia.Estructura.Controllers
                     {
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidadNM.Content);
 
-                        foreach (var oportunidad in oportunidadNMs)
+                        foreach (var oportunidadNM in oportunidadNMs)
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
-                                oportunidad.CodigoError = jsResponse[OutParameter.SF_CodigoError];
-                                oportunidad.MensajeError = jsResponse[OutParameter.SF_MensajeError];
+                                oportunidadNM.CodigoError = jsResponse[OutParameter.SF_CodigoError];
+                                oportunidadNM.MensajeError = jsResponse[OutParameter.SF_MensajeError];
 
                                 /// Actualización de estado de Oportunidad a PTA
                                 //var updateResponse = _oportunidadRepository.Update(oportunidad);
