@@ -272,23 +272,23 @@ namespace Expertia.Estructura.Repository.AppWebs
                     if(row != null)
                     {
                         PasarelaPago_Pedido = new PasarelaPago_Pedido();
-                        PasarelaPago_Pedido.IdPedido = (Int32)(row["NRO_PEDIDO"]);
+                        PasarelaPago_Pedido.IdPedido = Convert.ToInt32(row["NRO_PEDIDO"]);
                         PasarelaPago_Pedido.FechaPedido = (DateTime)row["TX_FECHA"];
                         PasarelaPago_Pedido.TipoMotor = Convert.ToString(row["MOTOR_TIPO"]);
-                        PasarelaPago_Pedido.IdWeb = (Int32)(row["WEBS_CID"]);
-                        if (row["RES_VUE_ID"] != null)
-                            PasarelaPago_Pedido.IdReservaVuelo = (Int32)(row["RES_VUE_ID"]);
-                        if (row["RES_PAQ_ID"] != null)
-                            PasarelaPago_Pedido.IdReservaPaquete = (Int32)(row["RES_PAQ_ID"]);
-                        if (row["RES_PAQ_TIPO"] != null)
+                        PasarelaPago_Pedido.IdWeb = Convert.ToInt32(row["WEBS_CID"].ToString());
+                        if (!Convert.IsDBNull(row["RES_VUE_ID"]))
+                            PasarelaPago_Pedido.IdReservaVuelo = Convert.ToInt32(row["RES_VUE_ID"]);
+                        if (!Convert.IsDBNull(row["RES_PAQ_ID"]))
+                            PasarelaPago_Pedido.IdReservaPaquete = Convert.ToInt32(row["RES_PAQ_ID"]);
+                        if (!Convert.IsDBNull(row["RES_PAQ_TIPO"]))
                             PasarelaPago_Pedido.TipoPaquete = Convert.ToString(row["RES_PAQ_TIPO"]);
-                        if (row["IP_USUARIO"] != null)
+                        if (!Convert.IsDBNull(row["IP_USUARIO"]))
                             PasarelaPago_Pedido.IPUsuario = Convert.ToString(row["IP_USUARIO"]);
-                        if (row["PAIS_ID"] != null)
+                        if (!Convert.IsDBNull(row["PAIS_ID"]))
                             PasarelaPago_Pedido.IdPaisUsuario = Convert.ToString(row["PAIS_ID"]);
-                        if (row["COU_CNAME"] != null)
+                        if (!Convert.IsDBNull(row["COU_CNAME"]))
                             PasarelaPago_Pedido.NomPaisUsuario = Convert.ToString(row["COU_CNAME"]);
-                        if (row["BROWSER_USUARIO"] != null)
+                        if (!Convert.IsDBNull(row["BROWSER_USUARIO"]))
                             PasarelaPago_Pedido.BrowserUsuario = Convert.ToString(row["BROWSER_USUARIO"]);
                         if (row["OK_PAGO_TARJETA"].ToString() == "1")
                             PasarelaPago_Pedido.OKPagoTarjeta = true;
@@ -296,233 +296,233 @@ namespace Expertia.Estructura.Repository.AppWebs
                         {
                             PasarelaPago_Pedido.OKPagoPuntos = true;
                         }                            
-                        PasarelaPago_Pedido.IdEstadoPedido = (Int16)(row["ESTPED_ID"]);
+                        PasarelaPago_Pedido.IdEstadoPedido = Convert.ToInt16(row["ESTPED_ID"]);
                         PasarelaPago_Pedido.NomEstadoPedido = Convert.ToString(row["ESTPED_NOM"]);
-                        if (row["MONTO_TARJETA"] != null)
+                        if (!Convert.IsDBNull(row["MONTO_TARJETA"]))
                             PasarelaPago_Pedido.MontoTarjeta = Convert.ToDouble(row["MONTO_TARJETA"]);
-                        if (row["COTSRV_ID"] != null)
-                            PasarelaPago_Pedido.IdCotSRV = (Int32)(row["COTSRV_ID"]);
-                        if (row["MONTO_DSCTO_SUBV"] != null)
+                        if (!Convert.IsDBNull(row["COTSRV_ID"]))
+                            PasarelaPago_Pedido.IdCotSRV = Convert.ToInt32(row["COTSRV_ID"]);
+                        if (!Convert.IsDBNull(row["MONTO_DSCTO_SUBV"]))
                             PasarelaPago_Pedido.MontoDscto = Convert.ToDouble(row["MONTO_DSCTO_SUBV"]);
-                        if (row["SERV_DETALLE"] != null)
+                        if (!Convert.IsDBNull(row["SERV_DETALLE"]))
                             PasarelaPago_Pedido.DetalleServicio = Convert.ToString(row["SERV_DETALLE"]);
-                        if (row["ES_UATP"] != null)
+                        if (!Convert.IsDBNull(row["ES_UATP"]))
                         {
                             if (row["ES_UATP"].ToString() == "1")
                                 PasarelaPago_Pedido.EsUATP = true;
 
-                            if (row["FECHA_EXPIRA"] != null)
+                            if (!Convert.IsDBNull(row["FECHA_EXPIRA"]))
                                 PasarelaPago_Pedido.datFechaexpira = (DateTime)row["FECHA_EXPIRA"];
                         }
-                        if (row["FECHA_EXPIRACION"] != null)
+                        if (!Convert.IsDBNull(row["FECHA_EXPIRACION"]))
                             PasarelaPago_Pedido.datFechaexpiracion = (DateTime)row["FECHA_EXPIRACION"];
 
-                        if (row["ID_LA_VALIDADORA_PED"] != null)
+                        if (!Convert.IsDBNull(row["ID_LA_VALIDADORA_PED"]))
                             PasarelaPago_Pedido.IdLAValidadora = Convert.ToString(row["ID_LA_VALIDADORA_PED"]);
-                        else if (row["ID_LA_VALIDADORA"] != null)
+                        else if (!Convert.IsDBNull(row["ID_LA_VALIDADORA"]))
                             PasarelaPago_Pedido.IdLAValidadora = Convert.ToString(row["ID_LA_VALIDADORA"]);
-                        if (row["ES_FONOPAGO"] != null)
+                        if (!Convert.IsDBNull(row["ES_FONOPAGO"]))
                         {
                             if (row["ES_FONOPAGO"].ToString() == "1")
                                 PasarelaPago_Pedido.EsFonoPago = true;
                         }
-                        if (row["ID_RECIBO"] != null)
-                            PasarelaPago_Pedido.IdRecibo = (Int32)(row["ID_RECIBO"]);
-                        if (row["ID_SUCURSAL_RC"] != null)
-                            PasarelaPago_Pedido.IdSucursalRC = (Int32)(row["ID_SUCURSAL_RC"]);
-                        if (row["FECHA_GENERA_RC"] != null)
+                        if (!Convert.IsDBNull(row["ID_RECIBO"]))
+                            PasarelaPago_Pedido.IdRecibo = Convert.ToInt32(row["ID_RECIBO"]);
+                        if (!Convert.IsDBNull(row["ID_SUCURSAL_RC"]))
+                            PasarelaPago_Pedido.IdSucursalRC = Convert.ToInt32(row["ID_SUCURSAL_RC"]);
+                        if (!Convert.IsDBNull(row["FECHA_GENERA_RC"]))
                             PasarelaPago_Pedido.FechaGeneraRecibo = (DateTime)row["FECHA_GENERA_RC"];
-                        if (row["NRO_PEDIDO_FORMA_PAGO"] != null)
+                        if (!Convert.IsDBNull(row["NRO_PEDIDO_FORMA_PAGO"]))
                         {
                             objFormaPagoPedido = new FormaPagoPedido();
-                            objFormaPagoPedido.IdPedido = (Int32)(row["NRO_PEDIDO_FORMA_PAGO"]);
-                            if (row["CCO_CID"] != null)
+                            objFormaPagoPedido.IdPedido = Convert.ToInt32(row["NRO_PEDIDO_FORMA_PAGO"]);
+                            if (!Convert.IsDBNull(row["CCO_CID"]))
                                 objFormaPagoPedido.IdTipoTarjeta = Convert.ToString(row["CCO_CID"]);
-                            if (row["TOTAL_PTOS_BOL"] != null)
-                                objFormaPagoPedido.TotalPtos = (Int32)(row["TOTAL_PTOS_BOL"]);
-                            if (row["PTOS_PAGO"] != null)
-                                objFormaPagoPedido.PtosPagoCliente = (Int32)(row["PTOS_PAGO"]);
-                            if (row["COD_AUTH_PTOS"] != null)
+                            if (!Convert.IsDBNull(row["TOTAL_PTOS_BOL"]))
+                                objFormaPagoPedido.TotalPtos = Convert.ToInt32(row["TOTAL_PTOS_BOL"]);
+                            if (!Convert.IsDBNull(row["PTOS_PAGO"]))
+                                objFormaPagoPedido.PtosPagoCliente = Convert.ToInt32(row["PTOS_PAGO"]);
+                            if (!Convert.IsDBNull(row["COD_AUTH_PTOS"]))
                                 objFormaPagoPedido.CodAutorizacionPtos = Convert.ToString(row["COD_AUTH_PTOS"]);
-                            if (row["FPAGO_ID"] != null)
-                                objFormaPagoPedido.IdFormaPago = (Int16)(row["FPAGO_ID"]);
-                            if (row["FPAGO_NOM"] != null)
+                            if (!Convert.IsDBNull(row["FPAGO_ID"]))
+                                objFormaPagoPedido.IdFormaPago = Convert.ToInt16(row["FPAGO_ID"]);
+                            if (!Convert.IsDBNull(row["FPAGO_NOM"]))
                                 objFormaPagoPedido.NomFormaPago = Convert.ToString(row["FPAGO_NOM"]);
-                            if (row["TITULAR_TARJETA"] != null)
+                            if (!Convert.IsDBNull(row["TITULAR_TARJETA"]))
                                 objFormaPagoPedido.TitularTarjeta = Convert.ToString(row["TITULAR_TARJETA"]);
-                            if (row["NRO_CUOTAS_FP"] != null)
-                                objFormaPagoPedido.NroCuotas = (Int16)(row["NRO_CUOTAS_FP"]);
-                            if (row["TIPo_CUOTAS_FP"] != null)
+                            if (!Convert.IsDBNull(row["NRO_CUOTAS_FP"]))
+                                objFormaPagoPedido.NroCuotas = Convert.ToInt16(row["NRO_CUOTAS_FP"]);
+                            if (!Convert.IsDBNull(row["TIPo_CUOTAS_FP"]))
                             {
                                 objFormaPagoPedido.TipoCuotas = Convert.ToString(row["TIPo_CUOTAS_FP"]);
                             }                                
                             PasarelaPago_Pedido.FormaPagoPedido = objFormaPagoPedido;
                         }
 
-                        if (row["NRO_PEDIDO_VI"] != null)
+                        if (!Convert.IsDBNull(row["NRO_PEDIDO_VI"]))
                         {
                             objRptaPagoVisa = new RptaPagoVisa();
-                            objRptaPagoVisa.IdPedido = (Int32)(row["NRO_PEDIDO_VI"]);
-                            if (row["HOST_RPTA"] != null)
+                            objRptaPagoVisa.IdPedido = Convert.ToInt32(row["NRO_PEDIDO_VI"]);
+                            if (!Convert.IsDBNull(row["HOST_RPTA"]))
                                 objRptaPagoVisa.HostRespuesta = Convert.ToString(row["HOST_RPTA"]);
-                            if (row["HOST_COD_TIENDA"] != null)
+                            if (!Convert.IsDBNull(row["HOST_COD_TIENDA"]))
                                 objRptaPagoVisa.CodTienda = Convert.ToString(row["HOST_COD_TIENDA"]);
-                            if (row["HOST_COD_ACCION"] != null)
+                            if (!Convert.IsDBNull(row["HOST_COD_ACCION"]))
                                 objRptaPagoVisa.HostCodAccion = Convert.ToString(row["HOST_COD_ACCION"]);
-                            if (row["HOST_PAN"] != null)
+                            if (!Convert.IsDBNull(row["HOST_PAN"]))
                                 objRptaPagoVisa.HostNroTarjeta = Convert.ToString(row["HOST_PAN"]);
-                            if (row["HOST_ECI"] != null)
+                            if (!Convert.IsDBNull(row["HOST_ECI"]))
                                 objRptaPagoVisa.HostECI = Convert.ToString(row["HOST_ECI"]);
-                            if (row["HOST_COD_AUTORIZA"] != null)
+                            if (!Convert.IsDBNull(row["HOST_COD_AUTORIZA"]))
                                 objRptaPagoVisa.HostCodAutoriza = Convert.ToString(row["HOST_COD_AUTORIZA"]);
-                            if (row["HOST_NOM_EMISOR"] != null)
+                            if (!Convert.IsDBNull(row["HOST_NOM_EMISOR"]))
                                 objRptaPagoVisa.HostNomEmisor = Convert.ToString(row["HOST_NOM_EMISOR"]);
-                            else if (row["TARJ_BANCO_EMISOR_VI"] != null)
+                            else if (!Convert.IsDBNull(row["TARJ_BANCO_EMISOR_VI"]))
                                 objRptaPagoVisa.HostNomEmisor = Convert.ToString(row["TARJ_BANCO_EMISOR_VI"]);
-                            if (row["HOST_IMP_AUTORIZADO"] != null)
+                            if (!Convert.IsDBNull(row["HOST_IMP_AUTORIZADO"]))
                                 objRptaPagoVisa.HostImporteAutorizado = Convert.ToDouble(row["HOST_IMP_AUTORIZADO"]);
-                            if (row["HOST_MSG_ERROR"] != null)
+                            if (!Convert.IsDBNull(row["HOST_MSG_ERROR"]))
                                 objRptaPagoVisa.HostMensajeError = Convert.ToString(row["HOST_MSG_ERROR"]);
-                            if (row["HOST_TARJETA_HABIENTE"] != null)
+                            if (!Convert.IsDBNull(row["HOST_TARJETA_HABIENTE"]))
                             {
                                 objRptaPagoVisa.HostTarjetaHabiente = Convert.ToString(row["HOST_TARJETA_HABIENTE"]);
                             }                                
                             PasarelaPago_Pedido.RptaPagoVisa = objRptaPagoVisa;
                         }
 
-                        if (row["NRO_PEDIDO_MC"] != null)
+                        if (!Convert.IsDBNull(row["NRO_PEDIDO_MC"]))
                         {
                             objRptaPagoMastercard = new RptaPagoMastercard();
-                            objRptaPagoMastercard.IdPedido = (Int32)(row["NRO_PEDIDO_MC"]);
-                            if (row["RESULT_TX"] != null)
+                            objRptaPagoMastercard.IdPedido = Convert.ToInt32(row["NRO_PEDIDO_MC"]);
+                            if (!Convert.IsDBNull(row["RESULT_TX"]))
                                 objRptaPagoMastercard.ResultTx = Convert.ToString(row["RESULT_TX"]);
-                            if (row["COD_AUTH"] != null)
+                            if (!Convert.IsDBNull(row["COD_AUTH"]))
                                 objRptaPagoMastercard.CodAuth = Convert.ToString(row["COD_AUTH"]);
-                            if (row["MONTO_TTL"] != null)
+                            if (!Convert.IsDBNull(row["MONTO_TTL"]))
                                 objRptaPagoMastercard.MontoTotal = Convert.ToString(row["MONTO_TTL"]);
-                            if (row["COD_RPTA"] != null)
+                            if (!Convert.IsDBNull(row["COD_RPTA"]))
                                 objRptaPagoMastercard.CodRpta = Convert.ToString(row["COD_RPTA"]);
-                            if (row["NRO_TARJETA"] != null)
+                            if (!Convert.IsDBNull(row["NRO_TARJETA"]))
                                 objRptaPagoMastercard.NroTarjeta = Convert.ToString(row["NRO_TARJETA"]);
-                            if (row["MENSAJE_RPTA"] != null)
+                            if (!Convert.IsDBNull(row["MENSAJE_RPTA"]))
                                 objRptaPagoMastercard.MensajeRpta = Convert.ToString(row["MENSAJE_RPTA"]);
-                            if (row["MSG_COD_RPTA"] != null)
+                            if (!Convert.IsDBNull(row["MSG_COD_RPTA"]))
                                 objRptaPagoMastercard.MsgCodRpta = Convert.ToString(row["MSG_COD_RPTA"]);
-                            if (row["NRO_CUOTAS"] != null)
+                            if (!Convert.IsDBNull(row["NRO_CUOTAS"]))
                                 objRptaPagoMastercard.NroCuotas = (row["NRO_CUOTAS"].ToString());
-                            if (row["FEC_PRIMERA_CUOTA"] != null)
+                            if (!Convert.IsDBNull(row["FEC_PRIMERA_CUOTA"]))
                                 objRptaPagoMastercard.FecPrimeraCuota = Convert.ToString(row["FEC_PRIMERA_CUOTA"]);
-                            if (row["MONEDA_CUOTA"] != null)
+                            if (!Convert.IsDBNull(row["MONEDA_CUOTA"]))
                                 objRptaPagoMastercard.MonedaCuota = Convert.ToString(row["MONEDA_CUOTA"]);
-                            if (row["MONTO_CUOTA"] != null)
+                            if (!Convert.IsDBNull(row["MONTO_CUOTA"]))
                                 objRptaPagoMastercard.MontoCuota = Convert.ToString(row["MONTO_CUOTA"]);
-                            if (row["MONTO_TTL"] != null)
+                            if (!Convert.IsDBNull(row["MONTO_TTL"]))
                                 objRptaPagoMastercard.MontoTotal = Convert.ToString(row["MONTO_TTL"]);
-                            if (row["TARJ_BANCO_EMISOR_MC"] != null)
+                            if (!Convert.IsDBNull(row["TARJ_BANCO_EMISOR_MC"]))
                             {
                                 objRptaPagoMastercard.NomBancoEmisor = Convert.ToString(row["TARJ_BANCO_EMISOR_MC"]);
                             }                                
                             PasarelaPago_Pedido.RptaPagoMastercard = objRptaPagoMastercard;
                         }
 
-                        if (row["NRO_PEDIDO_UATP"] != null)
+                        if (!Convert.IsDBNull(row["NRO_PEDIDO_UATP"]))
                         {
                             objRptaPagoUATP = new RptaPagoUATP();
-                            objRptaPagoUATP.IdPedido = (Int32)(row["NRO_PEDIDO_UATP"]);
+                            objRptaPagoUATP.IdPedido = Convert.ToInt32(row["NRO_PEDIDO_UATP"]);
                             objRptaPagoUATP.FechaRpta = (DateTime)row["FECHA_RPTA_UATP"];
                             objRptaPagoUATP.IdTipoTarjeta = Convert.ToString(row["CCO_CID_UATP"]);
                             objRptaPagoUATP.NroTarjeta = Convert.ToString(row["TARJ_NRO_UATP"]);
                             objRptaPagoUATP.AnioExpiraTarjeta = Convert.ToString(row["TARJ_ANIO_EXPIRA"]);
                             objRptaPagoUATP.MesExpiraTarjeta = Convert.ToString(row["TARJ_MES_EXPIRA"]);
                             objRptaPagoUATP.TitularTarjeta = Convert.ToString(row["TARJ_TITULAR"]);
-                            if (row["TARJ_COD_SEGURIDAD"] != null)
+                            if (!Convert.IsDBNull(row["TARJ_COD_SEGURIDAD"]))
                                 objRptaPagoUATP.CodSeguridadTarjeta = Convert.ToString(row["TARJ_COD_SEGURIDAD"]);
-                            if (row["TARJ_BANCO_EMISOR"] != null)
+                            if (!Convert.IsDBNull(row["TARJ_BANCO_EMISOR"]))
                                 objRptaPagoUATP.BancoEmisor = Convert.ToString(row["TARJ_BANCO_EMISOR"]);
-                            if (row["RPTA_MENSAJE_UATP"] != null)
+                            if (!Convert.IsDBNull(row["RPTA_MENSAJE_UATP"]))
                                 objRptaPagoUATP.MensajeRpta = Convert.ToString(row["RPTA_MENSAJE_UATP"]);
-                            if (row["FECHA_COBRO_PAYU"] != null)
+                            if (!Convert.IsDBNull(row["FECHA_COBRO_PAYU"]))
                                 objRptaPagoUATP.Fechacobropayu = Convert.ToString(row["FECHA_COBRO_PAYU"]);
-                            if (row["TIPO_DOC_TITULAR"] != null)
+                            if (!Convert.IsDBNull(row["TIPO_DOC_TITULAR"]))
                                 objRptaPagoUATP.IdTipoDocTitularTarjeta = Convert.ToString(row["TIPO_DOC_TITULAR"]);
-                            if (row["NUM_DOC_TITULAR"] != null)
+                            if (!Convert.IsDBNull(row["NUM_DOC_TITULAR"]))
                                 objRptaPagoUATP.NumDocTitularTarjeta = Convert.ToString(row["NUM_DOC_TITULAR"]);
-                            if (row["RPTA_UATP"] != null)
+                            if (!Convert.IsDBNull(row["RPTA_UATP"]))
                             {
                                 if (row["RPTA_UATP"].ToString() == "1")
                                     objRptaPagoUATP.ResultadoOK = true;
                             }
-                            if (row["TELF_USUARIO"] != null)
+                            if (!Convert.IsDBNull(row["TELF_USUARIO"]))
                             {
                                 objRptaPagoUATP.TelfCliente = Convert.ToString(row["TELF_USUARIO"]);
                             }
                             PasarelaPago_Pedido.RptaPagoUATP = objRptaPagoUATP;
                         }
 
-                        if (row["NRO_PEDIDO_PEEC"] != null)
+                        if (!Convert.IsDBNull(row["NRO_PEDIDO_PEEC"]))
                         {
                             objRptaPagoEfectivoEC = new RptaPagoEfectivoEC();
-                            if (row["CIP"] != null)
+                            if (!Convert.IsDBNull(row["CIP"]))
                                 objRptaPagoEfectivoEC.CIP = Convert.ToString(row["CIP"]);
-                            if (row["PE_ESTADO"] != null)
+                            if (!Convert.IsDBNull(row["PE_ESTADO"]))
                                 objRptaPagoEfectivoEC.Estado = Convert.ToString(row["PE_ESTADO"]);
-                            if (row["CIP_ESTADO"] != null)
+                            if (!Convert.IsDBNull(row["CIP_ESTADO"]))
                                 objRptaPagoEfectivoEC.EstadoCIP = Convert.ToString(row["CIP_ESTADO"]);
-                            if (row["CIP_ESTADO_CONCILIADO"] != null)
+                            if (!Convert.IsDBNull(row["CIP_ESTADO_CONCILIADO"]))
                                 objRptaPagoEfectivoEC.EstadoConciliado = Convert.ToString(row["CIP_ESTADO_CONCILIADO"]);
-                            if (row["CIP_FECHA_CANCELADO"] != null)
+                            if (!Convert.IsDBNull(row["CIP_FECHA_CANCELADO"]))
                                 objRptaPagoEfectivoEC.FechaCancelado = (DateTime)row["CIP_FECHA_CANCELADO"];
-                            if (row["CIP_FECHA_CONCILIADO"] != null)
+                            if (!Convert.IsDBNull(row["CIP_FECHA_CONCILIADO"]))
                                 objRptaPagoEfectivoEC.FechaConciliado = (DateTime)row["CIP_FECHA_CONCILIADO"];
-                            if (row["FECHA_EXPIRA_PAGO"] != null)
+                            if (!Convert.IsDBNull(row["FECHA_EXPIRA_PAGO"]))
                                 objRptaPagoEfectivoEC.FechaExpiraPago = (DateTime)row["FECHA_EXPIRA_PAGO"];
-                            if (row["CIP_FECHA_EXTORNO"] != null)
+                            if (!Convert.IsDBNull(row["CIP_FECHA_EXTORNO"]))
                                 objRptaPagoEfectivoEC.FechaExtorno = (DateTime)row["CIP_FECHA_EXTORNO"];
-                            if (row["PE_MENSAJE"] != null)
+                            if (!Convert.IsDBNull(row["PE_MENSAJE"]))
                                 objRptaPagoEfectivoEC.MensajeRpta = Convert.ToString(row["PE_MENSAJE"]);
-                            if (row["PE_ENVIO_RPTA_PAGO"] != null)
+                            if (!Convert.IsDBNull(row["PE_ENVIO_RPTA_PAGO"]))
                             {
                                 if (row["PE_ENVIO_RPTA_PAGO"].ToString() == "1")
                                     objRptaPagoEfectivoEC.EnvioRpta = true;
                             }
                             PasarelaPago_Pedido.RptaPagoEfectivoEC = objRptaPagoEfectivoEC;
                         }
-                        if (row["TOTAL_FEE_VUE"] != null)
+                        if (!Convert.IsDBNull(row["TOTAL_FEE_VUE"]))
                             PasarelaPago_Pedido.FEE_ResVue = Convert.ToDouble(row["TOTAL_FEE_VUE"]);
                         else
                             PasarelaPago_Pedido.FEE_ResVue = 0;
 
-                        if (row["NRO_PEDIDO_SP"] != null)
+                        if (!Convert.IsDBNull(row["NRO_PEDIDO_SP"]))
                         {
                             RptaPagoSafetyPay objRptaPagoSafetyPay = new RptaPagoSafetyPay();
-                            if (row["EXPIRATIONDATETIME"] != null)
+                            if (!Convert.IsDBNull(row["EXPIRATIONDATETIME"]))
                                 objRptaPagoSafetyPay.ExpirationDateTime = Convert.ToString(row["EXPIRATIONDATETIME"]);
-                            if (row["OPERATIONID"] != null)
+                            if (!Convert.IsDBNull(row["OPERATIONID"]))
                                 objRptaPagoSafetyPay.OperationId = Convert.ToString(row["OPERATIONID"]);
-                            if (row["TRANSACTIONIDENTIFIER"] != null)
+                            if (!Convert.IsDBNull(row["TRANSACTIONIDENTIFIER"]))
                                 objRptaPagoSafetyPay.TransaccionIdentifier = Convert.ToString(row["TRANSACTIONIDENTIFIER"]);
-                            if (row["ERRORMANAGER_SEVERITY"] != null)
+                            if (!Convert.IsDBNull(row["ERRORMANAGER_SEVERITY"]))
                                 objRptaPagoSafetyPay.ErrorManager_Severity = Convert.ToString(row["ERRORMANAGER_SEVERITY"]);
-                            if (row["ERRORMANAGER_ERRORNUMBER"] != null)
+                            if (!Convert.IsDBNull(row["ERRORMANAGER_ERRORNUMBER"]))
                                 objRptaPagoSafetyPay.ErrorManager_ErrorNumber = Convert.ToString(row["ERRORMANAGER_ERRORNUMBER"]);
-                            if (row["ERRORMANAGER_DESCRIPCION"] != null)
+                            if (!Convert.IsDBNull(row["ERRORMANAGER_DESCRIPCION"]))
                                 objRptaPagoSafetyPay.ErrorManager_Description = Convert.ToString(row["ERRORMANAGER_DESCRIPCION"]);
-                            if (row["BANK_REDIRECTURL"] != null)
+                            if (!Convert.IsDBNull(row["BANK_REDIRECTURL"]))
                             {
                                 objRptaPagoSafetyPay.BankRedirectUrl = Convert.ToString(row["BANK_REDIRECTURL"]);
                             }                                
                             PasarelaPago_Pedido.RptaPagoSafetyPay = objRptaPagoSafetyPay;
                         }
-                        if (row["ESPAYU"] != null)
+                        if (!Convert.IsDBNull(row["ESPAYU"]))
                         {
-                            if (0 < (Int32)(row["ESPAYU"]))
+                            if (0 < Convert.ToInt32(row["ESPAYU"]))
                             {
                                 PasarelaPago_Pedido.EsPayu = true;
                             }                                
                         }
 
                         // RCcancce - MT
-                        if (row["PNR_INI"] != null)
+                        if (!Convert.IsDBNull(row["PNR_INI"]))
                             PasarelaPago_Pedido.PNR_MT = (row["PNR_INI"].ToString().Trim());
                         else
                             PasarelaPago_Pedido.PNR_MT = "";
@@ -546,7 +546,7 @@ namespace Expertia.Estructura.Repository.AppWebs
         {
             try
             {
-                FormaPagoPedido FormaPagoPedido = null;
+                FormaPagoPedido FormaPagoPedido = new FormaPagoPedido();
 
                 #region Parameter
                 AddParameter("pNumIdPedido_in", OracleDbType.Int32, IdPedido, ParameterDirection.Input);
@@ -560,34 +560,34 @@ namespace Expertia.Estructura.Repository.AppWebs
                 {
                     if(row != null)
                     {
-                        FormaPagoPedido.IdPedido = (Int32)(row["NRO_PEDIDO"]);
-                        if (row["CCO_CID"] != null)
+                        FormaPagoPedido.IdPedido = Convert.ToInt32(row["NRO_PEDIDO"]);
+                        if (!Convert.IsDBNull(row["CCO_CID"]))
                             FormaPagoPedido.IdTipoTarjeta = row["CCO_CID"].ToString();
-                        if (row["TOTAL_PTOS_BOL"] != null)
-                            FormaPagoPedido.TotalPtos = (Int32)(row["TOTAL_PTOS_BOL"]);
-                        if (row["PTOS_PAGO"] != null)
-                            FormaPagoPedido.PtosPagoCliente = (Int32)(row["PTOS_PAGO"]);
-                        if (row["MONTO_PAGO"] != null)
+                        if (!Convert.IsDBNull(row["TOTAL_PTOS_BOL"]))
+                            FormaPagoPedido.TotalPtos = Convert.ToInt32(row["TOTAL_PTOS_BOL"]);
+                        if (!Convert.IsDBNull(row["PTOS_PAGO"]))
+                            FormaPagoPedido.PtosPagoCliente = Convert.ToInt32(row["PTOS_PAGO"]);
+                        if (!Convert.IsDBNull(row["MONTO_PAGO"]))
                             FormaPagoPedido.MontoPago = Convert.ToDouble(row["MONTO_PAGO"]);
-                        if (row["PUNTOXDOLAR"] != null)
+                        if (!Convert.IsDBNull(row["PUNTOXDOLAR"]))
                             FormaPagoPedido.PuntosXDolar = Convert.ToDouble(row["PUNTOXDOLAR"]);
-                        if (row["TIPO_CAMBIO"] != null)
+                        if (!Convert.IsDBNull(row["TIPO_CAMBIO"]))
                             FormaPagoPedido.TipoCambio = Convert.ToDouble(row["TIPO_CAMBIO"]);
-                        if (row["COD_AUTH_PTOS"] != null)
+                        if (!Convert.IsDBNull(row["COD_AUTH_PTOS"]))
                             FormaPagoPedido.CodAutorizacionPtos = row["COD_AUTH_PTOS"].ToString();
-                        if (row["FPAGO_ID"] != null)
-                            FormaPagoPedido.IdFormaPago = (Int16)(row["FPAGO_ID"]);
-                        if (row["CCO_CNAME"] != null)
+                        if (!Convert.IsDBNull(row["FPAGO_ID"]))
+                            FormaPagoPedido.IdFormaPago = Convert.ToInt16(row["FPAGO_ID"]);
+                        if (!Convert.IsDBNull(row["CCO_CNAME"]))
                             FormaPagoPedido.NomTarjeta = row["CCO_CNAME"].ToString();
-                        if (row["FPAGO_NOM"] != null)
+                        if (!Convert.IsDBNull(row["FPAGO_NOM"]))
                             FormaPagoPedido.NomFormaPago = row["FPAGO_NOM"].ToString();
-                        if (row["TITULAR_TARJETA"] != null)
+                        if (!Convert.IsDBNull(row["TITULAR_TARJETA"]))
                             FormaPagoPedido.TitularTarjeta = row["TITULAR_TARJETA"].ToString();
-                        if (row["AUTHORIZATIONCODE"] != null)
+                        if (!Convert.IsDBNull(row["AUTHORIZATIONCODE"]))
                             FormaPagoPedido.AutorizationTarjeta = row["AUTHORIZATIONCODE"].ToString();
-                        if (row["TARJ_BANCO_EMISOR"] != null)
+                        if (!Convert.IsDBNull(row["TARJ_BANCO_EMISOR"]))
                             FormaPagoPedido.BancoEmisorTarjeta = row["TARJ_BANCO_EMISOR"].ToString();
-                        if (row["ES_PAYU"] != null)
+                        if (!Convert.IsDBNull(row["ES_PAYU"]))
                             FormaPagoPedido.EsPayu = row["ES_PAYU"].ToString();
                     }
                 }

@@ -18,6 +18,7 @@ namespace Expertia.Estructura.Utils
         public const string DMConnKey = "DMConnKey";
         public const string IAConnKey = "IAConnKey";
         public const string AWConnKey = "AWConnKey";
+        public const string NMConnKey = "NMConnKey";
         public const string CondorConnKey_CL = "CTConnKey_CL";
         public const string CondorConnKey_EC = "CTConnKey_EC";
         public const string CondorConnKey_BR = "CTConnKey_BR";
@@ -239,6 +240,19 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_Datos_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF_TEST.SP_OBTIENE_COT_TEST_MT";
         public const string AW_Get_PedidoXSolicitud = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_X_SOLIC_MT";
         public const string AW_Get_FormaPagoBy_IdPedido = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_FORMA_PAGO_PEDIDO";
+        public const string AW_Upd_RC_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_UPD_RC_PEDIDO";
+        public const string AW_Upd_Mod_Compra = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MOD_COMPRA_COT";
+        public const string NM_Alter_SessionDT = "NUEVOMUNDO.PKG_WEB_UTILITY.SP_ALTER_SESSION_DATETIME";
+        public const string NM_Ins_ReciboCaja = "NUEVOMUNDO.PKG_WEB_PTA.SP_INS_RECIBO_CAJA";
+        public const string NM_Get_ComprobanteXFile = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_COMP_BOL_X_FILE";
+        public const string NM_Existe_VendedorSubArea = "NUEVOMUNDO.PKG_WEB_METAS_NM.SP_EXISTE_VEND_SAREA";
+        public const string NM_Upd_Fecha_Cierre_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_UPD_FECHA_CIERRE_FILE";
+        public const string NM_Ins_Historia_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_INS_HISTORIA_FILE";
+        public const string NM_Get_Select_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_X_ID";
+        public const string NM_Upd_IdVendedor_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_UPD_VEND_FILE";
+        public const string NM_Upd_PagoUATP_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_UPD_PAGO_UATP_FILE";
+        public const string NM_Upd_Vendedor_Pta = "NUEVOMUNDO.PKG_WEB_PTA.SP_UPD_VENDEDOR_PTA";
+        public const string NM_Ins_Text_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_INS_FILE_TEXTO";
         #endregion
     }
 
@@ -376,7 +390,8 @@ namespace Expertia.Estructura.Utils
         AppWebs,
         CondorTravel_CL,
         CondorTravel_EC,
-        CondorTravel_BR
+        CondorTravel_BR,
+        NuevoMundo
     }
 
     public static class UnidadNegocioShortNames
@@ -431,10 +446,23 @@ namespace Expertia.Estructura.Utils
         public const string BoletoNoExiste = "B2";
     }
 
+    public static class IdEmpresas
+    {
+        public const Int16 INT_ID_EMPRESA_GNM_NM = 1;
+        public const Int16 INT_ID_EMPRESA_GNM_IA = 2;
+        public const Int16 INT_ID_EMPRESA_GNM_DM = 3;
+        public const Int16 INT_ID_EMPRESA_GNM_CAMINOREAL = 4;
+        public const Int16 INT_ID_EMPRESA_GNM_DECAMERON = 7;
+        public const Int16 INT_ID_EMPRESA_GNM_TRAVELACE = 8;
+        public const Int16 INT_ID_EMPRESA_GNM_AGCORP = 35;
+        public const Int16 INT_ID_EMPRESA_GNM_CONDOR_TRAVEL = 13;
+    }
+
     public static class Constantes_SRV
     {
         public const string IP_GENERAL = "127.0.0.0";
         public const string ID_TIPO_POST_SRV_USUARIO = "2";
+        public const string APP_NAME = "WebFareFinder";
 
         #region Estados
         public const short ID_ESTADO_COT_PENDIENTE_PAGO = 11;
@@ -452,18 +480,31 @@ namespace Expertia.Estructura.Utils
         public const int INT_ID_DEP_SISTEMAS = 11;
         public const int INT_ID_DEP_LARCOMAR = 71;
         #endregion
+        #region Otros
+        public const int INT_ID_AREA_NMVCOM_METAS = 2;
+        public const int INT_ID_AREA_CRP_METAS = 11;
+        public const int INT_ID_SUBAREA_NMVCOM_BOLETOS_METAS = 2;
+        public const int INT_ID_SUBAREA_NMVCOM_PERSONAL_PAQUETE = 3;
+        #endregion
     }
 
     public static class Constantes_Pedido
     {
         public const string ID_TIPO_PEDIDO_OTROS = "OTR";
         public const int ID_CANAL_VENTA_CONTACT_CENTER = 94;
-        public const Int16 ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;
-        public const Int16 INT_ID_ESTADO_PEDIDO_PAGADO = 2;
+        public const Int16 ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;        
         public const string CODE_FPAGO_GENERAL = "SF";
-        public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";        
+        public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";
+
+        #region EstadoPedidos
+        public const Int16 INT_ID_ESTADO_PEDIDO_PAGADO = 2;
+        public const Int16 INT_ID_ESTADO_PEDIDO_PENDIENTE = 1;        
+        public const Int16 INT_ID_ESTADO_PEDIDO_ANULADO = 3;
+        public const Int16 INT_ID_ESTADO_PEDIDO_EN_PROCESO = 4;
+        public const Int16 INT_ID_ESTADO_PEDIDO_VALIDADO = 5;
+        #endregion
     }
-    
+
     public static class Constantes_Mail
     {
         public const string EMAIL_BOLETIN_NMV = "boletin@mktg.viajesnuevomundo.com";
@@ -476,14 +517,20 @@ namespace Expertia.Estructura.Utils
         public const string CurrencyUSD = "USD";
         public const string CodeSafetyPayOnline = "SF";
         public const int ID_MAIL_SOLICITUD_PAGO_SERVICIO_SF = 78;
+        public const string STR_NOM_ESTADO_CIP_GENERADO = "Generado";
+        public const string STR_NOM_ESTADO_CIP_GENERADA = "Generada";
+        public const string STR_NOM_ESTADO_CIP_EXPIRADO = "Expirado";
+        public const string STR_NOM_ESTADO_CIP_CANCELADO = "Cancelada";        
     }
 
     public static class Constantes_FileRetail
     {
+        public const short INT_ID_FORMA_PAGO_SOLO_PUNTOS = 1;
         public const short INT_ID_ESTADO_PEDIDO_VALIDADO = 5;
         public const short INT_ID_ESTADO_PEDIDO_PAGADO = 2;
         public const short INT_ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;
         public const short INT_ID_FORMA_PAGO_SAFETYPAY_CASH = 7;
+        public const short INT_ID_FORMA_PAGO_SAFETYPAY_INTERNAC = 9;
         public const string STR_ID_FORMA_PTA_SAFETYPAY = "35";
         public const string STR_ID_VALOR_PTA_USD = "08";
         public const short INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC = 5;
@@ -509,6 +556,11 @@ namespace Expertia.Estructura.Utils
         public const int ID_WEB_IA = 3;
         public const int ID_WEB_NMV_RECEPTIVO = 26;
         public const int ID_WEB_WEBFAREFINDER = 39;
+    }
+
+    public static class Lang_Cid
+    {
+        public const int IdLangSpa = 1;
     }
 
     public static class Oficina
@@ -555,6 +607,11 @@ namespace Expertia.Estructura.Utils
     public static class UtilityCorreo
     {
         public const string ERR_FOLDER_PATH = @"C:\InetPubNM\Webs_Intranet\wwwRootInterAgencias\";
+    }
+
+    public static class ConstantesWeb_Codigos
+    {
+        public const Int16 INT_ID_EMP_PTA_NMV = 1;
     }
     #endregion
 

@@ -102,6 +102,81 @@ namespace Expertia.Estructura.Repository.Base
             }
         }
 
+        protected void ExecuteConexionBegin(string CnxName, ref OracleTransaction _oracleTransaction, ref OracleConnection _oracleConnection)
+        {
+            try
+            {
+                OracleConnection conn = new OracleConnection();
+                conn.ConnectionString = ConfigAccess.GetValueInConnectionString(CnxName);
+                conn.Open();
+
+                _oracleConnection = conn;
+                _oracleTransaction = conn.BeginTransaction();                                                    
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        protected void ExecuteStorePBeginCommit(string SPName, OracleTransaction TransOrx, OracleConnection _oracleConnection, bool withCommit = false)
+        {
+            try
+            {                
+                {
+                    using (OracleCommand cmd = new OracleCommand()
+                    {
+                        CommandText = SPName,
+                        CommandType = CommandType.StoredProcedure,
+                        Connection = (TransOrx == null ? _oracleConnection : TransOrx.Connection)
+                    })
+                    {                       
+                        // Agregamos parámetros
+                        foreach (var key in _parameters.Keys)
+                        {
+                            cmd.Parameters.Add(_parameters[key]);
+                        }
+
+                        // Ejecutamos el SP
+                        cmd.ExecuteNonQuery();
+                        
+                        // Volcamos en parámetros resultantes
+                        foreach (var key in _parameters.Keys)
+                        {
+                            if (_parameters[key].Direction.Equals(ParameterDirection.Output))
+                            {
+                                if (_parameters[key].OracleDbType.Equals(OracleDbType.RefCursor))
+                                {
+                                    try
+                                    {
+                                        (_dtParameters[key] = new DataTable()).Load(((OracleRefCursor)(_parameters[key]).Value).GetDataReader());
+                                    }
+                                    catch
+                                    {
+                                        _dtParameters[key] = null;
+                                    }
+                                }
+                                else
+                                {
+                                    _outParameters[key] = _parameters[key];
+                                }
+                            }
+                        }
+
+                        if (withCommit) TransOrx.Commit();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                _parameters.Clear();
+            }
+        }
+
         protected object GetOutParameter(string parameterName)
         {
             try

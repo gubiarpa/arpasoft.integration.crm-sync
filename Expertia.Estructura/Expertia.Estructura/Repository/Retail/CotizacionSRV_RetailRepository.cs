@@ -47,18 +47,8 @@ namespace Expertia.Estructura.Repository.AppWebs
 
             if (RQ_General_PostSRV.CambioEstado)
             {
-                UpdateEstadoCotVTA(RQ_General_PostSRV);             
+                _UpdateEstadoCotVTA(RQ_General_PostSRV);             
             }
-
-            //if(RQ_General_PostSRV.IdEstado == (Int16)ENUM_ESTADOS_COT_VTA.Facturado)
-            //{
-            //    foreach (FilePTACotVta objTempFilePTA in RQ_General_PostSRV.LstFilesPTA)
-            //    {
-            //        DataTable dtImporteFile = _Select_InfoFile(objTempFilePTA.IdSuc, objTempFilePTA.IdFilePTA);
-            //        _Actualiza_Imp_File_Cot(,)
-            //    }
-            //        _Update_Importe_FilePTA(pIntIdCot, objTempFilePTA.IdSucursal, objTempFilePTA.IdFilePTA, pIntIdUsuWeb, pIntIdOfi, pIntIdDep, "1", objTx);
-            //}
 
             return IdPostFin;
         }
@@ -124,7 +114,7 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
-        public void UpdateEstadoCotVTA(Post_SRV RQ_PostSRV)
+        public void _UpdateEstadoCotVTA(Post_SRV RQ_PostSRV)
         {
             try
             {
@@ -132,7 +122,8 @@ namespace Expertia.Estructura.Repository.AppWebs
                 string DetalleAccion = string.Empty;
                 int? IdUsuWebCounterCreaVal = null;
 
-                if (RQ_PostSRV.EsCounterAdmin == true) {
+                if (RQ_PostSRV.EsCounterAdmin == true)
+                {
                     IdUsuWebCounterCreaVal = RQ_PostSRV.IdUsuWeb;
                 }
 
@@ -143,7 +134,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 else
                     DetalleAccion = "Usuario " + (RQ_PostSRV.EsCounterAdmin == true ? RQ_PostSRV.IdUsuWebCounterCrea.Value : RQ_PostSRV.IdUsuWeb) + " cambia estado de cotización '" + RQ_PostSRV.IdCot + "' a " + RQ_PostSRV.IdEstado;
                 #endregion
-                
+
                 #region Parameter                
                 AddParameter("pNumIdCot_in", OracleDbType.Int32, RQ_PostSRV.IdCot, ParameterDirection.Input);
                 AddParameter("pVarLoginUsuCrea_in", OracleDbType.Varchar2, RQ_PostSRV.LoginUsuCrea, ParameterDirection.Input, 50);
@@ -157,6 +148,42 @@ namespace Expertia.Estructura.Repository.AppWebs
 
                 #region Invoke
                 ExecuteStoredProcedure(StoredProcedureName.AW_Update_Estado_Cotizacion);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void _Update_Estado_Cot_VTA(int pIntIdCot, string pStrLoginUsuCrea, string pStrIPUsuCrea, Int16 pIntIdEstado, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi, bool pBolEsAutomatico, Nullable<int> pIntIdUsuWebCounterAdmin, OracleTransaction pObjTx)
+        {
+            try
+            {
+
+                #region Variables - Validaciones
+                string strDetalleAccion = string.Empty;
+                if (pBolEsAutomatico)
+                    strDetalleAccion = "Usuario " + pIntIdUsuWeb + " cambia estado de cotización '" + pIntIdCot + "' a " + pIntIdEstado + "(automático)";
+                else if (pIntIdUsuWebCounterAdmin.HasValue)
+                    strDetalleAccion = "Usuario " + pIntIdUsuWebCounterAdmin.Value + " cambia estado de cotización '" + pIntIdCot + "' a " + pIntIdEstado;
+                else
+                    strDetalleAccion = "Usuario " + pIntIdUsuWeb + " cambia estado de cotización '" + pIntIdCot + "' a " + pIntIdEstado;
+                #endregion
+
+                #region Parameter 
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pVarLoginUsuCrea_in", OracleDbType.Varchar2, pStrLoginUsuCrea, ParameterDirection.Input, 50);
+                AddParameter("pVarIPUsuCrea_in", OracleDbType.Varchar2, pStrIPUsuCrea, ParameterDirection.Input, 20);
+                AddParameter("pVarDetAccion_in", OracleDbType.Varchar2, strDetalleAccion, ParameterDirection.Input, 300);
+                AddParameter("pNumIdEstado_in", OracleDbType.Int16, pIntIdEstado, ParameterDirection.Input);
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, pIntIdDep, ParameterDirection.Input);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                #endregion
+                                
+                #region Invoke
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Update_Estado_Cotizacion, pObjTx, null, false);
                 #endregion
             }
             catch (Exception ex)
@@ -188,7 +215,7 @@ namespace Expertia.Estructura.Repository.AppWebs
             return bolAsignado;
         }
 
-        public int _Insert_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost, string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, short pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta, bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, int? pIntIdUsuWebCounterCrea, int? pIntIdOfiCounterCrea, int? pIntIdDepCounterCrea, bool? pBolEsUrgenteEmision, DateTime? pDatFecPlazoEmision, short? pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, double? pDblMontoEstimadoFile)
+        private int _Insert_Post_Cot(int pIntIdCot, string pStrTipoPost, string pStrTextoPost, string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, short pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta, bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, int? pIntIdUsuWebCounterCrea, int? pIntIdOfiCounterCrea, int? pIntIdDepCounterCrea, bool? pBolEsUrgenteEmision, DateTime? pDatFecPlazoEmision, short? pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, double? pDblMontoEstimadoFile, OracleTransaction pObjTx)
         {
             string valor = "";
             int intIdPost = 0;
@@ -253,7 +280,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.AW_Insert_Post_Cotizacion);
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Insert_Post_Cotizacion, pObjTx, null, false);
                 valor = GetOutParameter("pNumIdNewPost_out").ToString();
                 intIdPost = Convert.ToInt32(valor);
                 #endregion
@@ -262,11 +289,12 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
             catch (Exception ex)
             {
+                if (pObjTx != null){pObjTx.Rollback();}                    
                 throw ex;
             }
         }
 
-        public void _Update_MotivoNoCompro(int pIntIdCot, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro)
+        private void _Update_MotivoNoCompro(int pIntIdCot, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, OracleTransaction pObjTx)
         {
             try
             {
@@ -277,7 +305,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Motivo_No_Compra);
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Update_Motivo_No_Compra, pObjTx, null , false);
                 #endregion
             }
             catch (Exception ex)
@@ -304,13 +332,13 @@ namespace Expertia.Estructura.Repository.AppWebs
                 {
                     objFilePTACotVta = new FilePTACotVta();
                     objFilePTACotVta.IdCot = pIntIdCotVta;
-                    objFilePTACotVta.IdSuc = (Int16)row["SUC_ID"];
-                    objFilePTACotVta.IdFilePTA = (int)row["FILE_ID"];
+                    objFilePTACotVta.IdSuc = Convert.ToInt16(row["SUC_ID"]);
+                    objFilePTACotVta.IdFilePTA = Convert.ToInt32(row["FILE_ID"]);
                     objFilePTACotVta.Fecha = (DateTime)row["FPTA_FECHA"];
                     objFilePTACotVta.Moneda = (string)row["FPTA_MONEDA"];
-                    objFilePTACotVta.ImporteFacturado = (Double)row["FPTA_IMP_FACT"];
-                    objFilePTACotVta.TipoCambio = (Double)row["FPTA_TIPO_CAMBIO"];
-                    objFilePTACotVta.NombreSucursal = _Select_NomSucursal((Int16)row["SUC_ID"]);
+                    objFilePTACotVta.ImporteFacturado = Convert.ToDouble(row["FPTA_IMP_FACT"]);
+                    objFilePTACotVta.TipoCambio = Convert.ToDouble(row["FPTA_TIPO_CAMBIO"]);
+                    objFilePTACotVta.NombreSucursal = _Select_NomSucursal(Convert.ToInt16(row["SUC_ID"]));
                     lstFilesPTA.Add(objFilePTACotVta);
                 }
                 
@@ -438,7 +466,7 @@ namespace Expertia.Estructura.Repository.AppWebs
             return dblTipoCambio;
         }
 
-        public void _Insert_FilePTA_Cot(int IdCot, int IdSuc, int IdFilePTA, string Moneda, double dblTipoCambio, double ImporteFacturado, int IdUsuWebCounterCrea, int IdOfiCounterCrea, int IdDepCounterCrea)
+        private void _Insert_FilePTA_Cot(int IdCot, int IdSuc, int IdFilePTA, string Moneda, double dblTipoCambio, double ImporteFacturado, int IdUsuWebCounterCrea, int IdOfiCounterCrea, int IdDepCounterCrea, OracleTransaction pObjTx)
         {
             int intId = 0;
             try
@@ -448,15 +476,15 @@ namespace Expertia.Estructura.Repository.AppWebs
                 AddParameter("pNumIdSuc_in", OracleDbType.Int32, IdSuc, ParameterDirection.Input);
                 AddParameter("pNumIdFile_in", OracleDbType.Int32, IdFilePTA, ParameterDirection.Input);
                 AddParameter("pChrMoneda_in", OracleDbType.Char, Moneda, ParameterDirection.Input, 3);
-                AddParameter("pDecImpFact_in", OracleDbType.Decimal, ImporteFacturado, ParameterDirection.Input);
-                AddParameter("pDecTipoCambio_in", OracleDbType.Decimal, dblTipoCambio, ParameterDirection.Input, 100);
+                AddParameter("pDecImpFact_in", OracleDbType.Decimal, ImporteFacturado, ParameterDirection.Input,13);
+                AddParameter("pDecTipoCambio_in", OracleDbType.Decimal, dblTipoCambio, ParameterDirection.Input, 10);
                 AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, IdUsuWebCounterCrea, ParameterDirection.Input);
-                AddParameter("pNumIdDep_in", OracleDbType.Int32, IdOfiCounterCrea, ParameterDirection.Input);
-                AddParameter("pNumIdOfi_in", OracleDbType.Int32, IdDepCounterCrea, ParameterDirection.Input, 1);
+                AddParameter("pNumIdDep_in", OracleDbType.Int32, IdDepCounterCrea, ParameterDirection.Input);
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, IdOfiCounterCrea, ParameterDirection.Input);
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.AW_Ins_FilePTA_Cot);
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Ins_FilePTA_Cot, pObjTx, null, false);
                 #endregion
             }
             catch (Exception ex)
@@ -465,7 +493,7 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
-        public void _Insert_ArchivoMail_Post_Cot(int pIntIdCot, int intIdPost, string pBytArchivoMail)
+        private void _Insert_ArchivoMail_Post_Cot(int pIntIdCot, int intIdPost, string pBytArchivoMail, OracleTransaction pObjTx)
         {
             try
             {
@@ -476,7 +504,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.AW_Ins_FilePTA_Cot);
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Ins_FilePTA_Cot, pObjTx, null, false);
                 #endregion
             }
             catch (Exception ex)
@@ -485,7 +513,7 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
-        public void _Update_MontoEstimadoFileBy_IdCotVta(int pIntIdCot, double pDblMontoEstimadoFile)
+        private void _Update_MontoEstimadoFileBy_IdCotVta(int pIntIdCot, double pDblMontoEstimadoFile, OracleTransaction pObjTx)
         {
             try
             {
@@ -495,7 +523,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Monto_Estimado_File);
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Update_Monto_Estimado_File, pObjTx, null, false);
                 #endregion
             }
             catch (Exception ex)
@@ -504,7 +532,7 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
-        public void _Insert_FechaSalida_Cot(int pIntIdCot, string pStrFecSalida, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi)
+        private void _Insert_FechaSalida_Cot(int pIntIdCot, string pStrFecSalida, int pIntIdUsuWeb, int pIntIdDep, int pIntIdOfi, OracleTransaction pObjTx)
         {
             try
             {
@@ -517,7 +545,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 #endregion
 
                 #region Invoke
-                ExecuteStoredProcedure(StoredProcedureName.AW_Ins_Fec_Salida_Cot);
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Ins_Fec_Salida_Cot, pObjTx, null, false);
                 #endregion
             }
             catch (Exception ex)
@@ -532,112 +560,102 @@ namespace Expertia.Estructura.Repository.AppWebs
             bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, Nullable<int> pIntIdUsuWebCounterCrea, Nullable<int> pIntIdOfiCounterCrea,
             Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile)
         {
+
             int intIdPost = 0;
-
-            intIdPost = _Insert_Post_Cot(pIntIdCot, pStrTipoPost, pStrTextoPost, pStrIPUsuCrea,
-                                    pStrLoginUsuCrea, pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pLstArchivos, pLstFilesPTA, pIntIdEstado,
-                                    pBolCambioEstado, pLstFechasCotVta, pBolEsAutomatico, pBytArchivoMail, pBolEsCounterAdmin,
-                                    pIntIdUsuWebCounterCrea, pIntIdOfiCounterCrea, pIntIdDepCounterCrea, pBolEsUrgenteEmision,
-                                    pDatFecPlazoEmision, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, pDblMontoEstimadoFile);
-
-            if (pLstArchivos != null)
+            try
             {
-                foreach (ArchivoPostCot objArchivoPost in pLstArchivos)
+                UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs;
+                OracleTransaction objTx = null; OracleConnection objCnx = null;
+                ExecuteConexionBegin(unidadNegocio.ToConnectionKey(), ref objTx, ref objCnx);
+                        
+                intIdPost = _Insert_Post_Cot(pIntIdCot, pStrTipoPost, pStrTextoPost, pStrIPUsuCrea,
+                                        pStrLoginUsuCrea, pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pLstArchivos, pLstFilesPTA, pIntIdEstado,
+                                        pBolCambioEstado, pLstFechasCotVta, pBolEsAutomatico, pBytArchivoMail, pBolEsCounterAdmin,
+                                        pIntIdUsuWebCounterCrea, pIntIdOfiCounterCrea, pIntIdDepCounterCrea, pBolEsUrgenteEmision,
+                                        pDatFecPlazoEmision, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, pDblMontoEstimadoFile, objTx);
+                        
+                if (pBolCambioEstado)
                 {
-
-                }
-            }
-
-            if (pBolCambioEstado)
-            {
-                Post_SRV RQ_General_PostSRV = new Post_SRV();
-                RQ_General_PostSRV.IdCot = pIntIdCot;
-                RQ_General_PostSRV.LoginUsuCrea = pStrLoginUsuCrea;
-                RQ_General_PostSRV.IPUsuCrea = pStrIPUsuCrea;
-                RQ_General_PostSRV.IdEstado = pIntIdEstado;
-                if (pBolEsCounterAdmin)
-                {
-                    RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWebCounterCrea;
-                    RQ_General_PostSRV.IdDepCounterCrea = pIntIdDepCounterCrea;
-                    RQ_General_PostSRV.IdOfiCounterCrea = pIntIdOfiCounterCrea;
-                    RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
-                    RQ_General_PostSRV.IdUsuWeb = pIntIdUsuWeb;
-                    UpdateEstadoCotVTA(RQ_General_PostSRV);
-                }
-                else
-                {
-                    RQ_General_PostSRV.IdUsuWebCounterCrea = pIntIdUsuWeb;
-                    RQ_General_PostSRV.IdDep = pIntIdDep;
-                    RQ_General_PostSRV.IdOfi = pIntIdOfi;
-                    RQ_General_PostSRV.EsAutomatico = pBolEsAutomatico;
-                    RQ_General_PostSRV.IdUsuWeb = pIntIdUsuWeb;
-                    UpdateEstadoCotVTA(RQ_General_PostSRV);
-
-                }
-            }
-
-            if (pIntIdEstado == 8 && pIntIdMotivoNoCompro.HasValue) // ESTADO NO COMPRO
-            {
-                _Update_MotivoNoCompro(pIntIdCot, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro);
-            }
-
-            if (pIntIdEstado == 5) //ESTADO FACTURADO
-            {
-                Update_Importe_FilesPTABy_Cot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
-
-                if (pLstFilesPTA != null)
-                {
-                    if (pLstFilesPTA.Count > 0)
+                    if (pBolEsCounterAdmin)
                     {
-                        bool bolBDNuevoMundo = true;
+                        _Update_Estado_Cot_VTA(pIntIdCot, pStrLoginUsuCrea, pStrIPUsuCrea, pIntIdEstado,
+                                    pIntIdUsuWebCounterCrea.Value, pIntIdDepCounterCrea.Value, pIntIdOfiCounterCrea.Value,
+                                    pBolEsAutomatico, pIntIdUsuWeb, objTx);
+                    }
+                    else
+                    {
+                        _Update_Estado_Cot_VTA(pIntIdCot, pStrLoginUsuCrea, pStrIPUsuCrea, pIntIdEstado,
+                                    pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pBolEsAutomatico, null, objTx);
+                    }
+                }
 
-                        double dblTipoCambio = _Select_TipoCambio(DateTime.Now, "SOL", 1, bolBDNuevoMundo);
+                if (pIntIdEstado == 8 && pIntIdMotivoNoCompro.HasValue) /*Estado no compro*/
+                {
+                    _Update_MotivoNoCompro(pIntIdCot, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, objTx);
+                }
 
-                        foreach (FilePTACotVta objFilePTACotVta in pLstFilesPTA)
+                if (pIntIdEstado == 5) //ESTADO FACTURADO
+                {
+                    Update_Importe_FilesPTABy_Cot(pIntIdCot, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
+
+                    if (pLstFilesPTA != null)
+                    {
+                        if (pLstFilesPTA.Count > 0)
+                        {
+                            bool bolBDNuevoMundo = true;
+
+                            double dblTipoCambio = _Select_TipoCambio(DateTime.Now, "SOL", 1, bolBDNuevoMundo);
+
+                            foreach (FilePTACotVta objFilePTACotVta in pLstFilesPTA)
+                            {
+                                if (pBolEsCounterAdmin)
+                                {
+                                    _Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWebCounterCrea.Value, pIntIdOfiCounterCrea.Value, pIntIdDepCounterCrea.Value, objTx);
+                                }
+                                else
+                                {
+                                    _Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWeb, pIntIdOfi, pIntIdDep, objTx);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (pIntIdEstado == 4)
+                {
+                    if (pLstFechasCotVta != null)
+                    {
+                        for (int intX = 0; intX <= pLstFechasCotVta.Length - 1; intX++)
                         {
                             if (pBolEsCounterAdmin)
                             {
-                                _Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWebCounterCrea.Value, pIntIdOfiCounterCrea.Value, pIntIdDepCounterCrea.Value);
+                                _Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWebCounterCrea.Value, pIntIdDepCounterCrea.Value, pIntIdOfiCounterCrea.Value, objTx);
+
                             }
                             else
                             {
-                                _Insert_FilePTA_Cot(objFilePTACotVta.IdCot, objFilePTACotVta.IdSuc, objFilePTACotVta.IdFilePTA, objFilePTACotVta.Moneda, dblTipoCambio, objFilePTACotVta.ImporteFacturado, pIntIdUsuWeb, pIntIdOfi, pIntIdDep);
+
+                                _Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWeb, pIntIdDep, pIntIdOfi, objTx);
+
                             }
                         }
                     }
                 }
-            }
-            else if (pIntIdEstado == 4)
-            {
-                if (pLstFechasCotVta != null)
+
+                if (pBytArchivoMail != null)//NO ENTRA (SACADO DEL SRV)
                 {
-                    for (int intX = 0; intX <= pLstFechasCotVta.Length - 1; intX++)
-                    {
-                        if (pBolEsCounterAdmin)
-                        {
-                            _Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWebCounterCrea.Value, pIntIdDepCounterCrea.Value, pIntIdOfiCounterCrea.Value);
-
-                        }
-                        else
-                        {
-
-                            _Insert_FechaSalida_Cot(pIntIdCot, pLstFechasCotVta[intX].ToString(), pIntIdUsuWeb, pIntIdDep, pIntIdOfi);
-
-                        }
-                    }
+                    _Insert_ArchivoMail_Post_Cot(pIntIdCot, intIdPost, pBytArchivoMail, objTx);
                 }
-            }
 
-            if (pBytArchivoMail != null)//NO ENTRA (SACADO DEL SRV)
+                if (pDblMontoEstimadoFile.HasValue && pDblMontoEstimadoFile.Value > 0)
+                {
+                    _Update_MontoEstimadoFileBy_IdCotVta(pIntIdCot, pDblMontoEstimadoFile.Value, objTx);
+                }
+                objTx.Commit();
+            }
+            catch(Exception ex)
             {
-                _Insert_ArchivoMail_Post_Cot(pIntIdCot, intIdPost, pBytArchivoMail);
+                throw new Exception(ex.ToString());
             }
-
-            if (pDblMontoEstimadoFile.HasValue && pDblMontoEstimadoFile.Value > 0)
-            {
-                _Update_MontoEstimadoFileBy_IdCotVta(pIntIdCot, pDblMontoEstimadoFile.Value);
-            }
-
             return intIdPost;
         }
 
@@ -691,6 +709,25 @@ namespace Expertia.Estructura.Repository.AppWebs
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        public void _Update_ModalidadCompra(int pIntIdCot, Int16 pIntIdModalidadCompra)
+        {
+            try
+            {
+                #region Parameter                                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pNumIdModCompra_in", OracleDbType.Int16, pIntIdModalidadCompra, ParameterDirection.Input);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Upd_Mod_Compra, true);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
             }
         }
 

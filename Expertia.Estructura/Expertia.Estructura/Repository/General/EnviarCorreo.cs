@@ -264,6 +264,98 @@ namespace Expertia.Estructura.Repository.General
             }
             return _return;
         }
+
+        public void Enviar_Log(string pStrAsunto, string pStrBody, bool pBolGenerarArchivo, string pStrCarpeta, string pStrNomArchivo)
+        {
+            try
+            {
+                if (pBolGenerarArchivo)
+                {
+                    NMMail objNMMail = new NMMail();                    
+                    objNMMail.AddMailFrom = "errores-webmaster@inboxplace.com";
+                    objNMMail.AddMailsTo = "webmaster@inboxplace.com ";
+                    // objNMMail.AddMailsTo() = "luis_reque@hotmail.com"
+                    objNMMail.MailServer = "10.75.103.230";
+                    objNMMail.MailHTML = true;
+                    objNMMail.MailSubject = pStrAsunto;
+                    objNMMail.MailBody = pStrBody;
+                    objNMMail.SendMail("errores-webmaster@inboxplace.com", "1Nb0xplac3");
+
+                    if (!string.IsNullOrEmpty(pStrCarpeta))
+                    {
+                        string sFecha = DateTime.Now.ToString("yyyyMMdd");
+                        string sHora = DateTime.Now.ToString("HHmmss");
+
+                        string strRuta = pStrCarpeta + sFecha + @"\";
+                        bool bolExiste = System.IO.Directory.Exists(strRuta);
+                        if (!(bolExiste == true))
+                            System.IO.Directory.CreateDirectory(strRuta);
+
+                        System.IO.File.WriteAllText(strRuta + pStrNomArchivo, pStrBody);
+                    }
+                }
+                else
+                {
+                    NMMail objNMMail = new NMMail();                    
+                    objNMMail.AddMailFrom = "errores-webmaster@inboxplace.com";
+                    objNMMail.AddMailsTo = "webmaster@inboxplace.com ";
+                    // objNMMail.AddMailsTo() = "luis_reque@hotmail.com"
+                    objNMMail.MailServer = "10.75.103.230";
+                    objNMMail.MailHTML = true;
+                    objNMMail.MailSubject = pStrAsunto;
+                    objNMMail.MailBody = pStrBody;
+                    objNMMail.SendMail("errores-webmaster@inboxplace.com", "1Nb0xplac3");
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        public void Enviar_CajaWeb(int pIntIdWeb, int pIntIdLang, int pIntIdMail, string pStrHTMLBody, string pStrAsunto, string pStrEmailCounter)
+        {
+            NMMail objMail = new NMMail();
+            try
+            {                
+                CorreoNM objCorreo = new CorreoNM(); 
+                objCorreo = Get_Correo_Web(pIntIdWeb, pIntIdLang, pIntIdMail);
+
+                if (objCorreo != null)
+                {
+                    objMail.MailServer = "10.75.102.2";
+                    objMail.MailSubject = pStrAsunto;
+                    objMail.MailFrom = new System.Net.Mail.MailAddress(objCorreo.FromCorreo);
+
+                    if (!string.IsNullOrEmpty(pStrEmailCounter))
+                        objMail.MailTo = new System.Net.Mail.MailAddress(pStrEmailCounter);
+
+                    if (!string.IsNullOrEmpty(objCorreo.ToCorreo))
+                        objMail.AddMailsTo = objCorreo.ToCorreo;
+                    if (!string.IsNullOrEmpty(objCorreo.CCCorreo))
+                    {
+                        if (objCorreo.CCCorreo != "")
+                            objMail.AddMailsCC = objCorreo.CCCorreo;
+                    }
+                    if (!string.IsNullOrEmpty(objCorreo.BCCCorreo))
+                    {
+                        if (objCorreo.BCCCorreo != "")
+                            objMail.AddMailsBCC = objCorreo.BCCCorreo;
+                    }
+
+                    objMail.MailHTML = true;
+                    objMail.MailBody = objCorreo.StyleFileCorreo + objCorreo.HeaderCorreo + pStrHTMLBody + objCorreo.FooterCorreo;
+                    objMail.SendMail(objCorreo.UsuarioCredentials, objCorreo.PasswordCredentials);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                objMail = null;
+            }
+        }
         #endregion
 
         #region Procesos BD
@@ -276,7 +368,7 @@ namespace Expertia.Estructura.Repository.General
                 #region Parameter
                 AddParameter("pNumIdWeb_in", OracleDbType.Int64, pIntIdWeb, ParameterDirection.Input);
                 AddParameter("pNumIdLang_in", OracleDbType.Int64, pIntIdLang, ParameterDirection.Input);
-                AddParameter("pNumIdMail_in", OracleDbType.Int64, pIntIdLang, ParameterDirection.Input);                
+                AddParameter("pNumIdMail_in", OracleDbType.Int64, pIntIdMail, ParameterDirection.Input);                
                 AddParameter(OutParameter.CursorMailWeb, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
                 #endregion
 
@@ -294,6 +386,7 @@ namespace Expertia.Estructura.Repository.General
         }
         #endregion
 
+        #region Auxiliares
         private CorreoNM FillRptaMailWeb(DataTable dt = null)
         {
             try
@@ -336,5 +429,6 @@ namespace Expertia.Estructura.Repository.General
                 throw;
             }
         }
+        #endregion
     }
 }
