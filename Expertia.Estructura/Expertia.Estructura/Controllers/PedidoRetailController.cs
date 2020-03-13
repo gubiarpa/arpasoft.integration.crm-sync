@@ -234,6 +234,7 @@ namespace Expertia.Estructura.Controllers
         {
             IEnumerable<PedidosProcesados> ListPedidosProcesados = null;
             string errorEnvio = string.Empty;
+            object mResponse = null;
 
             try {                
                 RepositoryByBusiness(null);
@@ -260,6 +261,7 @@ namespace Expertia.Estructura.Controllers
                     if (responsePedidosProcess.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responsePedidosProcess.Content);
+                        mResponse = jsonResponse["Solicitudes"];
                         foreach (var pedidosProcesados in ListPedidosProcesados)
                         {
                             foreach (var jsResponse in jsonResponse["Solicitudes"])
@@ -292,7 +294,8 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    Request = ListPedidosProcesados,                    
+                    Request = ListPedidosProcesados,      
+                    Response = mResponse,
                     Exception = errorEnvio
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

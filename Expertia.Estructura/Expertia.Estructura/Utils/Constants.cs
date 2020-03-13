@@ -53,6 +53,7 @@ namespace Expertia.Estructura.Utils
         public const string OportunidadRetail = "api/oportunidadretail";
         public const string FileSRVRetail = "api/filesrvretail";
         public const string LeadCT = "api/leadct";
+        public const string CuentaNM = "api/cuentanm";
     }
 
     public enum ActionMethod
@@ -219,13 +220,13 @@ namespace Expertia.Estructura.Utils
         public const string AW_Insert_FormaPago_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_INS_FORMA_PAGO_PEDIDO";
         public const string AW_Update_FechaExpira_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_UPD_FECHAEXPIRA_PEDIDO";
         public const string AW_Get_Mail_Web = "APPWEBS.PKG_MAIL_LWEB.SP_MW_OBTIENE_X_ID";
-        public const string AW_Get_Datos_Usuario = "APPWEBS.PKG_PERSONAL.SP_OBTIENE_DATOS_X_USUARIO";
+        public const string AW_Get_Datos_Usuario = "APPWEBS.CRM_PKG.SP_OBTIENE_DATOS_X_USUARIO";
         public const string AW_Insert_Post_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_POST_COT";
         public const string AW_Update_Estado_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_EST_COT";
         public const string AW_Update_Motivo_No_Compra = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MOTIVO_NO_COMPRO";
         public const string AW_Get_FilesPtaBy_IdCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_FILESPTA_COT";
-        public const string AW_Get_Pedidos_Procesados = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_PROCESS_CRM";
-        public const string AW_Update_Pedido_Procesado = "APPWEBS.PKG_PAGO_ONLINE.SP_UPDATE_PEDIDO_PROCESS_CRM";
+        public const string AW_Get_Pedidos_Procesados = "APPWEBS.CRM_PKG.SP_GET_PEDIDOS_PROCESS_CRM";
+        public const string AW_Update_Pedido_Procesado = "APPWEBS.CRM_PKG.SP_UPDATE_PEDIDO_PROCESS_CRM";
         public const string AW_Update_Pedido_SolicitudPago_SF = "APPWEBS.PKG_PAGO_ONLINE.SP_UPD_PEDIDO_SOLPAGO_CRM";
 
         public const string AW_Update_Imp_File_Cot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_ACTUALIZA_IMP_FILE_COT";
@@ -253,6 +254,9 @@ namespace Expertia.Estructura.Utils
         public const string NM_Upd_PagoUATP_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_UPD_PAGO_UATP_FILE";
         public const string NM_Upd_Vendedor_Pta = "NUEVOMUNDO.PKG_WEB_PTA.SP_UPD_VENDEDOR_PTA";
         public const string NM_Ins_Text_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_INS_FILE_TEXTO";
+
+        /// Cuenta Nuevo Mundo
+        public const string AW_Get_Cuenta = "AGREGAR STORED PROCEDURE QUE TRAE LAS CUENTAS NUEVAS";
         #endregion
     }
 
@@ -275,6 +279,7 @@ namespace Expertia.Estructura.Utils
         public const string CotizacionJYUpdMethod = "COTIZACIONJYUPD_METHODNAME";
         public const string LeadCreateMethod = "LEADCREATE_METHODNAME";
         public const string OportunidadAsocMethod = "OPORTUNIDADASOCIACION_METHODNAME";
+        public const string CuentaNMMethod = "CUENTANM_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -584,12 +589,6 @@ namespace Expertia.Estructura.Utils
         public const int INT_ID_DEP_RECEPTIVO = 10;
     }
 
-    public static class ConstantesPedidoProcesado
-    {
-        public const string Cod_Retorno = "100";
-        public const string Pagado = "Pagado";
-        public const string Pendiente = "Pendiente";
-    }
     public enum ENUM_ESTADOS_COT_VTA : short
     {
         Solicitado = 1,

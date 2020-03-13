@@ -67,12 +67,14 @@ namespace Expertia.Estructura.Controllers
             string exceptionMsg = string.Empty;
             UnidadNegocioKeys? _unidadNegocioKey = null;
             object objEnvio = null;
+            List<Respuesta> ListRpta = new List<Respuesta>();
+            Respuesta Rpta = new Respuesta();
             try
             {
                 _unidadNegocioKey = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocioByCountry());
 
                 var operation = _cotizacionRepository.Lista_CotizacionB2C();
-                Respuesta Rpta = new Respuesta();
+                
                 Rpta.CodigoError = operation[OutParameter.CodigoError].ToString();
                 Rpta.MensajeError = operation[OutParameter.MensajeError].ToString();
                 var cotizacionJYUpdResponse = ((List<CotizacionJYUpdResponse>)operation[OutParameter.CursorCotizacionB2C]);
@@ -117,10 +119,12 @@ namespace Expertia.Estructura.Controllers
                                     };
 
                                     /// Actualización de estado de subcodigo a PTA
+                                    Rpta = new Respuesta();
                                     operation = _cotizacionRepository.Actualizar_EnvioCotizacionB2C(cotizacionJYUpd);
                                     Rpta.CodigoError = operation[OutParameter.CodigoError].ToString();
                                     Rpta.MensajeError = operation[OutParameter.MensajeError].ToString();
                                     Rpta.Numero_Afectados = operation[OutParameter.NumeroActualizados].ToString();
+                                    ListRpta.Add(Rpta);
 
                                 }
                             }
@@ -143,8 +147,10 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    Body = objEnvio.Stringify(true, false),
+
                     UnidadNegocio = _unidadNegocioKey.ToString(),
+                    Body = objEnvio,
+                    Response = ListRpta,
                     Exception = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }

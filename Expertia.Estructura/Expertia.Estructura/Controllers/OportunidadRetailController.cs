@@ -37,8 +37,8 @@ namespace Expertia.Estructura.Controllers
             int idCotizacion = 0;
             try
             {
-                var intIdUsuWeb = /*oportunidadRetail.IdUsuarioSrv_SF*/oportunidadRetail.UsuarioCrea;
-                var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(intIdUsuWeb);
+                var intIdUsuWeb = oportunidadRetail.UsuarioCrea;
+                var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(oportunidadRetail.IdUsuarioSrv_SF);
                 int? intIdCliCot = null;
 
                 int intIdOcurrencias, pIntIdCot = 0;
@@ -72,8 +72,8 @@ namespace Expertia.Estructura.Controllers
                             null,
                             oportunidadRetail.Numdoc,
                             oportunidadRetail.IdTipoDoc,
-                            intIdUsuWeb,
-                            39,
+                            oportunidadRetail.IdUsuarioSrv_SF,
+                            Webs_Cid.ID_WEB_WEBFAREFINDER,
                             null,
                             false,
                             null,
@@ -95,11 +95,12 @@ namespace Expertia.Estructura.Controllers
                         oportunidadRetail.ApePatCli,
                         oportunidadRetail.ApeMatCli,
                         oportunidadRetail.EmailCli,
-                        intIdUsuWeb
+                        oportunidadRetail.IdUsuarioSrv_SF
                         );
 
-                    if (string.IsNullOrEmpty(oportunidadRetail.IdDestino) && oportunidadRetail.IdDestino.Length >= 3)
-                        oportunidadRetail.IdDestino = oportunidadRetail.IdDestino.Substring(0, 3);
+                    var idDestino = string.Empty;
+                    if (!string.IsNullOrEmpty(oportunidadRetail.IdDestino) && oportunidadRetail.IdDestino.Length >= 3)
+                        idDestino = oportunidadRetail.IdDestino.Substring(0, 3);
 
                     #region RegistraCotizacion
                     var intIdCotVta = (int)_repository.InsertaCotizacionVenta(
@@ -112,13 +113,13 @@ namespace Expertia.Estructura.Controllers
                         intIdUsuWeb,
                         objPersonal.IdDepartamento,
                         objPersonal.IdOficina,
-                        39,
+                        Webs_Cid.ID_WEB_WEBFAREFINDER,
                         1,
                         oportunidadRetail.IdCanalVenta,
                         null,
-                        oportunidadRetail.IdDestino,
+                        idDestino,
                         null,
-                        1,
+                        (short)ENUM_ESTADOS_COT_VTA.Solicitado,
                         null,
                         null,
                         null,
@@ -148,9 +149,9 @@ namespace Expertia.Estructura.Controllers
                         oportunidadRetail.MotivoCrea, 
                         null,
                         oportunidadRetail.IdDestino,
-                        intIdUsuWeb,
-                        objPersonal.IdOficina,
-                        objPersonal.IdDepartamento, 
+                        oportunidadRetail.IdUsuarioSrv_SF,
+                        usuarioLogin.IdOfi,
+                        usuarioLogin.IdDep, 
                         DateTime.Now,
                         oportunidadRetail.UsuarioCrea,
                         objPersonal.IdOficina,
@@ -171,7 +172,7 @@ namespace Expertia.Estructura.Controllers
                         _repository.EnviarPromociones(
                             objPersonal,
                             oportunidadRetail,
-                            oportunidadRetail.EnviarPromociones.Equals("SI"),
+                            oportunidadRetail.EnviarPromociones.Equals("1"),
                             objPersonal.NomCompletoPer,
                             objPersonal.ApePatPer,
                             objPersonal.EmailPer);
@@ -189,8 +190,8 @@ namespace Expertia.Estructura.Controllers
                     string pStrIPUsuCrea = Constantes_SRV.IP_GENERAL;
                     string pStrLoginUsuCrea = usuarioLogin.LoginUsuario;
                     int pIntIdUsuWeb = intIdUsuWeb;
-                    int pIntIdDep = objPersonal.IdDepartamento;
-                    int pIntIdOfi = objPersonal.IdOficina;
+                    int pIntIdDep = usuarioLogin.IdDep;
+                    int pIntIdOfi = usuarioLogin.IdOfi;
                     List<ArchivoPostCot> pLstArchivos = null;
                     List<FilePTACotVta> pLstFilesPTA = null;
                     Int16 pIntIdEstado = (short)ENUM_ESTADOS_COT_VTA.Solicitado;
