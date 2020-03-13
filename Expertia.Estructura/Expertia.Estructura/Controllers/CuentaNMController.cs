@@ -63,10 +63,10 @@ namespace Expertia.Estructura.Controllers
                     QuickLog(objEnvio, "body_request.json", "CuentaNM"); /// ♫ Trace
 
 
-                    var responseCuentaPta = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CuentaNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
+                    var responseCuentaNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CuentaNMMethod, Method.POST, objEnvio, true, token);
+                    if (responseCuentaNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaPta.Content);
+                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaNM.Content);
 
                         foreach (var cuenta in cuentasNMs)
                         {
@@ -84,7 +84,7 @@ namespace Expertia.Estructura.Controllers
                     }
                     else
                     {
-                        error = responseCuentaPta.StatusCode.ToString();
+                        error = responseCuentaNM.StatusCode.ToString();
                     }
                 }
                 catch (Exception ex)

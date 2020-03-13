@@ -9,16 +9,16 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.NuevoMundo
 {
-    public class CuentaNMRepository : OracleBase<object>, ICuentaNMRepository
+    public class DetalleItinerarioNMRepository : OracleBase<object>, IDetalleItinerarioNMRepository
     {
         #region Constructor
-        public CuentaNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
+        public DetalleItinerarioNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
         #endregion
 
         #region PublicMethods
-        public Operation Read(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
+        public Operation Send(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
         {
             var operation = new Operation();
 
@@ -35,7 +35,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             ExecuteStoredProcedure(StoredProcedureName.AW_Get_CuentaNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CursorCuentaNM] = ToCuentaNM(GetDtParameter(OutParameter.CursorCuentaNM));
+            operation[OutParameter.CursorCuentaNM] = ToDetalleItinerarioNM(GetDtParameter(OutParameter.CursorCuentaNM));
             #endregion
 
             return operation;
@@ -43,7 +43,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<CuentaNM> ToCuentaNM(DataTable dt)
+        private IEnumerable<CuentaNM> ToDetalleItinerarioNM(DataTable dt)
         {
             try
             {

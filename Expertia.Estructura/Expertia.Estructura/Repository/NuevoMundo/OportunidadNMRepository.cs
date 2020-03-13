@@ -28,14 +28,14 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             /// (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (3) P_CUENTANM
-            AddParameter(OutParameter.CursorCuentaPta, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+            AddParameter(OutParameter.CursorOportunidadNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Get_Cuenta);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_OportunidadNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            //operation[OutParameter.CursorCuentaPta] = ToCuentaNM(GetDtParameter(OutParameter.CursorCuentaPta));
+            operation[OutParameter.CursorOportunidadNM] = ToCuentaNM(GetDtParameter(OutParameter.CursorOportunidadNM));
             #endregion
 
             return operation;
@@ -43,29 +43,22 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<CuentaPta> ToCuentaNM(DataTable dt)
+        private IEnumerable<OportunidadNM> ToCuentaNM(DataTable dt)
         {
             try
             {
-                var cuentaPtaList = new List<CuentaPta>();
+                var oportunidadNMList = new List<OportunidadNM>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    #region Loading
-                    var accion = row.StringParse("ACCION");
-                    var dkCuenta = row.IntParse("DK_CUENTA");
-                    var razonSocial = row.StringParse("RAZON_SOCIAL");
-                    var nombreComercial = row.StringParse("NOMBRE_COMERCIAL");
-                    var tipoCuenta = row.StringParse("TIPO_CUENTA");
-                    var propietario = row.StringParse("PROPIETARIO");
-                    var fechaAniversario = row.DateTimeParse("FECHA_ANIVERSARIO");
-                    var tipoDocumentoIdentidad = row.StringParse("TIPO_DOCUMENTO_IDENTIDAD");
-
-                    #endregion
-
+                    oportunidadNMList.Add(new OportunidadNM()
+                    {
+                        idCuenta_SF = row.StringParse("ACCION"),
+                        fechaRegistro = row.StringParse("DK_CUENTA")
+                    });
                 }
 
-                return cuentaPtaList;
+                return oportunidadNMList;
             }
             catch (Exception ex)
             {
