@@ -473,14 +473,21 @@ namespace Expertia.Estructura.Controllers
                 }
                 else if (FileAssociate.LstFiles[0].accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
                 {
+                    string _MsgDeleteAsocite = string.Empty;string _MsgDeleteAsociteFN = string.Empty;
                     foreach(FileSRV _fileDS in ListFile_Info)
                     {
                         _FileSRVRetailRepository._Delete_Cot_File(FileAssociate.idCotSRV_SF, _fileDS.IdFilePTA);
+
+                        _MsgDeleteAsocite = "Usuario " + DtsUsuarioLogin.LoginUsuario + " ha eliminado el File " + _fileDS.IdFilePTA.ToString() + " del SRV " + FileAssociate.idCotSRV_SF.ToString();
+                        _MsgDeleteAsociteFN = _MsgDeleteAsociteFN + _MsgDeleteAsocite;
+
                         _FileSRVRetailRepository._Insert(DtsUsuarioLogin.IdUsuario, Constantes_FileRetail.PAGE_DESASOCIARSRV,
-                             "Usuario " + DtsUsuarioLogin.LoginUsuario + " ha eliminado el File " + _fileDS.IdFilePTA.ToString() + " del SRV " + FileAssociate.idCotSRV_SF.ToString(),
-                             1, Webs_Cid.ID_WEB_WEBFAREFINDER, Constantes_FileRetail.PAGE_DESASOCIARSRV + "/PKG_COTIZACION_VTA_WFF/SP_DEL_COTIZACION_FILE", 
+                             _MsgDeleteAsocite,1, Webs_Cid.ID_WEB_WEBFAREFINDER, 
+                             Constantes_FileRetail.PAGE_DESASOCIARSRV + "/PKG_COTIZACION_VTA_WFF/SP_DEL_COTIZACION_FILE", 
                              "127.0.0.0");
                     }
+
+                    _responseAsociate.MensajeError = _MsgDeleteAsociteFN;
                     _responseAsociate.CodigoError = "OK";
                     return Ok(_responseAsociate);
                 }
