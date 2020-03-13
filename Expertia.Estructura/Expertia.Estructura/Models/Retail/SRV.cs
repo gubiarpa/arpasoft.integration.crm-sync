@@ -53,26 +53,28 @@ namespace Expertia.Estructura.Models
     }
 
     public class AssociateFile
-    {        
-        public int idUsuario { get; set; }       
+    {
         public string idoportunidad_SF { get; set; }
         public int idCotSRV_SF { get; set; }
-        public List<FileSRVRQ> LstFiles { get; set; }
+        public int idusuarioSrv_SF { get; set; }
+        public List<FileSRVRQ> lstFiles { get; set; }
         /*Duda si agregar comentario y nota de seguimiento (aplica al cambiar de estado a facturado - Informativo)*/
     }
 
-    public class AssociateFileRS :ICrmApiResponse
+    public class AssociateFileRS
     {
-        public string CodigoError { get; set; }
-        public string MensajeError { get; set; }
-        public int NumFile { get; set; }
+        public string codigo { get; set; }
         public string Cliente { get; set; }
         public double Importe { get; set; }
+        public string mensaje { get; set; }
+        public int Numero_de_File { get; set; }
+        
+        
     }
 
     public class FileSRVRQ
     {
-        public int IdFilePTA { get; set; }
+        public int idFilePTA { get; set; }
         public string Cliente { get; set; }
         public double Sucursal { get; set; }        
         public string accion_SF { get; set; }

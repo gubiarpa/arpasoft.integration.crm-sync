@@ -72,9 +72,9 @@ namespace Expertia.Estructura.Controllers
             {
                 /*Validaciones*/
                 validacionAssociate(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info);
-                if (string.IsNullOrEmpty(_responseAsociate.CodigoError) == false) return Ok(_responseAsociate);
+                if (string.IsNullOrEmpty(_responseAsociate.codigo) == false) return Ok(_responseAsociate);
 
-                if (FileAssociate.LstFiles[0].accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
+                if (FileAssociate.lstFiles[0].accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
                 {   
                     /*Obtenemos los datos del SRV, etc*/
                     DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV_SF);
@@ -97,7 +97,7 @@ namespace Expertia.Estructura.Controllers
 
                             if(UpdateResponse == true)/*Cargamos algunos valores al Response*/
                             {
-                                _responseAsociate.NumFile = fileSRV.IdFilePTA;
+                                _responseAsociate.Numero_de_File = fileSRV.IdFilePTA;
                                 _responseAsociate.Cliente = fileSRV.Cliente;
                                 _responseAsociate.Importe = fileSRV.ImporteFact;
                                 UpdateResponse = false;
@@ -468,17 +468,18 @@ namespace Expertia.Estructura.Controllers
                         oNMailAlerta.EnvioCorreoRegistrarError("Error de " + Constantes_SRV.APP_NAME, this, ex, strIPUsuario + "|Inserta_TextoFile");
                         oNMailAlerta = null;
                     }
-
-                    _responseAsociate.CodigoError = "OK";                    
+                                        
+                    _responseAsociate.codigo = "OK";
+                    _responseAsociate.mensaje = "Se asoció correctamente el file al SRV " + FileAssociate.idCotSRV_SF.ToString();
                 }
-                else if (FileAssociate.LstFiles[0].accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
+                else if (FileAssociate.lstFiles[0].accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
                 {
                     string _MsgDeleteAsocite = string.Empty;string _MsgDeleteAsociteFN = string.Empty;
                     foreach(FileSRV _fileDS in ListFile_Info)
                     {
                         _FileSRVRetailRepository._Delete_Cot_File(FileAssociate.idCotSRV_SF, _fileDS.IdFilePTA);
 
-                        _MsgDeleteAsocite = "Usuario " + DtsUsuarioLogin.LoginUsuario + " ha eliminado el File " + _fileDS.IdFilePTA.ToString() + " del SRV " + FileAssociate.idCotSRV_SF.ToString();
+                        _MsgDeleteAsocite = "Usuario " + DtsUsuarioLogin.LoginUsuario + " ha eliminado el File " + _fileDS.IdFilePTA.ToString() + " del SRV " + FileAssociate.idCotSRV_SF.ToString() + ".";
                         _MsgDeleteAsociteFN = _MsgDeleteAsociteFN + _MsgDeleteAsocite;
 
                         _FileSRVRetailRepository._Insert(DtsUsuarioLogin.IdUsuario, Constantes_FileRetail.PAGE_DESASOCIARSRV,
@@ -487,8 +488,9 @@ namespace Expertia.Estructura.Controllers
                              "127.0.0.0");
                     }
 
-                    _responseAsociate.MensajeError = _MsgDeleteAsociteFN;
-                    _responseAsociate.CodigoError = "OK";
+                    _responseAsociate.Numero_de_File = ListFile_Info[0].IdFilePTA;
+                    _responseAsociate.mensaje = _MsgDeleteAsociteFN;
+                    _responseAsociate.codigo = "OK";
                     return Ok(_responseAsociate);
                 }
 
@@ -995,8 +997,12 @@ namespace Expertia.Estructura.Controllers
 
         private void validacionAssociate(ref AssociateFile _fileAssociate, ref AssociateFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV)
         {
-            string mensajeError = string.Empty;            
+            string mensajeError = string.Empty;
 
+            if (_fileAssociate == null)
+            {
+                mensajeError += "Envie correctamente los parametros de entrada - RQ Nulo|";
+            }
             if (_fileAssociate.idCotSRV_SF <= 0)
             {
                 mensajeError += "Envie el codigo de SRV|";
@@ -1005,11 +1011,11 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie el codigo de Oportunidad|";
             }
-            if (_fileAssociate.LstFiles == null)
+            if (_fileAssociate.lstFiles == null)
             {
                 mensajeError += "Envie la lista de files a asociar/desasociar|";
             }
-            else if (_fileAssociate.LstFiles.Count > 3)
+            else if (_fileAssociate.lstFiles.Count > 3)
             {
                 mensajeError += "El maximo de files asociar es 3|";
             }
@@ -1018,14 +1024,14 @@ namespace Expertia.Estructura.Controllers
                 int posListFile = 0;
                 FileSRV _fileSRV_Info = null;
                 DataTable _dtfilesAsociadosSRV = null;
-                foreach (FileSRVRQ fileSRV in _fileAssociate.LstFiles) /*Aqui se tendra que validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
+                foreach (FileSRVRQ fileSRV in _fileAssociate.lstFiles) /*Aqui se tendra que validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
                 {
                     if (fileSRV == null)
                     {
                         mensajeError += "Envie el registro " + posListFile + " de la lista de files|";
                         break;
                     }
-                    if (fileSRV.IdFilePTA <= 0)
+                    if (fileSRV.idFilePTA <= 0)
                     {
                         mensajeError += "Envie el IdFile del registro " + posListFile + " de la lista de files|";
                         break;
@@ -1045,17 +1051,17 @@ namespace Expertia.Estructura.Controllers
                     }
                     else if(fileSRV.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
                     {
-                        if(posListFile > 0 && _fileAssociate.LstFiles[0].accion_SF != fileSRV.accion_SF)
+                        if(posListFile > 0 && _fileAssociate.lstFiles[0].accion_SF != fileSRV.accion_SF)
                         {
                             mensajeError += "La accion debe ser la misma en todos los files|";
                             break;
                         }
                         _fileSRV_Info = new FileSRV();
-                        _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, fileSRV.IdFilePTA);
+                        _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, fileSRV.idFilePTA);
                     }
                     else if (fileSRV.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
                     {
-                        if (posListFile > 0 && _fileAssociate.LstFiles[0].accion_SF != fileSRV.accion_SF)
+                        if (posListFile > 0 && _fileAssociate.lstFiles[0].accion_SF != fileSRV.accion_SF)
                         {
                             mensajeError += "La accion debe ser la misma en todos los files|";
                             break;
@@ -1071,7 +1077,7 @@ namespace Expertia.Estructura.Controllers
                         {                            
                             foreach (DataRow row in _dtfilesAsociadosSRV.Rows)
                             {
-                                if(row.IntParse("FILE_ID") == fileSRV.IdFilePTA && row.IntParse("SUC_ID") == fileSRV.Sucursal)
+                                if(row.IntParse("FILE_ID") == fileSRV.idFilePTA && row.IntParse("SUC_ID") == fileSRV.Sucursal)
                                 {
                                     _fileSRV_Info = new FileSRV() {
                                         IdFilePTA = row.IntParse("FILE_ID"),
@@ -1082,7 +1088,7 @@ namespace Expertia.Estructura.Controllers
                         }
                         else
                         {
-                            mensajeError += "No existe asociacion del SRV " + _fileAssociate.idCotSRV_SF.ToString() + " con el file " + fileSRV.IdFilePTA.ToString() + "|";
+                            mensajeError += "No existe asociacion del SRV " + _fileAssociate.idCotSRV_SF.ToString() + " con el file " + fileSRV.idFilePTA.ToString() + "|";
                             break;
                         }                       
                     }
@@ -1120,11 +1126,11 @@ namespace Expertia.Estructura.Controllers
                 }
             }
 
-            if (_fileAssociate.idUsuario > 0)
+            if (_fileAssociate.idusuarioSrv_SF > 0)
             {
                 /*Cargamos Datos del Usuario*/
                 RepositoryByBusiness(null);
-                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idUsuario));
+                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idusuarioSrv_SF));
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
             }
             else
@@ -1134,8 +1140,8 @@ namespace Expertia.Estructura.Controllers
 
             if (string.IsNullOrEmpty(mensajeError) == false)
             {
-                _responseFile.CodigoError = "ER";
-                _responseFile.MensajeError = "VA " + mensajeError;
+                _responseFile.codigo = "ER";
+                _responseFile.mensaje = "VA " + mensajeError;
             }
         }
 
