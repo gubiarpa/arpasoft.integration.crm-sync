@@ -244,6 +244,9 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_FormaPagoBy_IdPedido = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_FORMA_PAGO_PEDIDO";
         public const string AW_Upd_RC_Pedido = "APPWEBS.PKG_PAGO_ONLINE.SP_UPD_RC_PEDIDO";
         public const string AW_Upd_Mod_Compra = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_MOD_COMPRA_COT";
+        public const string AW_Get_File_Cot_XID = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_COT_FILE_ID";
+        public const string AW_Del_Cot_File = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_DEL_COTIZACION_FILE";
+        public const string AW_Ins_LogTwo = "APPWEBS.PKG_LOG.SP_LOG_INSERTA2";
         public const string NM_Alter_SessionDT = "NUEVOMUNDO.PKG_WEB_UTILITY.SP_ALTER_SESSION_DATETIME";
         public const string NM_Ins_ReciboCaja = "NUEVOMUNDO.PKG_WEB_PTA.SP_INS_RECIBO_CAJA";
         public const string NM_Get_ComprobanteXFile = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_COMP_BOL_X_FILE";
@@ -557,6 +560,9 @@ namespace Expertia.Estructura.Utils
         public const string STR_ID_FORMA_PTA_AMERICAN = "04";
         public const string STR_ID_TIPO_TARJETA_DINERS = "DN";
         public const string STR_ID_FORMA_PTA_DINERS = "05";
+        public const string STR_ASOCIAR_FILE = "A";
+        public const string STR_DESASOCIAR_FILE = "D";
+        public const string PAGE_DESASOCIARSRV = "ServicioCRM";
     }
 
     public static class Webs_Cid

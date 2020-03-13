@@ -66,20 +66,16 @@ namespace Expertia.Estructura.Controllers
             Int16 EstadoSeleccionado = (Int16)ENUM_ESTADOS_COT_VTA.Facturado;
             bool bolCambioEstado = true;
 
-            /*Datos que se quitaran, solo lo agregamos para tener una mejor vision*/
-            //bool bolEsCounterAdministrativo = objUsuarioSession.EsCounterAdminSRV;
-
-            string asociar = "A"; // poner en una constante
-            string desasociar = "D";// poner en una constante
+            /*Datos que se quitaran, solo lo agregamos para tener una mejor vision*/                                    
             string ErrorAsociate = string.Empty;
             try
             {
-                if (FileAssociate.LstFiles[0].accion_SF == asociar)
-                {
-                    /*Validaciones*/                    
-                    validacionAssociate(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info);
-                    if (string.IsNullOrEmpty(_responseAsociate.CodigoError) == false) return Ok(_responseAsociate);
-                    
+                /*Validaciones*/
+                validacionAssociate(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info);
+                if (string.IsNullOrEmpty(_responseAsociate.CodigoError) == false) return Ok(_responseAsociate);
+
+                if (FileAssociate.LstFiles[0].accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
+                {   
                     /*Obtenemos los datos del SRV, etc*/
                     DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV_SF);
 
@@ -475,8 +471,17 @@ namespace Expertia.Estructura.Controllers
 
                     _responseAsociate.CodigoError = "OK";                    
                 }
-                else if (FileAssociate.LstFiles[0].accion_SF == desasociar)
+                else if (FileAssociate.LstFiles[0].accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
                 {
+                    foreach(FileSRV _fileDS in ListFile_Info)
+                    {
+                        _FileSRVRetailRepository._Delete_Cot_File(FileAssociate.idCotSRV_SF, _fileDS.IdFilePTA);
+                        _FileSRVRetailRepository._Insert(DtsUsuarioLogin.IdUsuario, Constantes_FileRetail.PAGE_DESASOCIARSRV,
+                             "Usuario " + DtsUsuarioLogin.LoginUsuario + " ha eliminado el File " + _fileDS.IdFilePTA.ToString() + " del SRV " + FileAssociate.idCotSRV_SF.ToString(),
+                             1, Webs_Cid.ID_WEB_WEBFAREFINDER, Constantes_FileRetail.PAGE_DESASOCIARSRV + "/PKG_COTIZACION_VTA_WFF/SP_DEL_COTIZACION_FILE", 
+                             "127.0.0.0");
+                    }
+                    _responseAsociate.CodigoError = "OK";
                     return Ok(_responseAsociate);
                 }
 
@@ -995,7 +1000,7 @@ namespace Expertia.Estructura.Controllers
             }
             if (_fileAssociate.LstFiles == null)
             {
-                mensajeError += "Envie la lista de files a asociar|";
+                mensajeError += "Envie la lista de files a asociar/desasociar|";
             }
             else if (_fileAssociate.LstFiles.Count > 3)
             {
@@ -1005,24 +1010,82 @@ namespace Expertia.Estructura.Controllers
             {
                 int posListFile = 0;
                 FileSRV _fileSRV_Info = null;
+                DataTable _dtfilesAsociadosSRV = null;
                 foreach (FileSRVRQ fileSRV in _fileAssociate.LstFiles) /*Aqui se tendra que validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
                 {
                     if (fileSRV == null)
                     {
-                        mensajeError += "Envie el registro " + posListFile + " de la lista de files a asociar|";
+                        mensajeError += "Envie el registro " + posListFile + " de la lista de files|";
                         break;
                     }
                     if (fileSRV.IdFilePTA <= 0)
                     {
-                        mensajeError += "Envie el IdFile del registro " + posListFile + " de la lista de files a asociar|";
+                        mensajeError += "Envie el IdFile del registro " + posListFile + " de la lista de files|";
+                        break;
+                    }
+                    if (fileSRV.Sucursal <= 0)
+                    {
+                        mensajeError += "Envie la SucursalId del registro " + posListFile + " de la lista de files|";
+                        break;
                     }
                     if (string.IsNullOrEmpty(mensajeError) == false) { break; }
 
                     /*Realizamos la conexion a la BD*/
-                    _fileSRV_Info = new FileSRV();
-                    _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, fileSRV.IdFilePTA);
+                    if (string.IsNullOrEmpty(fileSRV.accion_SF))
+                    {
+                        mensajeError += "Envie la accion a realizar del file " + posListFile + " de la lista de files|";
+                        break;
+                    }
+                    else if(fileSRV.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
+                    {
+                        if(posListFile > 0 && _fileAssociate.LstFiles[0].accion_SF != fileSRV.accion_SF)
+                        {
+                            mensajeError += "La accion debe ser la misma en todos los files|";
+                            break;
+                        }
+                        _fileSRV_Info = new FileSRV();
+                        _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, fileSRV.IdFilePTA);
+                    }
+                    else if (fileSRV.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
+                    {
+                        if (posListFile > 0 && _fileAssociate.LstFiles[0].accion_SF != fileSRV.accion_SF)
+                        {
+                            mensajeError += "La accion debe ser la misma en todos los files|";
+                            break;
+                        }
 
-                    if(_fileSRV_Info != null)
+                        if (posListFile == 0)
+                        {
+                            _dtfilesAsociadosSRV = _FileSRVRetailRepository._SelectFilesIdBy_IdCot(_fileAssociate.idCotSRV_SF);
+                        }
+
+                        _fileSRV_Info = null;
+                        if (_dtfilesAsociadosSRV != null && _dtfilesAsociadosSRV.Rows.Count > 0)
+                        {                            
+                            foreach (DataRow row in _dtfilesAsociadosSRV.Rows)
+                            {
+                                if(row.IntParse("FILE_ID") == fileSRV.IdFilePTA && row.IntParse("SUC_ID") == fileSRV.Sucursal)
+                                {
+                                    _fileSRV_Info = new FileSRV() {
+                                        IdFilePTA = row.IntParse("FILE_ID"),
+                                        Sucursal = row.IntParse("SUC_ID")
+                                    };                                    
+                                }
+                            }                            
+                        }
+                        else
+                        {
+                            mensajeError += "No existe asociacion del SRV " + _fileAssociate.idCotSRV_SF.ToString() + " con el file " + fileSRV.IdFilePTA.ToString() + "|";
+                            break;
+                        }                       
+                    }
+                    else if(fileSRV.accion_SF != Constantes_FileRetail.STR_DESASOCIAR_FILE)
+                    {
+                        mensajeError += "Accion a realizar no soportada del file " + posListFile + " de la lista de files|";
+                        break;
+                    }
+                                        
+                    if (_fileSRV_Info != null)
                     {
                         if(ListFile_InfoSRV == null) { ListFile_InfoSRV = new List<FileSRV>(); }
                         ListFile_InfoSRV.Add(_fileSRV_Info);
@@ -1041,7 +1104,7 @@ namespace Expertia.Estructura.Controllers
                     }
                     else
                     {
-                        mensajeError += "No hay informacion con los datos proporcionados del File " + posListFile + "|";
+                        mensajeError += "No hay informacion/asociacion con los datos proporcionados del File " + posListFile + "|";
                         break;
                     }
 
