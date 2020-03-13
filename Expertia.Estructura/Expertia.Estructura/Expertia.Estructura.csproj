@@ -171,6 +171,7 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\FileRetailController.cs" />
     <Compile Include="Controllers\OportunidadController.cs" />
+    <Compile Include="Controllers\OportunidadNMController.cs" />
     <Compile Include="Controllers\OportunidadRetailController.cs" />
     <Compile Include="Controllers\FileSRVRetailController.cs" />
     <Compile Include="Controllers\PedidoRetailController.cs" />
@@ -200,7 +201,7 @@
     <Compile Include="Models\CuentaB2C.cs" />
     <Compile Include="Models\Auxiliar\Correo.cs" />
     <Compile Include="Models\Cuenta.cs" />
-    <Compile Include="Models\CuentaNM.cs" />
+    <Compile Include="Models\NuevoMundo\CuentaNM.cs" />
     <Compile Include="Models\CuentaPta.cs" />
     <Compile Include="Models\FactFileRetail.cs" />
     <Compile Include="Models\File.cs" />
@@ -213,6 +214,8 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\DetalleItinerarioNM.cs" />
+    <Compile Include="Models\NuevoMundo\OportunidadNM.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Retail\ArchivoCliCot.cs" />
     <Compile Include="Models\Retail\ArchivoPostCot.cs" />
@@ -246,6 +249,7 @@
     <Compile Include="Repository\Behavior\ICotizacion.cs" />
     <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
+    <Compile Include="Repository\Behavior\IDetalleItinerarioNMRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadNMRepository.cs" />
     <Compile Include="Repository\Behavior\ICuentaNMRepository.cs" />
     <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />
@@ -281,6 +285,7 @@
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Journeyou\CotizacionJYRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\DetalleItinerarioNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\OportunidadNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\CuentaNMRepository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />

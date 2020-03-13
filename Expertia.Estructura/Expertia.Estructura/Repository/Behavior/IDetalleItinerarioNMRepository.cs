@@ -3,10 +3,8 @@ using Expertia.Estructura.Utils;
 
 namespace Expertia.Estructura.Repository.Behavior
 {
-    public interface IOportunidadNMRepository
+    public interface IDetalleItinerarioNMRepository
     {
-        Operation GetOportunidades();
+        Operation Send(UnidadNegocioKeys? unidadNegocio);
     }
-
-
 }

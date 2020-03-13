@@ -355,5 +355,51 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this OportunidadNM oportunidadNM)
+        {
+            try
+            {
+                return new
+                {
+                    oportunidadNM.idCuenta_SF,
+                    oportunidadNM.fechaRegistro,
+                    oportunidadNM.idCanalVenta,
+                    oportunidadNM.metaBuscador,
+                    oportunidadNM.cajaVuelos,
+                    oportunidadNM.cajaHotel,
+                    oportunidadNM.cajaPaquetes,
+                    oportunidadNM.cajaServicios,
+                    oportunidadNM.modoIngreso,
+                    oportunidadNM.ordenAtencion,
+                    oportunidadNM.evento,
+                    oportunidadNM.estado,
+                    oportunidadNM.idCotSRV,
+                    oportunidadNM.idUsuarioSrv,
+                    oportunidadNM.codReserva,
+                    oportunidadNM.fechaCreación,
+                    oportunidadNM.estadoVenta,
+                    oportunidadNM.codigoAerolinea,
+                    oportunidadNM.tipo,
+                    oportunidadNM.ruc,
+                    oportunidadNM.pcc_OfficeID,
+                    oportunidadNM.counterAsignado,
+                    oportunidadNM.iata,
+                    oportunidadNM.descripPaquete,
+                    oportunidadNM.destinoPaquetes,
+                    oportunidadNM.fechasPaquetes,
+                    oportunidadNM.empresaCliente,
+                    oportunidadNM.nombreCliente,
+                    oportunidadNM.apeliidosCliente,
+                    oportunidadNM.idLoginWeb,
+                    oportunidadNM.telefonoCliente,
+                    oportunidadNM.accion_SF
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
