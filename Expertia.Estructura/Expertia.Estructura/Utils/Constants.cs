@@ -261,6 +261,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_CuentaNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS CUENTAS NUEVAS";
         public const string AW_Get_OportunidadNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS OPORTUNIDADES NUEVAS";
         public const string AW_Get_DetalleItinerarioNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE ITINERARIO NUEVAS";
+        public const string AW_Get_DetallePasajerosNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
         #endregion
     }
 
@@ -346,6 +347,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorCuentaNM = "x definir";
         public const string CursorOportunidadNM = "x definir";
         public const string CursorDetalleItinerarioNM = "x definir";
+        public const string CursorDetallePasajerosNM = "x definir";
         #endregion
 
         #region Fields

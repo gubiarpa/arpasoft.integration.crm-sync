@@ -9,16 +9,16 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.NuevoMundo
 {
-    public class OportunidadNMRepository : OracleBase<object>, IOportunidadNMRepository
+    public class DetallePasajerosNMRepository : OracleBase<object>, IDetallePasajerosNMRepository
     {
         #region Constructor
-        public OportunidadNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
+        public DetallePasajerosNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
         #endregion
 
         #region PublicMethods
-        public Operation GetOportunidades()
+        public Operation Send(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
         {
             var operation = new Operation();
 
@@ -27,15 +27,15 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (3) P_OPORTUNIDADNM
-            AddParameter(OutParameter.CursorOportunidadNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+            /// (3) P_DETALLEPASAJEROSNM
+            AddParameter(OutParameter.CursorDetallePasajerosNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Get_OportunidadNM);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_DetalleItinerarioNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CursorOportunidadNM] = ToCuentaNM(GetDtParameter(OutParameter.CursorOportunidadNM));
+            operation[OutParameter.CursorDetalleItinerarioNM] = ToDetalleItinerarioNM(GetDtParameter(OutParameter.CursorDetalleItinerarioNM));
             #endregion
 
             return operation;
@@ -43,22 +43,22 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<OportunidadNM> ToCuentaNM(DataTable dt)
+        private IEnumerable<DetalleItinerarioNM> ToDetalleItinerarioNM(DataTable dt)
         {
             try
             {
-                var oportunidadNMList = new List<OportunidadNM>();
+                var detalleItinerarioNMList = new List<DetalleItinerarioNM>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    oportunidadNMList.Add(new OportunidadNM()
+                    detalleItinerarioNMList.Add(new DetalleItinerarioNM()
                     {
-                        idCuenta_SF = row.StringParse("ACCION"),
-                        fechaRegistro = row.StringParse("DK_CUENTA")
+                        lAerea = row.StringParse("ACCION"),
+                        origen = row.StringParse("DK_CUENTA")
                     });
                 }
 
-                return oportunidadNMList;
+                return detalleItinerarioNMList;
             }
             catch (Exception ex)
             {

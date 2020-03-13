@@ -230,7 +230,7 @@ namespace Expertia.Estructura.Controllers
         }
 
         [Route(RouteAction.Send)]
-        public IHttpActionResult Send()
+        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<PedidosProcesados> ListPedidosProcesados = null;
             string errorEnvio = string.Empty;
@@ -238,7 +238,7 @@ namespace Expertia.Estructura.Controllers
             object objEnvio = null;
 
             try {                
-                RepositoryByBusiness(null);
+                RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
                 
                 /*Consulta de pedidos procesados a BD*/
                 ListPedidosProcesados = (IEnumerable<PedidosProcesados>)_pedidoRepository.GetPedidosProcesados()[OutParameter.CursorPedidosProcesados];

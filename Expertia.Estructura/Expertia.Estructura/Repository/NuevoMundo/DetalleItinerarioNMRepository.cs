@@ -27,7 +27,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (3) P_CUENTANM
+            /// (3) P_DETALLEITINERARIONM
             AddParameter(OutParameter.CursorDetalleItinerarioNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
