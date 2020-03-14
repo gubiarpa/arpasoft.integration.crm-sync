@@ -97,7 +97,7 @@ namespace Expertia.Estructura.Controllers.Base
         {
             try
             {
-                string _path = ConfigAccess.GetValueInAppSettings("LogPath", "") + path + "\\";
+                string _path = string.Format(ConfigAccess.GetValueInAppSettings("LogPath", "") + path + "\\", _controllerName.ToString());
                 if (!System.IO.Directory.Exists(_path)) System.IO.Directory.CreateDirectory(_path);
 
                 if (append)
