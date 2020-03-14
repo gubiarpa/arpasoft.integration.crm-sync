@@ -20,6 +20,7 @@ namespace Expertia.Estructura.Controllers
         private UnidadNegocioKeys? _unidadNegocioKey;
         private OportunidadRetailRepository _repository;
         private DatosUsuario _datosUsuario;
+        protected override ControllerName _controllerName => ControllerName.OportunidadRetail;
         #endregion
 
         #region Constructor
@@ -27,6 +28,7 @@ namespace Expertia.Estructura.Controllers
         {
             _unidadNegocioKey = RepositoryByBusiness(UnidadNegocioKeys.AppWebs);
         }
+
         #endregion
 
         #region PublicMethods

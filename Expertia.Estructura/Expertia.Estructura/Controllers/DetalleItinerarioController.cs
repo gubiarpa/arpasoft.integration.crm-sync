@@ -22,6 +22,7 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private IDetalleItinerarioNMRepository _detalleItinerarioNMRepository;
+        protected override ControllerName _controllerName => ControllerName.DetalleItinerario;
         #endregion
 
         #region PublicMethods

@@ -22,6 +22,7 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private IOportunidadNMRepository _oportunidadNMRepository;
+        protected override ControllerName _controllerName => ControllerName.OportunidadNM;
         #endregion
 
         #region PublicMethods

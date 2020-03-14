@@ -9,6 +9,7 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.CuentaB2C)]
     public class CuentaB2CController : BaseController<CuentaB2C>
     {
+        protected override ControllerName _controllerName => ControllerName.CuentaB2C;
         #region PublicMethods
         #endregion
 

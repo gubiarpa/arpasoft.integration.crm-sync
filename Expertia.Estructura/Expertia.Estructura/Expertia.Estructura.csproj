@@ -307,6 +307,7 @@
     <Compile Include="Utils\ClientFeatures.cs" />
     <Compile Include="Utils\ConfigAccess.cs" />
     <Compile Include="Utils\Constants.cs" />
+    <Compile Include="Utils\ControllerName.cs" />
     <Compile Include="Utils\FileIO.cs" />
     <Compile Include="Utils\JsonManager.cs" />
     <Compile Include="Utils\JsonTranslater.cs" />

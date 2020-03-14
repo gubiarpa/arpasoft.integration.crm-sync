@@ -19,7 +19,7 @@ namespace Expertia.Estructura.Filters
         #region Constructor
         public BasicAuthenticationAttribute()
         {
-            _logFileManager = new LogFileManager(LogKeys.LogPath, LogKeys.LogName);
+            _logFileManager = new LogFileManager(LogKeys.LogPath, LogKeys.LogName, ControllerName.Default);
             _clientFeatures = new ClientFeatures();
         }
         #endregion

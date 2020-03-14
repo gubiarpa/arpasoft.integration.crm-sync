@@ -20,6 +20,8 @@ namespace Expertia.Estructura.Controllers
     {
         private CotizacionJYRepository _cotizacionRepository;
 
+        protected override ControllerName _controllerName => ControllerName.CotizacionJY;
+
         #region PublicMethods
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(Cotizacion_JY cotizacion)

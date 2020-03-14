@@ -19,6 +19,7 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.LeadCT)]
     public class LeadController : BaseController
     {
+        protected override ControllerName _controllerName => ControllerName.Lead;
         #region PublicMethods
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(Lead Lead)

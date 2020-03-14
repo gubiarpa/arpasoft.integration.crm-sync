@@ -22,6 +22,7 @@ namespace Expertia.Estructura.Controllers.Base
         protected IDictionary<UnidadNegocioKeys?, Operation> _operCollection;
         protected IDictionary<UnidadNegocioKeys?, bool> _operRetry;
         protected IDictionary<InstantKey, DateTime> _instants;
+        protected abstract ControllerName _controllerName { get; }
         #endregion
 
         #region DatabaseError
@@ -31,7 +32,7 @@ namespace Expertia.Estructura.Controllers.Base
         #region Constructor
         public BaseController()
         {
-            _logFileManager = new LogFileManager(LogKeys.LogPath, LogKeys.LogName);
+            _logFileManager = new LogFileManager(LogKeys.LogPath, LogKeys.LogName, _controllerName);
             _clientFeatures = new ClientFeatures();
             _crmCollection = new Dictionary<UnidadNegocioKeys?, ICrud<T>>();
             _operCollection = new Dictionary<UnidadNegocioKeys?, Operation>();

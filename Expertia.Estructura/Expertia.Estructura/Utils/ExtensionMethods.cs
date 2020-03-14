@@ -49,13 +49,13 @@ namespace Expertia.Estructura.Utils
         {
             try
             {
-                logFileManager.WriteText(obj.BuildLogObject(clientFeatures, logType).Stringify(indented) + "\n");
+                logFileManager.WriteText(obj.BuildLogObject(clientFeatures).Stringify(indented) + "\n");
             }
             catch (Exception ex)
             {
                 try
                 {
-                    logFileManager.WriteText(ex.BuildLogObject(clientFeatures, logType).Stringify(indented) + "\n");
+                    logFileManager.WriteText(ex.BuildLogObject(clientFeatures).Stringify(indented) + "\n");
                 }
                 catch
                 {
@@ -63,7 +63,7 @@ namespace Expertia.Estructura.Utils
             }
         }
 
-        private static object BuildLogObject(this object obj, IClientFeatures clientFeatures, LogType logType = LogType.Info)
+        private static object BuildLogObject(this object obj, IClientFeatures clientFeatures)
         {
             try
             {
@@ -73,7 +73,6 @@ namespace Expertia.Estructura.Utils
                     {
                         clientFeatures.URL,
                         clientFeatures.Method,
-                        Log = logType,
                         Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")
                     },
                     Result = obj

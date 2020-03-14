@@ -25,10 +25,11 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties       
         private IFileSRVRetailRepository _fileSrvRetailRepository;
+        protected override ControllerName _controllerName => ControllerName.FileSRVRetail;
         #endregion
 
         #region PublicMethods
-       
+
         [Route(RouteAction.Send)]
         public IHttpActionResult Send()
         {

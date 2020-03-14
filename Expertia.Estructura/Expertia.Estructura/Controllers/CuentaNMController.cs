@@ -22,6 +22,8 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private ICuentaNMRepository _cuentaNMRepository;
+
+        protected override ControllerName _controllerName => ControllerName.CuentaNM;
         #endregion
 
         #region PublicMethods

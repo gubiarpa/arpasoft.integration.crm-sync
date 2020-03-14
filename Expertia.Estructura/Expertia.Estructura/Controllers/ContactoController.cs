@@ -18,6 +18,8 @@ namespace Expertia.Estructura.Controllers
         #region Properties
         protected IDictionary<UnidadNegocioKeys?, bool?> _operNotAssociated;
         private IDictionary<UnidadNegocioKeys?, string> _errorsValuesPairs;
+
+        protected override ControllerName _controllerName => ControllerName.Contacto;
         #endregion
 
         #region Constructor

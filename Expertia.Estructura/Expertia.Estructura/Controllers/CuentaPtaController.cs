@@ -21,12 +21,14 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private ICuentaPtaRepository _cuentaPtaRepository;
+        protected override ControllerName _controllerName => ControllerName.CuentaPta;
         #endregion
 
         #region Constructor
         public CuentaPtaController()
         {
         }
+
         #endregion
 
         #region PublicMethods

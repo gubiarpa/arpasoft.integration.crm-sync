@@ -29,6 +29,7 @@ namespace Expertia.Estructura.Controllers
         private ICotizacionSRV_Repository _CotizacionSRV_Repository;
         private IFileSRVRetailRepository _FileSRVRetailRepository;
         private IPedidoRepository _PedidoRetail_Repository;
+        protected override ControllerName _controllerName => ControllerName.FileRetail;
         #endregion
 
         #region Constructor
