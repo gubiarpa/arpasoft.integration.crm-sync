@@ -32,10 +32,10 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Get_DetalleItinerarioNM);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_DetallePasajerosNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CursorDetalleItinerarioNM] = ToDetalleItinerarioNM(GetDtParameter(OutParameter.CursorDetalleItinerarioNM));
+            operation[OutParameter.CursorDetallePasajerosNM] = ToDetallePasajerosNM(GetDtParameter(OutParameter.CursorDetallePasajerosNM));
             #endregion
 
             return operation;
@@ -43,22 +43,22 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<DetalleItinerarioNM> ToDetalleItinerarioNM(DataTable dt)
+        private IEnumerable<DetallePasajerosNM> ToDetallePasajerosNM(DataTable dt)
         {
             try
             {
-                var detalleItinerarioNMList = new List<DetalleItinerarioNM>();
+                var detallePasajerosNMList = new List<DetallePasajerosNM>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    detalleItinerarioNMList.Add(new DetalleItinerarioNM()
+                    detallePasajerosNMList.Add(new DetallePasajerosNM()
                     {
-                        lAerea = row.StringParse("ACCION"),
-                        origen = row.StringParse("DK_CUENTA")
+                        tipo = row.StringParse("ACCION"),
+                        pais = row.StringParse("DK_CUENTA")
                     });
                 }
 
-                return detalleItinerarioNMList;
+                return detallePasajerosNMList;
             }
             catch (Exception ex)
             {

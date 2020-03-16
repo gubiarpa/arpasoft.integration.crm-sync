@@ -426,5 +426,32 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this DetallePasajerosNM detallePasajerosNM)
+        {
+            try
+            {
+                return new
+                {
+                    detallePasajerosNM.idOportunidad_SF,
+                    detallePasajerosNM.tipo,
+                    detallePasajerosNM.pais,
+                    detallePasajerosNM.apellidos,
+                    detallePasajerosNM.nombre,
+                    detallePasajerosNM.tipoDocumento,
+                    detallePasajerosNM.nroDocumento,
+                    detallePasajerosNM.fechaNacimiento,
+                    detallePasajerosNM.foid,
+                    detallePasajerosNM.fee,
+                    detallePasajerosNM.NombreReniec,
+                    detallePasajerosNM.numHabitacionPaquete,
+                    detallePasajerosNM.idPasajero_SF
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

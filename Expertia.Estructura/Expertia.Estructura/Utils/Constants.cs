@@ -54,8 +54,9 @@ namespace Expertia.Estructura.Utils
         public const string FileSRVRetail = "api/filesrvretail";
         public const string LeadCT = "api/leadct";
         public const string CuentaNM = "api/cuentanm";
-        public const string OportunidadNM = "api/oportunidadNM";
-        public const string DetalleItinerarioNM = "api/detalleitinerarioNM";
+        public const string OportunidadNM = "api/oportunidadnm";
+        public const string DetalleItinerarioNM = "api/detalleitinerarionm";
+        public const string DetallePasajerosNM = "api/detallepasajerosnm";
     }
 
     public enum ActionMethod

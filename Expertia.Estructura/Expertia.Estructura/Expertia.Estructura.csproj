@@ -161,6 +161,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\CuentaNMController.cs" />
+    <Compile Include="Controllers\DetallePasajerosController.cs" />
     <Compile Include="Controllers\DetalleItinerarioController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Controllers\CotizacionJYController.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\DetallePasajerosNM.cs" />
     <Compile Include="Models\NuevoMundo\DetalleItinerarioNM.cs" />
     <Compile Include="Models\NuevoMundo\OportunidadNM.cs" />
     <Compile Include="Models\Oportunidad.cs" />
