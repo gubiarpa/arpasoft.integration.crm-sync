@@ -494,6 +494,69 @@ namespace Expertia.Estructura.Repository.Retail
                 throw new Exception(ex.ToString());
             }
         }
+
+        public DataTable _SelectFilesIdBy_IdCot(int pIntIdCotVta)
+        { 
+            try
+            {
+                #region Parameter                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCotVta, ParameterDirection.Input);                
+                AddParameter("pCurResult_out", OracleDbType.RefCursor, null, ParameterDirection.Output);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_File_Cot_XID);
+                return GetDtParameter("pCurResult_out");                
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }                        
+        }
+
+        public void _Delete_Cot_File(int pIntCotId, int pIntFileId)
+        { 
+            try
+            {
+                #region Parameter                                
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntCotId, ParameterDirection.Input);
+                AddParameter("pFileId_in", OracleDbType.Int32, pIntFileId, ParameterDirection.Input);              
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Del_Cot_File,true);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            } 
+        }
+
+        public void _Insert(int pIntIdUsuario, string pStrNomPagina, string pStrComment, int pIntIdLang, int pIntIdWeb, string pStrQuery, string pStrIP)
+        {            
+            try
+            {
+                #region Parameter   
+                AddParameter("pNumIdUsuario_in", OracleDbType.Int64, pIntIdUsuario, ParameterDirection.Input);
+                AddParameter("pVarQuery_in", OracleDbType.Clob, pStrQuery, ParameterDirection.Input);
+                AddParameter("pVarNomPagina_in", OracleDbType.Varchar2, pStrNomPagina, ParameterDirection.Input, 100);
+                AddParameter("pVarComment_in", OracleDbType.Varchar2, pStrComment, ParameterDirection.Input, 200);
+                AddParameter("pNumIdLang_in", OracleDbType.Int64, pIntIdLang, ParameterDirection.Input);
+                AddParameter("pNumIdWeb_in", OracleDbType.Int64, pIntIdWeb, ParameterDirection.Input);
+                AddParameter("pVarIP_in", OracleDbType.Varchar2, pStrIP, ParameterDirection.Input, 30);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Ins_LogTwo, true);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
         #endregion
 
         #region Auxiliares

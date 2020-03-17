@@ -21,12 +21,14 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private ICuentaPtaRepository _cuentaPtaRepository;
+        protected override ControllerName _controllerName => ControllerName.CuentaPta;
         #endregion
 
         #region Constructor
         public CuentaPtaController()
         {
         }
+
         #endregion
 
         #region PublicMethods
@@ -58,7 +60,7 @@ namespace Expertia.Estructura.Controllers
                         cuentaPta.UnidadNegocio = unidadNegocio.Descripcion;
                         cuentaPta.CodigoError = cuentaPta.MensajeError = string.Empty;
                         var cuentaSf = cuentaPta.ToSalesforceEntity();
-                        QuickLog(cuentaSf, "body_request.json", "Cuenta");
+                        QuickLog(cuentaSf, "body_request.json", "CuentaPta");
                         var responseCuentaPta = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CuentaPtaMethod, Method.POST, cuentaSf, true, token);
                         if (responseCuentaPta.StatusCode.Equals(HttpStatusCode.OK))
                         {

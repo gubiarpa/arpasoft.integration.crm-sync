@@ -15,11 +15,22 @@ namespace Expertia.Estructura.Utils
     {
         IFileIO _fileIO;
 
-        public LogFileManager(string filePathKey, string fileNameKey)
+        public LogFileManager(string filePathKey, string fileNameKey, ControllerName controllerName)
         {
+            DateTime now = DateTime.Now;
             _fileIO = new FileIO(
-                ConfigAccess.GetValueInAppSettings(filePathKey),
-                string.Format(ConfigAccess.GetValueInAppSettings(fileNameKey), DateTime.Now.ToString(ConfigAccess.GetValueInAppSettings(LogKeys.LogDate))));
+                /// Param 1: Now
+                now,
+                /// Param 2: Path
+                string.Format(
+                    ConfigAccess.GetValueInAppSettings(filePathKey),
+                    controllerName.ToString()
+                    ),
+                /// Param 3: File Name
+                string.Format(
+                    ConfigAccess.GetValueInAppSettings(fileNameKey),
+                    now.ToString(ConfigAccess.GetValueInAppSettings(LogKeys.LogDate))
+                    ));
         }
 
         public void WriteText(string text)

@@ -28,6 +28,8 @@ namespace Expertia.Estructura.Controllers
         public OportunidadController()
         {
         }
+
+        protected override ControllerName _controllerName => ControllerName.Oportunidad;
         #endregion
 
         #region PublicMethods

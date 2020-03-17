@@ -25,6 +25,8 @@ namespace Expertia.Estructura.Controllers
         private ICotizacionSRV_Repository _CotizacionSRV;
         private IDatosUsuario _datosUsuario;
         private IDatosOficina _datosOficina;
+
+        protected override ControllerName _controllerName => ControllerName.FactFileRetail;
         #endregion
         #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)

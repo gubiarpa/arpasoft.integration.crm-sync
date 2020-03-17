@@ -23,6 +23,8 @@ namespace Expertia.Estructura.Controllers
         #region Properties
         private ICotizacion_CT _cotizacionRepository_CT;
         private ICotizacion_DM _cotizacionRepository_DM;
+
+        protected override ControllerName _controllerName => ControllerName.Cotizacion;
         #endregion
 
         #region PublicMethods

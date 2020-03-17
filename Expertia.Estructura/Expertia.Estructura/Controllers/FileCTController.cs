@@ -13,6 +13,7 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private IFileCT _fileCTRepository;
+        protected override ControllerName _controllerName => ControllerName.FileCT;
         #endregion
 
         #region Constructor

@@ -22,6 +22,8 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private IContactoPtaRepository _contactoPtaRepository;
+
+        protected override ControllerName _controllerName => ControllerName.ContactoPta;
         #endregion
 
         #region PublicMethods

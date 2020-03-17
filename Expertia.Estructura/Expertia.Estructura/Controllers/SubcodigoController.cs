@@ -22,6 +22,7 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private IDictionary<UnidadNegocioKeys?, ISubcodigoRepository> _subcodigoCollection;
+        protected override ControllerName _controllerName => ControllerName.Subcodigo;
         #endregion
 
         #region Constructor
@@ -29,6 +30,7 @@ namespace Expertia.Estructura.Controllers
         {
             _subcodigoCollection = new Dictionary<UnidadNegocioKeys?, ISubcodigoRepository>();
         }
+
         #endregion
 
         #region PublicMethods

@@ -16,6 +16,8 @@ namespace Expertia.Estructura.Controllers
     {
         #region Properties
         private IDictionary<UnidadNegocioKeys?, IVentaCT> _ventaCollection = new Dictionary<UnidadNegocioKeys?, IVentaCT>();
+
+        protected override ControllerName _controllerName => ControllerName.Venta;
         #endregion
 
         #region PublicMethods

@@ -12,6 +12,7 @@ namespace Expertia.Estructura.Controllers
     public class RegionCuentaController : BaseController<RegionCuenta>
     {
         IRegionCuentaRepository _regionCuentaRepository;
+        protected override ControllerName _controllerName => ControllerName.RegionCuenta;
 
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(RegionCuenta regionCuenta)

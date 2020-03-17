@@ -14,6 +14,7 @@ namespace Expertia.Estructura.Controllers
     [RoutePrefix(RoutePrefix.CuentaB2B)]
     public class CuentaB2BController : BaseController<CuentaB2B>
     {
+        protected override ControllerName _controllerName => ControllerName.CuentaB2B;
         #region PublicMethods
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(CuentaB2B entity)

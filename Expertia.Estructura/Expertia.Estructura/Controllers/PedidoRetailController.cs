@@ -24,6 +24,8 @@ namespace Expertia.Estructura.Controllers
         #region Properties       
         private IPedidoRepository _pedidoRepository;
         private IDatosUsuario _datosUsuario;
+        protected override ControllerName _controllerName => ControllerName.PedidoRetail;
+
         #endregion
 
         #region PublicMethods
