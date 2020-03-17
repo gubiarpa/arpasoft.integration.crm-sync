@@ -36,6 +36,9 @@ namespace Expertia.Estructura.Utils
             _path += _now.Year.ToString("0000") + _now.Month.ToString("00") + "\\";
             if (!Directory.Exists(_path)) Directory.CreateDirectory(_path); /// Mes
 
+            _path += _now.Year.ToString("0000") + _now.Month.ToString("00") + _now.Day.ToString("00") + "\\";
+            if (!Directory.Exists(_path)) Directory.CreateDirectory(_path); /// Mes
+
             /// Impresión
             WriteContent(FullName, content);
         }

@@ -84,7 +84,7 @@ namespace Expertia.Estructura.Controllers.Base
         {
             try
             {
-                string _path = ConfigAccess.GetValueInAppSettings("LogPath", "") + path + "\\";
+                string _path = ConfigAccess.GetValueInAppSettings("QuickLogPath", "") + path + "\\";
                 if (!System.IO.Directory.Exists(_path)) System.IO.Directory.CreateDirectory(_path);
                 System.IO.File.WriteAllText(_path + fileName, string.Empty);
             }
@@ -97,7 +97,7 @@ namespace Expertia.Estructura.Controllers.Base
         {
             try
             {
-                string _path = string.Format(ConfigAccess.GetValueInAppSettings("LogPath", "") + path + "\\", _controllerName.ToString());
+                string _path = string.Format(ConfigAccess.GetValueInAppSettings("QuickLogPath", "") + path + "\\", _controllerName.ToString());
                 if (!System.IO.Directory.Exists(_path)) System.IO.Directory.CreateDirectory(_path);
 
                 if (append)
