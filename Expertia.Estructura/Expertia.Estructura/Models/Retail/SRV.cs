@@ -56,7 +56,7 @@ namespace Expertia.Estructura.Models
     {
         public string idoportunidad_SF { get; set; }
         public int idCotSRV_SF { get; set; }
-        public int idusuarioSrv_SF { get; set; }
+        public int idUsuario { get; set; }
         public List<FileSRVRQ> lstFiles { get; set; }
         /*Duda si agregar comentario y nota de seguimiento (aplica al cambiar de estado a facturado - Informativo)*/
     }

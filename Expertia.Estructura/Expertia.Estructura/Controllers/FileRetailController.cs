@@ -1127,11 +1127,11 @@ namespace Expertia.Estructura.Controllers
                 }
             }
 
-            if (_fileAssociate.idusuarioSrv_SF > 0)
+            if (_fileAssociate.idUsuario > 0)
             {
                 /*Cargamos Datos del Usuario*/
                 RepositoryByBusiness(null);
-                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idusuarioSrv_SF));
+                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idUsuario));
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
             }
             else
