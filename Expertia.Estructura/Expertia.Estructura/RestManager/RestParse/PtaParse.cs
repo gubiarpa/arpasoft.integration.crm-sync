@@ -453,5 +453,31 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this DetalleHotelNM detalleHotelNM)
+        {
+            try
+            {
+                return new
+                {
+                    detalleHotelNM.idOportunidad_SF,
+                    detalleHotelNM.hotel,
+                    detalleHotelNM.direccion,
+                    detalleHotelNM.destino,
+                    detalleHotelNM.categoria,
+                    detalleHotelNM.fechaIngreso,
+                    detalleHotelNM.fechaSalida,
+                    detalleHotelNM.fechaCancelacion,
+                    detalleHotelNM.codigoReservaNemo,
+                    detalleHotelNM.Proveedor,
+                    detalleHotelNM.accion_SF,
+                    detalleHotelNM.idDetalleHotel_SF
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

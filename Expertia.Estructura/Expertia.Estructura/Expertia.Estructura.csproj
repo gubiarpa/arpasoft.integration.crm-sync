@@ -161,8 +161,9 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\CuentaNMController.cs" />
-    <Compile Include="Controllers\DetallePasajerosController.cs" />
-    <Compile Include="Controllers\DetalleItinerarioController.cs" />
+    <Compile Include="Controllers\DetalleHotelNMController.cs" />
+    <Compile Include="Controllers\DetallePasajerosNMController.cs" />
+    <Compile Include="Controllers\DetalleItinerarioNMController.cs" />
     <Compile Include="Controllers\LeadController.cs" />
     <Compile Include="Controllers\CotizacionJYController.cs" />
     <Compile Include="Controllers\FactFileRetailController.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\DetalleHotelNM.cs" />
     <Compile Include="Models\NuevoMundo\DetallePasajerosNM.cs" />
     <Compile Include="Models\NuevoMundo\DetalleItinerarioNM.cs" />
     <Compile Include="Models\NuevoMundo\OportunidadNM.cs" />
@@ -256,6 +258,7 @@
     <Compile Include="Repository\Behavior\ICotizacion.cs" />
     <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
+    <Compile Include="Repository\Behavior\IDetalleHotelNMRepository.cs" />
     <Compile Include="Repository\Behavior\IDetallePasajerosNMRepository.cs" />
     <Compile Include="Repository\Behavior\IDetalleItinerarioNMRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadNMRepository.cs" />
@@ -293,6 +296,7 @@
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Journeyou\CotizacionJYRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\DetalleHotelNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\DetallePasajerosNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\DetalleItinerarioNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\OportunidadNMRepository.cs" />

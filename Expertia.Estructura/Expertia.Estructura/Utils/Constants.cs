@@ -57,6 +57,7 @@ namespace Expertia.Estructura.Utils
         public const string OportunidadNM = "api/oportunidadnm";
         public const string DetalleItinerarioNM = "api/detalleitinerarionm";
         public const string DetallePasajerosNM = "api/detallepasajerosnm";
+        public const string DetalleHotelNM = "api/detallehotelnm";
     }
 
     public enum ActionMethod
@@ -291,6 +292,8 @@ namespace Expertia.Estructura.Utils
         public const string CuentaNMMethod = "CUENTANM_METHODNAME";
         public const string OportunidadNMMethod = "OPORTUNIDADNM_METHODNAME";
         public const string DetalleItinerarioNMMethod = "DETALLEITINERARIONM_METHODNAME";
+        public const string DetallePasajeroNMMethod = "DETALLEPASAJERONM_METHODNAME";
+        public const string DetalleHotelNMMethod = "DETALLEHOTELNM_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -352,6 +355,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorOportunidadNM = "x definir";
         public const string CursorDetalleItinerarioNM = "x definir";
         public const string CursorDetallePasajerosNM = "x definir";
+        public const string CursorDetalleHotelNM = "x definir";
         #endregion
 
         #region Fields
@@ -385,6 +389,8 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdSolicitudPago = "idSolicitudPago_SF";
         public const string SF_IdLead = "ID_LEAD_SF";
         public const string SF_IdDetalleItinerario = "idItinerario_SF";
+        public const string SF_IdPasajero = "idPasajero_SF";
+        public const string SF_IdDetalleHotel = "idDetalleHotel_SF";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";

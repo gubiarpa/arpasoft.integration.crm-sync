@@ -17,18 +17,19 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
-    [RoutePrefix(RoutePrefix.DetallePasajerosNM)]
-    public class DetallePasajerosController : BaseController<object>
+    [RoutePrefix(RoutePrefix.DetalleHotelNM)]
+    public class DetalleHotelNMController : BaseController<object>
     {
         #region Properties
-        private IDetallePasajerosNMRepository _detallePasajerosNMRepository;
+        private IDetalleHotelNMRepository _detalleHotelNMRepository;
+        protected override ControllerName _controllerName => ControllerName.DetalleHotelNM;
         #endregion
 
         #region PublicMethods
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            IEnumerable<DetallePasajerosNM> detallePasajerosNMs = null;
+            IEnumerable<DetalleHotelNM> detalleHotelNMs = null;
             string error = string.Empty;
             object objEnvio = null;
 
@@ -39,43 +40,43 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Detalle Itinerario NM
-                detallePasajerosNMs = (IEnumerable<DetallePasajerosNM>)(_detallePasajerosNMRepository.Send(_unidadNegocio))[OutParameter.CursorDetallePasajerosNM];
-                if (detallePasajerosNMs == null || detallePasajerosNMs.ToList().Count.Equals(0)) return Ok(detallePasajerosNMs);
+                detalleHotelNMs = (IEnumerable<DetalleHotelNM>)(_detalleHotelNMRepository.Send(_unidadNegocio))[OutParameter.CursorDetalleHotelNM];
+                if (detalleHotelNMs == null || detalleHotelNMs.ToList().Count.Equals(0)) return Ok(detalleHotelNMs);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
                 var token = authSf[OutParameter.SF_Token].ToString();
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
-                /// preparación de cuenta para envio a Salesforce
-                var detallePasajerosNMSF = new List<object>();
-                foreach (var detallePasajeros in detallePasajerosNMs)
+                /// preparación de hotel para envio a Salesforce
+                var detalleHotelNMSF = new List<object>();
+                foreach (var detalleHotel in detalleHotelNMs)
                 {
-                    detallePasajerosNMSF.Add(detallePasajeros.ToSalesforceEntity());
+                    detalleHotelNMSF.Add(detalleHotel.ToSalesforceEntity());
                 }
 
 
                 try
                 {
                     /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = detallePasajerosNMSF };
-                    QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
+                    ClearQuickLog("body_request.json", "DetalleHotelNM"); /// ♫ Trace
+                    objEnvio = new { cotizaciones = detalleHotelNMSF };
+                    QuickLog(objEnvio, "body_request.json", "DetalleHotelNM"); /// ♫ Trace
 
 
-                    var responseCuentaNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleItinerarioNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseCuentaNM.StatusCode.Equals(HttpStatusCode.OK))
+                    var responseDetalleHotelNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleHotelNMMethod, Method.POST, objEnvio, true, token);
+                    if (responseDetalleHotelNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaNM.Content);
+                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetalleHotelNM.Content);
 
-                        foreach (var detallePasajeroNM in detallePasajerosNMs)
+                        foreach (var detalleHotelNM in detalleHotelNMs)
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
-                                detallePasajeroNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                detallePasajeroNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                detallePasajeroNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
-                                detallePasajeroNM.idPasajero_SF = jsResponse[OutParameter.SF_IdDetalleItinerario];
+                                detalleHotelNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
+                                detalleHotelNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                detalleHotelNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
+                                detalleHotelNM.idDetalleHotel_SF = jsResponse[OutParameter.SF_IdDetalleItinerario];
 
                                 ///// Actualización de estado de Cuenta NM hacia ???????
                                 //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
@@ -85,7 +86,7 @@ namespace Expertia.Estructura.Controllers
                     }
                     else
                     {
-                        error = responseCuentaNM.StatusCode.ToString();
+                        error = responseDetalleHotelNM.StatusCode.ToString();
                     }
                 }
                 catch (Exception ex)
@@ -93,7 +94,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { DetallePasajerosNM = detallePasajerosNMs });
+                return Ok(new { DetalleHotelNM = detalleHotelNMs });
             }
             catch (Exception ex)
             {
@@ -106,7 +107,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
-                    LegacySystems = detallePasajerosNMs
+                    LegacySystems = detalleHotelNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
@@ -115,7 +116,7 @@ namespace Expertia.Estructura.Controllers
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);
-            _detallePasajerosNMRepository = new DetallePasajerosNMRepository(unidadNegocioKey);
+            _detalleHotelNMRepository = new DetalleHotelNMRepository(unidadNegocioKey);
             return unidadNegocioKey;
         }
     }

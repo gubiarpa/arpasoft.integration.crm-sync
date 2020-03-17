@@ -18,11 +18,11 @@ using System.Web.Script.Serialization;
 namespace Expertia.Estructura.Controllers
 {
     [RoutePrefix(RoutePrefix.DetalleItinerarioNM)]
-    public class DetalleItinerarioController : BaseController<object>
+    public class DetalleItinerarioNMController : BaseController<object>
     {
         #region Properties
         private IDetalleItinerarioNMRepository _detalleItinerarioNMRepository;
-        protected override ControllerName _controllerName => ControllerName.DetalleItinerario;
+        protected override ControllerName _controllerName => ControllerName.DetalleItinerarioNM;
         #endregion
 
         #region PublicMethods
@@ -64,10 +64,10 @@ namespace Expertia.Estructura.Controllers
                     QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
 
 
-                    var responseCuentaNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleItinerarioNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseCuentaNM.StatusCode.Equals(HttpStatusCode.OK))
+                    var responseDetalleItinerarioNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleItinerarioNMMethod, Method.POST, objEnvio, true, token);
+                    if (responseDetalleItinerarioNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaNM.Content);
+                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetalleItinerarioNM.Content);
 
                         foreach (var detalleItinerarioNM in detalleItinerarioNMs)
                         {
@@ -86,7 +86,7 @@ namespace Expertia.Estructura.Controllers
                     }
                     else
                     {
-                        error = responseCuentaNM.StatusCode.ToString();
+                        error = responseDetalleItinerarioNM.StatusCode.ToString();
                     }
                 }
                 catch (Exception ex)
