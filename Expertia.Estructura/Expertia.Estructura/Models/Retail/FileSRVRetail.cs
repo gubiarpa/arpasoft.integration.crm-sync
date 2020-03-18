@@ -16,7 +16,7 @@ namespace Expertia.Estructura.Models.Retail
         public int suc_id { get; set; }
         public int file_id { get; set; }
         public DateTime fpta_fecha { get; set; }
-        public int fpta_imp_fact { get; set; }
+        public double fpta_imp_fact { get; set; }
     }
 
     public class FilesAsociadosSRVResponse
