@@ -267,6 +267,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_OportunidadNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS OPORTUNIDADES NUEVAS";
         public const string AW_Get_DetalleItinerarioNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE ITINERARIO NUEVAS";
         public const string AW_Get_DetallePasajerosNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
+        public const string AW_Get_SolicitudPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
         #endregion
     }
 
@@ -294,6 +295,7 @@ namespace Expertia.Estructura.Utils
         public const string DetalleItinerarioNMMethod = "DETALLEITINERARIONM_METHODNAME";
         public const string DetallePasajeroNMMethod = "DETALLEPASAJERONM_METHODNAME";
         public const string DetalleHotelNMMethod = "DETALLEHOTELNM_METHODNAME";
+        public const string SolicitudPagoNMMethod = "SOLICITUDPAGONM_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -356,6 +358,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorDetalleItinerarioNM = "x definir";
         public const string CursorDetallePasajerosNM = "x definir";
         public const string CursorDetalleHotelNM = "x definir";
+        public const string CursorSolicitudPagoNM = "x definir";
         #endregion
 
         #region Fields
@@ -391,6 +394,7 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdDetalleItinerario = "idItinerario_SF";
         public const string SF_IdPasajero = "idPasajero_SF";
         public const string SF_IdDetalleHotel = "idDetalleHotel_SF";
+        public const string SF_IdRegSolicitudPago = "IdRegSolicitudPago_SF";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";

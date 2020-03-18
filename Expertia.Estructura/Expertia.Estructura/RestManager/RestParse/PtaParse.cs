@@ -479,5 +479,43 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this SolicitudPagoNM solicitudPagoNM)
+        {
+            try
+            {
+                return new
+                {
+                    solicitudPagoNM.idOportunidad_SF,
+                    solicitudPagoNM.pasarela,
+                    solicitudPagoNM.fechaPedido,
+                    solicitudPagoNM.estado1,
+                    solicitudPagoNM.estado2,
+                    solicitudPagoNM.resultado,
+                    solicitudPagoNM.montoPagar,
+                    solicitudPagoNM.rcGenerado,
+                    solicitudPagoNM.lineaAereaValidadora,
+                    solicitudPagoNM.formaPago,
+                    solicitudPagoNM.entidadBancaria,
+                    solicitudPagoNM.nroTarjeta,
+                    solicitudPagoNM.titularTarjeta,
+                    solicitudPagoNM.expiracion,
+                    solicitudPagoNM.thReniec,
+                    solicitudPagoNM.marcaTC,
+                    solicitudPagoNM.tipoTC,
+                    solicitudPagoNM.nivelTC,
+                    solicitudPagoNM.paisTC,
+                    solicitudPagoNM.ipCliente,
+                    solicitudPagoNM.docTitular,
+                    solicitudPagoNM.mensaje,
+                    solicitudPagoNM.mensajeError,
+                    solicitudPagoNM.accion_SF
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
