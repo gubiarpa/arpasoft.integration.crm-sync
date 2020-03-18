@@ -260,6 +260,7 @@
     <Compile Include="Repository\Behavior\ICotizacion.cs" />
     <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
+    <Compile Include="Repository\Behavior\IInformacionPagoNMRepository.cs" />
     <Compile Include="Repository\Behavior\ISolicitudPagoNMRepository.cs" />
     <Compile Include="Repository\Behavior\IDetalleHotelNMRepository.cs" />
     <Compile Include="Repository\Behavior\IDetallePasajerosNMRepository.cs" />
