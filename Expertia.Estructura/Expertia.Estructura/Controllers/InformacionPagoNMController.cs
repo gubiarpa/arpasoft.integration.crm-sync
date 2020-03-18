@@ -17,19 +17,19 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
-    [RoutePrefix(RoutePrefix.SolicitudPagoNM)]
-    public class SolicitudPagoNMController : BaseController<object>
+    [RoutePrefix(RoutePrefix.InformacionPagoNM)]
+    public class InformacionPagoNMController : BaseController<object>
     {
         #region Properties
-        private ISolicitudPagoNMRepository _solicitudPagoNMRepository;
-        protected override ControllerName _controllerName => ControllerName.SolicitudPagoNM;
+        private IInformacionPagoNMRepository _informacionPagoNMRepository;
+        protected override ControllerName _controllerName => ControllerName.InformacionPagoNM;
         #endregion
 
         #region PublicMethods
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            IEnumerable<SolicitudPagoNM> solicitudPagoNMs = null;
+            IEnumerable<InformacionPagoNM> informacionPagoNMs = null;
             string error = string.Empty;
             object objEnvio = null;
 
@@ -39,9 +39,9 @@ namespace Expertia.Estructura.Controllers
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
-                /// I. Consulta de Solicitud Pago NM
-                solicitudPagoNMs = (IEnumerable<SolicitudPagoNM>)(_solicitudPagoNMRepository.Send(_unidadNegocio))[OutParameter.CursorSolicitudPagoNM];
-                if (solicitudPagoNMs == null || solicitudPagoNMs.ToList().Count.Equals(0)) return Ok(solicitudPagoNMs);
+                /// I. Consulta de Informacion Pago NM
+                informacionPagoNMs = (IEnumerable<InformacionPagoNM>)(_informacionPagoNMRepository.Send(_unidadNegocio))[OutParameter.CursorInformacionPagoNM];
+                if (informacionPagoNMs == null || informacionPagoNMs.ToList().Count.Equals(0)) return Ok(informacionPagoNMs);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -49,34 +49,34 @@ namespace Expertia.Estructura.Controllers
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// preparación de hotel para envio a Salesforce
-                var solicitudPagoNMSF = new List<object>();
-                foreach (var solicitudPago in solicitudPagoNMs)
+                var informacionPagoNMSF = new List<object>();
+                foreach (var informacionPago in informacionPagoNMs)
                 {
-                    solicitudPagoNMSF.Add(solicitudPago.ToSalesforceEntity());
+                    informacionPagoNMSF.Add(informacionPago.ToSalesforceEntity());
                 }
 
 
                 try
                 {
-                    /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "SolicitudPagoNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = solicitudPagoNMSF };
-                    QuickLog(objEnvio, "body_request.json", "SolicitudPagoNM"); /// ♫ Trace
+                    /// Envío de Informacion de Pago a Salesforce
+                    ClearQuickLog("body_request.json", "InformacionPagoNM"); /// ♫ Trace
+                    objEnvio = new { cotizaciones = informacionPagoNMSF };
+                    QuickLog(objEnvio, "body_request.json", "InformacionPagoNM"); /// ♫ Trace
 
 
-                    var responseSolicitudPagoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.SolicitudPagoNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseSolicitudPagoNM.StatusCode.Equals(HttpStatusCode.OK))
+                    var responseInformacionPagoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.InformacionPagoNMMethod, Method.POST, objEnvio, true, token);
+                    if (responseInformacionPagoNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseSolicitudPagoNM.Content);
+                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseInformacionPagoNM.Content);
 
-                        foreach (var solicitudPagoNM in solicitudPagoNMs)
+                        foreach (var informacionPagoNM in informacionPagoNMs)
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
-                                solicitudPagoNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                solicitudPagoNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                solicitudPagoNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
-                                solicitudPagoNM.IdRegSolicitudPago_SF = jsResponse[OutParameter.SF_IdRegSolicitudPago];
+                                informacionPagoNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
+                                informacionPagoNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                informacionPagoNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
+                                informacionPagoNM.IdInformacionPago_SF = jsResponse[OutParameter.SF_IdInformacionPago];
 
                                 ///// Actualización de estado de Cuenta NM hacia ???????
                                 //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
@@ -86,7 +86,7 @@ namespace Expertia.Estructura.Controllers
                     }
                     else
                     {
-                        error = responseSolicitudPagoNM.StatusCode.ToString();
+                        error = responseInformacionPagoNM.StatusCode.ToString();
                     }
                 }
                 catch (Exception ex)
@@ -94,7 +94,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { SolicitudPagoNM = solicitudPagoNMs});
+                return Ok(new { InformacionPagoNM = informacionPagoNMs});
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
-                    LegacySystems = solicitudPagoNMs
+                    LegacySystems = informacionPagoNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
@@ -116,7 +116,7 @@ namespace Expertia.Estructura.Controllers
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);
-            _solicitudPagoNMRepository = new SolicitudPagoNMRepository(unidadNegocioKey);
+            _informacionPagoNMRepository = new InformacionPagoNMRepository(unidadNegocioKey);
             return unidadNegocioKey;
         }
     }

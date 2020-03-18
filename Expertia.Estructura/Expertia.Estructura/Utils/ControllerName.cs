@@ -20,6 +20,7 @@ namespace Expertia.Estructura.Utils
         DetallePasajerosNM,
         DetalleHotelNM,
         SolicitudPagoNM,
+        InformacionPagoNM,
         FactFileRetail,
         File,
         FileCT,

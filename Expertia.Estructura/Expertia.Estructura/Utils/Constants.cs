@@ -58,6 +58,8 @@ namespace Expertia.Estructura.Utils
         public const string DetalleItinerarioNM = "api/detalleitinerarionm";
         public const string DetallePasajerosNM = "api/detallepasajerosnm";
         public const string DetalleHotelNM = "api/detallehotelnm";
+        public const string SolicitudPagoNM = "api/solicitudpagonm";
+        public const string InformacionPagoNM = "api/informacionpagonm";
     }
 
     public enum ActionMethod
@@ -296,6 +298,7 @@ namespace Expertia.Estructura.Utils
         public const string DetallePasajeroNMMethod = "DETALLEPASAJERONM_METHODNAME";
         public const string DetalleHotelNMMethod = "DETALLEHOTELNM_METHODNAME";
         public const string SolicitudPagoNMMethod = "SOLICITUDPAGONM_METHODNAME";
+        public const string InformacionPagoNMMethod = "INFORMACIONPAGONM_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -359,6 +362,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorDetallePasajerosNM = "x definir";
         public const string CursorDetalleHotelNM = "x definir";
         public const string CursorSolicitudPagoNM = "x definir";
+        public const string CursorInformacionPagoNM = "x definir";
         #endregion
 
         #region Fields
@@ -395,6 +399,7 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdPasajero = "idPasajero_SF";
         public const string SF_IdDetalleHotel = "idDetalleHotel_SF";
         public const string SF_IdRegSolicitudPago = "IdRegSolicitudPago_SF";
+        public const string SF_IdInformacionPago = "IdInformacionPago_SF";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";

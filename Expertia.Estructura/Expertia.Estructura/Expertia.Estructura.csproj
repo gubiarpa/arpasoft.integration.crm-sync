@@ -161,6 +161,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\CuentaNMController.cs" />
+    <Compile Include="Controllers\InformacionPagoNMController.cs" />
     <Compile Include="Controllers\SolicitudPagoNMController.cs" />
     <Compile Include="Controllers\DetalleHotelNMController.cs" />
     <Compile Include="Controllers\DetallePasajerosNMController.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\InformacionPagoNM.cs" />
     <Compile Include="Models\NuevoMundo\SolicitudPagoNM.cs" />
     <Compile Include="Models\NuevoMundo\DetalleHotelNM.cs" />
     <Compile Include="Models\NuevoMundo\DetallePasajerosNM.cs" />
@@ -260,6 +262,7 @@
     <Compile Include="Repository\Behavior\ICotizacion.cs" />
     <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
+    <Compile Include="Repository\Behavior\ICanalComunicacionNMRepository.cs" />
     <Compile Include="Repository\Behavior\IInformacionPagoNMRepository.cs" />
     <Compile Include="Repository\Behavior\ISolicitudPagoNMRepository.cs" />
     <Compile Include="Repository\Behavior\IDetalleHotelNMRepository.cs" />
@@ -300,6 +303,7 @@
     <Compile Include="Repository\InterAgencias\Subcodigo_IA_Repository.cs" />
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Journeyou\CotizacionJYRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\InformacionPagoNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\SolicitudPagoNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\DetalleHotelNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\DetallePasajerosNMRepository.cs" />

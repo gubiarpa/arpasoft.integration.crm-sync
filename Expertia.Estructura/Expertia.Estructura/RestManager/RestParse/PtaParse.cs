@@ -517,5 +517,37 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this InformacionPagoNM informacionPagoNM)
+        {
+            try
+            {
+                return new
+                {
+                    informacionPagoNM.idOportunidad_SF,
+                    informacionPagoNM.tipoServicio,
+                    informacionPagoNM.tipoPasajero,
+                    informacionPagoNM.totalBoleto,
+                    informacionPagoNM.tarifaNeto,
+                    informacionPagoNM.impuestos,
+                    informacionPagoNM.cargos,
+                    informacionPagoNM.nombreHotel,
+                    informacionPagoNM.totalPagar,
+                    informacionPagoNM.numHabitacionPaquete,
+                    informacionPagoNM.cantidadPasajeroPaq,
+                    informacionPagoNM.precioUnitarioPaq,
+                    informacionPagoNM.totalUnitarioPaq,
+                    informacionPagoNM.precioTotalPorHabitacionPaq,
+                    informacionPagoNM.precioTotalHabitacionesPaq,
+                    informacionPagoNM.gastosAdministrativosPaq,
+                    informacionPagoNM.precioTotalPagarPaq,
+                    informacionPagoNM.accion_SF
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
