@@ -60,6 +60,7 @@ namespace Expertia.Estructura.Utils
         public const string DetalleHotelNM = "api/detallehotelnm";
         public const string SolicitudPagoNM = "api/solicitudpagonm";
         public const string InformacionPagoNM = "api/informacionpagonm";
+        public const string CanalComunicacionNM = "api/canalcomunicacionnm";
     }
 
     public enum ActionMethod
@@ -269,7 +270,10 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_OportunidadNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS OPORTUNIDADES NUEVAS";
         public const string AW_Get_DetalleItinerarioNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE ITINERARIO NUEVAS";
         public const string AW_Get_DetallePasajerosNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
-        public const string AW_Get_SolicitudPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
+        public const string AW_Get_DetalleHotelNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE HOTEL NUEVAS";
+        public const string AW_Get_SolicitudPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS SOLICITUDES DE PAGO NUEVAS";
+        public const string AW_Get_InformacionPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LA INFORMACION DE PAGO NUEVAS";
+        public const string AW_Get_CanalComunicacionNM = "AGREGAR STORED PROCEDURE QUE TRAE EL CANAL COMUNICACION NUEVAS";
         #endregion
     }
 
@@ -299,6 +303,7 @@ namespace Expertia.Estructura.Utils
         public const string DetalleHotelNMMethod = "DETALLEHOTELNM_METHODNAME";
         public const string SolicitudPagoNMMethod = "SOLICITUDPAGONM_METHODNAME";
         public const string InformacionPagoNMMethod = "INFORMACIONPAGONM_METHODNAME";
+        public const string CanalComunicacionNMMethod = "CANALCOMUNICACIONNM_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -363,6 +368,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorDetalleHotelNM = "x definir";
         public const string CursorSolicitudPagoNM = "x definir";
         public const string CursorInformacionPagoNM = "x definir";
+        public const string CursorCanalComunicacionNM = "x definir";
         #endregion
 
         #region Fields

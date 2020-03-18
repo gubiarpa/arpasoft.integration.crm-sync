@@ -549,5 +549,23 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+
+        public static object ToSalesforceEntity(this CanalComunicacionNM canalComunicacionNM)
+        {
+            try
+            {
+                return new
+                {
+                    canalComunicacionNM.idOportunidad_SF,
+                    canalComunicacionNM.idCotSrv_SF,
+                    canalComunicacionNM.texto,
+                    canalComunicacionNM.accion_SF
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

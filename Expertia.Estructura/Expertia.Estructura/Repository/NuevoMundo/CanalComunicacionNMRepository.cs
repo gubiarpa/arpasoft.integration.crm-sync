@@ -9,10 +9,10 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.NuevoMundo
 {
-    public class InformacionPagoNMRepository : OracleBase<object>, IInformacionPagoNMRepository
+    public class CanalComunicacionNMRepository : OracleBase<object>, ICanalComunicacionNMRepository
     {
         #region Constructor
-        public InformacionPagoNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
+        public CanalComunicacionNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
         #endregion
@@ -28,14 +28,14 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             /// (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (3) P_DETALLEPASAJEROSNM
-            AddParameter(OutParameter.CursorInformacionPagoNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+            AddParameter(OutParameter.CursorCanalComunicacionNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Get_InformacionPagoNM);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_CanalComunicacionNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CursorInformacionPagoNM] = ToInformacionPagoNM(GetDtParameter(OutParameter.CursorInformacionPagoNM));
+            operation[OutParameter.CursorCanalComunicacionNM] = ToCanalComunicacionNM(GetDtParameter(OutParameter.CursorCanalComunicacionNM));
             #endregion
 
             return operation;
@@ -43,21 +43,21 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<InformacionPagoNM> ToInformacionPagoNM(DataTable dt)
+        private IEnumerable<CanalComunicacionNM> ToCanalComunicacionNM(DataTable dt)
         {
             try
             {
-                var informacionPagoNMList = new List<InformacionPagoNM>();
+                var canalComunicacionNMList = new List<CanalComunicacionNM>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    informacionPagoNMList.Add(new InformacionPagoNM()
+                    canalComunicacionNMList.Add(new CanalComunicacionNM()
                     {
-                        tipoServicio = row.StringParse("ACCION"),
-                        tipoPasajero = row.StringParse("DK_CUENTA")
+                        idCotSrv_SF = row.StringParse("ACCION"),
+                        texto = row.StringParse("DK_CUENTA")
                     });
                 }
-                return informacionPagoNMList;
+                return canalComunicacionNMList;
             }
             catch (Exception ex)
             {

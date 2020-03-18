@@ -32,7 +32,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Get_DetallePasajerosNM);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_DetalleHotelNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
             operation[OutParameter.CursorDetalleHotelNM] = ToDetalleHotelNM(GetDtParameter(OutParameter.CursorDetalleHotelNM));
