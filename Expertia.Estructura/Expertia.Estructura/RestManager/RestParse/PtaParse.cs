@@ -550,7 +550,7 @@ namespace Expertia.Estructura.RestManager.RestParse
             }
         }
 
-        public static object ToSalesforceEntity(this CanalComunicacionNM canalComunicacionNM)
+        public static object ToSalesforceEntity(this ChatterNM canalComunicacionNM)
         {
             try
             {

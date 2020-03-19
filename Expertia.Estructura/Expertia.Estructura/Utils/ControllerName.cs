@@ -21,7 +21,7 @@ namespace Expertia.Estructura.Utils
         DetalleHotelNM,
         SolicitudPagoNM,
         InformacionPagoNM,
-        CanalComunicacionNM,
+        ChatterNM,
         FactFileRetail,
         File,
         FileCT,

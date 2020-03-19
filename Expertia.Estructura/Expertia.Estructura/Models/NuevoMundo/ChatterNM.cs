@@ -3,7 +3,7 @@ using System;
 
 namespace Expertia.Estructura.Models
 {
-    public class CanalComunicacionNM : ICrmApiResponse, IActualizado
+    public class ChatterNM : ICrmApiResponse, IActualizado
     {
         public string idOportunidad_SF { get; set; }
         public string idCotSrv_SF { get; set; }

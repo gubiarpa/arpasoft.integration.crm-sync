@@ -9,10 +9,10 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.NuevoMundo
 {
-    public class CanalComunicacionNMRepository : OracleBase<object>, ICanalComunicacionNMRepository
+    public class ChatterNMRepository : OracleBase<object>, IChatterNMRepository
     {
         #region Constructor
-        public CanalComunicacionNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
+        public ChatterNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
         }
         #endregion
@@ -28,14 +28,14 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             /// (2) P_MENSAJE_ERROR
             AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (3) P_DETALLEPASAJEROSNM
-            AddParameter(OutParameter.CursorCanalComunicacionNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+            AddParameter(OutParameter.CursorChatterNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Get_CanalComunicacionNM);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_ChatterNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CursorCanalComunicacionNM] = ToCanalComunicacionNM(GetDtParameter(OutParameter.CursorCanalComunicacionNM));
+            operation[OutParameter.CursorChatterNM] = ToChatterNM(GetDtParameter(OutParameter.CursorChatterNM));
             #endregion
 
             return operation;
@@ -43,21 +43,21 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<CanalComunicacionNM> ToCanalComunicacionNM(DataTable dt)
+        private IEnumerable<ChatterNM> ToChatterNM(DataTable dt)
         {
             try
             {
-                var canalComunicacionNMList = new List<CanalComunicacionNM>();
+                var chatterNMList = new List<ChatterNM>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    canalComunicacionNMList.Add(new CanalComunicacionNM()
+                    chatterNMList.Add(new ChatterNM()
                     {
                         idCotSrv_SF = row.StringParse("ACCION"),
                         texto = row.StringParse("DK_CUENTA")
                     });
                 }
-                return canalComunicacionNMList;
+                return chatterNMList;
             }
             catch (Exception ex)
             {
