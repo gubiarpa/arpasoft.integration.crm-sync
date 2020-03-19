@@ -34,6 +34,7 @@ namespace Expertia.Estructura.Utils
         PedidoRetail,
         RegionCuenta,
         Subcodigo,
-        Venta
+        Venta,
+        FileOportunidadNM
     }
 }

@@ -61,6 +61,8 @@ namespace Expertia.Estructura.Utils
         public const string SolicitudPagoNM = "api/solicitudpagonm";
         public const string InformacionPagoNM = "api/informacionpagonm";
         public const string ChatterNM = "api/canalcomunicacionnm";
+        public const string FileOportunidadNM = "api/fileoportunidadnm";
+        public const string GenCodigoPagoNM = "api/gencodigopagonm";
     }
 
     public enum ActionMethod
@@ -274,6 +276,8 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_SolicitudPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS SOLICITUDES DE PAGO NUEVAS";
         public const string AW_Get_InformacionPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LA INFORMACION DE PAGO NUEVAS";
         public const string AW_Get_ChatterNM = "AGREGAR STORED PROCEDURE QUE TRAE EL CANAL COMUNICACION NUEVAS";
+        public const string AW_Asociar_FileOportunidad = "AGREGAR STORED PROCEDURE QUE ASOCIA FILE OPORTUNIDAD";
+        public const string AW_Generar_Codigo_Pago = "AGREGAR STORED PROCEDURE QUE GENERA CODIGO DE PAGO";
         #endregion
     }
 
@@ -385,6 +389,7 @@ namespace Expertia.Estructura.Utils
         public const string NombreVendedorReserva = "P_NOMBRE_VENDEDOR_RESERVA";
         public const string NumeroIdPostSRV = "pNumIdNewPost_out";
         public const string NumeroActualizados = "P_ACTUALIZADOS";
+        public const string CodigoTransaccion = "P_CODIGO_TRANSACCION";
         #endregion
 
         #region SalesforceParameters

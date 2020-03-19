@@ -161,6 +161,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\ChatterNMController.cs" />
+    <Compile Include="Controllers\GenCodigoPagoNMController.cs" />
+    <Compile Include="Controllers\FileOportunidadNMController.cs" />
     <Compile Include="Controllers\CuentaNMController.cs" />
     <Compile Include="Controllers\InformacionPagoNMController.cs" />
     <Compile Include="Controllers\SolicitudPagoNMController.cs" />
@@ -225,6 +227,7 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\GenCodigoPagoNM.cs" />
     <Compile Include="Models\NuevoMundo\FileOportunidadNM.cs" />
     <Compile Include="Models\NuevoMundo\InformacionPagoNM.cs" />
     <Compile Include="Models\NuevoMundo\SolicitudPagoNM.cs" />
@@ -307,6 +310,7 @@
     <Compile Include="Repository\InterAgencias\Oportunidad_IA_Repository.cs" />
     <Compile Include="Repository\Journeyou\CotizacionJYRepository.cs" />
     <Compile Include="Repository\NuevoMundo\ChatterNMRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\GenCodigoPagoNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\FileOportunidadNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\InformacionPagoNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\SolicitudPagoNMRepository.cs" />
