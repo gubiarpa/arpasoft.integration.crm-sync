@@ -63,6 +63,7 @@ namespace Expertia.Estructura.Utils
         public const string ChatterNM = "api/canalcomunicacionnm";
         public const string FileOportunidadNM = "api/fileoportunidadnm";
         public const string GenCodigoPagoNM = "api/gencodigopagonm";
+        public const string SolicitarFactFileNM = "api/solicitarfactfilenm";
     }
 
     public enum ActionMethod
@@ -276,8 +277,9 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_SolicitudPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS SOLICITUDES DE PAGO NUEVAS";
         public const string AW_Get_InformacionPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LA INFORMACION DE PAGO NUEVAS";
         public const string AW_Get_ChatterNM = "AGREGAR STORED PROCEDURE QUE TRAE EL CANAL COMUNICACION NUEVAS";
-        public const string AW_Asociar_FileOportunidad = "AGREGAR STORED PROCEDURE QUE ASOCIA FILE OPORTUNIDAD";
-        public const string AW_Generar_Codigo_Pago = "AGREGAR STORED PROCEDURE QUE GENERA CODIGO DE PAGO";
+        public const string AW_Asociar_FileOportunidadNM = "AGREGAR STORED PROCEDURE QUE ASOCIA FILE OPORTUNIDAD";
+        public const string AW_Generar_Codigo_PagoNM = "AGREGAR STORED PROCEDURE QUE GENERA CODIGO DE PAGO";
+        public const string AW_Solicitar_Facturacion_FileNM = "AGREGAR STORED PROCEDURE QUE SOLICITA FACTURACION DE FILE";
         #endregion
     }
 

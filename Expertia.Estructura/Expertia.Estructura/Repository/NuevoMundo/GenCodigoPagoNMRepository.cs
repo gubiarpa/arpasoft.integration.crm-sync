@@ -70,7 +70,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             #region Invoke
             try
             {
-                ExecuteStoredProcedure(StoredProcedureName.AW_Generar_Codigo_Pago);
+                ExecuteStoredProcedure(StoredProcedureName.AW_Generar_Codigo_PagoNM);
 
                 operation[OutParameter.SF_Codigo] = GetOutParameter(OutParameter.SF_Codigo);
                 operation[OutParameter.SF_Mensaje] = GetOutParameter(OutParameter.SF_Mensaje);
