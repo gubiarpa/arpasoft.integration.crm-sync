@@ -578,7 +578,7 @@ namespace Expertia.Estructura.Repository.Retail
                                                     suc_id = row.IntParse("SUC_ID"),
                                                     file_id = row.IntParse("FILE_ID"),
                                                     fpta_fecha = row.DateTimeParse("FPTA_FECHA"),
-                                                    fpta_imp_fact = row.IntParse("FPTA_IMP_FACT")
+                                                    fpta_imp_fact = (double)row["FPTA_IMP_FACT"]
                                                 });
                         #endregion
                     }
