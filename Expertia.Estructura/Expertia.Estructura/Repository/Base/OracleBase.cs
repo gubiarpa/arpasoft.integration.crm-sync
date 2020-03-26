@@ -7,6 +7,13 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.Base
 {
+    public abstract class OracleBase : OracleBase<object>
+    {
+        public OracleBase(string connKey, UnidadNegocioKeys? unidadNegocio = null) : base(connKey, unidadNegocio)
+        {
+        }
+    }
+
     public abstract class OracleBase<T>
     {
         #region Properties

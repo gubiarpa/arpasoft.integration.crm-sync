@@ -268,14 +268,22 @@ namespace Expertia.Estructura.Utils
         public const string NM_Upd_Vendedor_Pta = "NUEVOMUNDO.PKG_WEB_PTA.SP_UPD_VENDEDOR_PTA";
         public const string NM_Ins_Text_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_INS_FILE_TEXTO";
 
-        /// Cuenta Nuevo Mundo
+        /* *** NUEVO MUNDO *** */
+        public const string AW_NM_Package = "APPWEBS.CRM_PKG_ECOMMERCE";
         public const string AW_Get_CuentaNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS CUENTAS NUEVAS";
         public const string AW_Get_OportunidadNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS OPORTUNIDADES NUEVAS";
-        public const string AW_Get_DetalleItinerarioNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE ITINERARIO NUEVAS";
-        public const string AW_Get_DetallePasajerosNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
-        public const string AW_Get_DetalleHotelNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE HOTEL NUEVAS";
-        public const string AW_Get_SolicitudPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS SOLICITUDES DE PAGO NUEVAS";
-        public const string AW_Get_InformacionPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LA INFORMACION DE PAGO NUEVAS";
+        // CRMEC003_1
+        public const string AW_Get_DetalleItinerarioNM = AW_NM_Package + "." + "SP_LISTAR_DET_ITINERARIO";
+        public const string AW_Set_DetalleItinerarioNM = AW_NM_Package + "." + "SP_ACTUALIZAR_DET_ITINERARIO";
+        // CRMEC003_2
+        public const string AW_Get_DetallePasajerosNM = AW_NM_Package + "." + "SP_LISTAR_DET_PASAJERO";
+        // CRMEC003_3
+        public const string AW_Get_DetalleHotelNM = AW_NM_Package + "." + "SP_LISTAR_DET_HOTEL";
+        // CRMEC003_4
+        public const string AW_Get_SolicitudPagoNM = AW_NM_Package + "." + "SP_LISTAR_SOLIC_PAGO";
+        // CRMEC003_5
+        public const string AW_Get_InformacionPagoNM = AW_NM_Package + "." + "SP_LISTAR_INFO_PAGO";
+
         public const string AW_Get_ChatterNM = "AGREGAR STORED PROCEDURE QUE TRAE EL CANAL COMUNICACION NUEVAS";
         public const string AW_Asociar_FileOportunidadNM = "AGREGAR STORED PROCEDURE QUE ASOCIA FILE OPORTUNIDAD";
         public const string AW_Generar_Codigo_PagoNM = "AGREGAR STORED PROCEDURE QUE GENERA CODIGO DE PAGO";
@@ -304,7 +312,7 @@ namespace Expertia.Estructura.Utils
         public const string OportunidadAsocMethod = "OPORTUNIDADASOCIACION_METHODNAME";
         public const string CuentaNMMethod = "CUENTANM_METHODNAME";
         public const string OportunidadNMMethod = "OPORTUNIDADNM_METHODNAME";
-        public const string DetalleItinerarioNMMethod = "DETALLEITINERARIONM_METHODNAME";
+        public const string DetItinerarioNMMethod = "NM_DET_ITINERARIO_METHODNAME";
         public const string DetallePasajeroNMMethod = "DETALLEPASAJERONM_METHODNAME";
         public const string DetalleHotelNMMethod = "DETALLEHOTELNM_METHODNAME";
         public const string SolicitudPagoNMMethod = "SOLICITUDPAGONM_METHODNAME";
@@ -369,7 +377,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorFilesAsociadosSRV = "P_FILES_ASOCIADOS_SRV";
         public const string CursorCuentaNM = "x definir";
         public const string CursorOportunidadNM = "x definir";
-        public const string CursorDetalleItinerarioNM = "x definir";
+        public const string CursorDetalleItinerarioNM = "P_DETALLEITINERARIO";
         public const string CursorDetallePasajerosNM = "x definir";
         public const string CursorDetalleHotelNM = "x definir";
         public const string CursorSolicitudPagoNM = "x definir";
@@ -408,11 +416,11 @@ namespace Expertia.Estructura.Utils
         public const string SF_Mensaje = "mensaje";
         public const string SF_IdSolicitudPago = "idSolicitudPago_SF";
         public const string SF_IdLead = "ID_LEAD_SF";
-        public const string SF_IdDetalleItinerario = "idItinerario_SF";
-        public const string SF_IdPasajero = "idPasajero_SF";
-        public const string SF_IdDetalleHotel = "idDetalleHotel_SF";
-        public const string SF_IdRegSolicitudPago = "IdRegSolicitudPago_SF";
-        public const string SF_IdInformacionPago = "IdInformacionPago_SF";
+        public const string SF_IdDetalleItinerario = "IDITINERARIO_SF";
+        public const string SF_IdPasajero = "IDPASAJERO_SF";
+        public const string SF_IdDetalleHotel = "IDDETALLEHOTEL_SF";
+        public const string SF_IdRegSolicitudPago = "IDREGSOLICITUDPAGO_SF";
+        public const string SF_IdInformacionPago = "IDINFORMACIONPAGO_SF";
 
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";

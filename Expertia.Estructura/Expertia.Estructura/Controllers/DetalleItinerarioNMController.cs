@@ -21,7 +21,7 @@ namespace Expertia.Estructura.Controllers
     public class DetalleItinerarioNMController : BaseController<object>
     {
         #region Properties
-        private IDetalleItinerarioNMRepository _detalleItinerarioNMRepository;
+        private ISendRepository<DetalleItinerarioNM> _detalleItinerarioNMRepository;
         protected override ControllerName _controllerName => ControllerName.DetalleItinerarioNM;
         #endregion
 
@@ -29,47 +29,49 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            IEnumerable<DetalleItinerarioNM> detalleItinerarioNMs = null;
+            IEnumerable<DetalleItinerarioNM> detItinerarioList = null;
             string error = string.Empty;
             object objEnvio = null;
 
             try
             {
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
-                RepositoryByBusiness(_unidadNegocio);
-                _instants[InstantKey.Salesforce] = DateTime.Now;
+                var _unidadNegocio = RepositoryByBusiness(GetUnidadNegocio(unidadNegocio.Descripcion));
 
                 /// I. Consulta de Detalle Itinerario NM
-                detalleItinerarioNMs = (IEnumerable<DetalleItinerarioNM>)(_detalleItinerarioNMRepository.Send(_unidadNegocio))[OutParameter.CursorDetalleItinerarioNM];
-                if (detalleItinerarioNMs == null || detalleItinerarioNMs.ToList().Count.Equals(0)) return Ok(detalleItinerarioNMs);
+                detItinerarioList = (IEnumerable<DetalleItinerarioNM>)(_detalleItinerarioNMRepository.Read(_unidadNegocio))[OutParameter.CursorDetalleItinerarioNM];
+                if (detItinerarioList == null || detItinerarioList.ToList().Count.Equals(0)) return Ok(detItinerarioList);
 
-                /// Obtiene Token para envío a Salesforce
+                /// II. Obtiene Token y URL para envío a Salesforce
                 var authSf = RestBase.GetToken();
                 var token = authSf[OutParameter.SF_Token].ToString();
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
-                /// preparación de cuenta para envio a Salesforce
-                var detalleItinerarioNMSF = new List<object>();
-                foreach (var detalleItinerario in detalleItinerarioNMs)
-                {
-                    detalleItinerarioNMSF.Add(detalleItinerario.ToSalesforceEntity());
-                }
-
+                /// III. Construímos lista para enviar a SF
+                var detItinerarioNM_SF = new List<object>();
+                foreach (var detItinerario in detItinerarioList)
+                    detItinerarioNM_SF.Add(detItinerario.ToSalesforceEntity());
 
                 try
                 {
                     /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = detalleItinerarioNMSF };
-                    QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
-
-
-                    var responseDetalleItinerarioNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleItinerarioNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseDetalleItinerarioNM.StatusCode.Equals(HttpStatusCode.OK))
+                    objEnvio = new { listaDatos = detItinerarioNM_SF };
+                    QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM", previousClear: true); /// ♫ Trace
+                    var responseDetItinerarioNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetItinerarioNMMethod, Method.POST, objEnvio, true, token);
+                    if (responseDetItinerarioNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetalleItinerarioNM.Content);
+                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetItinerarioNM.Content);
 
-                        foreach (var detalleItinerarioNM in detalleItinerarioNMs)
+                        try
+                        {
+
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+
+                        foreach (var detalleItinerarioNM in detItinerarioList)
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
@@ -78,15 +80,15 @@ namespace Expertia.Estructura.Controllers
                                 detalleItinerarioNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
                                 detalleItinerarioNM.idItinerario_SF = jsResponse[OutParameter.SF_IdDetalleItinerario];
 
-                                ///// Actualización de estado de Cuenta NM hacia ???????
-                                //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
-                                //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                /// Actualización de estado de Cuenta NM hacia ???????
+                                //var updateResponse = _detalleItinerarioNMRepository.Update(cuentaNM);
+                                //cuentaNM.Actualizados = (int)(updateResponse[OutParameter.IdActualizados].ToString());
                             }
                         }
                     }
                     else
                     {
-                        error = responseDetalleItinerarioNM.StatusCode.ToString();
+                        error = responseDetItinerarioNM.StatusCode.ToString();
                     }
                 }
                 catch (Exception ex)
@@ -94,7 +96,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { DetalleItinerarioNM = detalleItinerarioNMs });
+                return Ok(new { DetalleItinerarioNM = detItinerarioList });
             }
             catch (Exception ex)
             {
@@ -107,7 +109,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
-                    LegacySystems = detalleItinerarioNMs
+                    LegacySystems = detItinerarioList
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }

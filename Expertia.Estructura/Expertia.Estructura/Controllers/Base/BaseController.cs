@@ -93,8 +93,10 @@ namespace Expertia.Estructura.Controllers.Base
             }
         }
 
-        protected void QuickLog(object obj, string fileName, string path = "SF_Entities\\", bool append = false)
+        protected void QuickLog(object obj, string fileName, string path = "SF_Entities\\", bool append = false, bool previousClear = false)
         {
+            if (previousClear) ClearQuickLog(fileName, path);
+
             try
             {
                 string _path = string.Format(ConfigAccess.GetValueInAppSettings("QuickLogPath", "") + path + "\\", _controllerName.ToString());

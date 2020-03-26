@@ -272,10 +272,10 @@
     <Compile Include="Repository\Behavior\ICotizacionSRV_Repository.cs" />
     <Compile Include="Repository\Behavior\ICrud.cs" />
     <Compile Include="Repository\Behavior\IInformacionPagoNMRepository.cs" />
+    <Compile Include="Repository\Behavior\ISendRepository.cs" />
     <Compile Include="Repository\Behavior\ISolicitudPagoNMRepository.cs" />
     <Compile Include="Repository\Behavior\IDetalleHotelNMRepository.cs" />
     <Compile Include="Repository\Behavior\IDetallePasajerosNMRepository.cs" />
-    <Compile Include="Repository\Behavior\IDetalleItinerarioNMRepository.cs" />
     <Compile Include="Repository\Behavior\IOportunidadNMRepository.cs" />
     <Compile Include="Repository\Behavior\ICuentaNMRepository.cs" />
     <Compile Include="Repository\Behavior\ICuentaPtaRepository.cs" />

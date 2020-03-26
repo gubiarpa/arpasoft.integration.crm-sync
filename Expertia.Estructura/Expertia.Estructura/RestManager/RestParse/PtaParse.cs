@@ -321,6 +321,7 @@ namespace Expertia.Estructura.RestManager.RestParse
             }
         }
 
+        #region Nuevo Mundo
         public static object ToSalesforceEntity(this CuentaNM cuentaNM)
         {
             try
@@ -402,23 +403,23 @@ namespace Expertia.Estructura.RestManager.RestParse
             }
         }
 
-        public static object ToSalesforceEntity(this DetalleItinerarioNM detalleItinerarioNM)
+        public static object ToSalesforceEntity(this DetalleItinerarioNM detItinerarioNM)
         {
             try
             {
                 return new
                 {
-                    detalleItinerarioNM.idOportunidad_SF,
-                    detalleItinerarioNM.lAerea,
-                    detalleItinerarioNM.origen,
-                    detalleItinerarioNM.salida,
-                    detalleItinerarioNM.destino,
-                    detalleItinerarioNM.llegada,
-                    detalleItinerarioNM.numeroVuelo,
-                    detalleItinerarioNM.clase,
-                    detalleItinerarioNM.fareBasis,
-                    detalleItinerarioNM.operadoPor,
-                    detalleItinerarioNM.accion_SF
+                    idOportunidad_SF = detItinerarioNM.idOportunidad_SF,
+                    lAerea = detItinerarioNM.lAerea,
+                    origen = detItinerarioNM.origen,
+                    salida = detItinerarioNM.salida,
+                    destino = detItinerarioNM.destino,
+                    llegada = detItinerarioNM.llegada,
+                    numeroVuelo = detItinerarioNM.numeroVuelo,
+                    clase = detItinerarioNM.clase,
+                    fareBasis =detItinerarioNM.fareBasis,
+                    operadoPor = detItinerarioNM.operadoPor,
+                    accion_SF = detItinerarioNM.accion_SF
                 };
             }
             catch (Exception ex)
@@ -567,5 +568,6 @@ namespace Expertia.Estructura.RestManager.RestParse
                 throw ex;
             }
         }
+        #endregion
     }
 }

@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Expertia.Estructura.Repository.NuevoMundo
 {
-    public class DetalleItinerarioNMRepository : OracleBase<object>, IDetalleItinerarioNMRepository
+    public class DetalleItinerarioNMRepository : OracleBase, ISendRepository<DetalleItinerarioNM>
     {
         #region Constructor
         public DetalleItinerarioNMRepository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region PublicMethods
-        public Operation Send(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
+        public Operation Read(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
         {
             var operation = new Operation();
 
@@ -40,6 +40,31 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
             return operation;
         }
+
+        public Operation Update(UnidadNegocioKeys? unidadNegocio, DetalleItinerarioNM entity)
+        {
+            var operation = new Operation();
+
+            #region Parameters
+            /// (1) P_CODIGO_ERROR
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            /// (2) P_MENSAJE_ERROR
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            /// (3) P_IDOPORTUNIDAD_SF
+            AddParameter("P_IDOPORTUNIDAD_SF", OracleDbType.Varchar2, entity.idOportunidad_SF);
+            /// (4) P_IDITINERARIO_SF
+            AddParameter("P_IDITINERARIO_SF", OracleDbType.Varchar2, entity.idItinerario_SF);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Set_DetalleItinerarioNM);
+            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            #endregion
+
+            return operation;
+        }
+
         #endregion
 
         #region Parse
@@ -53,8 +78,17 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 {
                     detalleItinerarioNMList.Add(new DetalleItinerarioNM()
                     {
-                        lAerea = row.StringParse("ACCION"),
-                        origen = row.StringParse("DK_CUENTA")
+                        idOportunidad_SF = row.StringParse("idOportunidad_SF"),
+                        lAerea = row.StringParse("LAerea"),
+                        origen = row.StringParse("Origen"),
+                        salida = row.StringParse("Salida"),
+                        destino = row.StringParse("Destino"),
+                        llegada = row.StringParse("Llegada"),
+                        numeroVuelo = row.IntParse("NumeroVuelo"),
+                        clase = row.StringParse("Clase"),
+                        fareBasis = row.StringParse("FareBasis"),
+                        operadoPor = row.StringParse("OperadoPor"),
+                        accion_SF = row.StringParse("Accion_SF")
                     });
                 }
 
