@@ -28,11 +28,11 @@ namespace Expertia.Estructura.Models.Journeyou
         public string MensajeError { get; set; }
         public string Grupo { get; set; }
         public string Estado { get; set; }
-        public float VentaEstimada { get; set; }
+        public float? VentaEstimada { get; set; }
         public string FileSubfile { get; set; }
-        public float VentaFile { get; set; }
-        public float MargenFile { get; set; }
-        public int PaxsFile { get; set; }
+        public float? VentaFile { get; set; }
+        public float? MargenFile { get; set; }
+        public int? PaxsFile { get; set; }
         public string EstadoFile { get; set; }
         public string FechaInicioViaje { get; set; }
     }

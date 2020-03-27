@@ -79,11 +79,11 @@ namespace Expertia.Estructura.Repository.Journeyou
                         {
                             Grupo = row.StringParse("Grupo"),
                             Estado = row.StringParse("Estado"),
-                            VentaEstimada = row.FloatParse("Venta_Estimada"),
+                            VentaEstimada = row.FloatNullParse("Venta_Estimada") != 0 ? row.FloatNullParse("Venta_Estimada") : null,
                             FileSubfile = row.StringParse("File_SubFile"),
-                            VentaFile = row.FloatParse("Venta_File"),
-                            MargenFile = row.FloatParse("Margen_File"),
-                            PaxsFile = row.IntParse("Paxs_File"),
+                            VentaFile = row.FloatNullParse("Venta_File") != 0 ? row.FloatNullParse("Venta_File") : null,
+                            MargenFile = row.FloatNullParse("Margen_File") != 0 ? row.FloatNullParse("Margen_File") : null,
+                            PaxsFile = row.IntNullParse("Paxs_File") != 0 ? row.IntNullParse("Paxs_File") : null,
                             EstadoFile = row.StringParse("Estado_File"),
                             FechaInicioViaje = row["Fecha_Inicio_Viaje"].ToString() != "" ? row.DateTimeParse("Fecha_Inicio_Viaje").ToString("dd/MM/yyyy") : null
                         });
