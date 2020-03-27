@@ -28,6 +28,7 @@ namespace Expertia.Estructura.Controllers
         {
             UnidadNegocioKeys? _unidadNegocio = null;
             string exceptionMsg = string.Empty;
+            var cotizacionResponse = new CotizacionJYResponse();
             try
             {
                 if ((_unidadNegocio = RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry())) != null)
@@ -35,7 +36,7 @@ namespace Expertia.Estructura.Controllers
                     var operation = _cotizacionRepository.GetCotizaciones(cotizacion);
                     var cotizaciones = (List<CotizacionJYResponse>)operation["P_CUR_COTIZACION_ASOCIADA"];
 
-                    var cotizacionResponse = cotizaciones.Count.Equals(0) ? new CotizacionJYResponse() : cotizaciones.ElementAt(0);
+                    cotizacionResponse = cotizaciones.Count.Equals(0) ? new CotizacionJYResponse() : cotizaciones.ElementAt(0);
                     cotizacionResponse.CodigoError = operation[OutParameter.CodigoError].ToString();
                     cotizacionResponse.MensajeError = operation[OutParameter.MensajeError].ToString();
                     
@@ -54,6 +55,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     UnidadNegocio = _unidadNegocio.ToLongName(),
                     Body = cotizacion,
+                    Response = cotizacionResponse,
                     cotizacion.Region,
                     Exception = exceptionMsg
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
