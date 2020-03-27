@@ -5,69 +5,65 @@ namespace Expertia.Estructura.Models
 {
     public class SolicitarFactFileNM
     {
-        public string idDatosFacturacion { get; set; }
+        public string iddatosfacturacion { get; set; }
         public string estado { get; set; }
         public string dk { get; set; }
-        public string subCodigo { get; set; }
+        public string subcodigo { get; set; }
         public string comisionista { get; set; }
-        public string campana { get; set; }
-        public string numFileNM { get; set; }
-        public string numFileDM { get; set; }
+        public string compania { get; set; }
+        public string numfilenm { get; set; }
+        public string numfiledm { get; set; }
         public string ccb { get; set; }
-        public string facturaRUC { get; set; }
-        public string razon { get; set; }
+        public string facturaruc { get; set; }
+        public string razonsocial { get; set; }
         public string correo { get; set; }
-        public string tipoDeDocumentoVenta { get; set; }
+        public string tipodocventa { get; set; }
+        public string tipodocidentidad { get; set; }
+        public string numdocidentidad { get; set; }
         public string nombre { get; set; }
-        public string tipoDeDocumentoIdentidad { get; set; }
-        public string numeroDeDocumento { get; set; }
-        public string nombres { get; set; }
-        public string apellidoP { get; set; }
-        public string ApellidoM { get; set; }
-        public string oacpsit { get; set; }
-        public string monto { get; set; }
-        public string idUsuario { get; set; }
-        public string cot_Id { get; set; }
+        public string apepaterno { get; set; }
+        public string apemateno { get; set; }
+        public string oaripley { get; set; }
+        public string oamonto { get; set; }
+        public string idusuario { get; set; }
+        public float cotid { get; set; }
         public string banco { get; set; }
-        public string cantidadMillas { get; set; }
-        public string montoMillas { get; set; }
-        public string reciboDetalle { get; set; }
-        public string idDetalleNoRecibo { get; set; }
-        public string identificadorSucursal { get; set; }
+        public string cantidadmillas { get; set; }
+        public string montomillas { get; set; }
+        public float iddetallenrorecibo { get; set; }
+        public float idsucursal { get; set; }
+        public string nomsucursal { get; set; }
+        public string nrorecibo { get; set; }
+        public string montorecibo { get; set; }
+        //public string iddatosfacturacion { get; set; }
+        public float pasajeroadt { get; set; }
+        public float pasajerochd { get; set; }
+        public float pasajeroinf { get; set; }
+        public float idgruposervicio { get; set; }
+        public string gruposervicio { get; set; }
+        public float tarifaadt { get; set; }
+        public float tarifachd { get; set; }
+        public float tarifainf { get; set; }
+        public float montoadt { get; set; }
+        public float montochd { get; set; }
+        public float montoinf { get; set; }
+        //public string iddatosfacturacion { get; set; }
+        public string rutaarchivo { get; set; }
+        public string nomarchivo { get; set; }
+        public string urlarchivo { get; set; }
+        public float nrofiles { get; set; }
         public string sucursal { get; set; }
-        public string nRecibo { get; set; }
-        public string monto2 { get; set; }
-        public string idDatosFacturacion2 { get; set; }
-        public string tarifaDetalle { get; set; }
-        public string adt { get; set; }
-        public string chd { get; set; }
-        public string inf { get; set; }
-        public string identificadorGrupoServicio { get; set; }
-        public string grupoServicio { get; set; }
-        public string tarifaAdulto { get; set; }
-        public string tarifaNiño { get; set; }
-        public string tarifaInfante { get; set; }
-        public string montoADT { get; set; }
-        public string montoCHD { get; set; }
-        public string montoINF { get; set; }
-        public string idDatosFacturacion3 { get; set; }
-        public string Archivos { get; set; }
-        public string rutaArchivo { get; set; }
-        public string nomArchivo { get; set; }
-        public string urlArchivo { get; set; }
-        public string numeroFiles { get; set; }
-        public string sucursal2 { get; set; }
-        public string fechaAsociacion { get; set; }
+        public string fechaasociacion { get; set; }
         public string cliente { get; set; }
         public string importe { get; set; }
-        public string idOportunidad_SF { get; set; }
-        public string idCotSrv_SF { get; set; }
-        public string montoTotalCobrar { get; set; }
+        public string idoportunidadsf { get; set; }
+        public string idcotsrvsf { get; set; }
+        public string montocobrar { get; set; }
         public string observaciones { get; set; }
-        public string idOportunidad_SF2 { get; set; }
-        public string idCotSrv_SF2 { get; set; }
-        public string accion_SF { get; set; }
-        public string idusuarioSrv_SF { get; set; }
+        //public string idoportunidadsf { get; set; }
+        //public string idcotsrvsf { get; set; }
+        public string accionsf { get; set; }
+        public string idusuariosrv { get; set; }
         public string codigo { get; set; }
         public string mensaje { get; set; }
     }

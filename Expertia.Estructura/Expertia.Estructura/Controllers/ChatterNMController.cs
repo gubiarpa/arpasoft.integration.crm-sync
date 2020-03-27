@@ -73,12 +73,16 @@ namespace Expertia.Estructura.Controllers
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
-                                chatterNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                chatterNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                if (chatterNM.idCotSrv_SF == jsResponse[""])
+                                {
+                                    chatterNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
+                                    chatterNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
 
-                                ///// Actualización de estado de Cuenta NM hacia ???????
-                                //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
-                                //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                    /// Actualización de estado de Chatter
+                                    var updateResponse = _chatterNMRepository.Update(chatterNM);
+                                    chatterNM.CodigoError = updateResponse[OutParameter.CodigoError].ToString();
+                                    chatterNM.MensajeError = updateResponse[OutParameter.MensajeError].ToString();
+                                }
                             }
                         }
                     }

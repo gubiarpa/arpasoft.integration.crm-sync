@@ -60,7 +60,7 @@ namespace Expertia.Estructura.Utils
         public const string DetalleHotelNM = "api/detallehotelnm";
         public const string SolicitudPagoNM = "api/solicitudpagonm";
         public const string InformacionPagoNM = "api/informacionpagonm";
-        public const string ChatterNM = "api/canalcomunicacionnm";
+        public const string ChatterNM = "api/chatternm";
         public const string FileOportunidadNM = "api/fileoportunidadnm";
         public const string GenCodigoPagoNM = "api/gencodigopagonm";
         public const string SolicitarFactFileNM = "api/solicitarfactfilenm";
@@ -269,17 +269,20 @@ namespace Expertia.Estructura.Utils
         public const string NM_Ins_Text_File = "NUEVOMUNDO.PKG_WEB_PTA.SP_INS_FILE_TEXTO";
 
         /// Cuenta Nuevo Mundo
-        public const string AW_Get_CuentaNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS CUENTAS NUEVAS";
-        public const string AW_Get_OportunidadNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS OPORTUNIDADES NUEVAS";
+        public const string AW_Get_CuentaNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_LISTAR_CUENTA";
+        public const string AW_Upd_CuentaNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_ACTUALIZAR_CUENTA";
+        public const string AW_Get_OportunidadNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_LISTAR_OPORTUNIDAD";
+        public const string AW_Upd_OportunidadNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_ACTUALIZAR_OPORTUNIDAD";
         public const string AW_Get_DetalleItinerarioNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE ITINERARIO NUEVAS";
         public const string AW_Get_DetallePasajerosNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE PASAJEROS NUEVAS";
         public const string AW_Get_DetalleHotelNM = "AGREGAR STORED PROCEDURE QUE TRAE LOS DETALLES DE HOTEL NUEVAS";
         public const string AW_Get_SolicitudPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LAS SOLICITUDES DE PAGO NUEVAS";
         public const string AW_Get_InformacionPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LA INFORMACION DE PAGO NUEVAS";
-        public const string AW_Get_ChatterNM = "AGREGAR STORED PROCEDURE QUE TRAE EL CANAL COMUNICACION NUEVAS";
+        public const string AW_Get_ChatterNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_LISTAR_CHATTER";
+        public const string AW_Upd_ChatterNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_ACTUALIZAR_CHATTER";
         public const string AW_Asociar_FileOportunidadNM = "AGREGAR STORED PROCEDURE QUE ASOCIA FILE OPORTUNIDAD";
         public const string AW_Generar_Codigo_PagoNM = "AGREGAR STORED PROCEDURE QUE GENERA CODIGO DE PAGO";
-        public const string AW_Solicitar_Facturacion_FileNM = "AGREGAR STORED PROCEDURE QUE SOLICITA FACTURACION DE FILE";
+        public const string AW_Solicitar_Facturacion_FileNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_SOLICITAR_FACTURACION_FILE";
         #endregion
     }
 
@@ -367,14 +370,14 @@ namespace Expertia.Estructura.Utils
         public const string CursorCotizacionB2C = "P_CUR_COTIZACION_B2C";
         public const string CursorPedidosProcesados = "P_PEDIDOS_PROCESADOS";
         public const string CursorFilesAsociadosSRV = "P_FILES_ASOCIADOS_SRV";
-        public const string CursorCuentaNM = "x definir";
-        public const string CursorOportunidadNM = "x definir";
+        public const string CursorCuentaNM = "P_CUENTA";
+        public const string CursorOportunidadNM = "P_OPORTUNIDAD";
         public const string CursorDetalleItinerarioNM = "x definir";
         public const string CursorDetallePasajerosNM = "x definir";
         public const string CursorDetalleHotelNM = "x definir";
         public const string CursorSolicitudPagoNM = "x definir";
         public const string CursorInformacionPagoNM = "x definir";
-        public const string CursorChatterNM = "x definir";
+        public const string CursorChatterNM = "P_CHATTER";
         #endregion
 
         #region Fields
@@ -397,7 +400,8 @@ namespace Expertia.Estructura.Utils
         #region SalesforceParameters
         public const string SF_CodigoError = "CODIGO_ERROR";
         public const string SF_MensajeError = "MENSAJE_ERROR";
-        public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF";
+        public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF"; 
+        public const string SF_IdOportunidad2 = "idOportunidad_SF";
         public const string SF_IdCuenta = "ID_CUENTA_SF";
         public const string SF_IdContacto = "ID_CONTACTO_SF";
         public const string SF_CodigoRetorno = "CODIGO_RETORNO";

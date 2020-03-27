@@ -67,12 +67,18 @@ namespace Expertia.Estructura.Controllers
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
-                                oportunidadNM.CodigoError = jsResponse[OutParameter.SF_CodigoError];
-                                oportunidadNM.MensajeError = jsResponse[OutParameter.SF_MensajeError];
+                                if (oportunidadNM.idCuenta_SF == jsResponse["idCuenta_SF"])
+                                {
+                                    oportunidadNM.CodigoError = jsResponse[OutParameter.SF_CodigoError];
+                                    oportunidadNM.MensajeError = jsResponse[OutParameter.SF_MensajeError];
+                                    oportunidadNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad2];
 
-                                /// Actualización de estado de Oportunidad a PTA
-                                //var updateResponse = _oportunidadRepository.Update(oportunidad);
-                                //oportunidad.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                    /// Actualización de estado de Oportunidad
+                                    var updateResponse = _oportunidadNMRepository.Update(oportunidadNM);
+                                    oportunidadNM.CodigoError = updateResponse[OutParameter.CodigoError].ToString();
+                                    oportunidadNM.MensajeError = updateResponse[OutParameter.MensajeError].ToString();
+                                }
+                                
                             }
                         }
                     }
