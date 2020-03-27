@@ -280,8 +280,8 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_InformacionPagoNM = "AGREGAR STORED PROCEDURE QUE TRAE LA INFORMACION DE PAGO NUEVAS";
         public const string AW_Get_ChatterNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_ACTUALIZAR_CHATTER";
-        public const string AW_Asociar_FileOportunidadNM = "AGREGAR STORED PROCEDURE QUE ASOCIA FILE OPORTUNIDAD";
-        public const string AW_Generar_Codigo_PagoNM = "AGREGAR STORED PROCEDURE QUE GENERA CODIGO DE PAGO";
+        public const string AW_Asociar_FileOportunidadNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_ASOCIAR_FILE_OPORTUNIDAD";
+        public const string AW_Generar_Codigo_PagoNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_GENERACION_CODIGO_PAGO";
         public const string AW_Solicitar_Facturacion_FileNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_SOLICITAR_FACTURACION_FILE";
         #endregion
     }
