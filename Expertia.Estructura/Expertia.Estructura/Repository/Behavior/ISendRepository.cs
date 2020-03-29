@@ -9,8 +9,8 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface ISendRepository<T>
     {
-        Operation Read(UnidadNegocioKeys? unidadNegocio);
+        Operation Read();
 
-        Operation Update(UnidadNegocioKeys? unidadNegocio, T entity);
+        Operation Update(T entity);
     }
 }

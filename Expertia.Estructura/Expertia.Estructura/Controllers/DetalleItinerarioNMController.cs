@@ -25,7 +25,6 @@ namespace Expertia.Estructura.Controllers
         protected override ControllerName _controllerName => ControllerName.DetalleItinerarioNM;
         #endregion
 
-        #region PublicMethods
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
@@ -38,7 +37,7 @@ namespace Expertia.Estructura.Controllers
                 var _unidadNegocio = RepositoryByBusiness(GetUnidadNegocio(unidadNegocio.Descripcion));
 
                 /// I. Consulta de Detalle Itinerario NM
-                detItinerarioList = (IEnumerable<DetalleItinerarioNM>)(_detalleItinerarioNMRepository.Read(_unidadNegocio))[OutParameter.CursorDetalleItinerarioNM];
+                detItinerarioList = (IEnumerable<DetalleItinerarioNM>)(_detalleItinerarioNMRepository.Read())[OutParameter.CursorDetalleItinerarioNM];
                 if (detItinerarioList == null || detItinerarioList.ToList().Count.Equals(0)) return Ok(detItinerarioList);
 
                 /// II. Obtiene Token y URL para envío a Salesforce
@@ -54,36 +53,47 @@ namespace Expertia.Estructura.Controllers
                 try
                 {
                     /// Envío de CuentaNM a Salesforce
-                    objEnvio = new { listaDatos = detItinerarioNM_SF };
+                    objEnvio = new { listadatos = detItinerarioNM_SF };
                     QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM", previousClear: true); /// ♫ Trace
                     var responseDetItinerarioNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetItinerarioNMMethod, Method.POST, objEnvio, true, token);
                     if (responseDetItinerarioNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetItinerarioNM.Content);
-
                         try
                         {
-
-                        }
-                        catch (Exception)
-                        {
-
-                            throw;
-                        }
-
-                        foreach (var detalleItinerarioNM in detItinerarioList)
-                        {
-                            foreach (var jsResponse in jsonResponse["Cotizaciones"])
+                            var responseList = jsonResponse["respuestas"]; // Obtiene todo el json
+                            QuickLog(responseList, "body_response.json");
+                            foreach (var item in responseList)
                             {
-                                detalleItinerarioNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                detalleItinerarioNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                detalleItinerarioNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
-                                detalleItinerarioNM.idItinerario_SF = jsResponse[OutParameter.SF_IdDetalleItinerario];
+                                try
+                                {
+                                    #region Deserialize
+                                    var mensaje = (item["mensaje"] ?? string.Empty).ToString();
+                                    var idOportunidad_SF = (item["idOportunidad_SF"] ?? string.Empty).ToString();
+                                    var idItinerario_SF = (item["idItinerario_SF"] ?? string.Empty).ToString();
+                                    var codigo = (item["codigo"] ?? string.Empty).ToString();
+                                    #endregion
 
-                                /// Actualización de estado de Cuenta NM hacia ???????
-                                //var updateResponse = _detalleItinerarioNMRepository.Update(cuentaNM);
-                                //cuentaNM.Actualizados = (int)(updateResponse[OutParameter.IdActualizados].ToString());
+                                    var detItinerario = detItinerarioList.FirstOrDefault(c => c.idOportunidad_SF.Equals(idOportunidad_SF));
+
+                                    detItinerario.CodigoError = codigo;
+                                    detItinerario.MensajeError = mensaje;
+                                    detItinerario.idItinerario_SF = idItinerario_SF;
+
+                                    #region ReturnToDB
+                                    var updOperation = _detalleItinerarioNMRepository.Update(detItinerario)[OutParameter.IdActualizados];
+                                    if (int.TryParse(updOperation.ToString(), out int actualizados)) detItinerario.Actualizados = actualizados;
+                                    #endregion
+                                }
+                                catch (Exception ex)
+                                {
+                                    throw ex;
+                                }
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
                         }
                     }
                     else
@@ -113,7 +123,6 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
-        #endregion
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {

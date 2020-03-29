@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region PublicMethods
-        public Operation Read(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
+        public Operation Read()
         {
             var operation = new Operation();
 
@@ -41,7 +41,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             return operation;
         }
 
-        public Operation Update(UnidadNegocioKeys? unidadNegocio, DetalleItinerarioNM entity)
+        public Operation Update(DetalleItinerarioNM entity)
         {
             var operation = new Operation();
 
@@ -54,12 +54,15 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             AddParameter("P_IDOPORTUNIDAD_SF", OracleDbType.Varchar2, entity.idOportunidad_SF);
             /// (4) P_IDITINERARIO_SF
             AddParameter("P_IDITINERARIO_SF", OracleDbType.Varchar2, entity.idItinerario_SF);
+            /// (5) P_ACTUALIZADOS
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.AW_Set_DetalleItinerarioNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
             #endregion
 
             return operation;
@@ -87,8 +90,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         numeroVuelo = row.IntParse("NumeroVuelo"),
                         clase = row.StringParse("Clase"),
                         fareBasis = row.StringParse("FareBasis"),
-                        operadoPor = row.StringParse("OperadoPor"),
-                        accion_SF = row.StringParse("Accion_SF")
+                        operadoPor = row.StringParse("OperadoPor")
                     });
                 }
 

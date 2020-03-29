@@ -15,7 +15,6 @@ namespace Expertia.Estructura.Models
         public string clase { get; set; }
         public string fareBasis { get; set; }
         public string operadoPor { get; set; }
-        public string accion_SF { get; set; }
         public string idItinerario_SF { get; set; }
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }

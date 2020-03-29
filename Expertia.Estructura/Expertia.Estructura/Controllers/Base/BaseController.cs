@@ -93,8 +93,9 @@ namespace Expertia.Estructura.Controllers.Base
             }
         }
 
-        protected void QuickLog(object obj, string fileName, string path = "SF_Entities\\", bool append = false, bool previousClear = false)
+        protected void QuickLog(object obj, string fileName, string path = null, bool append = false, bool previousClear = false)
         {
+            if (string.IsNullOrEmpty(path)) path = _controllerName.ToString();
             if (previousClear) ClearQuickLog(fileName, path);
 
             try

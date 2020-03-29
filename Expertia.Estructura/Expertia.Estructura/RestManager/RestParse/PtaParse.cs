@@ -418,8 +418,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     numeroVuelo = detItinerarioNM.numeroVuelo,
                     clase = detItinerarioNM.clase,
                     fareBasis =detItinerarioNM.fareBasis,
-                    operadoPor = detItinerarioNM.operadoPor,
-                    accion_SF = detItinerarioNM.accion_SF
+                    operadoPor = detItinerarioNM.operadoPor
                 };
             }
             catch (Exception ex)
