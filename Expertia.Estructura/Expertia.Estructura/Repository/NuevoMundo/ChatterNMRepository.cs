@@ -40,6 +40,28 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
             return operation;
         }
+
+        public Operation Update(ChatterNM chatterNM)
+        {
+            var operation = new Operation();
+
+            #region Parameters
+            /// (1) P_CODIGO_ERROR
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            /// (2) P_MENSAJE_ERROR
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            /// (3) P_IDCUENTA_SF
+            AddParameter("P_IDCOTSRV_SF", OracleDbType.Varchar2, chatterNM.idCotSrv_SF);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Upd_ChatterNM);
+            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            #endregion
+
+            return operation;
+        }
         #endregion
 
         #region Parse
@@ -53,8 +75,10 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 {
                     chatterNMList.Add(new ChatterNM()
                     {
-                        idCotSrv_SF = row.StringParse("ACCION"),
-                        texto = row.StringParse("DK_CUENTA")
+                        idOportunidad_SF = row.StringParse("IdOportunidad_SF"),
+                        idCotSrv_SF = row.StringParse("IdCotSrv_SF"),
+                        texto = row.StringParse("Texto"),
+                        accion_SF = row.StringParse("Accion_SF")
                     });
                 }
                 return chatterNMList;

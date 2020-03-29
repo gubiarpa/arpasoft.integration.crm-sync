@@ -29,6 +29,5 @@ namespace Expertia.Estructura.Models
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }
         public int Actualizados { get; set; } = -1;
-        public string idCuentaCrm { get; set; }
     }
 }

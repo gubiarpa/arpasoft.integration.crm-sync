@@ -6,5 +6,6 @@ namespace Expertia.Estructura.Repository.Behavior
     public interface ICuentaNMRepository
     {
         Operation Read(UnidadNegocioKeys? unidadNegocio);
+        Operation Update(CuentaNM cuentaNM);
     }
 }

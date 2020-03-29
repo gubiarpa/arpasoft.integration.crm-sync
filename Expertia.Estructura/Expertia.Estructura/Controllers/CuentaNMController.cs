@@ -36,12 +36,13 @@ namespace Expertia.Estructura.Controllers
 
             try
             {
+                
                 var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Cuentas NM
-                cuentasNMs = (IEnumerable<CuentaNM>)(_cuentaNMRepository.Read(_unidadNegocio))[OutParameter.CursorCuentaPta];
+                cuentasNMs = (IEnumerable<CuentaNM>)(_cuentaNMRepository.Read(_unidadNegocio))[OutParameter.CursorCuentaNM];
                 if (cuentasNMs == null || cuentasNMs.ToList().Count.Equals(0)) return Ok(cuentasNMs);
 
                 /// Obtiene Token para envío a Salesforce
@@ -74,13 +75,18 @@ namespace Expertia.Estructura.Controllers
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
                             {
-                                cuentaNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                cuentaNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                cuentaNM.idCuentaCrm = jsResponse[OutParameter.SF_IdCuenta];
+                                if (cuentaNM.eMailCli == jsResponse["EmailCli"])
+                                {
+                                    cuentaNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
+                                    cuentaNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                    cuentaNM.idCuenta_Sf = jsResponse[OutParameter.SF_IdCuenta];
 
-                                ///// Actualización de estado de Cuenta NM hacia ???????
-                                //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
-                                //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                    /// Actualización de Cuenta NM
+                                    var updateResponse = _cuentaNMRepository.Update(cuentaNM);
+                                    cuentaNM.CodigoError = updateResponse[OutParameter.CodigoError].ToString();
+                                    cuentaNM.MensajeError = updateResponse[OutParameter.MensajeError].ToString();
+                                    //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                }
                             }
                         }
                     }
