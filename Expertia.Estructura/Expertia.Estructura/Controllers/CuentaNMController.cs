@@ -62,7 +62,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     /// Envío de CuentaNM a Salesforce
                     ClearQuickLog("body_request.json", "CuentaNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = cuentaNMSF };
+                    objEnvio = new { listadatosCuenta = cuentaNMSF };
                     QuickLog(objEnvio, "body_request.json", "CuentaNM"); /// ♫ Trace
 
 
@@ -73,13 +73,13 @@ namespace Expertia.Estructura.Controllers
 
                         foreach (var cuentaNM in cuentasNMs)
                         {
-                            foreach (var jsResponse in jsonResponse["Cotizaciones"])
+                            foreach (var jsResponse in jsonResponse["respuestas"])
                             {
-                                if (cuentaNM.eMailCli == jsResponse["EmailCli"])
+                                if (cuentaNM.emailCliente == jsResponse["emailCliente"])
                                 {
                                     cuentaNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
                                     cuentaNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                    cuentaNM.idCuenta_Sf = jsResponse[OutParameter.SF_IdCuenta];
+                                    cuentaNM.idCuenta_Sf = jsResponse[OutParameter.SF_IdCuenta2];
 
                                     /// Actualización de Cuenta NM
                                     var updateResponse = _cuentaNMRepository.Update(cuentaNM);

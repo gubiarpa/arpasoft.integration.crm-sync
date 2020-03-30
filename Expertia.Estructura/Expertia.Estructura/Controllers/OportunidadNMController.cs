@@ -55,7 +55,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     //oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
                     ClearQuickLog("body_request.json", "OportunidadNM"); /// ♫ Trace
-                    var objEnvio = new {cotizaciones = oportunidadNMSF};
+                    var objEnvio = new {opp = oportunidadNMSF};
                     QuickLog(objEnvio, "body_request.json", "OportunidadNM"); /// ♫ Trace
 
                     var responseOportunidadNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.OportunidadNMMethod, Method.POST, objEnvio, true, token);
@@ -65,7 +65,7 @@ namespace Expertia.Estructura.Controllers
 
                         foreach (var oportunidadNM in oportunidadNMs)
                         {
-                            foreach (var jsResponse in jsonResponse["Cotizaciones"])
+                            foreach (var jsResponse in jsonResponse["respuestas"])
                             {
                                 if (oportunidadNM.idCuenta_SF == jsResponse["idCuenta_SF"])
                                 {

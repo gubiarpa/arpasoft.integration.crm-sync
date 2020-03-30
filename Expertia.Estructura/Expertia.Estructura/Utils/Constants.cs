@@ -414,6 +414,7 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF"; 
         public const string SF_IdOportunidad2 = "idOportunidad_SF";
         public const string SF_IdCuenta = "ID_CUENTA_SF";
+        public const string SF_IdCuenta2 = "idCuenta_SF";
         public const string SF_IdContacto = "ID_CONTACTO_SF";
         public const string SF_CodigoRetorno = "CODIGO_RETORNO";
         public const string SF_MensajeRetorno = "MENSAJE_RETORNO";

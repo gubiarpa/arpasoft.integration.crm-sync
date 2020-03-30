@@ -35,7 +35,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             ExecuteStoredProcedure(StoredProcedureName.AW_Get_OportunidadNM);
             operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
             operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
-            operation[OutParameter.CursorOportunidadNM] = ToCuentaNM(GetDtParameter(OutParameter.CursorOportunidadNM));
+            operation[OutParameter.CursorOportunidadNM] = ToOportunidadNM(GetDtParameter(OutParameter.CursorOportunidadNM));
             #endregion
 
             return operation;
@@ -65,7 +65,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Parse
-        private IEnumerable<OportunidadNM> ToCuentaNM(DataTable dt)
+        private IEnumerable<OportunidadNM> ToOportunidadNM(DataTable dt)
         {
             try
             {
@@ -77,34 +77,34 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     {
                        idCuenta_SF = row.StringParse("IdCuenta_SF"),
                        fechaRegistro = row.StringParse("FechaRegistro"),
-                       idCanalVenta = row.StringParse("IdCanalVenta"),
-                       metaBuscador = row.StringParse("Metabuscador"),
-                       cajaVuelos = row.BoolParse("CajaVuelos"),
-                       cajaHotel = row.BoolParse("CajaHotel"),
-                       cajaPaquetes = row.BoolParse("CajaPaquetes"),
-                       cajaServicios = row.BoolParse("CajaServicios"),
+                       IdCanalVenta = row.StringParse("IdCanalVenta"),
+                       metabuscador = row.StringParse("Metabuscador"),
+                       CajaVuelos = row.BoolParse("CajaVuelos"),
+                       CajaHotel = row.BoolParse("CajaHotel"),
+                       CajaPaquetes = row.BoolParse("CajaPaquetes"),
+                       CajaServicios = row.BoolParse("CajaServicios"),
                        modoIngreso = row.StringParse("ModoIngreso"),
                        ordenAtencion = row.StringParse("OrdenAtencion"),
                        evento = row.StringParse("Evento"),
-                       estado = row.StringParse("Estado"),
-                       idCotSRV = row.IntParse("IdCotSRV"),
-                       idUsuarioSrv = row.IntParse("IdUsuarioSrv"),
+                       Estado = row.StringParse("Estado"),
+                       IdCotSRV = row.IntParse("IdCotSRV"),
+                       IdUsuarioSrv = row.IntParse("IdUsuarioSrv"),
                        codReserva = row.StringParse("CodReserva"),
                        fechaCreación = row.StringParse("FechaCreación"),
                        estadoVenta = row.StringParse("EstadoVenta"),
                        codigoAerolinea = row.StringParse("CodigoAerolinea"),
-                       tipo = row.StringParse("Tipo"),
-                       ruc = row.IntParse("RUC"),
-                       pcc_OfficeID = row.StringParse("PCCOfficeID"),
+                       Tipo = row.StringParse("Tipo"),
+                       RUCEmpresa = row.IntParse("RUC"),
+                       PCCOfficeID = row.StringParse("PCCOfficeID"),
                        counterAsignado = row.StringParse("CounterAsignado"),
-                       iata = row.StringParse("IATA"),
+                       IATA = row.StringParse("IATA"),
                        descripPaquete = row.StringParse("DescripPaquete"),
                        destinoPaquetes = row.StringParse("DestinoPaquetes"),
                        fechasPaquetes = row.StringParse("FechasPaquetes"),
-                       empresaCliente = row.StringParse("EmpresaCliente"),
+                       EmpresaCliente = row.StringParse("EmpresaCliente"),
                        nombreCliente = row.StringParse("NombreCliente"),
                        apeliidosCliente = row.StringParse("ApeliidosCliente"),
-                       idLoginWeb = row.StringParse("IdLoginWeb"),
+                       IdLoginWeb = row.StringParse("IdLoginWeb"),
                        telefonoCliente = row.IntParse("TelefonoCliente"),
                        accion_SF = row.StringParse("Accion_SF")
                     });

@@ -75,27 +75,27 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 {
                     cuentaNMList.Add(new CuentaNM()
                     {
-                        nombreCli = row.StringParse("NombreCli"),
-                        apePatCli = row.StringParse("ApePatCli"),
-                        apeMatCli = row.StringParse("ApeMatCli"),
+                        nombreCliente = row.StringParse("NombreCli"),
+                        apellidoCliente = row.StringParse("ApePatCli"),
+                        //apeMatCli = row.StringParse("ApeMatCli"),
                         idCuenta_Sf = row.StringParse("idCuenta_SF"),
-                        eMailCli = row.StringParse("EmailCli"),
+                        emailCliente = row.StringParse("EmailCli"),
                         enviarPromociones = row.BoolParse("EnviarPromociones"),
                         tipoTelefono1 = row.StringParse("tipoTelefono1"),
-                        codPais1 = row.IntParse("codPais1"),
+                        pais1 = row.IntParse("codPais1"),
                         numero1 = row.IntParse("Numero1"),
                         tipoTelefono2 = row.StringParse("TipoTelefono2"),
-                        codPais2 = row.IntParse("codPais2"),
+                        pais2 = row.IntParse("codPais2"),
                         numero2 = row.IntParse("Numero2"),
                         tipoTelefono3 = row.StringParse("TipoTelefono3"),
-                        codPais3 = row.IntParse("codPais3"),
+                        pais3 = row.IntParse("codPais3"),
                         numero3 = row.IntParse("Numero3"),
                         direccion = row.StringParse("Dirección"),
                         razonSocial = row.StringParse("razonSocial"),
                         aceptarPoliticas = row.BoolParse("aceptarPoliticas"),
                         ruc = row.IntParse("RUC"),
                         idUsuarioSrv_Sf = row.IntParse("IdUsuarioSrv_SF"),
-                        accion_Sf = row.StringParse("accion_SF")
+                        accion_SF = row.StringParse("accion_SF")
 
                     });
                 }
