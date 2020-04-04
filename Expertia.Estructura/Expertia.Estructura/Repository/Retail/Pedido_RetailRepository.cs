@@ -14,6 +14,7 @@ namespace Expertia.Estructura.Repository.AppWebs
         #region Constructor
         public Pedido_AW_Repository(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs) : base(unidadNegocio.ToConnectionKey(), unidadNegocio)
         {
+
         }
         #endregion
 
@@ -39,6 +40,44 @@ namespace Expertia.Estructura.Repository.AppWebs
                 AddParameter("pNumMonto_in", OracleDbType.Double, Convert.ToDouble(pedido.Monto), ParameterDirection.Input);                
                 
                 AddParameter(OutParameter.IdPedido, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);                
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Create_Pedido);
+
+                operation[OutParameter.IdPedido] = GetOutParameter(OutParameter.IdPedido);
+                operation[Operation.Result] = ResultType.Success;
+                #endregion
+
+                return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Operation CreateNM(DatosPedido pedido)
+        {
+            try
+            {
+                var operation = new Operation();
+
+                #region Parameter
+                AddParameter("pChrMotorTipo_in", OracleDbType.Char, Constantes_Pedido.ID_TIPO_PEDIDO_OTROS, ParameterDirection.Input, 3);
+                AddParameter("pVarIdSesion_in", OracleDbType.Varchar2, null, ParameterDirection.Input, 50);
+                AddParameter("pNumIdResVue_in", OracleDbType.Int32, null, ParameterDirection.Input);
+                AddParameter("pNumIdResPaq_in", OracleDbType.Int32, null, ParameterDirection.Input);
+                AddParameter("pChrTipoPaq_in", OracleDbType.Char, null, ParameterDirection.Input, 1);
+                AddParameter("pNumIdWeb_in", OracleDbType.Int32, pedido.IdWeb, ParameterDirection.Input);
+                AddParameter("pNumIdLang_in", OracleDbType.Int32, pedido.IdLang, ParameterDirection.Input);
+                AddParameter("pVarIP_in", OracleDbType.Varchar2, (string.IsNullOrEmpty(pedido.IPUsuario) ? "127.0.0.0" : pedido.IPUsuario), ParameterDirection.Input, 30);
+                AddParameter("pVarBrowser_in", OracleDbType.Varchar2, (string.IsNullOrEmpty(pedido.Browser) ? "Servicio Saleforce" : pedido.IPUsuario), ParameterDirection.Input, 200);
+                AddParameter("pNumIdCotSRV_in", OracleDbType.Int32, pedido.IdCotVta, ParameterDirection.Input);
+                AddParameter("pVarDetalleServ_in", OracleDbType.Varchar2, pedido.DetalleServicio, ParameterDirection.Input, 1000);
+                AddParameter("pNumMonto_in", OracleDbType.Double, Convert.ToDouble(pedido.Monto), ParameterDirection.Input);
+
+                AddParameter(OutParameter.IdPedido, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
                 #endregion
 
                 #region Invoke
@@ -103,6 +142,32 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
+        public void InsertFormaPagoPedidoNM(DatosPedido pedidoRQ, PedidoRS pedidoRS, int intIdFormaPago)
+        {
+            try
+            {
+                #region Parameter
+                AddParameter("pNumIdPedido_in", OracleDbType.Int32, pedidoRS.IdPedido, ParameterDirection.Input);
+                AddParameter("pNumIdFormaPago_in", OracleDbType.Int16, intIdFormaPago);
+                AddParameter("pChrTipoTarj_in", OracleDbType.Char, "", ParameterDirection.Input, 2);
+                AddParameter("pIntTotalPtos_in", OracleDbType.Int32, 0, ParameterDirection.Input);
+                AddParameter("pIntPtosPago_in", OracleDbType.Int32, 0, ParameterDirection.Input);
+                AddParameter("pNumMontoPago_in", OracleDbType.Decimal, pedidoRQ.Monto, ParameterDirection.Input, 10);
+                AddParameter("pNumPuntoXDolar_in", OracleDbType.Decimal, 0, ParameterDirection.Input, 10);
+                AddParameter("pNumTipoCambio_in", OracleDbType.Decimal, 0, ParameterDirection.Input, 10);
+                AddParameter("pVarCodAuthPtos_in", OracleDbType.Varchar2, "", ParameterDirection.Input, 100);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Insert_FormaPago_Pedido);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public void Update_FechaExpira_Pedido(Pedido pedidoRQ, PedidoRS pedidoRS)
         {
             try
@@ -110,6 +175,25 @@ namespace Expertia.Estructura.Repository.AppWebs
                 #region Parameter
                 AddParameter("pNumIdPedido_in", OracleDbType.Int32, pedidoRS.IdPedido, ParameterDirection.Input);
                 AddParameter("pdatefeChaExpira", OracleDbType.Date, DateTime.Now.AddHours(Convert.ToDouble(pedidoRQ.TiempoExpiracionCIP)), ParameterDirection.Input);               
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_FechaExpira_Pedido);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void Update_FechaExpira_PedidoNM(DatosPedido pedidoRQ, PedidoRS pedidoRS)
+        {
+            try
+            {
+                #region Parameter
+                AddParameter("pNumIdPedido_in", OracleDbType.Int32, pedidoRS.IdPedido, ParameterDirection.Input);
+                AddParameter("pdatefeChaExpira", OracleDbType.Date, DateTime.Now.AddHours(Convert.ToDouble(pedidoRQ.TiempoExpiracionCIP)), ParameterDirection.Input);
                 #endregion
 
                 #region Invoke

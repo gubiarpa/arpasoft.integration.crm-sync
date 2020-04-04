@@ -29,6 +29,73 @@ namespace Expertia.Estructura.Models
         public string IdSolicitudpago_SF { get; set; }
     }
 
+    public class DatosPedido : IUnidadNegocio
+    {
+        public string IdUsuario { get; set; }
+        public int? IdLang { get; set; }
+        public int? IdWeb { get; set; }
+        public string IPUsuario { get; set; }
+        public string Browser { get; set; }
+        public string DetalleServicio { get; set; }
+        public string CodePasarelaPago { get; set; }
+        public string Email { get; set; }
+        public int? TiempoExpiracionCIP { get; set; }
+        public string Monto { get; set; }
+        public int IdCotVta { get; set; }
+        public int? IdCanalVta { get; set; }
+        public string NombreClienteCot { get; set; }
+        public string ApellidoClienteCot { get; set; }
+        public UnidadNegocio UnidadNegocio { get; set; }
+        public string IdOportunidad_SF { get; set; }
+        public string IdSolicitudpago_SF { get; set; }
+
+        public string Codigo { get; set; }
+        public string FechaRegistro { get; set; }
+        public string Estado { get; set; }
+        public string ModoIngreso { get; set; }
+        public string CanalVenta { get; set; }
+        public string Empresa { get; set; }
+        public string Cliente { get; set; }
+        public string DatosContacto { get; set; }
+        public string EmailContacto { get; set; }
+        public string RegistradoPor { get; set; }
+        public string MetaBuscador { get; set; }
+        public string OrdenAtencion { get; set; }
+        public string Evento { get; set; }
+        public string UsuarioLogin { get; set; }
+        public string Moneda { get; set; }
+        public string NumeroPedido { get; set; }
+        public string TipoPasarela { get; set; }
+        public string CodigoAutorizacion { get; set; }
+        public string FechaPedido { get; set; }
+        public string CodigoLineaAerea { get; set; }
+        public string DetalleServicioEc { get; set; }
+        public double TotalPagar { get; set; }
+        public string ExpiracionPedido { get; set; }
+        public string MailDestinatario { get; set; }
+        public string Resultado { get; set; }
+        public string FechaPasarela { get; set; }
+        public double MontoPagar { get; set; }
+        public string LineaAereaValidadora { get; set; }
+        public string RCGenerado { get; set; }
+        public string FormaPago { get; set; }
+        public string NumeroTarjeta { get; set; }
+        public string TipoTarjeta { get; set; }
+        public string EntidadBancaria { get; set; }
+        public string TitularTarjeta { get; set; }
+        public string DocumentoTitular { get; set; }
+        public string Expiracion { get; set; }
+        public string THReniec { get; set; }
+        public string MarcaTipoCambio { get; set; }
+        public string TipoTipoCambio { get; set; }
+        public string NivelTipoCambio { get; set; }
+        public string PaisTipoCambio { get; set; }
+        public string IPCliente { get; set; }
+        public int Fee { get; set; }
+        public int Pef { get; set; }
+        public int Gem { get; set; }
+    }
+
     public class PedidoRS : ICrmApiResponse
     {       
         public string CodigoError { get; set; }

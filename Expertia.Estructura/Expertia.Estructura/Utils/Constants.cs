@@ -557,8 +557,10 @@ namespace Expertia.Estructura.Utils
     {
         public const string ID_TIPO_PEDIDO_OTROS = "OTR";
         public const int ID_CANAL_VENTA_CONTACT_CENTER = 94;
-        public const Int16 ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;        
-        public const string CODE_FPAGO_GENERAL = "SF";
+        public const Int16 ID_FORMA_PAGO_SAFETYPAY_ONLINE = 6;
+        public const Int16 ID_FORMA_PAGO_SAFETYPAY_CASH = 7;
+        public const string CODE_FPAGO_GENERAL = "SF"; //CODIGO SAFETYPAY ONLINE
+        public const string CODE_FPAGO_SAFETYPAY_CASH = "SC";//CODIGO SAFETYPAY CASH
         public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";
 
         #region EstadoPedidos
@@ -581,11 +583,26 @@ namespace Expertia.Estructura.Utils
     {
         public const string CurrencyUSD = "USD";
         public const string CodeSafetyPayOnline = "SF";
+        public const string CodeSafetyPayCash = "SC";
         public const int ID_MAIL_SOLICITUD_PAGO_SERVICIO_SF = 78;
         public const string STR_NOM_ESTADO_CIP_GENERADO = "Generado";
         public const string STR_NOM_ESTADO_CIP_GENERADA = "Generada";
         public const string STR_NOM_ESTADO_CIP_EXPIRADO = "Expirado";
         public const string STR_NOM_ESTADO_CIP_CANCELADO = "Cancelada";        
+    }
+
+    public static class Constantes_MetodoDePago
+    {
+        public const string CODE_FPAGO_PAGOEFECTIVO = "PE"; //CODIGO METODO DE PAGO EFECTIVO
+        public const string CODE_FPAGO_SAFETYPAY_ONLINE = "SO"; //CODIGO METODO DE PAGO  SAFETYPAY ONLINE
+        public const string CODE_FPAGO_SAFETYPAY_CASH = "SC";//CODIGO METODO DE PAGO SAFETYPAY CASH
+        public const string CODE_FPAGO_SAFETYPAY_INTERN = "SI";//CODIGO METODO DE PAGO SAFETYPAY INTERNACIONAL
+        public const string CODE_FPAGO_TARJETA_VISA = "VI";//CODIGO METODO DE PAGO TARJETA VISA
+        public const string CODE_FPAGO_TARJETA_MASTERCARD = "MC";//CODIGO METODO DE PAGO TARJETA MASTERCARD
+        public const string CODE_FPAGO_TARJETA_MASTERCARD_CA = "CA";//CODIGO METODO DE PAGO TARJETA MASTERCARD CA
+        public const string CODE_FPAGO_TARJETA_DINERS = "DN";//CODIGO METODO DE PAGO TARJETA DINERS
+        public const string CODE_FPAGO_TARJETA_AMERICANEX = "AX";//CODIGO METODO DE PAGO TARJETA AMERICAN EXPRESS
+
     }
 
     public static class Constantes_FileRetail

@@ -35,6 +35,7 @@ namespace Expertia.Estructura.Utils
         RegionCuenta,
         Subcodigo,
         Venta,
-        FileOportunidadNM
+        FileOportunidadNM,
+        GenCodigoPagoNM
     }
 }
