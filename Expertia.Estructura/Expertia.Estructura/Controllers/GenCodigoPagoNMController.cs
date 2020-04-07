@@ -47,7 +47,7 @@ namespace Expertia.Estructura.Controllers
                 if (_return == true) return Ok(_resultpedido);
 
                 RepositoryByBusiness(pedido.UnidadNegocio.ID);
-
+                
                 /*Generamos el Pedido*/
                 var operation = _pedidoRepository.CreateNM(pedido);
                 if (operation[Operation.Result].ToString() == ResultType.Success.ToString() && Convert.ToInt32(operation[OutParameter.IdPedido].ToString()) > 0)
@@ -65,162 +65,62 @@ namespace Expertia.Estructura.Controllers
                 /// SEGUN SEA EL METODO DE PAGO REALIZA DIFERENTE PROCESO
                 if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_VISA)
                 {
+                    intIdFormaPago = Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA;
+                    pedido.CodePasarelaPago = Constantes_MetodoDePago.CODE_FPAGO_TARJETA_VISA;
                 }
                 else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_MASTERCARD)
                 {
+                    intIdFormaPago = Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA;
+                    pedido.CodePasarelaPago = Constantes_MetodoDePago.CODE_FPAGO_TARJETA_MASTERCARD_CA;
                 }
                 else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_DINERS)
                 {
+                    intIdFormaPago = Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA;
+                    pedido.CodePasarelaPago = Constantes_MetodoDePago.CODE_FPAGO_TARJETA_DINERS;
                 }
                 else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_AMERICANEX)
                 {
+                    intIdFormaPago = Constantes_FileRetail.INT_ID_FORMA_PAGO_SOLO_TARJETA;
+                    pedido.CodePasarelaPago = Constantes_MetodoDePago.CODE_FPAGO_TARJETA_AMERICANEX;
                 }
                 else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_PAGOEFECTIVO)
                 {
+                    GenerarPedido_Pago_Efectivo(pedido, _resultpedido, DtsUsuarioLogin);
                 }
                 else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_ONLINE)
                 {
+                    GenerarPedido_Safetypay_Online(pedido, _resultpedido, DtsUsuarioLogin);
                 }
                 else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_CASH)
                 {
                     intIdFormaPago = Constantes_Pedido.ID_FORMA_PAGO_SAFETYPAY_CASH;
-                    GenerarPedido_SC(pedido, _resultpedido, DtsUsuarioLogin);
+                    GenerarPedido_Safetypay_Cash(pedido, _resultpedido, DtsUsuarioLogin);
+                    pedido.CodePasarelaPago = "";// Para este caso se setea a vacio ya que el procedimiento siguiente solo acepta valores de tarjetas VI, MC, DN, AX
                 }
                 else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_INTERN)
                 {
-
+                    GenerarPedido_Safetypay_Internacional(pedido, _resultpedido, DtsUsuarioLogin);
                 }
-                else {
-                }
-                /*
-                ///Generamos el codigo en SafetyPay
-                ws_compra.ws_compra Ws_Compra = new ws_compra.ws_compra();
-                CustomCashPaymentRequestType requestCash = new CustomCashPaymentRequestType();
-                ws_compra.AmountType objAmountType = new ws_compra.AmountType();
-
-                objAmountType.CurrencyID = "150"; ///Valor del dolar para SafetyPay
-                objAmountType.Value = Convert.ToDecimal(pedido.Monto);
-
-                requestCash.BankID = String.Empty;
-                requestCash.IncludeAllBanks = true;
-                requestCash.TransactionIdentifier = String.Empty;
-                requestCash.MerchantAccount = String.Empty;
-                requestCash.MerchantSalesID = _resultpedido.IdPedido.ToString();
-                requestCash.TrackingCode = "";
-                requestCash.ExpirationTime = (Convert.ToInt16(pedido.TiempoExpiracionCIP) * 60);
-                requestCash.ExpirationTimeSpecified = true;
-                requestCash.Language = (pedido.IdWeb == Webs_Cid.DM_WEB_ID ? "PE" : "ES");
-                requestCash.CountryID = "PER";
-                requestCash.Amount = objAmountType;
-
-                requestCash.SendEmailToShopper = true;
-                if (requestCash.SendEmailToShopper)
+                else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_UATP)
                 {
-                    requestCash.CustomerInformation_Value = DtsUsuarioLogin.EmailUsuario;
-                }
 
-                requestCash.CustomMerchantName = (pedido.IdWeb == Webs_Cid.DM_WEB_ID ? "Destinos Mundiales Perú": "NMVIAJES");
-                requestCash.ApplicationID = Convert.ToInt16(pedido.IdWeb);
+                }
+                else if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_INDEPENDENCIA)
+                {
+                    GenerarPedido_Independencia(pedido, _resultpedido, DtsUsuarioLogin);
+                }
                 
-                ws_compra.RptaPagoSafetyPay response = new ws_compra.RptaPagoSafetyPay();
-                if (pedido.IdWeb == Webs_Cid.DM_WEB_ID)
-                {
-                    requestCash.WebId = Convert.ToString(pedido.IdWeb);
-                    response = Ws_Compra.GenerarPago_SafetyPay_Cash_DM(requestCash);
-                }
-                else
-                {
-                    requestCash.IdDepartamento = DtsUsuarioLogin.IdDep;
-                    requestCash.IdOficina = DtsUsuarioLogin.IdOfi;
-                    response = Ws_Compra.GenerarPago_SafetyPay_Cash(requestCash);
-                }
-
-                if (response.OperationId != null && response.TransaccionIdentifier != null)
-                {
-                    _resultpedido.CodigoOperacion = response.OperationId;
-                    _resultpedido.CodigoTransaction = response.TransaccionIdentifier;
-
-                    _resultpedido.CodigoError = "OK";
-                    _resultpedido.MensajeError = "Se generó el código de pedido.";
-                }
-                else
-                {
-                    _resultpedido.CodigoError = "ER"; _resultpedido.MensajeError = "GP - Error al intentar generar el CIP";
-                    return Ok(_resultpedido);
-                }
-
-                Models.RptaPagoSafetyPay RptaPagoSafetyPayBD = _pedidoRepository.Get_Rpta_SagetyPay(_resultpedido.IdPedido);
-
-                List<Models.PaymentLocationType> lstPaymentType = new List<Models.PaymentLocationType>();
-
-                if (response.lst_PaymentLocationType != null)
-                {
-                    List<Models.PaymentStepType> lstPaymentStep = new List<Models.PaymentStepType>();
-                    List<Models.PaymentInstructionType> lstPaymentInstructions = new List<Models.PaymentInstructionType>();
-                    foreach (ws_compra.PaymentLocationType objPaymentLocationTypeRSTmp in response.lst_PaymentLocationType)
-                    {
-                        Models.PaymentLocationType objPaymentLocationTypeRS = new Models.PaymentLocationType();
-                        objPaymentLocationTypeRS.Id = objPaymentLocationTypeRSTmp.ID;
-
-                        foreach (ws_compra.PaymentStepType objPaymentStepRSTmp in objPaymentLocationTypeRSTmp.lst_PaymentStepType)
-                        {
-                            Models.PaymentStepType objPaymentStepRS = new Models.PaymentStepType();
-                            objPaymentStepRS.Step = objPaymentStepRSTmp.Step;
-                            objPaymentStepRS.StepSpecified = objPaymentStepRSTmp.StepSpecified;
-                            objPaymentStepRS.Value = objPaymentStepRSTmp.Value;
-                            lstPaymentStep.Add(objPaymentStepRS);
-                        }
-
-                        if (objPaymentLocationTypeRSTmp.PaymentInstructions != null)
-                        {
-                            foreach (ws_compra.PaymentInstructionType objPaymentInstructionTypeRSTmp in objPaymentLocationTypeRSTmp.PaymentInstructions)
-                            {
-                                Models.PaymentInstructionType objPaymentInstructionsRS = new Models.PaymentInstructionType();
-                                objPaymentInstructionsRS.Name = objPaymentInstructionTypeRSTmp.Name;
-                                objPaymentInstructionsRS.Value = objPaymentInstructionTypeRSTmp.Value;
-                                lstPaymentInstructions.Add(objPaymentInstructionsRS);
-                            }
-                        }
-
-                        objPaymentLocationTypeRS.lstPaymentStepType = lstPaymentStep;
-                        objPaymentLocationTypeRS.Name = objPaymentLocationTypeRSTmp.Name;
-                        objPaymentLocationTypeRS.PaymentInstructions = lstPaymentInstructions.ToArray();
-                        objPaymentLocationTypeRS.PaymentSteps = lstPaymentStep.ToArray();
-                        lstPaymentType.Add(objPaymentLocationTypeRS);
-                    }
-                }
-
-                ///IdFormaPago  Identificador de la forma de pago
-                intIdFormaPago = Constantes_Pedido.ID_FORMA_PAGO_SAFETYPAY_CASH;
-                ///Realizamos el envio del correo
-                try
-                {
-                    IEnviarCorreo objEnviarCorreo = new EnviarCorreo(pedido.UnidadNegocio.ID);
-                    DateTime datFechaActual = DateTime.Now;
-                    DateTime datFechaExpiraPago;
-                    string strExpirationDateTime = response.ExpirationDateTime;
-                    string[] arrExp = strExpirationDateTime.Split('(');
-                    datFechaExpiraPago = datFechaActual.AddHours(Convert.ToInt16(pedido.TiempoExpiracionCIP));
-
-                    _resultpedido.CorreoEnviado = objEnviarCorreo.Enviar_SolicitudPagoServicioSafetyPay(
-                        pedido.IdUsuario.ToString(), Convert.ToInt32(pedido.IdWeb), Convert.ToInt32(pedido.IdLang), 
-                        pedido.IdCotVta, pedido.Email, null, pedido.NombreClienteCot, pedido.ApellidoClienteCot, null, 
-                        DtsUsuarioLogin.NomCompletoUsuario, DtsUsuarioLogin.EmailUsuario, 
-                        (pedido.CodePasarelaPago == Constantes_SafetyPay.CodeSafetyPayCash ? Constantes_Pedido.ID_FORMA_PAGO_SAFETYPAY_CASH : Convert.ToInt16(0)), 
-                        RptaPagoSafetyPayBD.TransaccionIdentifier, _resultpedido.IdPedido, Convert.ToDouble(pedido.Monto), 
-                        RptaPagoSafetyPayBD.ExpirationDateTime, RptaPagoSafetyPayBD.lstAmountType, lstPaymentType);
-                    objEnviarCorreo = null;
-                }
-                catch (Exception ex)
-                {
-                    errorPedido = "Error al enviar el correo |" + ex.Message;
-                    ///return InternalServerError(ex);
-                }
-                */
                 /*Inserta Forma de Pedido  General para todos las metodos de pago*/
                 _pedidoRepository.InsertFormaPagoPedidoNM(pedido, _resultpedido, intIdFormaPago);
-                _pedidoRepository.Update_FechaExpira_PedidoNM(pedido, _resultpedido);
 
+                if (pedido.TiempoExpiracionCIP != null || pedido.TiempoExpiracionCIP > 0)
+                {
+                    _pedidoRepository.Update_FechaExpira_PedidoNM(pedido, _resultpedido);
+                }
+
+
+                ///Aca deberia estar una validacion de Fee implementar si es el caso
+                
                 /*Insertamos el POST en el SRV*/
                 string strTextoPost = "<span class='texto_cambio_estado'>Cambio de estado a <strong>Pendiente de Pago</strong></span><br><br>" + "La pasarela de pago ha actualizado el estado de su cotización.";
                 ICotizacionSRV_Repository _CotizacionSRV = new CotizacionSRV_AW_Repository(pedido.UnidadNegocio.ID);
@@ -309,10 +209,11 @@ namespace Expertia.Estructura.Controllers
         }
 
 
-        private void GenerarPedido_SC(DatosPedido pedido, 
+        private void GenerarPedido_Safetypay_Cash(DatosPedido pedido, 
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
+            Pedido_AW_Repository _pedidoRepository = new Pedido_AW_Repository();
             var errorPedido = string.Empty;
 
             /*Generamos el codigo en SafetyPay*/
@@ -437,6 +338,27 @@ namespace Expertia.Estructura.Controllers
                 /*return InternalServerError(ex);*/
             }
         }
+
+        private void GenerarPedido_Safetypay_Online(DatosPedido pedido,
+                                      Models.PedidoRS resultPedido,
+                                      UsuarioLogin DtsUsuarioLogin)
+        {
+        }
+        private void GenerarPedido_Safetypay_Internacional(DatosPedido pedido,
+                                      Models.PedidoRS resultPedido,
+                                      UsuarioLogin DtsUsuarioLogin)
+        {
+        }
+        private void GenerarPedido_Independencia(DatosPedido pedido,
+                                      Models.PedidoRS resultPedido,
+                                      UsuarioLogin DtsUsuarioLogin)
+        {
+        }
+        private void GenerarPedido_Pago_Efectivo(DatosPedido pedido,
+                                      Models.PedidoRS resultPedido,
+                                      UsuarioLogin DtsUsuarioLogin)
+        {
+        }
         private void validacionPedido(ref DatosPedido _pedido, ref Models.PedidoRS _resultPedido, ref bool _return, ref UsuarioLogin UserLogin)
         {
             string mensajeError = string.Empty;
@@ -490,6 +412,10 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie el monto|";
             }
+            if (_pedido.Monto.Contains(","))
+            {
+                mensajeError += "El uso de la coma (,) no es válido como separador decimal.";
+            }
             if (_pedido.TiempoExpiracionCIP == null || _pedido.TiempoExpiracionCIP <= 0)
             {
                 mensajeError += "Envie el tiempo de expiracion del CIP|";
@@ -541,6 +467,14 @@ namespace Expertia.Estructura.Controllers
                         _pedido.IdWeb = Webs_Cid.ID_WEB_WEBFAREFINDER;
                 }
             }
+        }
+
+        private Boolean ValidarMontoMaxPasarela(double monto)
+        {
+            if (monto > Constantes_Pedido.DBL_VI_MONTO_MAX_TX)
+                return false;
+            else
+                return true;
         }
         #endregion
 

@@ -62,6 +62,7 @@ namespace Expertia.Estructura.Repository.AppWebs
             try
             {
                 var operation = new Operation();
+                int intIdNewPedido = 0;
 
                 #region Parameter
                 AddParameter("pChrMotorTipo_in", OracleDbType.Char, Constantes_Pedido.ID_TIPO_PEDIDO_OTROS, ParameterDirection.Input, 3);
@@ -85,9 +86,35 @@ namespace Expertia.Estructura.Repository.AppWebs
 
                 operation[OutParameter.IdPedido] = GetOutParameter(OutParameter.IdPedido);
                 operation[Operation.Result] = ResultType.Success;
+
+                intIdNewPedido = Convert.ToInt32(GetOutParameter(OutParameter.IdPedido).ToString());
+                if (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_UATP)
+                {
+                    _Update_Pedido_EsUATP(intIdNewPedido, pedido);
+                }
                 #endregion
 
                 return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void _Update_Pedido_EsUATP(int intIdNewPedido, DatosPedido pedido)
+        {
+            try
+            {
+                #region Parameter
+                AddParameter("pNumIdPedido_in", OracleDbType.Int32, intIdNewPedido, ParameterDirection.Input);
+                AddParameter("pChrEsUATP_in", OracleDbType.Char, (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_UATP ? "1" : "0"), ParameterDirection.Input, 1);
+                AddParameter("pChrIdLAValidadora_in", OracleDbType.Char, (pedido.CodePasarelaPago == Constantes_MetodoDePago.CODE_FPAGO_TARJETA_UATP ? pedido.LineaAereaValidadora : ""), ParameterDirection.Input, 2);
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_Pedido_EsUATP);
+                #endregion
             }
             catch (Exception ex)
             {
@@ -149,6 +176,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 #region Parameter
                 AddParameter("pNumIdPedido_in", OracleDbType.Int32, pedidoRS.IdPedido, ParameterDirection.Input);
                 AddParameter("pNumIdFormaPago_in", OracleDbType.Int16, intIdFormaPago);
+                //AddParameter("pChrTipoTarj_in", OracleDbType.Char, pedidoRQ.CodePasarelaPago, ParameterDirection.Input, 2);
                 AddParameter("pChrTipoTarj_in", OracleDbType.Char, "", ParameterDirection.Input, 2);
                 AddParameter("pIntTotalPtos_in", OracleDbType.Int32, 0, ParameterDirection.Input);
                 AddParameter("pIntPtosPago_in", OracleDbType.Int32, 0, ParameterDirection.Input);

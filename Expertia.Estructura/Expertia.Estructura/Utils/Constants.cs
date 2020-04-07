@@ -247,6 +247,8 @@ namespace Expertia.Estructura.Utils
         public const string AW_Update_Facturacion_os_Tkts_Util = "NUEVOMUNDO.UP_FACTURACION_OS_TKTS_UTIL";
         public const string AW_Liberar_Usuweb_CA = "APPWEBS.TEST_PKG_COTIZACION_VTA_WFF.SP_LIBERAR_USUWEB_CA";
 
+        public const string AW_Update_Pedido_EsUATP = "APPWEBS.PKG_PAGO_ONLINE.SP_UPD_PEDIDO_ES_UATP";
+
         //Associate File
         public const string AW_Get_Datos_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF_TEST.SP_OBTIENE_COT_TEST_MT";
         public const string AW_Get_PedidoXSolicitud = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_X_SOLIC_MT";
@@ -562,6 +564,7 @@ namespace Expertia.Estructura.Utils
         public const string CODE_FPAGO_GENERAL = "SF"; //CODIGO SAFETYPAY ONLINE
         public const string CODE_FPAGO_SAFETYPAY_CASH = "SC";//CODIGO SAFETYPAY CASH
         public const string USERAGCORPGENERAPEDIDOLOGO = "userAGCorpGeneraPedidoLogoEmail";
+        public const double DBL_VI_MONTO_MAX_TX = 10000;
 
         #region EstadoPedidos
         public const Int16 INT_ID_ESTADO_PEDIDO_PAGADO = 2;
@@ -602,6 +605,8 @@ namespace Expertia.Estructura.Utils
         public const string CODE_FPAGO_TARJETA_MASTERCARD_CA = "CA";//CODIGO METODO DE PAGO TARJETA MASTERCARD CA
         public const string CODE_FPAGO_TARJETA_DINERS = "DN";//CODIGO METODO DE PAGO TARJETA DINERS
         public const string CODE_FPAGO_TARJETA_AMERICANEX = "AX";//CODIGO METODO DE PAGO TARJETA AMERICAN EXPRESS
+        public const string CODE_FPAGO_TARJETA_UATP = "UA";//CODIGO METODO DE PAGO TARJETA UATP
+        public const string CODE_FPAGO_INDEPENDENCIA = "IN";//CODIGO METODO DE PAGO INDEPENDENCIA
 
     }
 
