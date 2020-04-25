@@ -98,7 +98,7 @@ namespace Expertia.Estructura.Controllers
             object error = null, logResult = null;
             try
             {
-                var codigoError = DbResponseCode.ContactoYaExiste;
+                var codigoError = DbResponseCode.ContactoNoExiste;
                 entity.UnidadNegocio.ID = GetUnidadNegocio(entity.UnidadNegocio.Descripcion);
                 object result;
                 _instants[InstantKey.Salesforce] = DateTime.Now;
