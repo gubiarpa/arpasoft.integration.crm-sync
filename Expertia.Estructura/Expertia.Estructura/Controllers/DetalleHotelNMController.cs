@@ -30,18 +30,20 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<DetalleHotelNM> detalleHotelNMs = null;
+            List<RptaHotelSF> ListRptaHotelSF_Fail = null;
+            RptaHotelSF _rptaHotelSF = null;
+
+            object SFResponse = null;
             string error = string.Empty;
             object objEnvio = null;
 
             try
             {
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
-                RepositoryByBusiness(_unidadNegocio);
-                _instants[InstantKey.Salesforce] = DateTime.Now;
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());                                
 
                 /// I. Consulta de Detalle Itinerario NM
-                detalleHotelNMs = (IEnumerable<DetalleHotelNM>)(_detalleHotelNMRepository.Send(_unidadNegocio))[OutParameter.CursorDetalleHotelNM];
-                if (detalleHotelNMs == null || detalleHotelNMs.ToList().Count.Equals(0)) return Ok(detalleHotelNMs);
+                detalleHotelNMs = (IEnumerable<DetalleHotelNM>)(_detalleHotelNMRepository.GetDetalleHoteles())[OutParameter.CursorDetalleHotelNM];
+                if (detalleHotelNMs == null || detalleHotelNMs.ToList().Count.Equals(0)) return Ok(false);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -54,33 +56,57 @@ namespace Expertia.Estructura.Controllers
                 {
                     detalleHotelNMSF.Add(detalleHotel.ToSalesforceEntity());
                 }
-
-
+                
                 try
                 {
-                    /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "DetalleHotelNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = detalleHotelNMSF };
-                    QuickLog(objEnvio, "body_request.json", "DetalleHotelNM"); /// ♫ Trace
+                    /// Envío de CuentaNM a Salesforce                    
+                    objEnvio = new { listadatos = detalleHotelNMSF };
+                    QuickLog(objEnvio, "body_request.json", "DetalleHotelNM", previousClear: true); /// ♫ Trace
 
 
                     var responseDetalleHotelNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleHotelNMMethod, Method.POST, objEnvio, true, token);
                     if (responseDetalleHotelNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetalleHotelNM.Content);
+                        SFResponse = jsonResponse["respuestas"];
 
-                        foreach (var detalleHotelNM in detalleHotelNMs)
+                        ListRptaHotelSF_Fail = new List<RptaHotelSF>();
+                        foreach (var detalleHotelNM in jsonResponse["respuestas"])
                         {
-                            foreach (var jsResponse in jsonResponse["Cotizaciones"])
+                            try
                             {
-                                detalleHotelNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                detalleHotelNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                detalleHotelNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
-                                detalleHotelNM.idDetalleHotel_SF = jsResponse[OutParameter.SF_IdDetalleItinerario];
+                                #region Deserialize
+                                _rptaHotelSF = new RptaHotelSF();
 
-                                ///// Actualización de estado de Cuenta NM hacia ???????
-                                //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
-                                //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                _rptaHotelSF.CodigoError = "OK";
+                                _rptaHotelSF.MensajeError = "TST";
+                                _rptaHotelSF.idOportunidad_SF = "006R000000WAUr4IAH";
+                                _rptaHotelSF.idDetalleHotel_SF = "006R000000WAUr4IAC";
+                                _rptaHotelSF.Identificador_NM = "1";
+
+                                _rptaHotelSF.CodigoError = detalleHotelNM[OutParameter.SF_Codigo];
+                                _rptaHotelSF.MensajeError = detalleHotelNM[OutParameter.SF_Mensaje];
+                                _rptaHotelSF.idOportunidad_SF = detalleHotelNM[OutParameter.SF_IdOportunidad2];
+                                _rptaHotelSF.idDetalleHotel_SF = detalleHotelNM[OutParameter.SF_IdDetalleHotel];
+                                _rptaHotelSF.Identificador_NM = detalleHotelNM[OutParameter.SF_IdentificadorNM];
+                                #endregion
+
+                                #region ReturnToDB
+                                var updOperation = _detalleHotelNMRepository.Update(_rptaHotelSF);
+
+                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                {
+                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaHotelSF.Identificador_NM.ToString() + "||||";
+                                    ListRptaHotelSF_Fail.Add(_rptaHotelSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                }
+                                #endregion
+                            }
+                            catch (Exception ex)
+                            {
+                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                ListRptaHotelSF_Fail.Add(_rptaHotelSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                             }
                         }
                     }
@@ -94,7 +120,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { DetalleHotelNM = detalleHotelNMs });
+                return Ok(true);
             }
             catch (Exception ex)
             {
@@ -105,6 +131,8 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Response = SFResponse,
+                    Rpta_NoUpdate_Fail = ListRptaHotelSF_Fail,                    
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
                     LegacySystems = detalleHotelNMs

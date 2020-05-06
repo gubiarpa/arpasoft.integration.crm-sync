@@ -5,6 +5,7 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface IDetalleHotelNMRepository
     {
-        Operation Send(UnidadNegocioKeys? unidadNegocio);
+        Operation GetDetalleHoteles();
+        Operation Update(RptaHotelSF RptaHotelNM);
     }
 }

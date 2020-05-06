@@ -6,7 +6,7 @@ namespace Expertia.Estructura.Repository.Behavior
     public interface IOportunidadNMRepository
     {
         Operation GetOportunidades();
-        Operation Update(OportunidadNM oportunidadNM);
+        Operation Update(RptaOportunidadSF RptaOportunidadNM);
     }
 
 

@@ -30,18 +30,20 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<SolicitudPagoNM> solicitudPagoNMs = null;
+            List<RptaSolicitudPagoSF> ListRptaSolicitudPagoSF_Fail = null;
+            RptaSolicitudPagoSF _rptaSolicitudPagoSF = null;
+
+            object SFResponse = null;
             string error = string.Empty;
             object objEnvio = null;
 
             try
             {
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
-                RepositoryByBusiness(_unidadNegocio);
-                _instants[InstantKey.Salesforce] = DateTime.Now;
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
 
                 /// I. Consulta de Solicitud Pago NM
-                solicitudPagoNMs = (IEnumerable<SolicitudPagoNM>)(_solicitudPagoNMRepository.Send(_unidadNegocio))[OutParameter.CursorSolicitudPagoNM];
-                if (solicitudPagoNMs == null || solicitudPagoNMs.ToList().Count.Equals(0)) return Ok(solicitudPagoNMs);
+                solicitudPagoNMs = (IEnumerable<SolicitudPagoNM>)(_solicitudPagoNMRepository.GetSolicitudesPago())[OutParameter.CursorSolicitudPagoNM];
+                if (solicitudPagoNMs == null || solicitudPagoNMs.ToList().Count.Equals(0)) return Ok(false);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -55,32 +57,55 @@ namespace Expertia.Estructura.Controllers
                     solicitudPagoNMSF.Add(solicitudPago.ToSalesforceEntity());
                 }
 
-
                 try
                 {
-                    /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "SolicitudPagoNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = solicitudPagoNMSF };
-                    QuickLog(objEnvio, "body_request.json", "SolicitudPagoNM"); /// ♫ Trace
-
+                    /// Envío de CuentaNM a Salesforce                    
+                    objEnvio = new { ListdatosSolicitudPago = solicitudPagoNMSF };
+                    QuickLog(objEnvio, "body_request.json", "SolicitudPagoNM", previousClear: true); /// ♫ Trace
 
                     var responseSolicitudPagoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.SolicitudPagoNMMethod, Method.POST, objEnvio, true, token);
                     if (responseSolicitudPagoNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseSolicitudPagoNM.Content);
+                        SFResponse = jsonResponse["respuestas"];
 
-                        foreach (var solicitudPagoNM in solicitudPagoNMs)
+                        ListRptaSolicitudPagoSF_Fail = new List<RptaSolicitudPagoSF>();
+                        foreach (var solicitudPagoNM in jsonResponse["respuestas"])
                         {
-                            foreach (var jsResponse in jsonResponse["Cotizaciones"])
+                            try
                             {
-                                solicitudPagoNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                solicitudPagoNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                solicitudPagoNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
-                                solicitudPagoNM.IdRegSolicitudPago_SF = jsResponse[OutParameter.SF_IdRegSolicitudPago];
+                                #region Deserialize
+                                _rptaSolicitudPagoSF = new RptaSolicitudPagoSF();
 
-                                ///// Actualización de estado de Cuenta NM hacia ???????
-                                //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
-                                //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                _rptaSolicitudPagoSF.CodigoError = "OK";
+                                _rptaSolicitudPagoSF.MensajeError = "TST";
+                                _rptaSolicitudPagoSF.idOportunidad_SF = "006R000000WAUr4IAH";
+                                _rptaSolicitudPagoSF.IdRegSolicitudPago_SF = "006R000000WAUr4IAC";
+                                _rptaSolicitudPagoSF.Identificador_NM = "2";
+
+                                _rptaSolicitudPagoSF.CodigoError = solicitudPagoNM[OutParameter.SF_Codigo];
+                                _rptaSolicitudPagoSF.MensajeError = solicitudPagoNM[OutParameter.SF_Mensaje];
+                                _rptaSolicitudPagoSF.idOportunidad_SF = solicitudPagoNM[OutParameter.SF_IdOportunidad2];
+                                _rptaSolicitudPagoSF.IdRegSolicitudPago_SF = solicitudPagoNM[OutParameter.SF_IdRegSolicitudPago];
+                                _rptaSolicitudPagoSF.Identificador_NM = solicitudPagoNM[OutParameter.SF_IdentificadorNM];
+                                #endregion
+
+                                #region ReturnToDB
+                                var updOperation = _solicitudPagoNMRepository.Update(_rptaSolicitudPagoSF);
+
+                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                {
+                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaSolicitudPagoSF.Identificador_NM.ToString() + "||||";
+                                    ListRptaSolicitudPagoSF_Fail.Add(_rptaSolicitudPagoSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                }
+                                #endregion
+                            }
+                            catch (Exception ex)
+                            {
+                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                ListRptaSolicitudPagoSF_Fail.Add(_rptaSolicitudPagoSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                             }
                         }
                     }
@@ -94,7 +119,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { SolicitudPagoNM = solicitudPagoNMs});
+                return Ok(true);
             }
             catch (Exception ex)
             {
@@ -105,6 +130,8 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Response = SFResponse,
+                    Rpta_NoUpdate_Fail = ListRptaSolicitudPagoSF_Fail,                    
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
                     LegacySystems = solicitudPagoNMs

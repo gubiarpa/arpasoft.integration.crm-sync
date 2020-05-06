@@ -21,7 +21,7 @@ namespace Expertia.Estructura.Controllers
     public class DetalleItinerarioNMController : BaseController<object>
     {
         #region Properties
-        private ISendRepository<DetalleItinerarioNM> _detalleItinerarioNMRepository;
+        private  IDetalleItinerarioNMRepository _detalleItinerarioNMRepository;
         protected override ControllerName _controllerName => ControllerName.DetalleItinerarioNM;
         #endregion
 
@@ -29,16 +29,20 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<DetalleItinerarioNM> detItinerarioList = null;
+            List<RptaItinerarioSF> ListRptaItinerarioSF_Fail = new List<RptaItinerarioSF>();
+            RptaItinerarioSF _rptaItinerarioSF = null;
+
+            object SFResponse = null;
             string error = string.Empty;
             object objEnvio = null;
 
             try
-            {
-                var _unidadNegocio = RepositoryByBusiness(GetUnidadNegocio(unidadNegocio.Descripcion));
+            {                
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
 
                 /// I. Consulta de Detalle Itinerario NM
-                detItinerarioList = (IEnumerable<DetalleItinerarioNM>)(_detalleItinerarioNMRepository.Read())[OutParameter.CursorDetalleItinerarioNM];
-                if (detItinerarioList == null || detItinerarioList.ToList().Count.Equals(0)) return Ok(detItinerarioList);
+                detItinerarioList = (IEnumerable<DetalleItinerarioNM>)(_detalleItinerarioNMRepository.GetItinerarios())[OutParameter.CursorDetalleItinerarioNM];
+                if (detItinerarioList == null || detItinerarioList.ToList().Count.Equals(0)) return Ok(false);
 
                 /// II. Obtiene Token y URL para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -48,52 +52,59 @@ namespace Expertia.Estructura.Controllers
                 /// III. Construímos lista para enviar a SF
                 var detItinerarioNM_SF = new List<object>();
                 foreach (var detItinerario in detItinerarioList)
+                {
                     detItinerarioNM_SF.Add(detItinerario.ToSalesforceEntity());
+                }                    
 
                 try
                 {
                     /// Envío de CuentaNM a Salesforce
                     objEnvio = new { listadatos = detItinerarioNM_SF };
                     QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM", previousClear: true); /// ♫ Trace
+
                     var responseDetItinerarioNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetItinerarioNMMethod, Method.POST, objEnvio, true, token);
                     if (responseDetItinerarioNM.StatusCode.Equals(HttpStatusCode.OK))
-                    {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetItinerarioNM.Content);
-                        try
+                    {                        
+                        dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseDetItinerarioNM.Content);                        
+                        SFResponse = jsonResponse["respuestas"];                        
+
+                        foreach (var item in jsonResponse["respuestas"])
                         {
-                            var responseList = jsonResponse["respuestas"]; // Obtiene todo el json
-                            QuickLog(responseList, "body_response.json");
-                            foreach (var item in responseList)
+                            try
                             {
-                                try
+                                #region Deserialize
+                                _rptaItinerarioSF = new RptaItinerarioSF();
+
+                                _rptaItinerarioSF.CodigoError = "OK";
+                                _rptaItinerarioSF.MensajeError = "TST";
+                                _rptaItinerarioSF.idOportunidad_SF = "006R000000WAUr4IAH";
+                                _rptaItinerarioSF.idItinerario_SF = "006R000000WAUr4IAC";
+                                _rptaItinerarioSF.Identificador_NM = "2";
+
+                                _rptaItinerarioSF.CodigoError = item[OutParameter.SF_Codigo];
+                                _rptaItinerarioSF.MensajeError = item[OutParameter.SF_Mensaje];
+                                _rptaItinerarioSF.idOportunidad_SF = item[OutParameter.SF_IdOportunidad2];
+                                _rptaItinerarioSF.idItinerario_SF = item[OutParameter.SF_IdItinerario];
+                                _rptaItinerarioSF.Identificador_NM = item[OutParameter.SF_IdentificadorNM];
+                                #endregion
+                                           
+                                #region ReturnToDB
+                                var updOperation = _detalleItinerarioNMRepository.Update(_rptaItinerarioSF);
+
+                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
                                 {
-                                    #region Deserialize
-                                    var mensaje = (item["mensaje"] ?? string.Empty).ToString();
-                                    var idOportunidad_SF = (item["idOportunidad_SF"] ?? string.Empty).ToString();
-                                    var idItinerario_SF = (item["idItinerario_SF"] ?? string.Empty).ToString();
-                                    var codigo = (item["codigo"] ?? string.Empty).ToString();
-                                    #endregion
-
-                                    var detItinerario = detItinerarioList.FirstOrDefault(c => c.idOportunidad_SF.Equals(idOportunidad_SF));
-
-                                    detItinerario.CodigoError = codigo;
-                                    detItinerario.MensajeError = mensaje;
-                                    detItinerario.idItinerario_SF = idItinerario_SF;
-
-                                    #region ReturnToDB
-                                    var updOperation = _detalleItinerarioNMRepository.Update(detItinerario)[OutParameter.IdActualizados];
-                                    if (int.TryParse(updOperation.ToString(), out int actualizados)) detItinerario.Actualizados = actualizados;
-                                    #endregion
+                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaItinerarioSF.Identificador_NM.ToString() + "||||";
+                                    ListRptaItinerarioSF_Fail.Add(_rptaItinerarioSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                                 }
-                                catch (Exception ex)
-                                {
-                                    throw ex;
-                                }
+                                #endregion
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            throw ex;
+                            catch (Exception ex)
+                            {                                    
+                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                ListRptaItinerarioSF_Fail.Add(_rptaItinerarioSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                            }
                         }
                     }
                     else
@@ -106,7 +117,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { DetalleItinerarioNM = detItinerarioList });
+                return Ok(true);
             }
             catch (Exception ex)
             {
@@ -117,6 +128,8 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Response = SFResponse,
+                    Rpta_NoUpdate_Fail = ListRptaItinerarioSF_Fail,                  
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
                     LegacySystems = detItinerarioList

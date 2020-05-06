@@ -30,18 +30,20 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<DetallePasajerosNM> detallePasajerosNMs = null;
+            List<RptaPasajeroSF> ListRptaPasajeroSF_Fail = null;
+            RptaPasajeroSF _rptaPasajeroSF = null;
+
+            object SFResponse = null;
             string error = string.Empty;
             object objEnvio = null;
 
             try
             {
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
-                RepositoryByBusiness(_unidadNegocio);
-                _instants[InstantKey.Salesforce] = DateTime.Now;
-
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());                
+                
                 /// I. Consulta de Detalle Itinerario NM
-                detallePasajerosNMs = (IEnumerable<DetallePasajerosNM>)(_detallePasajerosNMRepository.Send(_unidadNegocio))[OutParameter.CursorDetallePasajerosNM];
-                if (detallePasajerosNMs == null || detallePasajerosNMs.ToList().Count.Equals(0)) return Ok(detallePasajerosNMs);
+                detallePasajerosNMs = (IEnumerable<DetallePasajerosNM>)(_detallePasajerosNMRepository.GetPasajeros())[OutParameter.CursorDetallePasajerosNM];
+                if (detallePasajerosNMs == null || detallePasajerosNMs.ToList().Count.Equals(0)) return Ok(false);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -54,33 +56,56 @@ namespace Expertia.Estructura.Controllers
                 {
                     detallePasajerosNMSF.Add(detallePasajeros.ToSalesforceEntity());
                 }
-
-
+                
                 try
                 {
-                    /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = detallePasajerosNMSF };
-                    QuickLog(objEnvio, "body_request.json", "DetalleItinerarioNM"); /// ♫ Trace
-
-
+                    /// Envío de CuentaNM a Salesforce                    
+                    objEnvio = new { listadatos = detallePasajerosNMSF };
+                    QuickLog(objEnvio, "body_request.json", "DetallePasajerosNM", previousClear: true); /// ♫ Trace
+                    
                     var responseDetallePasajeroNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetallePasajeroNMMethod, Method.POST, objEnvio, true, token);
                     if (responseDetallePasajeroNM.StatusCode.Equals(HttpStatusCode.OK))
-                    {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetallePasajeroNM.Content);
+                    {                        
+                        dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseDetallePasajeroNM.Content);
+                        SFResponse = jsonResponse["respuestas"];
 
-                        foreach (var detallePasajeroNM in detallePasajerosNMs)
+                        ListRptaPasajeroSF_Fail = new List<RptaPasajeroSF>();
+                        foreach (var detallePasajeroNM in jsonResponse["respuestas"])
                         {
-                            foreach (var jsResponse in jsonResponse["Cotizaciones"])
+                            try
                             {
-                                detallePasajeroNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                detallePasajeroNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                detallePasajeroNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad];
-                                detallePasajeroNM.idPasajero_SF = jsResponse[OutParameter.SF_IdPasajero];
+                                #region Deserialize
+                                _rptaPasajeroSF = new RptaPasajeroSF();
 
-                                ///// Actualización de estado de Cuenta NM hacia ???????
-                                //var updateResponse = _cuentaNMRepository.Update(cuentaNM);
-                                //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                _rptaPasajeroSF.CodigoError = "OK";
+                                _rptaPasajeroSF.MensajeError = "TST";
+                                _rptaPasajeroSF.idOportunidad_SF = "006R000000WAUr4IAH";
+                                _rptaPasajeroSF.idPasajero_SF = "006R000000WAUr4IAC";
+                                _rptaPasajeroSF.Identificador_NM = "VU-2";
+
+                                _rptaPasajeroSF.CodigoError = detallePasajeroNM[OutParameter.SF_Codigo];
+                                _rptaPasajeroSF.MensajeError = detallePasajeroNM[OutParameter.SF_Mensaje];
+                                _rptaPasajeroSF.idOportunidad_SF = detallePasajeroNM[OutParameter.SF_IdOportunidad2];
+                                _rptaPasajeroSF.idPasajero_SF = detallePasajeroNM[OutParameter.SF_IdPasajero];
+                                _rptaPasajeroSF.Identificador_NM = detallePasajeroNM[OutParameter.SF_IdentificadorNM];
+                                #endregion
+
+                                #region ReturnToDB
+                                var updOperation = _detallePasajerosNMRepository.Update(_rptaPasajeroSF);
+
+                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                {
+                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaPasajeroSF.Identificador_NM.ToString() + "||||";
+                                    ListRptaPasajeroSF_Fail.Add(_rptaPasajeroSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                }
+                                #endregion
+                            }
+                            catch (Exception ex)
+                            {
+                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                ListRptaPasajeroSF_Fail.Add(_rptaPasajeroSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                             }
                         }
                     }
@@ -94,7 +119,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { DetallePasajerosNM = detallePasajerosNMs });
+                return Ok(true);
             }
             catch (Exception ex)
             {
@@ -105,6 +130,8 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Response = SFResponse,
+                    Rpta_NoUpdate_Fail = ListRptaPasajeroSF_Fail,                    
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
                     LegacySystems = detallePasajerosNMs

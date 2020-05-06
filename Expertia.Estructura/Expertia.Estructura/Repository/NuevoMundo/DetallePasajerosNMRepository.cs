@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region PublicMethods
-        public Operation Send(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
+        public Operation GetPasajeros()
         {
             var operation = new Operation();
 
@@ -40,6 +40,28 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
             return operation;
         }
+
+        public Operation Update(RptaPasajeroSF RptaPasajeroNM)
+        {
+            var operation = new Operation();
+
+            #region Parameters            
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, RptaPasajeroNM.CodigoError, ParameterDirection.Input, 2);
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, RptaPasajeroNM.MensajeError, ParameterDirection.Input, 1000);
+            AddParameter(OutParameter.SF_IDOPORTUNIDAD_NM, OracleDbType.Varchar2, RptaPasajeroNM.idOportunidad_SF);
+            AddParameter(OutParameter.SF_IDPASAJERO_NM, OracleDbType.Varchar2, RptaPasajeroNM.idPasajero_SF);            
+            AddParameter(OutParameter.IdCodeIdentifyNM, OracleDbType.Varchar2, (RptaPasajeroNM.Identificador_NM.Contains("-") ? RptaPasajeroNM.Identificador_NM.Split('-')[0] : ""));
+            AddParameter(OutParameter.IdIdentificadorNM, OracleDbType.Int64, (RptaPasajeroNM.Identificador_NM.Contains("-") ? Convert.ToInt64(RptaPasajeroNM.Identificador_NM.Split('-')[1]) : -1));
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Upd_DetallePasajerosNM);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+            #endregion
+
+            return operation;
+        }
         #endregion
 
         #region Parse
@@ -53,9 +75,26 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 {
                     detallePasajerosNMList.Add(new DetallePasajerosNM()
                     {
-                        tipo = row.StringParse("ACCION"),
-                        pais = row.StringParse("DK_CUENTA")
+                        idOportunidad_SF = row.StringParse("idOportunidad_SF"),
+                        Identificador_NM = row.StringParse("Identificador_NM"),
+                        id_reserva = row.IntParse("IdReserva"),
+                        IdPasajero = row.StringParse("IdPasajero"),
+                        tipo = row.StringParse("Tipo"),
+                        pais = row.StringParse("Pais"),
+                        apellidos = row.StringParse("Apellidos"),
+                        nombre = row.StringParse("Nombre"),
+                        tipoDocumento = row.StringParse("TipoDocumento"),
+                        nroDocumento = row.StringParse("NroDocumento"),
+                        fechaNacimiento = row.StringParse("FechaNacimiento"),                        
+                        FOID = row.StringParse("FOID"),                        
+                        NombreReniec = row.StringParse("NombreReniec"),
+                        numHabitacionPaquete = row.StringParse("NumHabitacionPaquete"),
+                        accion_SF = row.StringParse("Accion_SF")
                     });
+                    if(Convert.IsDBNull(row["FEE"]) == false)
+                    {
+                        detallePasajerosNMList[detallePasajerosNMList.Count - 1].FEE = row.FloatParse("FEE");
+                    }                    
                 }
 
                 return detallePasajerosNMList;

@@ -41,23 +41,21 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             return operation;
         }
 
-        public Operation Update(OportunidadNM oportunidadNM)
+        public Operation Update(RptaOportunidadSF RptaOportunidadNM)
         {
             var operation = new Operation();
 
-            #region Parameters
-            /// (1) P_CODIGO_ERROR
-            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (2) P_MENSAJE_ERROR
-            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (3) P_IDCUENTA_SF
-            AddParameter("P_IDOPORTUNIDAD_SF", OracleDbType.Varchar2, oportunidadNM.idOportunidad_SF);
+            #region Parameters            
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, RptaOportunidadNM.CodigoError, ParameterDirection.Input, 2);            
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, RptaOportunidadNM.MensajeError, ParameterDirection.Input,1000);            
+            AddParameter(OutParameter.SF_IDOPORTUNIDAD_NM, OracleDbType.Varchar2, RptaOportunidadNM.idOportunidad_SF);
+            AddParameter(OutParameter.IdIdentificadorNM, OracleDbType.Int64, Convert.ToInt64(RptaOportunidadNM.Identificador_NM));
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
-            ExecuteStoredProcedure(StoredProcedureName.AW_Upd_CuentaNM);
-            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
-            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            ExecuteStoredProcedure(StoredProcedureName.AW_Upd_OportunidadNM);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);            
             #endregion
 
             return operation;
@@ -69,45 +67,106 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         {
             try
             {
+                Int32 Cot_IdTempo = 0;                
+                ReservasOportunidad_NM ObjReservasOportunidad_NM = null;
+                PlanReservaSeguro_NM objPlanReservaSeguro_NM = null;
+                EmergenciaReservaSeguro_NM objEmergenciaReservaSeguro_NM = null;
+
                 var oportunidadNMList = new List<OportunidadNM>();
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    oportunidadNMList.Add(new OportunidadNM()
+                    if(Cot_IdTempo != row.IntParse("IdCotSRV"))
                     {
-                       idCuenta_SF = row.StringParse("IdCuenta_SF"),
-                       fechaRegistro = row.StringParse("FechaRegistro"),
-                       IdCanalVenta = row.StringParse("IdCanalVenta"),
-                       metabuscador = row.StringParse("Metabuscador"),
-                       CajaVuelos = row.BoolParse("CajaVuelos"),
-                       CajaHotel = row.BoolParse("CajaHotel"),
-                       CajaPaquetes = row.BoolParse("CajaPaquetes"),
-                       CajaServicios = row.BoolParse("CajaServicios"),
-                       modoIngreso = row.StringParse("ModoIngreso"),
-                       ordenAtencion = row.StringParse("OrdenAtencion"),
-                       evento = row.StringParse("Evento"),
-                       Estado = row.StringParse("Estado"),
-                       IdCotSRV = row.IntParse("IdCotSRV"),
-                       IdUsuarioSrv = row.IntParse("IdUsuarioSrv"),
-                       codReserva = row.StringParse("CodReserva"),
-                       fechaCreación = row.StringParse("FechaCreación"),
-                       estadoVenta = row.StringParse("EstadoVenta"),
-                       codigoAerolinea = row.StringParse("CodigoAerolinea"),
-                       Tipo = row.StringParse("Tipo"),
-                       RUCEmpresa = row.IntParse("RUC"),
-                       PCCOfficeID = row.StringParse("PCCOfficeID"),
-                       counterAsignado = row.StringParse("CounterAsignado"),
-                       IATA = row.StringParse("IATA"),
-                       descripPaquete = row.StringParse("DescripPaquete"),
-                       destinoPaquetes = row.StringParse("DestinoPaquetes"),
-                       fechasPaquetes = row.StringParse("FechasPaquetes"),
-                       EmpresaCliente = row.StringParse("EmpresaCliente"),
-                       nombreCliente = row.StringParse("NombreCliente"),
-                       apeliidosCliente = row.StringParse("ApeliidosCliente"),
-                       IdLoginWeb = row.StringParse("IdLoginWeb"),
-                       telefonoCliente = row.IntParse("TelefonoCliente"),
-                       accion_SF = row.StringParse("Accion_SF")
-                    });
+                        oportunidadNMList.Add(new OportunidadNM()
+                        {
+                            idCuenta_SF = row.StringParse("idCuenta_SF"),
+                            Identificador_NM = row.StringParse("Identificador_NM"),
+                            fechaRegistro = row.StringParse("fechaRegistro"),
+                            IdCanalVenta = row.StringParse("IdCanalVenta"),
+                            metabuscador = row.StringParse("metabuscador"),
+                            CajaVuelos = (row.IntParse("CajaVuelos") > 0 ? true : false),
+                            CajaHotel = (row.IntParse("CajaHotel") > 0 ? true : false),
+                            CajaPaquetes = (row.IntParse("CajaPaquetes") > 0 ? true : false),
+                            CajaServicios = (row.IntParse("CajaServicios") > 0 ? true : false),
+                            CajaSeguro = (row.IntParse("CajaSeguro") > 0 ? true : false),
+                            modoIngreso = row.StringParse("modoIngreso"),
+                            ordenAtencion = row.StringParse("ordenAtencion"),
+                            evento = row.StringParse("evento"),
+                            Estado = row.StringParse("Estado"),
+                            IdCotSRV = row.IntParse("IdCotSRV"),                           
+                            counterAsignado = row.StringParse("counterAsignado"),
+                            EmpresaCliente = row.StringParse("EmpresaCliente"),
+                            nombreCliente = row.StringParse("nombreCliente"),
+                            apellidosCliente = row.StringParse("apeliidosCliente"),
+                            IdLoginWeb = row.StringParse("idLoginWeb"),
+                            telefonoCliente = row.StringParse("telefonoCliente"),
+                            accion_SF = row.StringParse("accion_SF")
+                        });
+
+                        if (Convert.IsDBNull(row["IdUsuarioSrv"]) == false)
+                        {
+                            oportunidadNMList[oportunidadNMList.Count - 1].IdUsuarioSrv = row.IntParse("IdUsuarioSrv");
+                        }
+
+                        if (Convert.IsDBNull(row["IdReserva"]) == false)
+                        {
+                            oportunidadNMList[oportunidadNMList.Count - 1].ListReservas = new List<ReservasOportunidad_NM>();
+                        }
+                    }
+
+                    if (Convert.IsDBNull(row["IdReserva"]) == false) 
+                    {
+                        ObjReservasOportunidad_NM = new ReservasOportunidad_NM() {
+                            IdReserva = row.StringParse("IdReserva"),
+                            codReserva = row.StringParse("codReserva"),
+                            fechaCreación = row.StringParse("fechaCreacion"),
+                            estadoVenta = row.StringParse("estadoVenta"),
+                            codigoAerolinea = row.StringParse("codigoAerolinea"),
+                            Tipo = row.StringParse("Tipo"),
+                            PCCOfficeID = row.StringParse("PCC_OfficeID"),
+                            IATA = row.StringParse("IATA"),
+                            RUCEmpresa = row.StringParse("RUC_Empresa"),
+                            descripPaquete = row.StringParse("descripPaquete"),
+                            destinoPaquetes = row.StringParse("destinoPaquetes"),
+                            fechasPaquetes = row.StringParse("fechasPaquetes"),
+                            Proveedor = row.StringParse("Proveedor")
+                        };
+                        
+                        if (Convert.IsDBNull(row["PlanSeguro"]) == false)
+                        {
+                            objPlanReservaSeguro_NM = new PlanReservaSeguro_NM() {
+                                Plan = row.StringParse("PlanSeguro"),                               
+                                Destino = row.StringParse("Destino"),
+                                FechaSalida = row.StringParse("FechaSalida"),
+                                FechaRetorno = row.StringParse("FechaRetorno"),
+                                Edades = row.StringParse("Edades")
+                            };
+
+                            if (Convert.IsDBNull(row["CantPasajeros"]) == false)
+                            {
+                                objPlanReservaSeguro_NM.CantPasajeros = row.IntParse("CantPasajeros");
+                            }
+
+                            ObjReservasOportunidad_NM.PlanSeguro = objPlanReservaSeguro_NM;
+                        }
+
+                        if (Convert.IsDBNull(row["NombreEmergencia"]) == false)
+                        {
+                            objEmergenciaReservaSeguro_NM = new EmergenciaReservaSeguro_NM()
+                            {
+                                Nombre = row.StringParse("NombreEmergencia"),
+                                Apellido = row.StringParse("ApellidoEmergencia"),
+                                Telefono = row.StringParse("TelefonoEmergencia"),
+                                Email = row.StringParse("EmailEmergencia")
+                            };
+                            ObjReservasOportunidad_NM.EmergenciaSeguro = objEmergenciaReservaSeguro_NM;
+                        }
+
+                        oportunidadNMList[oportunidadNMList.Count - 1].ListReservas.Add(ObjReservasOportunidad_NM);
+                    }
+                                    
+                    Cot_IdTempo = row.IntParse("IdCotSRV");
                 }
 
                 return oportunidadNMList;

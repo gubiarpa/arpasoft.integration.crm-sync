@@ -30,18 +30,20 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<ChatterNM> chatterNMs = null;
+            List<RptaChatterSF> ListRptaChatterSF_Fail = null;
+            RptaChatterSF _rptaChatterSF = null;
+
+            object SFResponse = null;
             string error = string.Empty;
             object objEnvio = null;
 
             try
             {
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
-                RepositoryByBusiness(_unidadNegocio);
-                _instants[InstantKey.Salesforce] = DateTime.Now;
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
 
                 /// I. Consulta de Informacion Pago NM
-                chatterNMs = (IEnumerable<ChatterNM>)(_chatterNMRepository.Send(_unidadNegocio))[OutParameter.CursorChatterNM];
-                if (chatterNMs == null || chatterNMs.ToList().Count.Equals(0)) return Ok(chatterNMs);
+                chatterNMs = (IEnumerable<ChatterNM>)(_chatterNMRepository.GetPostCotizaciones())[OutParameter.CursorChatterNM];
+                if (chatterNMs == null || chatterNMs.ToList().Count.Equals(0)) return Ok(false);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -54,35 +56,57 @@ namespace Expertia.Estructura.Controllers
                 {
                     chatterNMSF.Add(chatter.ToSalesforceEntity());
                 }
-
-
+                
                 try
                 {
-                    /// Envío de Informacion de Canal de Comunicacion a Salesforce
-                    ClearQuickLog("body_request.json", "ChatterNM"); /// ♫ Trace
-                    objEnvio = new { cotizaciones = chatterNMSF };
-                    QuickLog(objEnvio, "body_request.json", "ChatterNM"); /// ♫ Trace
+                    /// Envío de Informacion de Canal de Comunicacion a Salesforce                    
+                    objEnvio = new { porDefinir = chatterNMSF }; /**POR DEFINIR**/
+                    QuickLog(objEnvio, "body_request.json", "ChatterNM", previousClear: true); /// ♫ Trace
 
 
                     var responseChatterNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.ChatterNMMethod, Method.POST, objEnvio, true, token);
                     if (responseChatterNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseChatterNM.Content);
+                        SFResponse = jsonResponse["respuestas"];
 
-                        foreach (var chatterNM in chatterNMs)
+                        ListRptaChatterSF_Fail = new List<RptaChatterSF>();
+                        foreach (var chatterNM in jsonResponse["respuestas"])
                         {
-                            foreach (var jsResponse in jsonResponse["Cotizaciones"])
+                            try
                             {
-                                if (chatterNM.idCotSrv_SF == jsResponse[""])
-                                {
-                                    chatterNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                    chatterNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                #region Deserialize
+                                _rptaChatterSF = new RptaChatterSF();
 
-                                    /// Actualización de estado de Chatter
-                                    var updateResponse = _chatterNMRepository.Update(chatterNM);
-                                    chatterNM.CodigoError = updateResponse[OutParameter.CodigoError].ToString();
-                                    chatterNM.MensajeError = updateResponse[OutParameter.MensajeError].ToString();
+                                _rptaChatterSF.CodigoError = "OK";
+                                _rptaChatterSF.MensajeError = "TST";
+                                _rptaChatterSF.idOportunidad_SF = "006R000000WAUr4IAH";
+                                _rptaChatterSF.IdRegPostCotSrv_SF = "006R000000WAUr4IAC";
+                                _rptaChatterSF.Identificador_NM = "16";
+
+                                _rptaChatterSF.CodigoError = chatterNM[OutParameter.SF_Codigo];
+                                _rptaChatterSF.MensajeError = chatterNM[OutParameter.SF_Mensaje];
+                                _rptaChatterSF.idOportunidad_SF = chatterNM[OutParameter.SF_IdOportunidad2];
+                                _rptaChatterSF.IdRegPostCotSrv_SF = chatterNM[OutParameter.SF_IdRegPostCotSrv];
+                                _rptaChatterSF.Identificador_NM = chatterNM[OutParameter.SF_IdentificadorNM];
+                                #endregion
+
+                                #region ReturnToDB
+                                var updOperation = _chatterNMRepository.Update(_rptaChatterSF);
+
+                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                {
+                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaChatterSF.Identificador_NM.ToString() + "||||";
+                                    ListRptaChatterSF_Fail.Add(_rptaChatterSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                                 }
+                                #endregion
+                            }
+                            catch (Exception ex)
+                            {
+                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                ListRptaChatterSF_Fail.Add(_rptaChatterSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                             }
                         }
                     }
@@ -96,7 +120,7 @@ namespace Expertia.Estructura.Controllers
                     error = ex.Message;
                 }
 
-                return Ok(new { ChatterNM = chatterNMs});
+                return Ok(true);
             }
             catch (Exception ex)
             {
@@ -107,6 +131,8 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Response = SFResponse,
+                    Rpta_NoUpdate_Fail = ListRptaChatterSF_Fail,                    
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Error = error,
                     LegacySystems = chatterNMs

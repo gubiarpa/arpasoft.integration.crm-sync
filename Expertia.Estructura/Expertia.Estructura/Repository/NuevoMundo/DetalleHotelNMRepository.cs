@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region PublicMethods
-        public Operation Send(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
+        public Operation GetDetalleHoteles()
         {
             var operation = new Operation();
 
@@ -40,6 +40,27 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
             return operation;
         }
+
+        public Operation Update(RptaHotelSF RptaHotelNM)
+        {
+            var operation = new Operation();
+
+            #region Parameters            
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, RptaHotelNM.CodigoError, ParameterDirection.Input, 2);
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, RptaHotelNM.MensajeError, ParameterDirection.Input, 1000);
+            AddParameter(OutParameter.SF_IDOPORTUNIDAD_NM, OracleDbType.Varchar2, RptaHotelNM.idOportunidad_SF);
+            AddParameter(OutParameter.SF_IDHOTEL_NM, OracleDbType.Varchar2, RptaHotelNM.idDetalleHotel_SF);            
+            AddParameter(OutParameter.IdIdentificadorNM, OracleDbType.Int64, Convert.ToInt64(RptaHotelNM.Identificador_NM));
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Upd_DetalleHotelNM);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+            #endregion
+
+            return operation;
+        }
         #endregion
 
         #region Parse
@@ -53,8 +74,18 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 {
                     detalleHotelNMList.Add(new DetalleHotelNM()
                     {
-                        hotel = row.StringParse("ACCION"),
-                        direccion = row.StringParse("DK_CUENTA")
+                        idOportunidad_SF = row.StringParse("IdOportunidad_SF"),
+                        Identificador_NM = row.StringParse("Identificador_NM"),                        
+                        hotel = row.StringParse("Hotel"),
+                        direccion = row.StringParse("Direccion"),
+                        destino = row.StringParse("Destino"),
+                        categoria = row.StringParse("Categoria"),
+                        fechaIngreso = row.StringParse("FechaIngreso"),
+                        fechaSalida = row.StringParse("FechaSalida"),
+                        fechaCancelacion = row.StringParse("FechaCancelacion"),
+                        codigoReservaNemo = row.StringParse("CodigoReservaNemo"),
+                        Proveedor = row.StringParse("Proveedor"),                        
+                        accion_SF = row.StringParse("Accion_SF")
                     });
                 }
 

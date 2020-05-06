@@ -280,15 +280,19 @@ namespace Expertia.Estructura.Utils
         public const string AW_Upd_OportunidadNM = AW_NM_Package + "." + "SP_ACTUALIZAR_OPORTUNIDAD";
         // CRMEC003_1
         public const string AW_Get_DetalleItinerarioNM = AW_NM_Package + "." + "SP_LISTAR_DET_ITINERARIO";
-        public const string AW_Set_DetalleItinerarioNM = AW_NM_Package + "." + "SP_ACTUALIZAR_DET_ITINERARIO";
+        public const string AW_Upd_DetalleItinerarioNM = AW_NM_Package + "." + "SP_ACTUALIZAR_DET_ITINERARIO";
         // CRMEC003_2
         public const string AW_Get_DetallePasajerosNM = AW_NM_Package + "." + "SP_LISTAR_DET_PASAJERO";
+        public const string AW_Upd_DetallePasajerosNM = AW_NM_Package + "." + "SP_ACTUALIZAR_DET_PASAJERO";
         // CRMEC003_3
         public const string AW_Get_DetalleHotelNM = AW_NM_Package + "." + "SP_LISTAR_DET_HOTEL";
+        public const string AW_Upd_DetalleHotelNM = AW_NM_Package + "." + "SP_ACTUALIZAR_DET_HOTEL";
         // CRMEC003_4
         public const string AW_Get_SolicitudPagoNM = AW_NM_Package + "." + "SP_LISTAR_SOLIC_PAGO";
+        public const string AW_Upd_SolicitudPagoNM = AW_NM_Package + "." + "SP_ACTUALIZAR_SOLIC_PAGO";
         // CRMEC003_5
         public const string AW_Get_InformacionPagoNM = AW_NM_Package + "." + "SP_LISTAR_INFO_PAGO";
+        public const string AW_Upd_InformacionPagoNM = AW_NM_Package + "." + "SP_ACTUALIZAR_INFO_PAGO";
         // CRMEC004
         public const string AW_Get_ChatterNM = AW_NM_Package + "." + "SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CHATTER";
@@ -355,7 +359,7 @@ namespace Expertia.Estructura.Utils
         public const string IdActualizados = "P_ACTUALIZADOS";
         public const string NumId = "pNumId_out";
         public const string IdDatosFactura = "ID_DATOS_FACTURA";
-        public const string IdPedido = "pNumIdNewPedido_out";
+        public const string IdPedido = "pNumIdNewPedido_out";        
         #endregion
 
         #region Cursors
@@ -386,10 +390,10 @@ namespace Expertia.Estructura.Utils
         public const string CursorCuentaNM = "P_CUENTA";
         public const string CursorOportunidadNM = "P_OPORTUNIDAD";
         public const string CursorDetalleItinerarioNM = "P_DETALLEITINERARIO";
-        public const string CursorDetallePasajerosNM = "x definir";
-        public const string CursorDetalleHotelNM = "x definir";
-        public const string CursorSolicitudPagoNM = "x definir";
-        public const string CursorInformacionPagoNM = "x definir";
+        public const string CursorDetallePasajerosNM = "P_PASAJEROS";
+        public const string CursorDetalleHotelNM = "P_HOTEL";
+        public const string CursorSolicitudPagoNM = "P_SOLIC_PAGO";
+        public const string CursorInformacionPagoNM = "P_INFO_PAGO";
         public const string CursorChatterNM = "P_CHATTER";
         #endregion
 
@@ -410,10 +414,14 @@ namespace Expertia.Estructura.Utils
         public const string CodigoTransaccion = "P_CODIGO_TRANSACCION";
         #endregion
 
-        #region SalesforceParameters
+        #region SalesforceParameters        
+        public const string IdIdentificadorNM = "P_IDENTIFY_NM_CAMB";
+        public const string IdCodeIdentifyNM = "P_CODE_SERV_NM";
+        public const string SF_IdentificadorNM = "Identificador_NM";
         public const string SF_CodigoError = "CODIGO_ERROR";
-        public const string SF_MensajeError = "MENSAJE_ERROR";
-        public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF"; 
+        public const string SF_MensajeError = "MENSAJE_ERROR";        
+        public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF";
+        public const string SF_IDOPORTUNIDAD_NM = "P_IDOPORTUNIDAD_SF";
         public const string SF_IdOportunidad2 = "idOportunidad_SF";
         public const string SF_IdCuenta = "ID_CUENTA_SF";
         public const string SF_IdCuenta2 = "idCuenta_SF";
@@ -425,13 +433,19 @@ namespace Expertia.Estructura.Utils
         public const string SF_Codigo = "codigo";
         public const string SF_Mensaje = "mensaje";
         public const string SF_IdSolicitudPago = "idSolicitudPago_SF";
-        public const string SF_IdLead = "ID_LEAD_SF";
-        public const string SF_IdDetalleItinerario = "IDITINERARIO_SF";
-        public const string SF_IdPasajero = "IDPASAJERO_SF";
-        public const string SF_IdDetalleHotel = "IDDETALLEHOTEL_SF";
-        public const string SF_IdRegSolicitudPago = "IDREGSOLICITUDPAGO_SF";
-        public const string SF_IdInformacionPago = "IDINFORMACIONPAGO_SF";
-
+        public const string SF_IdLead = "ID_LEAD_SF";        
+        public const string SF_IdItinerario = "idItinerario_SF";
+        public const string SF_IDITINERARIO_NM = "P_IDITINERARIO_SF";        
+        public const string SF_IdPasajero = "idPasajero_SF";
+        public const string SF_IDPASAJERO_NM = "P_IDPASAJERO_SF";                
+        public const string SF_IdDetalleHotel = "idDetalleHotel_SF";
+        public const string SF_IDHOTEL_NM = "P_IDHOTEL_SF";
+        public const string SF_IdRegSolicitudPago = "IdRegSolicitudPago_SF";
+        public const string SF_IdRegSolicitudPago_NM = "P_IDSOLICPAGO_SF";
+        public const string SF_IdInformacionPago = "IdInformacionPago_SF";
+        public const string SF_IdInformacionPagoNM = "P_IDINFOPAGO_SF";        
+        public const string SF_IdRegPostCotSrv = "IdRegPostCotSrv_SF";
+        public const string SF_IDPOSTCOTSRV_NM = "P_IDPOSTCOTSRV_SF";
         public const string SF_Token = "TOKEN";
         public const string SF_UrlAuth = "URL_AUTHORIZED";
         #endregion
@@ -575,6 +589,14 @@ namespace Expertia.Estructura.Utils
         #endregion
     }
 
+    public static class Constantes_FEE
+    {
+        public const string DBL_PAGOEFECTIVO_MONTO_COMISION1 = "DBL_PAGOEFECTIVO_MONTO_COMISION1";
+        public const string DBL_PAGOEFECTIVO_MONTO_COMISION2 = "DBL_PAGOEFECTIVO_MONTO_COMISION2";
+        public const string DBL_PAGOEFECTIVO_PCTAJE_COMISION = "DBL_PAGOEFECTIVO_PCTAJE_COMISION";
+        public const string DBL_PAGOEFECTIVO_TOPE_MONTO_COMISION = "DBL_PAGOEFECTIVO_TOPE_MONTO_COMISION";        
+    }    
+
     public static class Constantes_Mail
     {
         public const string EMAIL_BOLETIN_NMV = "boletin@mktg.viajesnuevomundo.com";
@@ -646,6 +668,7 @@ namespace Expertia.Estructura.Utils
         public const int ID_WEB_IA = 3;
         public const int ID_WEB_NMV_RECEPTIVO = 26;
         public const int ID_WEB_WEBFAREFINDER = 39;
+        public const int ID_WEB_NM_PERUTRIP = 36;
     }
 
     public static class Lang_Cid

@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region PublicMethods
-        public Operation Send(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
+        public Operation GetPostCotizaciones()
         {
             var operation = new Operation();
 
@@ -41,23 +41,22 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             return operation;
         }
 
-        public Operation Update(ChatterNM chatterNM)
+        public Operation Update(RptaChatterSF RptaChatterNM)
         {
             var operation = new Operation();
 
-            #region Parameters
-            /// (1) P_CODIGO_ERROR
-            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (2) P_MENSAJE_ERROR
-            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (3) P_IDCUENTA_SF
-            AddParameter("P_IDCOTSRV_SF", OracleDbType.Varchar2, chatterNM.idCotSrv_SF);
+            #region Parameters  
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, RptaChatterNM.CodigoError, ParameterDirection.Input, 2);
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, RptaChatterNM.MensajeError, ParameterDirection.Input, 1000);
+            AddParameter(OutParameter.SF_IDOPORTUNIDAD_NM, OracleDbType.Varchar2, RptaChatterNM.idOportunidad_SF);
+            AddParameter(OutParameter.SF_IDPOSTCOTSRV_NM, OracleDbType.Varchar2, RptaChatterNM.IdRegPostCotSrv_SF);
+            AddParameter(OutParameter.IdIdentificadorNM, OracleDbType.Int64, Convert.ToInt64(RptaChatterNM.Identificador_NM));
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.AW_Upd_ChatterNM);
-            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
-            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);            
             #endregion
 
             return operation;
@@ -75,10 +74,13 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 {
                     chatterNMList.Add(new ChatterNM()
                     {
-                        idOportunidad_SF = row.StringParse("IdOportunidad_SF"),
-                        idCotSrv_SF = row.StringParse("IdCotSrv_SF"),
-                        texto = row.StringParse("Texto"),
-                        accion_SF = row.StringParse("Accion_SF")
+                        idOportunidad_SF = row.StringParse("idOportunidad_SF"),
+                        idPostCotSrv = row.IntParse("idPostCotSrv"),
+                        Identificador_NM = row.StringParse("Identificador_NM"),
+                        cabecera = row.StringParse("cabecera"),
+                        texto = row.StringParse("texto"),
+                        fecha = row.StringParse("fecha"),
+                        accion_SF = row.StringParse("accion_SF")
                     });
                 }
                 return chatterNMList;

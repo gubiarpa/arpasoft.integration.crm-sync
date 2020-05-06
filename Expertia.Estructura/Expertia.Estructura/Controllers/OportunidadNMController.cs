@@ -30,6 +30,10 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<OportunidadNM> oportunidadNMs = null;
+            List<RptaOportunidadSF> ListRptaOportunidadSF_Fail = new List<RptaOportunidadSF>();
+            RptaOportunidadSF _rptaOportunidadSF = null;
+
+            object SFResponse = null;
             string exceptionMsg = string.Empty;
             try
             {
@@ -37,7 +41,7 @@ namespace Expertia.Estructura.Controllers
 
                 /// I. Consulta de Oportunidades de Nuevo Mundo
                 oportunidadNMs = (IEnumerable<OportunidadNM>)_oportunidadNMRepository.GetOportunidades()[OutParameter.CursorOportunidad];
-                if (oportunidadNMs == null || oportunidadNMs.ToList().Count.Equals(0)) return Ok(oportunidadNMs);
+                if (oportunidadNMs == null || oportunidadNMs.ToList().Count.Equals(0)) return Ok(false);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -45,42 +49,57 @@ namespace Expertia.Estructura.Controllers
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// preparación de la oportunidad para envio a Salesforce
-                var oportunidadNMSF = new List<object>();
+                var oportunidadNMSF = new List<object>();                
                 foreach (var oportunidad in oportunidadNMs)
-                {
+                {                  
                     oportunidadNMSF.Add(oportunidad.ToSalesforceEntity());
-                }
-                    /// II. Enviar Oportunidad a Salesforce
+                }  
+                
+                /// II. Enviar Oportunidad a Salesforce
                 try
-                {
-                    //oportunidad.CodigoError = oportunidad.MensajeError = string.Empty;
-                    ClearQuickLog("body_request.json", "OportunidadNM"); /// ♫ Trace
-                    var objEnvio = new {opp = oportunidadNMSF};
-                    QuickLog(objEnvio, "body_request.json", "OportunidadNM"); /// ♫ Trace
+                {   
+                    var objEnvio = new {opp = oportunidadNMSF};                    
+                    QuickLog(objEnvio, "body_request.json", "OportunidadNM",previousClear: true); /// ♫ Trace
 
                     var responseOportunidadNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.OportunidadNMMethod, Method.POST, objEnvio, true, token);
                     if (responseOportunidadNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseOportunidadNM.Content);
+                        SFResponse = jsonResponse["respuestas"];
 
-                        foreach (var oportunidadNM in oportunidadNMs)
+                        foreach (var jsResponse in jsonResponse["respuestas"])
                         {
-                            foreach (var jsResponse in jsonResponse["respuestas"])
+                            try
                             {
-                                if (oportunidadNM.idCuenta_SF == jsResponse["idCuenta_SF"])
-                                {
-                                    oportunidadNM.CodigoError = jsResponse[OutParameter.SF_CodigoError];
-                                    oportunidadNM.MensajeError = jsResponse[OutParameter.SF_MensajeError];
-                                    oportunidadNM.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad2];
+                                _rptaOportunidadSF = new RptaOportunidadSF();
 
-                                    /// Actualización de estado de Oportunidad
-                                    var updateResponse = _oportunidadNMRepository.Update(oportunidadNM);
-                                    oportunidadNM.CodigoError = updateResponse[OutParameter.CodigoError].ToString();
-                                    oportunidadNM.MensajeError = updateResponse[OutParameter.MensajeError].ToString();
+                                _rptaOportunidadSF.CodigoError = "OK";
+                                _rptaOportunidadSF.MensajeError = "TST";
+                                _rptaOportunidadSF.idOportunidad_SF = "001P000001bpIOWIC4";
+                                _rptaOportunidadSF.Identificador_NM = "2";
+
+                                _rptaOportunidadSF.CodigoError = jsResponse[OutParameter.SF_Codigo];
+                                _rptaOportunidadSF.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                _rptaOportunidadSF.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad2];
+                                _rptaOportunidadSF.Identificador_NM = jsResponse[OutParameter.SF_IdentificadorNM];
+
+                                /// Actualización de estado de Oportunidad
+                                var updateResponse = _oportunidadNMRepository.Update(_rptaOportunidadSF);
+
+                                if (Convert.IsDBNull(updateResponse[OutParameter.IdActualizados]) == true || updateResponse[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updateResponse[OutParameter.IdActualizados].ToString()) <= 0)
+                                {
+                                    exceptionMsg = exceptionMsg +  "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaOportunidadSF.Identificador_NM.ToString() +  "||||";
+                                    ListRptaOportunidadSF_Fail.Add(_rptaOportunidadSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                                 }
-                                
                             }
-                        }
+                            catch (Exception ex)
+                            {                                
+                                exceptionMsg = exceptionMsg  + "Error en el Proceso de Actualizacion - Response SalesForce : " +  ex.Message + "||||";
+                                ListRptaOportunidadSF_Fail.Add(_rptaOportunidadSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                            }
+                        }             
                     }
                     else 
                     {
@@ -92,7 +111,7 @@ namespace Expertia.Estructura.Controllers
                     exceptionMsg = ex.Message;
                 }
 
-                return Ok(oportunidadNMs);
+                return Ok(true);
             }
             catch (Exception ex)
             {
@@ -102,7 +121,9 @@ namespace Expertia.Estructura.Controllers
             finally
             {
                 (new
-                {
+                {                    
+                    Response = SFResponse,
+                    Rpta_NoUpdate_Fail = ListRptaOportunidadSF_Fail,
                     UnidadNegocio = unidadNegocio.Descripcion,
                     Exception = exceptionMsg,
                     LegacySystems = oportunidadNMs

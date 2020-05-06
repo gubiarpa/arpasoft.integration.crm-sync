@@ -5,7 +5,7 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface IChatterNMRepository
     {
-        Operation Send(UnidadNegocioKeys? unidadNegocio);
-        Operation Update(ChatterNM chatterNM);
+        Operation GetPostCotizaciones();
+        Operation Update(RptaChatterSF RptaChatterNM);
     }
 }

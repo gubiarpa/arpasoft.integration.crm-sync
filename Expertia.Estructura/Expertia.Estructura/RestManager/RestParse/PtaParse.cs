@@ -2,6 +2,7 @@
 using Expertia.Estructura.Models.Retail;
 using Expertia.Estructura.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace Expertia.Estructura.RestManager.RestParse
 {
@@ -361,39 +362,96 @@ namespace Expertia.Estructura.RestManager.RestParse
                 return new
                 {
                     oportunidadNM.idCuenta_SF,
-                    oportunidadNM.idOportunidad_SF,
+                    oportunidadNM.Identificador_NM,
+                    //oportunidadNM.idOportunidad_SF,
                     oportunidadNM.fechaRegistro,
+                    oportunidadNM.Servicio,
                     oportunidadNM.IdCanalVenta,
                     oportunidadNM.metabuscador,
                     oportunidadNM.CajaVuelos,
                     oportunidadNM.CajaHotel,
                     oportunidadNM.CajaPaquetes,
                     oportunidadNM.CajaServicios,
+                    oportunidadNM.CajaSeguro,
                     oportunidadNM.modoIngreso,
                     oportunidadNM.ordenAtencion,
                     oportunidadNM.evento,
                     oportunidadNM.Estado,
                     oportunidadNM.IdCotSRV,
                     oportunidadNM.IdUsuarioSrv,
-                    oportunidadNM.codReserva,
-                    oportunidadNM.fechaCreación,
-                    oportunidadNM.estadoVenta,
-                    oportunidadNM.codigoAerolinea,
-                    oportunidadNM.Tipo,
-                    oportunidadNM.RUCEmpresa,
-                    oportunidadNM.PCCOfficeID,
+                    oportunidadNM.requiereFirmaCliente,
                     oportunidadNM.counterAsignado,
-                    oportunidadNM.IATA,
-                    oportunidadNM.descripPaquete,
-                    oportunidadNM.destinoPaquetes,
-                    oportunidadNM.fechasPaquetes,
+                    ListReservas = (oportunidadNM.ListReservas == null ? null :
+                        oportunidadNM.ListReservas.ToSalesforceEntity()
+                    ),
                     oportunidadNM.EmpresaCliente,
                     oportunidadNM.nombreCliente,
-                    oportunidadNM.apeliidosCliente,
+                    oportunidadNM.apellidosCliente,
                     oportunidadNM.IdLoginWeb,
                     oportunidadNM.telefonoCliente,
                     oportunidadNM.accion_SF
                 };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static List<object> ToSalesforceEntity(this List<ReservasOportunidad_NM> ListReservasOp_NM)
+        {
+            try
+            {
+                if(ListReservasOp_NM != null && ListReservasOp_NM.Count > 0)
+                {
+                    var objListReservasOp_NM = new List<object>();                    
+
+                    foreach (ReservasOportunidad_NM ReservasOp_NM in ListReservasOp_NM)
+                    {
+                        objListReservasOp_NM.Add(
+                            new
+                            {
+                                ReservasOp_NM.IdReserva,
+                                ReservasOp_NM.codReserva,
+                                ReservasOp_NM.fechaCreación,
+                                ReservasOp_NM.estadoVenta,
+                                ReservasOp_NM.codigoAerolinea,
+                                ReservasOp_NM.Tipo,
+                                ReservasOp_NM.PCCOfficeID,
+                                ReservasOp_NM.IATA,
+                                ReservasOp_NM.RUCEmpresa,
+                                ReservasOp_NM.descripPaquete,
+                                ReservasOp_NM.destinoPaquetes,
+                                ReservasOp_NM.fechasPaquetes,
+                                ReservasOp_NM.Proveedor,
+                                PlanSeguro = (ReservasOp_NM.PlanSeguro == null ? null : new
+                                {
+                                    ReservasOp_NM.PlanSeguro.Plan,
+                                    ReservasOp_NM.PlanSeguro.CantPasajeros,
+                                    ReservasOp_NM.PlanSeguro.Destino,
+                                    ReservasOp_NM.PlanSeguro.FechaSalida,
+                                    ReservasOp_NM.PlanSeguro.FechaRetorno,
+                                    ReservasOp_NM.PlanSeguro.Edades
+                                }),
+                                EmergenciaSeguro = (ReservasOp_NM.EmergenciaSeguro == null ? null : new
+                                {
+                                    ReservasOp_NM.EmergenciaSeguro.Nombre,
+                                    ReservasOp_NM.EmergenciaSeguro.Apellido,
+                                    ReservasOp_NM.EmergenciaSeguro.Telefono,
+                                    ReservasOp_NM.EmergenciaSeguro.Email
+                                })
+                            }
+                        );
+                    }
+                                        
+                    return objListReservasOp_NM;
+
+                }
+                else
+                {
+                    return null;
+                }
+                               
             }
             catch (Exception ex)
             {
@@ -407,16 +465,21 @@ namespace Expertia.Estructura.RestManager.RestParse
             {
                 return new
                 {
-                    idOportunidad_SF = detItinerarioNM.idOportunidad_SF,
-                    lAerea = detItinerarioNM.lAerea,
-                    origen = detItinerarioNM.origen,
-                    salida = detItinerarioNM.salida,
-                    destino = detItinerarioNM.destino,
-                    llegada = detItinerarioNM.llegada,
-                    numeroVuelo = detItinerarioNM.numeroVuelo,
-                    clase = detItinerarioNM.clase,
-                    fareBasis =detItinerarioNM.fareBasis,
-                    operadoPor = detItinerarioNM.operadoPor
+                    detItinerarioNM.idOportunidad_SF,
+                    detItinerarioNM.Identificador_NM,
+                    detItinerarioNM.id_reserva,
+                    detItinerarioNM.id_itinerario,
+                    detItinerarioNM.LAerea,
+                    detItinerarioNM.Origen,
+                    detItinerarioNM.Salida,
+                    detItinerarioNM.Destino,
+                    detItinerarioNM.llegada,
+                    detItinerarioNM.numeroVuelo,
+                    detItinerarioNM.Clase,
+                    detItinerarioNM.fareBasis,
+                    detItinerarioNM.OperadoPor,
+                    detItinerarioNM.esRetornoItinerario,
+                    detItinerarioNM.accion_SF
                 };
             }
             catch (Exception ex)
@@ -432,6 +495,9 @@ namespace Expertia.Estructura.RestManager.RestParse
                 return new
                 {
                     detallePasajerosNM.idOportunidad_SF,
+                    detallePasajerosNM.Identificador_NM,
+                    detallePasajerosNM.id_reserva,
+                    detallePasajerosNM.IdPasajero,
                     detallePasajerosNM.tipo,
                     detallePasajerosNM.pais,
                     detallePasajerosNM.apellidos,
@@ -439,11 +505,12 @@ namespace Expertia.Estructura.RestManager.RestParse
                     detallePasajerosNM.tipoDocumento,
                     detallePasajerosNM.nroDocumento,
                     detallePasajerosNM.fechaNacimiento,
-                    detallePasajerosNM.foid,
-                    detallePasajerosNM.fee,
+                    detallePasajerosNM.Genero,
+                    detallePasajerosNM.FOID,
+                    detallePasajerosNM.FEE,
                     detallePasajerosNM.NombreReniec,
                     detallePasajerosNM.numHabitacionPaquete,
-                    detallePasajerosNM.idPasajero_SF
+                    detallePasajerosNM.accion_SF
                 };
             }
             catch (Exception ex)
@@ -459,6 +526,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                 return new
                 {
                     detalleHotelNM.idOportunidad_SF,
+                    detalleHotelNM.Identificador_NM,
                     detalleHotelNM.hotel,
                     detalleHotelNM.direccion,
                     detalleHotelNM.destino,
@@ -468,8 +536,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     detalleHotelNM.fechaCancelacion,
                     detalleHotelNM.codigoReservaNemo,
                     detalleHotelNM.Proveedor,
-                    detalleHotelNM.accion_SF,
-                    detalleHotelNM.idDetalleHotel_SF
+                    detalleHotelNM.accion_SF,                    
                 };
             }
             catch (Exception ex)
@@ -485,6 +552,8 @@ namespace Expertia.Estructura.RestManager.RestParse
                 return new
                 {
                     solicitudPagoNM.idOportunidad_SF,
+                    solicitudPagoNM.Identificador_NM,
+                    solicitudPagoNM.IdPedido,
                     solicitudPagoNM.pasarela,
                     solicitudPagoNM.fechaPedido,
                     solicitudPagoNM.estado1,
@@ -503,10 +572,21 @@ namespace Expertia.Estructura.RestManager.RestParse
                     solicitudPagoNM.tipoTC,
                     solicitudPagoNM.nivelTC,
                     solicitudPagoNM.paisTC,
+                    solicitudPagoNM.EsAutenticada,
+                    solicitudPagoNM.Detalle,
+                    solicitudPagoNM.LinkPago,
+                    solicitudPagoNM.CodAutorTarj,
+                    solicitudPagoNM.TipoImporte,
+                    solicitudPagoNM.MontoImporte,
+                    solicitudPagoNM.PlazoDePago,
+                    solicitudPagoNM.Error,
+                    solicitudPagoNM.CodCanje,
+                    solicitudPagoNM.Puntos,
                     solicitudPagoNM.ipCliente,
                     solicitudPagoNM.docTitular,
-                    solicitudPagoNM.mensaje,
-                    solicitudPagoNM.mensajeError,
+                    solicitudPagoNM.FEE,
+                    solicitudPagoNM.GEM,
+                    solicitudPagoNM.PEF,
                     solicitudPagoNM.accion_SF
                 };
             }
@@ -555,8 +635,11 @@ namespace Expertia.Estructura.RestManager.RestParse
                 return new
                 {
                     canalComunicacionNM.idOportunidad_SF,
-                    canalComunicacionNM.idCotSrv_SF,
+                    canalComunicacionNM.idPostCotSrv,
+                    canalComunicacionNM.Identificador_NM,
+                    canalComunicacionNM.cabecera,
                     canalComunicacionNM.texto,
+                    canalComunicacionNM.fecha,
                     canalComunicacionNM.accion_SF
                 };
             }
