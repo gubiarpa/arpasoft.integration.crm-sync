@@ -5,6 +5,6 @@ namespace Expertia.Estructura.Repository.Behavior
 {
     public interface IInformacionPagoNMRepository
     {
-        Operation Send(UnidadNegocioKeys? unidadNegocio);
+        Operation GetInformacionPago(UnidadNegocioKeys? unidadNegocio);
     }
 }

@@ -17,8 +17,9 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// CRMEC002 : Envío de datos de Oportunidad y Actualización 
     [RoutePrefix(RoutePrefix.OportunidadNM)]
-    public class OportunidadNMController : BaseController<object>
+    public class OportunidadNMController : BaseController
     {
         #region Properties
         private IOportunidadNMRepository _oportunidadNMRepository;

@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region PublicMethods
-        public Operation Send(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
+        public Operation GetInformacionPago(UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs)
         {
             var operation = new Operation();
 

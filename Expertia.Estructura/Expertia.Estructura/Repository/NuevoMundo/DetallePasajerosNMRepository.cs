@@ -86,6 +86,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         tipoDocumento = row.StringParse("TipoDocumento"),
                         nroDocumento = row.StringParse("NroDocumento"),
                         fechaNacimiento = row.StringParse("FechaNacimiento"),                        
+                        Genero = row.StringParse("Genero"),
                         FOID = row.StringParse("FOID"),                        
                         NombreReniec = row.StringParse("NombreReniec"),
                         numHabitacionPaquete = row.StringParse("NumHabitacionPaquete"),

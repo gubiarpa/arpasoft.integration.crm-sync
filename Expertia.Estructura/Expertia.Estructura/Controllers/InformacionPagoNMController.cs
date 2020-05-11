@@ -17,8 +17,9 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// CRMEC003_5 : Registro de Información de pago
     [RoutePrefix(RoutePrefix.InformacionPagoNM)]
-    public class InformacionPagoNMController : BaseController<object>
+    public class InformacionPagoNMController : BaseController
     {
         #region Properties
         private IInformacionPagoNMRepository _informacionPagoNMRepository;
@@ -40,7 +41,7 @@ namespace Expertia.Estructura.Controllers
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
                 /// I. Consulta de Informacion Pago NM
-                informacionPagoNMs = (IEnumerable<InformacionPagoNM>)(_informacionPagoNMRepository.Send(_unidadNegocio))[OutParameter.CursorInformacionPagoNM];
+                informacionPagoNMs = (IEnumerable<InformacionPagoNM>)(_informacionPagoNMRepository.GetInformacionPago(_unidadNegocio))[OutParameter.CursorInformacionPagoNM];
                 if (informacionPagoNMs == null || informacionPagoNMs.ToList().Count.Equals(0)) return Ok(informacionPagoNMs);
 
                 /// Obtiene Token para envío a Salesforce
