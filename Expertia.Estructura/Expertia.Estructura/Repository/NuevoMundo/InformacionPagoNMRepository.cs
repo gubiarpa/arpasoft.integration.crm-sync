@@ -53,8 +53,46 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 {
                     informacionPagoNMList.Add(new InformacionPagoNM()
                     {
-                        tipoServicio = row.StringParse("ACCION"),
-                        tipoPasajero = row.StringParse("DK_CUENTA")
+                        idOportunidad_SF = row.StringParse("idOportunidad_SF"),
+                        Identificador_NM = row.StringParse("Identificador_NM"),
+                        reservaID = row.StringParse("reservaID"),
+                        tipoServicio = row.StringParse("tipoServicio"),
+                        tipoPasajero = row.StringParse("tipoPasajero"),
+                        totalBoleto = row.FloatParse("totalBoleto"),
+                        tarifaNeto = row.FloatParse("tarifaNeto"),
+                        impuestos = row.FloatParse("impuestos"),
+                        cargos = row.FloatParse("cargos"),
+                        nombreHotel = row.StringParse("nombreHotel"),
+                        totalPagar = row.FloatParse("totalPagar"),
+                        descripcion = row.StringParse("descripcion"),
+                        feeAsumidoGeneral = row.StringParse("feeAsumidoGeneral"),
+                        numHabitacionPaquete = row.FloatParse("numHabitacionPaquete"),
+                        tipoPasajeroPaq = row.StringParse("tipoPasajeroPaq"),
+                        cantidadPasajeroPaq = row.FloatParse("cantidadPasajeroPaq"),
+                        monedaPaq = row.StringParse("monedaPaq"),
+                        precioUnitarioPaq = row.FloatParse("precioUnitarioPaq"),
+                        totalUnitarioPaq = row.FloatParse("totalUnitarioPaq"),
+                        precioTotalPorHabitacionPaq = row.FloatParse("precioTotalPorHabitacionPaq"),
+                        precioTotalHabitacionesPaq = row.FloatParse("precioTotalHabitacionesPaq"),
+                        gastosAdministrativosPaq = row.FloatParse("gastosAdministrativosPaq"),
+                        tarjetaDeTurismo = row.StringParse("tarjetaDeTurismo"),
+                        tarjetaDeAsistencia = row.StringParse("tarjetaDeAsistencia"),
+                        precioTotalPagarPaq = row.FloatParse("precioTotalPagarPaq"),
+                        textoDescuentoPaq = row.StringParse("textoDescuentoPaq"),
+                        montoDescuentoPaq = row.FloatParse("montoDescuentoPaq"),
+                        totalFacturarPaq = row.FloatParse("totalFacturarPaq"),
+                        cantDiasSeg = row.IntParse("cantDiasSeg"),
+                        precioUnitarioSeg = row.FloatParse("precioUnitarioSeg"),
+                        MontoReservaSeg = row.FloatParse("MontoReservaSeg"),
+                        accion_SF = row.StringParse("accion_SF"),
+                        IdInformacionPago_SF = row.StringParse("IdInformacionPago_SF"),
+                        Id_Sucursal = row.StringParse("Id_Sucursal"),
+                        Codigoweb = row.StringParse("Codigoweb"),
+                        PaqueteId = row.StringParse("PaqueteId"),
+                        SeguroId = row.StringParse("SeguroId"),
+                        IdCotizacion = row.StringParse("IdCotizacion"),
+                        OrdenServicio = row.StringParse("OrdenServicio"),
+                        OrdenDatos = row.StringParse("OrdenDatos")
                     });
                 }
                 return informacionPagoNMList;

@@ -609,8 +609,6 @@ namespace Expertia.Estructura.RestManager.RestParse
                     informacionPagoNM.tarifaNeto,
                     informacionPagoNM.impuestos,
                     informacionPagoNM.cargos,
-                    informacionPagoNM.nombreHotel,
-                    informacionPagoNM.totalPagar,
                     informacionPagoNM.numHabitacionPaquete,
                     informacionPagoNM.cantidadPasajeroPaq,
                     informacionPagoNM.precioUnitarioPaq,

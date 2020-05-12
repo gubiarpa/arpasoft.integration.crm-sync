@@ -52,10 +52,7 @@ namespace Expertia.Estructura.Controllers
                 /// preparación de hotel para envio a Salesforce
                 var informacionPagoNMSF = new List<object>();
                 foreach (var informacionPago in informacionPagoNMs)
-                {
                     informacionPagoNMSF.Add(informacionPago.ToSalesforceEntity());
-                }
-
 
                 try
                 {
