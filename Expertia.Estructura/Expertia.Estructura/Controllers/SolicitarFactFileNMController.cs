@@ -15,6 +15,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// CRMAFO06 : Envio de datos de File y actualización
     [RoutePrefix(RoutePrefix.SolicitarFactFileNM)]
     public class SolicitarFactFileNMController : BaseController
     {
@@ -24,37 +25,9 @@ namespace Expertia.Estructura.Controllers
 
         #region PublicMethods
         [Route(RouteAction.Send)]
-        public IHttpActionResult Send(SolicitarFactFileNM solicitarFactFileNM)
+        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
-            UnidadNegocioKeys? _unidadNegocio = null;
-            string exceptionMsg = string.Empty;
-            try
-            {
-                RepositoryByBusiness(_unidadNegocio);
-                //if ((_unidadNegocio = RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry())) != null)
-                //{
-                var operation = _solicitarFactFileNMRepository.SolicitarFactFile(solicitarFactFileNM);
-                solicitarFactFileNM.codigo = operation[OutParameter.SF_Codigo].ToString();
-                solicitarFactFileNM.mensaje = operation[OutParameter.SF_Mensaje].ToString();
-
-                return Ok(solicitarFactFileNM);
-                //}
-                //return NotFound();
-            }
-            catch (Exception ex)
-            {
-                exceptionMsg = ex.Message;
-                return InternalServerError(ex);
-            }
-            finally
-            {
-                (new
-                {
-                    UnidadNegocio = _unidadNegocio.ToLongName(),
-                    Body = solicitarFactFileNM,
-                    Exception = exceptionMsg
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
-            }
+            return Ok();
         }
         #endregion
 
