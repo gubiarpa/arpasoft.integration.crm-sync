@@ -297,6 +297,8 @@ namespace Expertia.Estructura.Utils
         // CRMEC004
         public const string AW_Get_ChatterNM = AW_NM_Package + "." + "SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CHATTER";
+        // CRMC008
+        public const string AW_Set_CotServ = AW_NM_Package + "." + "SP_INSERTA_SERVICIO_COT";
 
         public const string AW_Asociar_FileOportunidadNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_ASOCIAR_FILE_OPORTUNIDAD";
         public const string AW_Generar_Codigo_PagoNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_GENERACION_CODIGO_PAGO";

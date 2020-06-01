@@ -488,6 +488,19 @@ namespace Expertia.Estructura.Repository.Retail
             }
         }
 
+        /// <summary>
+        /// Creado exclusivamente para Nuevo Mundo
+        /// </summary>
+        public void Inserta_Servicio_Cot(
+           int pIntIdCot,
+           short pIntIdServSol)
+        {
+            AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot);
+            AddParameter("pNumIdServSol_in", OracleDbType.Int16, pIntIdServSol);
+
+            ExecuteStoredProcedure(StoredProcedureName.AW_Set_CotServ);
+        }
+
         public int Inserta_Post_Cot(
             int pIntIdCot,
             string pStrTipoPost,

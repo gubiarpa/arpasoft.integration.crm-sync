@@ -9,14 +9,14 @@ namespace Expertia.Estructura.Models.NuevoMundo
     {
         public string NumDoc { get; set; }
         public string IdTipoDoc { get; set; }
-        public string IdCanalVenta { get; set; }
+        public short IdCanalVenta { get; set; } // * cambio a int
         public string NombreCli { get; set; }
         public string ApePatCli { get; set; }
         public string ApeMatCli { get; set; }
         public string EmailCli { get; set; }
         public string IdDestino { get; set; }
         public string EnviarPromociones { get; set; }
-        public int UsuarioCre { get; set; } // * cambio a int
+        public int UsuarioCrea { get; set; } // * cambio a int
         public string Comentario { get; set; }
         public string IdCotSRV { get; set; }
         public string IdOportunidad_SF { get; set; }
@@ -37,11 +37,10 @@ namespace Expertia.Estructura.Models.NuevoMundo
         public bool CajaPaquetes { get; set; }
         public bool CajaServicios { get; set; }
         public bool CajaSeguros { get; set; }
-        public string ModoIngreso { get; set; }
+        public short ModoIngreso { get; set; } // * cambio a short
         public int CantidadAdultos { get; set; }
+        public int CantidadNinos { get; set; }
         public DateTime FechaIngreso { get; set; }
         public DateTime FechaEgreso { get; set; }
-        public int CntAdultos { get; set; }
-        public int CntNinios { get; set; }
     }
 }

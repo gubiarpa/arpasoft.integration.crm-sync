@@ -35,7 +35,7 @@ namespace Expertia.Estructura.Controllers
             int idCotizacion = 0;
             try
             {
-                var intIdUsuWeb = oportunidadVentaNM.UsuarioCre;
+                var intIdUsuWeb = oportunidadVentaNM.UsuarioCrea;
                 var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(oportunidadVentaNM.IdUsuarioSrv_SF);
                 int? intIdCliCot = null;
 
@@ -102,8 +102,8 @@ namespace Expertia.Estructura.Controllers
 
                     #region RegistraCotizacion
                     var intIdCotVta = (int)_repository.InsertaCotizacionVenta(
-                        3,
-                        null,
+                        oportunidadVentaNM.ModoIngreso,
+                        oportunidadVentaNM.Comentario,
                         objPersonal.NomCompletoPer,
                         objUsuarioWeb.LoginUsuWeb,
                         Constantes_SRV.IP_GENERAL,
@@ -113,7 +113,7 @@ namespace Expertia.Estructura.Controllers
                         objPersonal.IdOficina,
                         Webs_Cid.ID_WEB_WEBFAREFINDER,
                         1,
-                        short.Parse(oportunidadVentaNM.IdCanalVenta),
+                        oportunidadVentaNM.IdCanalVenta,
                         null,
                         idDestino,
                         null,
@@ -151,7 +151,7 @@ namespace Expertia.Estructura.Controllers
                         usuarioLogin.IdOfi,
                         usuarioLogin.IdDep,
                         DateTime.Now,
-                        oportunidadVentaNM.UsuarioCre,
+                        oportunidadVentaNM.UsuarioCrea,
                         objPersonal.IdOficina,
                         objPersonal.IdDepartamento,
                         oportunidadVentaNM.Comentario,
@@ -167,15 +167,13 @@ namespace Expertia.Estructura.Controllers
                     #region EnvioPromociones
                     if (_repository.ValidarEnvioPromociones(intIdOcurrencias, oportunidadVentaNM.EnviarPromociones))
                     {
-                        /*
                         _repository.EnviarPromociones(
                             objPersonal,
-                            oportunidadRetail,
-                            oportunidadRetail.EnviarPromociones.Equals("1"),
+                            ToOportunidadRetailReq(oportunidadVentaNM),
+                            oportunidadVentaNM.EnviarPromociones.Equals("1"),
                             objPersonal.NomCompletoPer,
                             objPersonal.ApePatPer,
                             objPersonal.EmailPer);
-                        */
                     }
                     #endregion
 
@@ -378,7 +376,24 @@ namespace Expertia.Estructura.Controllers
         #region Helpers
         private OportunidadRetailReq ToOportunidadRetailReq(OportunidadVentaNM oportunidadVentaNM)
         {
-            return new OportunidadRetailReq();
+            return new OportunidadRetailReq()
+            {
+                Numdoc = oportunidadVentaNM.NumDoc,
+                IdTipoDoc = oportunidadVentaNM.IdTipoDoc,
+                IdCanalVenta = oportunidadVentaNM.IdCanalVenta,
+                NombreCli = oportunidadVentaNM.NombreCli,
+                ApePatCli = oportunidadVentaNM.ApePatCli,
+                ApeMatCli = oportunidadVentaNM.ApeMatCli,
+                EmailCli = oportunidadVentaNM.EmailCli,
+                IdDestino = oportunidadVentaNM.IdDestino,
+                EnviarPromociones = oportunidadVentaNM.EnviarPromociones,
+                UsuarioCrea = oportunidadVentaNM.UsuarioCrea,
+                Comentario = oportunidadVentaNM.Comentario,
+                //IdCotSRV = oportunidadVentaNM.IdCotSRV,
+                IdOportunidad_SF = oportunidadVentaNM.IdOportunidad_SF,
+                IdUsuarioSrv_SF = oportunidadVentaNM.IdUsuarioSrv_SF,
+                Accion_SF = oportunidadVentaNM.Accion_SF
+            };
         }
 
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
