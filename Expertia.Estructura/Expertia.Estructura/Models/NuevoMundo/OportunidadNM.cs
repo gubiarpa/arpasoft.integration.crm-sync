@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
-    public class OportunidadNM : ICrmApiResponse
+    public class OportunidadNM
     {
         public string idCuenta_SF { get; set; }
         public string Identificador_NM { get; set; }
+        public string idOportunidad_SF { get; set; }
         public string fechaRegistro { get; set; }
         public string Servicio { get; set; }
         public string IdCanalVenta { get; set; }
@@ -31,10 +32,13 @@ namespace Expertia.Estructura.Models
         public string apellidosCliente { get; set; }
         public string IdLoginWeb { get; set; }
         public string telefonoCliente { get; set; }
-        public string accion_SF { get; set; }
-        public string CodigoError { get; set; }
-        public string MensajeError { get; set; }
-        public string idOportunidad_SF { get; set; }
+        public string esEmitido { get; set; }
+        public string fechaPlazoEmision { get; set; }
+        public string cot_IataPrincipal { get; set; }
+        public string tipoCotizacion { get; set; }
+        public string emailUserLogin { get; set; }
+        public int idUserLogin { get; set; }
+        public string accion_SF { get; set; }                
     }
 
 
@@ -57,6 +61,9 @@ namespace Expertia.Estructura.Models
         public string PCCOfficeID { get; set; }
         public string IATA { get; set; }
         public string RUCEmpresa { get; set; }
+        public string razonSocial { get; set; }
+        public bool aceptarPoliticas { get; set; }
+        public float ruc { get; set; }
         public string descripPaquete { get; set; }
         public string destinoPaquetes { get; set; }
         public string fechasPaquetes { get; set; }

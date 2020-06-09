@@ -31,19 +31,19 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
             IEnumerable<CuentaNM> cuentasNMs = null;
-            string error = string.Empty;
-            object objEnvio = null;
+            List<RptaCuentaSF> ListRptaCuentaSF_Fail = new List<RptaCuentaSF>();
+            RptaCuentaSF _rptaCuentaSF = null;
+            
+            object SFResponse = null;
+            string exceptionMsg = string.Empty;
 
             try
-            {
-                
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
-                RepositoryByBusiness(_unidadNegocio);
-                _instants[InstantKey.Salesforce] = DateTime.Now;
+            {                                
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
 
-                /// I. Consulta de Cuentas NM
-                cuentasNMs = (IEnumerable<CuentaNM>)(_cuentaNMRepository.Read(_unidadNegocio))[OutParameter.CursorCuentaNM];
-                if (cuentasNMs == null || cuentasNMs.ToList().Count.Equals(0)) return Ok(cuentasNMs);
+                /// I. Consulta de Cuentas NM                                
+                cuentasNMs = (IEnumerable<CuentaNM>)_cuentaNMRepository.GetCuentas()[OutParameter.CursorCuentaNM];
+                if (cuentasNMs == null || cuentasNMs.ToList().Count.Equals(0)) return Ok(false);
 
                 /// Obtiene Token para envío a Salesforce
                 var authSf = RestBase.GetToken();
@@ -56,65 +56,80 @@ namespace Expertia.Estructura.Controllers
                 {
                     cuentaNMSF.Add(cuenta.ToSalesforceEntity());
                 }
-
-
+                
                 try
                 {
                     /// Envío de CuentaNM a Salesforce
-                    ClearQuickLog("body_request.json", "CuentaNM"); /// ♫ Trace
-                    objEnvio = new { listadatosCuenta = cuentaNMSF };
-                    QuickLog(objEnvio, "body_request.json", "CuentaNM"); /// ♫ Trace
-
-
+                    var objEnvio = new { listadatosCuenta = cuentaNMSF };
+                    QuickLog(objEnvio, "body_request.json", "CuentaNM", previousClear: true); /// ♫ Trace
+                    
                     var responseCuentaNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CuentaNMMethod, Method.POST, objEnvio, true, token);
                     if (responseCuentaNM.StatusCode.Equals(HttpStatusCode.OK))
-                    {
+                    {   
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaNM.Content);
+                        SFResponse = jsonResponse["respuestas"];
 
-                        foreach (var cuentaNM in cuentasNMs)
+                        foreach (var jsResponse in jsonResponse["respuestas"])
                         {
-                            foreach (var jsResponse in jsonResponse["respuestas"])
+                            try
                             {
-                                if (cuentaNM.emailCliente == jsResponse["emailCliente"])
-                                {
-                                    cuentaNM.CodigoError = jsResponse[OutParameter.SF_Codigo];
-                                    cuentaNM.MensajeError = jsResponse[OutParameter.SF_Mensaje];
-                                    cuentaNM.idCuenta_Sf = jsResponse[OutParameter.SF_IdCuenta2];
+                                _rptaCuentaSF = new RptaCuentaSF();
 
-                                    /// Actualización de Cuenta NM
-                                    var updateResponse = _cuentaNMRepository.Update(cuentaNM);
-                                    cuentaNM.CodigoError = updateResponse[OutParameter.CodigoError].ToString();
-                                    cuentaNM.MensajeError = updateResponse[OutParameter.MensajeError].ToString();
-                                    //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                                _rptaCuentaSF.CodigoError = "OK";
+                                _rptaCuentaSF.MensajeError = "TST";
+                                _rptaCuentaSF.idCuenta_SF = "001P002201bpIOWIC4";
+                                _rptaCuentaSF.Identificador_NM = "2";
+
+                                _rptaCuentaSF.CodigoError = jsResponse[OutParameter.SF_Codigo];
+                                _rptaCuentaSF.MensajeError = jsResponse[OutParameter.SF_Mensaje];
+                                _rptaCuentaSF.idCuenta_SF = jsResponse[OutParameter.SF_IdCuenta2];
+                                _rptaCuentaSF.Identificador_NM = jsResponse[OutParameter.SF_IdentificadorNM];
+
+                                /// Actualización de estado de la Cuenta
+                                var updateResponse = _cuentaNMRepository.Update(_rptaCuentaSF);
+                                
+                                if (Convert.IsDBNull(updateResponse[OutParameter.IdActualizados]) == true || updateResponse[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updateResponse[OutParameter.IdActualizados].ToString()) <= 0)
+                                {
+                                    exceptionMsg = exceptionMsg + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaCuentaSF.Identificador_NM.ToString() + "||||";
+                                    ListRptaCuentaSF_Fail.Add(_rptaCuentaSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                                 }
+                            }
+                            catch (Exception ex)
+                            {
+                                exceptionMsg = exceptionMsg + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                ListRptaCuentaSF_Fail.Add(_rptaCuentaSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
                             }
                         }
                     }
                     else
                     {
-                        error = responseCuentaNM.StatusCode.ToString();
+                        exceptionMsg = responseCuentaNM.StatusCode.ToString();
                     }
                 }
                 catch (Exception ex)
                 {
-                    error = ex.Message;
+                    exceptionMsg = ex.Message;
                 }
                 
-                return Ok(new { CuentasNM = cuentasNMs });
+                return Ok(true);
             }
             catch (Exception ex)
             {
-                error = error + " / " + ex.Message;
-                return InternalServerError(ex);
+                cuentasNMs = null;
+                return InternalServerError(ex);                
             }
             finally
             {
                 (new
                 {
+                    Response = SFResponse,
+                    Rpta_NoUpdate_Fail = ListRptaCuentaSF_Fail,
                     UnidadNegocio = unidadNegocio.Descripcion,
-                    Error = error,
+                    Exception = exceptionMsg,
                     LegacySystems = cuentasNMs
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);                
             }
         }
         #endregion

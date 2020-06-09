@@ -18,7 +18,7 @@ namespace Expertia.Estructura.Models.NuevoMundo
         public string EnviarPromociones { get; set; }
         public int UsuarioCrea { get; set; } // * cambio a int
         public string Comentario { get; set; }
-        public string IdCotSRV { get; set; }
+        public int IdCotSRV { get; set; }
         public string IdOportunidad_SF { get; set; }
         public int IdUsuarioSrv_SF { get; set; } // * cambio a int
         public string Accion_SF { get; set; }
@@ -41,6 +41,16 @@ namespace Expertia.Estructura.Models.NuevoMundo
         public int CantidadAdultos { get; set; }
         public int CantidadNinos { get; set; }
         public DateTime FechaIngreso { get; set; }
-        public DateTime FechaEgreso { get; set; }
+        public DateTime Fecharegreso { get; set; }
+    }
+
+    public class RptaOportunidadVentaNM
+    {
+        public string Codigo { get; set; }
+        public string Mensaje { get; set; }
+        public int? IdCotSrv { get; set; }
+        //public string IdOportunidad_SF { get; set; }
+        //public string FechaCreacion { get; set; }
+
     }
 }

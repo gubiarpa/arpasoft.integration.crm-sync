@@ -75,6 +75,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     chatterNMList.Add(new ChatterNM()
                     {
                         idOportunidad_SF = row.StringParse("idOportunidad_SF"),
+                        IdRegPostCotSrv_SF = (Convert.IsDBNull(row["IdRegPostCotSrv_SF"]) == false ? row.StringParse("IdRegPostCotSrv_SF") : null),
                         idPostCotSrv = row.IntParse("idPostCotSrv"),
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         cabecera = row.StringParse("cabecera"),

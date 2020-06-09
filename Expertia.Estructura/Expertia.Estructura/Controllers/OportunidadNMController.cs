@@ -59,7 +59,7 @@ namespace Expertia.Estructura.Controllers
                 /// II. Enviar Oportunidad a Salesforce
                 try
                 {   
-                    var objEnvio = new {opp = oportunidadNMSF};                    
+                    var objEnvio = new { ListadatosOportunidades = oportunidadNMSF};                    
                     QuickLog(objEnvio, "body_request.json", "OportunidadNM",previousClear: true); /// ♫ Trace
 
                     var responseOportunidadNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.OportunidadNMMethod, Method.POST, objEnvio, true, token);

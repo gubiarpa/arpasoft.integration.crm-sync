@@ -6,6 +6,7 @@ namespace Expertia.Estructura.Models
     public class DetallePasajerosNM : ICrmApiResponse
     {
         public string idOportunidad_SF { get; set; }
+        public string idPasajero_SF { get; set; }
         public string Identificador_NM { get; set; }
         public int id_reserva { get; set; }
         public string IdPasajero { get; set; }

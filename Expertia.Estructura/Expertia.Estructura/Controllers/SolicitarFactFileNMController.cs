@@ -15,7 +15,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
-    /// CRMAFO06 : Envio de datos de File y actualización
+    //[ CRM008 ] : Registro y actualización de Oportunidad de venta en Sistema Expertia
     [RoutePrefix(RoutePrefix.SolicitarFactFileNM)]
     public class SolicitarFactFileNMController : BaseController
     {

@@ -6,6 +6,7 @@ namespace Expertia.Estructura.Models
     public class DetalleHotelNM : ICrmApiResponse
     {
         public string idOportunidad_SF { get; set; }
+        public string idDetalleHotel_SF { get; set; }
         public string Identificador_NM { get; set; }
         public string hotel { get; set; }
         public string direccion { get; set; }

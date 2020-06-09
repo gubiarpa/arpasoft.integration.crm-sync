@@ -60,7 +60,7 @@ namespace Expertia.Estructura.Controllers
                 try
                 {
                     /// Envío de Informacion de Canal de Comunicacion a Salesforce                    
-                    objEnvio = new { porDefinir = chatterNMSF }; /**POR DEFINIR**/
+                    objEnvio = new { listadatos = chatterNMSF }; /**POR DEFINIR**/
                     QuickLog(objEnvio, "body_request.json", "ChatterNM", previousClear: true); /// ♫ Trace
 
 

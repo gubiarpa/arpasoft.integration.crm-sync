@@ -26,33 +26,33 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             /// (02) P_MENSAJE_ERROR
             AddParameter(OutParameter.SF_Mensaje, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
             /// (03) P_ID_OPORTUNIDAD_SF
-            AddParameter("P_DETALLE_SERVICIO", OracleDbType.Varchar2, genCodigoPago.detalledeServicio);
+            AddParameter("P_DETALLE_SERVICIO", OracleDbType.Varchar2, genCodigoPago.detalleServicio);
             /// (04) P_ID_COT_SRV_SF
-            AddParameter("P_TOTAL_PAGAR", OracleDbType.Varchar2, genCodigoPago.totalAPagar);
+            AddParameter("P_TOTAL_PAGAR", OracleDbType.Varchar2, genCodigoPago.monto);
             /// (05) P_FILE
-            AddParameter("P_TIEMPO_EXPIRACION", OracleDbType.Varchar2, genCodigoPago.tiempoExpiracion);
+            AddParameter("P_TIEMPO_EXPIRACION", OracleDbType.Varchar2, genCodigoPago.tiempoExpiracionCIP);
             /// (06) P_IMPORTE
             AddParameter("P_EMAIL", OracleDbType.Varchar2, genCodigoPago.email);
             /// (07) P_SUCURSAL
             AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, genCodigoPago.idOportunidad_SF);
             /// (08) P_FECHA
-            AddParameter("P_ID_COT_SRV", OracleDbType.Varchar2, genCodigoPago.idCotSRV);
+            AddParameter("P_ID_COT_SRV", OracleDbType.Varchar2, genCodigoPago.idCotVta);
             /// (09) P_FECHA
             AddParameter("P_ID_SOLICITUD_PAGO_SF", OracleDbType.Varchar2, genCodigoPago.idSolicitudPago_SF);
             /// (10) P_FECHA
-            AddParameter("P_ID_USUARIO_SRV_SF", OracleDbType.Varchar2, genCodigoPago.idUsuarioSrv_SF);
+            AddParameter("P_ID_USUARIO_SRV_SF", OracleDbType.Varchar2, genCodigoPago.idUsuario);
             /// (11) P_FECHA
-            AddParameter("P_ID_CANAL_VENTA", OracleDbType.Varchar2, genCodigoPago.idCanalVenta);
+            AddParameter("P_ID_CANAL_VENTA", OracleDbType.Varchar2, genCodigoPago.idCanalVta);
             /// (12) P_FECHA
-            AddParameter("P_NOMBRECLI", OracleDbType.Varchar2, genCodigoPago.nombreCli);
+            AddParameter("P_NOMBRECLI", OracleDbType.Varchar2, genCodigoPago.NombreClienteCot);
             /// (13) P_FECHA
-            AddParameter("P_APEPATCLI", OracleDbType.Varchar2, genCodigoPago.apePatCli);
+            AddParameter("P_APEPATCLI", OracleDbType.Varchar2, genCodigoPago.ApellidoClienteCot);
             /// (14) P_FECHA
-            AddParameter("P_UNIDAD_NEGOCIO", OracleDbType.Varchar2, genCodigoPago.unidadNegocio);
+            AddParameter("P_UNIDAD_NEGOCIO", OracleDbType.Varchar2, "Quitar Esto");
             /// (15) P_FECHA
-            AddParameter("P_ID", OracleDbType.Varchar2, genCodigoPago.id);
+            AddParameter("P_ID", OracleDbType.Varchar2, genCodigoPago.unidadDeNegocio.ID);
             /// (16) P_FECHA
-            AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, genCodigoPago.descripcion);
+            AddParameter("P_DESCRIPCION", OracleDbType.Varchar2, genCodigoPago.unidadDeNegocio.Descripcion);
             /// (17) P_FECHA
             AddParameter("P_ID_LANG", OracleDbType.Varchar2, genCodigoPago.idLang);
             /// (18) P_FECHA
@@ -79,9 +79,9 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             catch (Exception)
             {
 
-                operation[OutParameter.SF_Codigo] = "OK, Esto es codigo duro";
-                operation[OutParameter.SF_Mensaje] = "Mensaje: Esto es codigo duro";
-                operation[OutParameter.CodigoTransaccion] = "0015980025ABC: Codigo duro";
+                operation[OutParameter.SF_Codigo] = "ER";
+                operation[OutParameter.SF_Mensaje] = "Error de Prueba";
+                operation[OutParameter.CodigoTransaccion] = "0015980025ABC";
             }
             
             #endregion
