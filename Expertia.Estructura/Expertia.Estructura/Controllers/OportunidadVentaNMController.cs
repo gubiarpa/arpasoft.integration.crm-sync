@@ -31,11 +31,15 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(OportunidadVentaNM oportunidadVentaNM)
         {
-            string exMessage = string.Empty;
+            string exMessage = string.Empty;      
             object objRespuesta = null;            
             int idCotizacion = 0;
+
             try
             {
+                _datosUsuario = new DatosUsuario();
+                _repository = new OportunidadRetailRepository();                
+
                 var intIdUsuWeb = oportunidadVentaNM.UsuarioCrea;
                 var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(oportunidadVentaNM.IdUsuarioSrv_SF);
                 int? intIdCliCot = null;

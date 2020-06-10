@@ -65,9 +65,10 @@ namespace Expertia.Estructura.Controllers
                     var responseDetItinerarioNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetItinerarioNMMethod, Method.POST, objEnvio, true, token);
                     if (responseDetItinerarioNM.StatusCode.Equals(HttpStatusCode.OK))
                     {                        
-                        dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseDetItinerarioNM.Content);                        
-                        SFResponse = jsonResponse["respuestas"];                        
+                        dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseDetItinerarioNM.Content);
+                        QuickLog(jsonResponse, "body_response.json", "DetalleItinerarioNM", previousClear: true); /// ♫ Trace
 
+                        SFResponse = jsonResponse["respuestas"];
                         foreach (var item in jsonResponse["respuestas"])
                         {
                             try
@@ -110,6 +111,10 @@ namespace Expertia.Estructura.Controllers
                     else
                     {
                         error = responseDetItinerarioNM.StatusCode.ToString();
+                        if(responseDetItinerarioNM != null && responseDetItinerarioNM.Content != null)
+                        {
+                            QuickLog(responseDetItinerarioNM.Content, "body_response.json", "DetalleItinerarioNM", previousClear: true); /// ♫ Trace
+                        }
                     }
                 }
                 catch (Exception ex)

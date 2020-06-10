@@ -9,8 +9,8 @@ namespace Expertia.Estructura.Models
     {
         public string idOportunidad_SF { get; set; }
         public string Identificador_NM { get; set; }
-        public int idCotSRV { get; set; }
-        public int idFilePTA { get; set; }
+        public int idCotSrv_SF { get; set; }
+        public int numeroFile { get; set; }
         public string importe { get; set; }
         public short sucursal { get; set; }
         public string fecha { get; set; }

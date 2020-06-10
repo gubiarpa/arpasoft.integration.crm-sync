@@ -79,13 +79,13 @@ namespace Expertia.Estructura.Controllers
                     objEnvio = new { listadatosOportunidad = filesAsociadosNMSF };
                     QuickLog(objEnvio, "body_request.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
 
-
                     var responseFileAsociadoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileAsociadoOPNMMethod, Method.POST, objEnvio, true, token);
                     if (responseFileAsociadoNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseFileAsociadoNM.Content);
-                        SFResponse = jsonResponse["respuestas"];
-                        
+                        QuickLog(jsonResponse, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+
+                        SFResponse = jsonResponse["respuestas"];                        
                         ListRptaFiles_Fail = new List<RptaFileNM_SF>();
                         foreach (var detalleHotelNM in jsonResponse["respuestas"])
                         {
@@ -127,6 +127,10 @@ namespace Expertia.Estructura.Controllers
                     else
                     {
                         error = responseFileAsociadoNM.StatusCode.ToString();
+                        if (responseFileAsociadoNM != null && responseFileAsociadoNM.Content != null)
+                        {
+                            QuickLog(responseFileAsociadoNM.Content, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+                        }
                     }
                 }
                 catch (Exception ex)

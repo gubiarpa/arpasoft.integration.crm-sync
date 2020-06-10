@@ -373,7 +373,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     oportunidadNM.idOportunidad_SF,
                     oportunidadNM.fechaRegistro,
                     oportunidadNM.Servicio,
-                    oportunidadNM.IdCanalVenta,
+                    IdCanalVenta = "4", //oportunidadNM.IdCanalVenta,
                     oportunidadNM.metabuscador,
                     oportunidadNM.CajaVuelos,
                     oportunidadNM.CajaHotel,
@@ -447,35 +447,35 @@ namespace Expertia.Estructura.RestManager.RestParse
                                 ReservasOp_NM.descripPaquete,
                                 ReservasOp_NM.destinoPaquetes,
                                 ReservasOp_NM.fechasPaquetes,
-                                ReservasOp_NM.Proveedor,
-                                //PlanSeguro = (ReservasOp_NM.PlanSeguro == null ? null : new
-                                //{
-                                //    ReservasOp_NM.PlanSeguro.Plan,
-                                //    ReservasOp_NM.PlanSeguro.CantPasajeros,
-                                //    ReservasOp_NM.PlanSeguro.Destino,
-                                //    ReservasOp_NM.PlanSeguro.FechaSalida,
-                                //    ReservasOp_NM.PlanSeguro.FechaRetorno,
-                                //    ReservasOp_NM.PlanSeguro.Edades
-                                //}),
-                                //EmergenciaSeguro = (ReservasOp_NM.EmergenciaSeguro == null ? null : new
-                                //{
-                                //    ReservasOp_NM.EmergenciaSeguro.Nombre,
-                                //    ReservasOp_NM.EmergenciaSeguro.Apellido,
-                                //    ReservasOp_NM.EmergenciaSeguro.Telefono,
-                                //    ReservasOp_NM.EmergenciaSeguro.Email
-                                //})                                
+                                ReservasOp_NM.Proveedor,    
                                 PlanSeguro = "",
-                                Plan = "",
-                                CantPasajeros = 1,
-                                Destino = "",
-                                FechaSalida = "",
-                                FechaRetorno = "",
-                                Edades = "",
+                                Plan = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.Plan),
+                                CantPasajeros = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.CantPasajeros),
+                                Destino = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.Destino),
+                                FechaSalida = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.FechaSalida),
+                                FechaRetorno = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.FechaRetorno),
+                                Edades = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.Edades),
                                 EmergenciaSeguro = "",                                
-                                Nombre = "",
-                                Apellido = "",
-                                Telefono = "",
-                                Email = "",
+                                Nombre = (ReservasOp_NM.EmergenciaSeguro == null ? null : ReservasOp_NM.EmergenciaSeguro.Nombre),
+                                Apellido = (ReservasOp_NM.EmergenciaSeguro == null ? null : ReservasOp_NM.EmergenciaSeguro.Apellido),
+                                Telefono = (ReservasOp_NM.EmergenciaSeguro == null ? null : ReservasOp_NM.EmergenciaSeguro.Telefono),
+                                Email = (ReservasOp_NM.EmergenciaSeguro == null ? null : ReservasOp_NM.EmergenciaSeguro.Email)
+                                /*PlanSeguro = (ReservasOp_NM.PlanSeguro == null ? null : new
+                                {
+                                    ReservasOp_NM.PlanSeguro.Plan,
+                                    ReservasOp_NM.PlanSeguro.CantPasajeros,
+                                    ReservasOp_NM.PlanSeguro.Destino,
+                                    ReservasOp_NM.PlanSeguro.FechaSalida,
+                                    ReservasOp_NM.PlanSeguro.FechaRetorno,
+                                    ReservasOp_NM.PlanSeguro.Edades
+                                }),
+                                EmergenciaSeguro = (ReservasOp_NM.EmergenciaSeguro == null ? null : new
+                                {
+                                    ReservasOp_NM.EmergenciaSeguro.Nombre,
+                                    ReservasOp_NM.EmergenciaSeguro.Apellido,
+                                    ReservasOp_NM.EmergenciaSeguro.Telefono,
+                                    ReservasOp_NM.EmergenciaSeguro.Email
+                                })*/
                             }
                         );
                     }
@@ -695,8 +695,8 @@ namespace Expertia.Estructura.RestManager.RestParse
                 {
                     fileOportunidadNM.idOportunidad_SF,
                     fileOportunidadNM.Identificador_NM,
-                    fileOportunidadNM.idCotSRV,
-                    fileOportunidadNM.idFilePTA,
+                    fileOportunidadNM.idCotSrv_SF,
+                    fileOportunidadNM.numeroFile,
                     fileOportunidadNM.importe,
                     fileOportunidadNM.sucursal,
                     fileOportunidadNM.fecha,

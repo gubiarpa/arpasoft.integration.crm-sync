@@ -73,8 +73,8 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     {
                         idOportunidad_SF = row.StringParse("idoportunidad_sf"),
                         Identificador_NM = row.StringParse("identificador_nm"),
-                        idCotSRV = row.IntParse("idcotsrv_sf"),
-                        idFilePTA = row.IntParse("numero_de_file"),
+                        idCotSrv_SF = row.IntParse("idcotsrv_sf"),
+                        numeroFile = row.IntParse("numero_de_file"),
                         importe = (Convert.IsDBNull(row["importe"]) == false ? row.StringParse("importe") : null),
                         sucursal = Convert.ToInt16(row.StringParse("sucursal")),
                         fecha = (Convert.IsDBNull(row["fecha"]) == false ? row.StringParse("fecha") : null),

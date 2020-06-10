@@ -67,8 +67,9 @@ namespace Expertia.Estructura.Controllers
                     if (responseCuentaNM.StatusCode.Equals(HttpStatusCode.OK))
                     {   
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseCuentaNM.Content);
-                        SFResponse = jsonResponse["respuestas"];
+                        QuickLog(jsonResponse, "body_response.json", "CuentaNM", previousClear: true); /// ♫ Trace
 
+                        SFResponse = jsonResponse["respuestas"];
                         foreach (var jsResponse in jsonResponse["respuestas"])
                         {
                             try
@@ -106,6 +107,10 @@ namespace Expertia.Estructura.Controllers
                     else
                     {
                         exceptionMsg = responseCuentaNM.StatusCode.ToString();
+                        if (responseCuentaNM != null && responseCuentaNM.Content != null)
+                        {
+                            QuickLog(responseCuentaNM.Content, "body_response.json", "CuentaNM", previousClear: true); /// ♫ Trace
+                        }
                     }
                 }
                 catch (Exception ex)
