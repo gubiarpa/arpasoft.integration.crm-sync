@@ -124,23 +124,8 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 EliminarDetalleNoRecibos(solicitarFactFile, objTx, objConn);
             }
 
-            //Using objCnx As New OracleConnection(Data.strCnx_WebsOracle)
-            //    objCnx.Open()
-
-            //    Using objTx As OracleTransaction = objCnx.BeginTransaction
-            //        IdDatosFactura = GuardarDatosFacturacion(model.datosFacturacion, objTx) 'Guardar
-
-            //        If model.datosFacturacion.IdDatosFacturacion <> 0 Then
-            //            EliminarDetalleTarifa(model.datosFacturacion.IdDatosFacturacion, objTx)
-            //            EliminarDetalleNoRecibos(model.datosFacturacion.IdDatosFacturacion, objTx)
-            //        End If
-
-            //        GuardarDetalleTarifa(model, IdDatosFactura, objTx) 'Guardar detalle de Factura
-            //        GuardarDetalleNoRecibo(model, IdDatosFactura, objTx) 'Guardar detalle de N° Recibo
-            //        objTx.Commit()
-            //    End Using
-            //    result = IdDatosFactura
-            //End Using
+            GuardarDetalleTarifa(solicitarFactFile, objTx, objConn);
+            GuardarDetalleNoRecibo(solicitarFactFile, objTx, objConn);
 
             objTx.Commit();
             return operation;
@@ -149,8 +134,8 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         private void GuardarDatosFacturacion(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
         {
             var spName = solicitarFactFile.existeIdDatosFacturacion ?
-                    "APPWEBS.PKG_Desglose_CA.SP_ACTUALIZAR_DATOSFACTURACION" :
-                    "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_DATOSFACTURACION";
+                    "APPWEBS.PKG_DESGLOSE_CA.SP_ACTUALIZAR_DATOSFACTURACION" :
+                    "APPWEBS.PKG_DESGLOSE_CA.SP_INSERTAR_DATOSFACTURACION";
 
             if (solicitarFactFile.existeIdDatosFacturacion)
                 AddParameter("pIdDatosFacturacion", OracleDbType.Int32, solicitarFactFile.iddatosfacturacion);
@@ -186,7 +171,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
         private void EliminarDetalleTarifa(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
         {
-            var spName = "APPWEBS.PKG_Desglose_CA.SP_ELIMINAR_DETALLETARIFA";
+            var spName = "APPWEBS.PKG_DESGLOSE_CA.SP_ELIMINAR_DETALLETARIFA";
 
             AddParameter("pIdDatosFacturacion", OracleDbType.Int32, solicitarFactFile.iddatosfacturacion);
 
@@ -195,11 +180,51 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
         private void EliminarDetalleNoRecibos(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
         {
-            var spName = "APPWEBS.PKG_Desglose_CA.SP_ELIMINAR_DETALLENORECIBOS";
+            var spName = "APPWEBS.PKG_DESGLOSE_CA.SP_ELIMINAR_DETALLENORECIBOS";
 
             AddParameter("pIdDatosFacturacion", OracleDbType.Int32, solicitarFactFile.iddatosfacturacion);
 
             ExecuteStorePBeginCommit(spName, objTx, objConn);
+        }
+
+        private void GuardarDetalleTarifa(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
+        {
+            foreach (var tarifaDetalle in solicitarFactFile.TarifaDetalleList)
+            {
+                var spName = "APPWEBS.PKG_DESGLOSE_CA.SP_INSERTAR_TARIFA";
+
+                AddParameter("pCantidadADT", OracleDbType.Int32, tarifaDetalle.CantidadADT);
+                AddParameter("pTarifaPorADT", OracleDbType.Decimal, tarifaDetalle.TarifaPorADT);
+                AddParameter("pCatindadCHD", OracleDbType.Int32, tarifaDetalle.CantidadCHD);
+                AddParameter("pTarifaPorCHD", OracleDbType.Decimal, tarifaDetalle.TarifaPorCHD);
+                AddParameter("pCantidadINF", OracleDbType.Int32, tarifaDetalle.CantidadCHD);
+                AddParameter("pTarifaPorINF", OracleDbType.Decimal, tarifaDetalle.TarifaINF);
+                AddParameter("pIdDatosFacturacion", OracleDbType.Int32, tarifaDetalle.IdDatosFacturacion);
+                AddParameter("pIdGrupoServicio", OracleDbType.Int32, tarifaDetalle.IdGrupoServicio);
+                AddParameter("pMontoPorADT", OracleDbType.Decimal, tarifaDetalle.MontoPorADT);
+                AddParameter("pMontoPorCHD", OracleDbType.Decimal, tarifaDetalle.MontoPorCHD);
+                AddParameter("pMontoPorINF", OracleDbType.Decimal, tarifaDetalle.MontoPorINF);
+                AddParameter("pGrupoServicio", OracleDbType.NVarchar2, tarifaDetalle.GrupoServicio);
+
+                ExecuteStorePBeginCommit(spName, objTx, objConn);
+            }
+        }
+
+        private void GuardarDetalleNoRecibo(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
+        {
+            foreach (var reciboDetalle in solicitarFactFile.ReciboDetalleList)
+            {
+                var spName = "APPWEBS.PKG_DESGLOSE_CA.SP_INSERTAR_NORECIBO";
+
+                AddParameter("pNoRecibo", OracleDbType.NVarchar2, reciboDetalle.NoRecibo);
+                AddParameter("pMontoRecibo", OracleDbType.Decimal, reciboDetalle.MontoRecibo);
+                AddParameter("pEstado", OracleDbType.Int32, 1);
+                AddParameter("pIdSucursal", OracleDbType.Int32, reciboDetalle.IdSucursal);
+                AddParameter("pIdDatosFacturacion", OracleDbType.Int32, reciboDetalle.IdDatosFacturacion);
+                AddParameter("pSucursal", OracleDbType.NVarchar2, reciboDetalle.Sucursal);
+
+                ExecuteStorePBeginCommit(spName, objTx, objConn);
+            }
         }
         #endregion
     }
