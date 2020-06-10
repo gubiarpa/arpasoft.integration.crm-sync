@@ -75,6 +75,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     detalleHotelNMList.Add(new DetalleHotelNM()
                     {
                         idOportunidad_SF = row.StringParse("IdOportunidad_SF"),
+                        idDetalleHotel_SF = (Convert.IsDBNull(row["idDetalleHotel_SF"]) == false ? row.StringParse("idDetalleHotel_SF") : null),
                         Identificador_NM = row.StringParse("Identificador_NM"),                        
                         hotel = row.StringParse("Hotel"),
                         direccion = row.StringParse("Direccion"),

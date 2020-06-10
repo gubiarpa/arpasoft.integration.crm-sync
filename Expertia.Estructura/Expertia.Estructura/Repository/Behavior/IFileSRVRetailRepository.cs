@@ -17,7 +17,7 @@ namespace Expertia.Estructura.Repository.Behavior
         bool _Existe_Vendedor_SubArea(Int16 pIntIdArea, Int16 pIntIdSubArea, string pStrIdVendedor);
         void _Update_FechaCierreVenta(List<Models.FilePTACotVta> pLstFiles, Int16 pIntIdEmpresa, string pStrIdVendedorRegistra, string pStrIdVendedorCreaCot, string pStrLoginUsuWebRegistra, Nullable<bool> pBolUATPExoneradoFirmaCliente, string pStrNomVendedorCounter, bool pActualizaVendedor);
         void _Insert_TextoFile(int pIntIdFile, Int16 pIntIdSucursal, string pStrTextoFile, string pStrLoginUsuWeb, Int16 pIntIdEmpresa);
-        DataTable _SelectFilesIdBy_IdCot(int pIntIdCotVta);
+        DataTable _SelectFilesIdBy_IdCot(int pIntIdCotVta);        
         void _Delete_Cot_File(int pIntCotId, int pIntFileId);
         void _Insert(int pIntIdUsuario, string pStrNomPagina, string pStrComment, int pIntIdLang, int pIntIdWeb, string pStrQuery, string pStrIP);
     }

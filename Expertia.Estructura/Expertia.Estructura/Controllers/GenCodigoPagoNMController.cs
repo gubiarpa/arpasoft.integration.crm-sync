@@ -33,7 +33,7 @@ namespace Expertia.Estructura.Controllers
         #region PublicMethods
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(DatosPedido pedido)
-        {
+        {            
             Pedido_AW_Repository _pedidoRepository = new Pedido_AW_Repository();
             Models.PedidoRS _resultpedido = new Models.PedidoRS();
             UsuarioLogin DtsUsuarioLogin = null;
@@ -175,7 +175,7 @@ namespace Expertia.Estructura.Controllers
 
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(GenCodigoPagoNM genCodigoPagoNM)
-        {
+        {           
             UnidadNegocioKeys? _unidadNegocio = null;
             string exceptionMsg = string.Empty;
             try
@@ -184,11 +184,18 @@ namespace Expertia.Estructura.Controllers
                 //if ((_unidadNegocio = RepositoryByBusiness(cotizacion.Region.ToUnidadNegocioByCountry())) != null)
                 //{
                 var operation = _genCodigoPagoNMRepository.GenerarCodigoPago(genCodigoPagoNM);
-                genCodigoPagoNM.codigo = operation[OutParameter.SF_Codigo].ToString();
-                genCodigoPagoNM.mensaje = operation[OutParameter.SF_Mensaje].ToString();
-                genCodigoPagoNM.codigoTransaccion = operation[OutParameter.CodigoTransaccion].ToString();
-
-                return Ok(genCodigoPagoNM);
+                var RptaCodigoPagoNM = new
+                {
+                    respuesta =
+                   new
+                   {
+                       codigo = operation[OutParameter.SF_Codigo].ToString(),
+                       mensaje = operation[OutParameter.SF_Mensaje].ToString(),
+                       codigoTransaccion = operation[OutParameter.CodigoTransaccion].ToString()
+            }
+                };
+                
+                return Ok(RptaCodigoPagoNM);
                 //}
                 //return NotFound();
             }

@@ -7,6 +7,7 @@ namespace Expertia.Estructura.Models
     {
         public string idOportunidad_SF { get; set; }
         public string Identificador_NM { get; set; }
+        public string id_Itinerario_SF { get; set; }
         public int id_reserva { get; set; }
         public string id_itinerario { get; set; }
         public string LAerea { get; set; }
@@ -14,7 +15,7 @@ namespace Expertia.Estructura.Models
         public string Salida { get; set; }
         public string Destino { get; set; }
         public string llegada { get; set; }
-        public int numeroVuelo { get; set; }
+        public string numeroVuelo { get; set; }
         public string Clase { get; set; }
         public string fareBasis { get; set; }
         public string OperadoPor { get; set; }

@@ -76,6 +76,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     detalleItinerarioNMList.Add(new DetalleItinerarioNM()
                     {
                         idOportunidad_SF = row.StringParse("idOportunidad_SF"),
+                        id_Itinerario_SF = (Convert.IsDBNull(row["id_Itinerario_SF"]) == false ? row.StringParse("id_Itinerario_SF") : null),                        
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         id_reserva = row.IntParse("IdReserva"),
                         id_itinerario = row.StringParse("IdPosItinerario"),
@@ -84,7 +85,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         Salida = row.StringParse("Salida"),
                         Destino = row.StringParse("Destino"),
                         llegada = row.StringParse("Llegada"),
-                        numeroVuelo = row.IntParse("NumeroVuelo"),
+                        numeroVuelo = row.StringParse("NumeroVuelo"),
                         Clase = row.StringParse("Clase"),
                         fareBasis = row.StringParse("FareBasis"),
                         OperadoPor = row.StringParse("OperadoPor"),

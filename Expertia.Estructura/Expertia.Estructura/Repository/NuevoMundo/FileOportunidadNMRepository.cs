@@ -16,47 +16,78 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         {
         }
 
-        public Operation AsociarFileOportunidad(FileOportunidadNM fileOportunidad)
+        #region PublicMethods
+        public Operation GetFilesAsociadosSRV_NM()
         {
             var operation = new Operation();
 
-            #region Parameter
-            /// (01) P_CODIGO_ERROR
-            AddParameter(OutParameter.SF_Codigo, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (02) P_MENSAJE_ERROR
-            AddParameter(OutParameter.SF_Mensaje, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
-            /// (03) P_ID_OPORTUNIDAD_SF
-            AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.Varchar2, fileOportunidad.idOportunidad_SF);
-            /// (04) P_ID_COT_SRV_SF
-            AddParameter("P_ID_COT_SRV_SF", OracleDbType.Varchar2, fileOportunidad.idCotSrv_SF);
-            /// (05) P_FILE
-            AddParameter("P_FILE", OracleDbType.Varchar2, fileOportunidad.file);
-            /// (06) P_IMPORTE
-            AddParameter("P_IMPORTE", OracleDbType.Varchar2, fileOportunidad.importe);
-            /// (07) P_SUCURSAL
-            AddParameter("P_SUCURSAL", OracleDbType.Varchar2, fileOportunidad.sucursal);
-            /// (08) P_FECHA
-            AddParameter("P_FECHA", OracleDbType.Varchar2, fileOportunidad.fecha);
+            #region Parameters
+            /// (1) P_CODIGO_ERROR
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            /// (2) P_MENSAJE_ERROR
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Output, OutParameter.DefaultSize);
+            /// (3) P_DETALLEPASAJEROSNM
+            AddParameter(OutParameter.CursorFileAsociadossNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
             #endregion
 
             #region Invoke
-            try
-            {
-                ExecuteStoredProcedure(StoredProcedureName.AW_Asociar_FileOportunidadNM);
-
-                operation[OutParameter.SF_Codigo] = GetOutParameter(OutParameter.SF_Codigo);
-                operation[OutParameter.SF_Mensaje] = GetOutParameter(OutParameter.SF_Mensaje);
-            }
-            catch (Exception)
-            {
-
-                operation[OutParameter.SF_Codigo] = "OK, Esto es codigo duro";
-                operation[OutParameter.SF_Mensaje] = "Mensaje: Esto es codigo duro";
-            }
-            
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_FileOportunidadNM);
+            operation[OutParameter.CodigoError] = GetOutParameter(OutParameter.CodigoError);
+            operation[OutParameter.MensajeError] = GetOutParameter(OutParameter.MensajeError);
+            operation[OutParameter.CursorFileAsociadossNM] = ToFileOportunidadNM(GetDtParameter(OutParameter.CursorFileAsociadossNM));
             #endregion
 
             return operation;
         }
+
+        public Operation Update(RptaFileNM_SF RptaFileNM)
+        {
+            var operation = new Operation();
+
+            #region Parameters  
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, RptaFileNM.CodigoError, ParameterDirection.Input, 2);
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, RptaFileNM.MensajeError, ParameterDirection.Input, 1000);            
+            AddParameter(OutParameter.IdIdentificadorNM, OracleDbType.Int64, Convert.ToInt64(RptaFileNM.Identificador_NM));
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Upd_FileOportunidadNM);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+            #endregion
+
+            return operation;
+        }
+        #endregion
+
+        #region Parse
+        private IEnumerable<FileOportunidadNM> ToFileOportunidadNM(DataTable dt)
+        {
+            try
+            {
+                var fileNMList = new List<FileOportunidadNM>();
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    fileNMList.Add(new FileOportunidadNM()
+                    {
+                        idOportunidad_SF = row.StringParse("idoportunidad_sf"),
+                        Identificador_NM = row.StringParse("identificador_nm"),
+                        idCotSrv_SF = row.IntParse("idcotsrv_sf"),
+                        numeroFile = row.IntParse("numero_de_file"),
+                        importe = (Convert.IsDBNull(row["importe"]) == false ? row.StringParse("importe") : null),
+                        sucursal = Convert.ToInt16(row.StringParse("sucursal")),
+                        fecha = (Convert.IsDBNull(row["fecha"]) == false ? row.StringParse("fecha") : null),
+                        accion_SF = row.StringParse("accion_sf")
+                    });
+                }
+                return fileNMList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion        
     }
 }

@@ -80,6 +80,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     {
                         oportunidadNMList.Add(new OportunidadNM()
                         {
+                            idOportunidad_SF = (Convert.IsDBNull(row["Id_Oportunidad_Crm"]) == false ? row.StringParse("Id_Oportunidad_Crm") : null),
                             idCuenta_SF = row.StringParse("idCuenta_SF"),
                             Identificador_NM = row.StringParse("Identificador_NM"),
                             fechaRegistro = row.StringParse("fechaRegistro"),
@@ -129,6 +130,9 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                             PCCOfficeID = row.StringParse("PCC_OfficeID"),
                             IATA = row.StringParse("IATA"),
                             RUCEmpresa = row.StringParse("RUC_Empresa"),
+                            razonSocial = null,//row.StringParse("razonSocial"),
+                            aceptarPoliticas = true,//(row.IntParse("aceptarPoliticas") == 1 ? true : false),
+                            ruc = null, //row.IntParse("RUC"),
                             descripPaquete = row.StringParse("descripPaquete"),
                             destinoPaquetes = row.StringParse("destinoPaquetes"),
                             fechasPaquetes = row.StringParse("fechasPaquetes"),

@@ -300,7 +300,10 @@ namespace Expertia.Estructura.Utils
         // CRMC008
         public const string AW_Set_CotServ = AW_NM_Package + "." + "SP_INSERTA_SERVICIO_COT";
 
-        public const string AW_Asociar_FileOportunidadNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_ASOCIAR_FILE_OPORTUNIDAD";
+        // CRMC006
+        public const string AW_Get_FileOportunidadNM = AW_NM_Package + "." + "SP_LISTAR_FILE_ASOCIADO";
+        public const string AW_Upd_FileOportunidadNM = AW_NM_Package + "." + "SP_ACTUALIZAR_ENVIO_FILE_ASOCI";
+
         public const string AW_Generar_Codigo_PagoNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_GENERACION_CODIGO_PAGO";
         public const string AW_Solicitar_Facturacion_FileNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_SOLICITAR_FACTURACION_FILE";
         #endregion
@@ -333,6 +336,7 @@ namespace Expertia.Estructura.Utils
         public const string SolicitudPagoNMMethod = "SOLICITUDPAGONM_METHODNAME";
         public const string InformacionPagoNMMethod = "INFORMACIONPAGONM_METHODNAME";
         public const string ChatterNMMethod = "CANALCOMUNICACIONNM_METHODNAME";
+        public const string FileAsociadoOPNMMethod = "FILEASOCIADO_OPNM_METHODNAME";
         /// Actions
         public const string CreateAction = "Crear";
         public const string UpdateAction = "Actualizar";
@@ -398,6 +402,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorSolicitudPagoNM = "P_SOLIC_PAGO";
         public const string CursorInformacionPagoNM = "P_INFO_PAGO";
         public const string CursorChatterNM = "P_CHATTER";
+        public const string CursorFileAsociadossNM = "P_FILES_ASOCIADOS";
         #endregion
 
         #region Fields
@@ -427,7 +432,8 @@ namespace Expertia.Estructura.Utils
         public const string SF_IDOPORTUNIDAD_NM = "P_IDOPORTUNIDAD_SF";
         public const string SF_IdOportunidad2 = "idOportunidad_SF";
         public const string SF_IdCuenta = "ID_CUENTA_SF";
-        public const string SF_IdCuenta2 = "idCuenta_SF";
+        public const string SF_IDCUENTA_NM = "P_IDCUENTA_SF";
+        public const string SF_IdCuenta2 = "idCuenta_SF";        
         public const string SF_IdContacto = "ID_CONTACTO_SF";
         public const string SF_CodigoRetorno = "CODIGO_RETORNO";
         public const string SF_MensajeRetorno = "MENSAJE_RETORNO";

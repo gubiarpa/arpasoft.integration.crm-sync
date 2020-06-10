@@ -6,6 +6,7 @@ namespace Expertia.Estructura.Models
     public class ChatterNM : ICrmApiResponse
     {
         public string idOportunidad_SF { get; set; }
+        public string IdRegPostCotSrv_SF { get; set; }
         public int idPostCotSrv { get; set; }
         public string Identificador_NM { get; set; }
         public string cabecera { get; set; }

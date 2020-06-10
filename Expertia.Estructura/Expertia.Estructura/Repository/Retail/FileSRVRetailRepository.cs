@@ -11,6 +11,7 @@ using Microsoft.VisualBasic;
 using System.Data;
 using System.Linq;
 using System.Web;
+using Expertia.Estructura.Repository.AppWebs;
 
 namespace Expertia.Estructura.Repository.Retail
 {
@@ -514,6 +515,7 @@ namespace Expertia.Estructura.Repository.Retail
                 throw new Exception(ex.ToString());
             }                        
         }
+                
 
         public void _Delete_Cot_File(int pIntCotId, int pIntFileId)
         { 

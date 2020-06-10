@@ -28,13 +28,18 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region PublicMethods
-        [Route(RouteAction.Send)]
+        [Route(RouteAction.Create)]
         public IHttpActionResult Create(OportunidadVentaNM oportunidadVentaNM)
         {
-            string exMessage = string.Empty;
+            string exMessage = string.Empty;      
+            object objRespuesta = null;            
             int idCotizacion = 0;
+
             try
             {
+                _datosUsuario = new DatosUsuario();
+                _repository = new OportunidadRetailRepository();                
+
                 var intIdUsuWeb = oportunidadVentaNM.UsuarioCrea;
                 var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(oportunidadVentaNM.IdUsuarioSrv_SF);
                 int? intIdCliCot = null;
@@ -335,31 +340,33 @@ namespace Expertia.Estructura.Controllers
 
                 _repository.RegistraOportunidad(oportunidadVentaNM.IdOportunidad_SF, pIntIdCot);
                 idCotizacion = pIntIdCot;
-                var oportunidadRetailRes = new OportunidadRetailRes()
+                var oportunidadRetailRes = new RptaOportunidadVentaNM()
                 {
-                    CodigoError = "OK",
-                    MensajeError = "Se agregó correctamente",
+                    Codigo = "OK",
+                    Mensaje = "Se agregó correctamente",                    
+                    IdCotSrv = pIntIdCot/*,
                     IdOportunidad_SF = oportunidadVentaNM.IdOportunidad_SF,
-                    IdCotSrv = pIntIdCot,
-                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
+                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")*/
                 };
 
-                return Ok(oportunidadRetailRes);
+                objRespuesta = new { respuesta = oportunidadRetailRes };
+                return Ok(objRespuesta);
             }
             catch (Exception ex)
             {
-                var oportunidadRetailResError = new OportunidadRetailRes()
+                var oportunidadRetailResError = new RptaOportunidadVentaNM()
                 {
-                    CodigoError = "ER",
-                    MensajeError = ex.Message,
+                    Codigo = "ER",
+                    Mensaje = ex.Message,                    
+                    IdCotSrv = null/*,
                     IdOportunidad_SF = oportunidadVentaNM.IdOportunidad_SF,
-                    IdCotSrv = null,
-                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")
+                    FechaCreacion = DateTime.Now.ToString("dd/MM/yyyy")*/
                 };
 
                 exMessage = ex.Message;
-
-                return Ok(oportunidadRetailResError);
+                                
+                objRespuesta = new { respuesta = oportunidadRetailResError };
+                return Ok(objRespuesta);
             }
             finally
             {

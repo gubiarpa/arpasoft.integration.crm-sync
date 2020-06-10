@@ -23,7 +23,7 @@ namespace Expertia.Estructura.Models
         public string ApellidoPaterno { get; set; }
         public string ApellidoMateno { get; set; }
         public string OARipley { get; set; }
-        public double MontoOA { get; set; }
+        public double? MontoOA { get; set; }
         private int NumId_out { get; set; }
         public int IdUsuario { get; set; }
         public int Cot_Id { get; set; }

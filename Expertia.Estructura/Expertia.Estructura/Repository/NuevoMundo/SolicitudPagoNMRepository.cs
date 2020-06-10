@@ -78,8 +78,8 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         idOportunidad_SF = row.StringParse("IdOportunidad_SF"),
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         IdPedido = row.IntParse("NRO_PEDIDO"),
-                        pasarela = row.StringParse("Pasarela"),
-                        fechaPedido = row.StringParse("FechaPedido"),
+                        pasarela = row.StringParse("FormaPago"), //row.StringParse("Pasarela"),
+                        fechaPedido = row.DateTimeParse("FechaPedido").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
                         estado1 = row.StringParse("Estado1"),
                         estado2 = row.StringParse("Estado2"),
                         resultado = row.StringParse("Resultado"),
@@ -113,7 +113,10 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         IdCotizacion = row.IntParse("COTSRV_ID"),
                         idFormpaPago = row.IntParse("idFormpaPago"),
                         igv = row.FloatParse("IGV"),
-                        montoPagarDbl = row.FloatParse("MontoPagarDbl")
+                        montoPagarDbl = row.FloatParse("MontoPagarDbl"),
+                        IdRegSolicitudPago_SF ="",
+                        codigoPago = row.StringParse("CodigoPago"),
+                        fechaExpiracion = row.StringParse("FechaExpiracionPago")
                     };
 
                     if ("56789".Contains(objSolicitudPagoNM.idFormpaPago.ToString()) == true)
