@@ -42,6 +42,7 @@ namespace Expertia.Estructura.Models
         public string idusuariosrv { get; set; }
         public string codigo { get; set; }
         public string mensaje { get; set; }
+        public bool existeIdDatosFacturacion { get { return iddatosfacturacion != null; } }
     }
 
     public class Archivo
