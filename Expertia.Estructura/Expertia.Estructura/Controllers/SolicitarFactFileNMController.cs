@@ -27,7 +27,13 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(SolicitarFactFileNM solicitarFactFileNM)
         {
-            var operation = _solicitarFactFileNMRepository.SolicitarFactFile(solicitarFactFileNM);
+            var operation = _solicitarFactFileNMRepository.GuardarDesgloseCA(solicitarFactFileNM);
+
+            if (solicitarFactFileNM.ArchivoList != null && solicitarFactFileNM.ArchivoList.Count > 0)
+            {
+                var result = operation[ResultType.Success.ToString()].ToString();
+                _solicitarFactFileNMRepository.GuardarArchivo(solicitarFactFileNM, int.Parse(result), int.Parse(solicitarFactFileNM.idusuario));
+            }
 
             return Ok(new
             {

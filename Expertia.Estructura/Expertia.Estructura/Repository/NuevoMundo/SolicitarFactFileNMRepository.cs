@@ -109,29 +109,38 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #region Desglose
         public Operation GuardarDesgloseCA(SolicitarFactFileNM solicitarFactFile)
         {
-            var operation = new Operation();
-
             UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs;
             OracleTransaction objTx = null; OracleConnection objConn = null;
 
-            ExecuteConexionBegin(unidadNegocio.ToConnectionKey(), ref objTx, ref objConn);
-
-            GuardarDatosFacturacion(solicitarFactFile, objTx, objConn);
-
-            if (solicitarFactFile.existeIdDatosFacturacion)
+            try
             {
-                EliminarDetalleTarifa(solicitarFactFile, objTx, objConn);
-                EliminarDetalleNoRecibos(solicitarFactFile, objTx, objConn);
+                var operation = new Operation();
+
+                ExecuteConexionBegin(unidadNegocio.ToConnectionKey(), ref objTx, ref objConn);
+
+                var result = GuardarDatosFacturacion(solicitarFactFile, objTx, objConn);
+                operation[ResultType.Success.ToString()] = result;
+
+                if (solicitarFactFile.existeIdDatosFacturacion)
+                {
+                    EliminarDetalleTarifa(solicitarFactFile, objTx, objConn);
+                    EliminarDetalleNoRecibos(solicitarFactFile, objTx, objConn);
+                }
+
+                GuardarDetalleTarifa(solicitarFactFile, objTx, objConn);
+                GuardarDetalleNoRecibo(solicitarFactFile, objTx, objConn);
+
+                objTx.Commit();
+                return operation;
             }
-
-            GuardarDetalleTarifa(solicitarFactFile, objTx, objConn);
-            GuardarDetalleNoRecibo(solicitarFactFile, objTx, objConn);
-
-            objTx.Commit();
-            return operation;
+            catch (Exception ex)
+            {
+                objTx.Rollback();
+                throw ex;
+            }
         }
 
-        private void GuardarDatosFacturacion(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
+        private int GuardarDatosFacturacion(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
         {
             var spName = solicitarFactFile.existeIdDatosFacturacion ?
                     "APPWEBS.PKG_DESGLOSE_CA.SP_ACTUALIZAR_DATOSFACTURACION" :
@@ -157,7 +166,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             AddParameter("pApellidoM", OracleDbType.NVarchar2, solicitarFactFile.apemateno);
             AddParameter("pOARippley", OracleDbType.NVarchar2, solicitarFactFile.oaripley);
             AddParameter("pMontoOA", OracleDbType.Decimal, solicitarFactFile.oamonto);
-            AddParameter("pIdUsuario", OracleDbType.Int32, string.Empty); // (!) Orig., model.IdUsuario
+            AddParameter("pIdUsuario", OracleDbType.Int32, solicitarFactFile.idusuario);
             AddParameter("pCot_Id", OracleDbType.Int32, solicitarFactFile.cotid);
             AddParameter("pCampania", OracleDbType.NVarchar2, solicitarFactFile.campania);
             AddParameter("pCorreo", OracleDbType.NVarchar2, solicitarFactFile.correo);
@@ -166,7 +175,21 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             AddParameter("pMontoMillas", OracleDbType.Decimal, solicitarFactFile.montomillas);
             AddParameter("pObservacion", OracleDbType.Clob, solicitarFactFile.observaciones);
 
-            ExecuteStorePBeginCommit(spName, objTx, objConn);
+            var idDatosFactura = string.Empty;
+
+            if (solicitarFactFile.existeIdDatosFacturacion)
+            {
+                ExecuteStorePBeginCommit(spName, objTx, objConn);
+                idDatosFactura = solicitarFactFile.iddatosfacturacion;
+            }
+            else
+            {
+                AddParameter("pNumId_out", OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+                ExecuteStorePBeginCommit(spName, objTx, objConn);
+                idDatosFactura = GetOutParameter("pNumId_out").ToString();
+            }
+
+            return int.Parse(idDatosFactura);
         }
 
         private void EliminarDetalleTarifa(SolicitarFactFileNM solicitarFactFile, OracleTransaction objTx, OracleConnection objConn)
@@ -225,6 +248,29 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
                 ExecuteStorePBeginCommit(spName, objTx, objConn);
             }
+        }
+        #endregion
+
+        #region Archivo
+        public Operation GuardarArchivo(SolicitarFactFileNM solicitarFactFile, int idDatosFacturacion, int idUsuario)
+        {
+            var operation = new Operation();
+
+            foreach (var archivo in solicitarFactFile.ArchivoList)
+            {
+                var spName = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_ARCHIVOS";
+
+                AddParameter("pRutaArchivo", OracleDbType.NVarchar2, archivo.RutaArchivo);
+                AddParameter("pNombreArchivo", OracleDbType.NVarchar2, archivo.NomArchivo);
+                AddParameter("pExtensionArchivo", OracleDbType.NVarchar2, string.Empty); // (!) Item.ExtensionArchivo
+                AddParameter("pIdDatosFacturacion", OracleDbType.Int32, idDatosFacturacion);
+                AddParameter("pIdUsuWebCrea", OracleDbType.Int32, idUsuario);
+                AddParameter("pUrlArchivo", OracleDbType.NVarchar2, archivo.UrlArchivo);
+
+                ExecuteStoredProcedure(spName);
+            }
+
+            return operation;
         }
         #endregion
     }
