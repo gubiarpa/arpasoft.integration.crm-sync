@@ -229,6 +229,7 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\InfoPagoNM.cs" />
     <Compile Include="Models\NuevoMundo\OportunidadVentaNM.cs" />
     <Compile Include="Models\NuevoMundo\SolicitarFactFileNM.cs" />
     <Compile Include="Models\NuevoMundo\GenCodigoPagoNM.cs" />

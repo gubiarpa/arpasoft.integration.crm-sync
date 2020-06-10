@@ -48,7 +48,10 @@ namespace Expertia.Estructura.Models
         public int WebCid { get; set; }
         public int IdCotizacion { get; set; }
         public string CodigoError { get; set; }
-        public string MensajeError { get; set; }        
+        public string MensajeError { get; set; }    
+        public string IdRegSolicitudPago_SF { get; set;}
+        public string codigoPago { get; set; }
+        public string fechaExpiracion { get; set; }
     }
 
     public class RptaSolicitudPagoSF : ICrmApiResponse

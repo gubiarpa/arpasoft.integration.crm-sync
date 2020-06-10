@@ -36,7 +36,7 @@ namespace Expertia.Estructura.Controllers
 
             try
             {
-                var _unidadNegocio = GetUnidadNegocio(unidadNegocio.Descripcion);
+                var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
                 RepositoryByBusiness(_unidadNegocio);
                 _instants[InstantKey.Salesforce] = DateTime.Now;
 
@@ -65,8 +65,9 @@ namespace Expertia.Estructura.Controllers
                     var responseInformacionPagoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.InformacionPagoNMMethod, Method.POST, objEnvio, true, token);
                     if (responseInformacionPagoNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
+                       
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseInformacionPagoNM.Content);
-
+                        QuickLog(jsonResponse, "body_response.json", "InformacionPagoNM"); /// ♫ Trace
                         foreach (var informacionPagoNM in informacionPagoNMs)
                         {
                             foreach (var jsResponse in jsonResponse["Cotizaciones"])
@@ -84,6 +85,9 @@ namespace Expertia.Estructura.Controllers
                     }
                     else
                     {
+
+                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseInformacionPagoNM.Content);
+                        QuickLog(jsonResponse, "body_response.json", "InformacionPagoNM"); /// ♫ Trace
                         error = responseInformacionPagoNM.StatusCode.ToString();
                     }
                 }
@@ -117,5 +121,6 @@ namespace Expertia.Estructura.Controllers
             _informacionPagoNMRepository = new InformacionPagoNMRepository(unidadNegocioKey);
             return unidadNegocioKey;
         }
+
     }
 }

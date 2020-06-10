@@ -588,6 +588,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     solicitudPagoNM.GEM,
                     solicitudPagoNM.PEF,
                     solicitudPagoNM.accion_SF
+                    ,solicitudPagoNM.IdRegSolicitudPago_SF
                 };
             }
             catch (Exception ex)

@@ -62,10 +62,14 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         tarifaNeto = row.FloatParse("tarifaNeto"),
                         impuestos = row.FloatParse("impuestos"),
                         cargos = row.FloatParse("cargos"),
-                        nombreHotel = row.StringParse("nombreHotel"),
-                        totalPagar = row.FloatParse("totalPagar"),
+                        montodescuento = row.FloatParse("montodescuquixento"),
+                        textodescuento = row.StringParse("textodescuento"),
+                        promowebcode = row.StringParse("promowebcode"),
+                        totalfacturar = row.FloatParse("totalfacturar"),
+                        //nombreHotel = row.StringParse("nombreHotel"), //no
+                        //totalPagar = row.FloatParse("totalPagar"),//no
                         descripcion = row.StringParse("descripcion"),
-                        feeAsumidoGeneral = row.StringParse("feeAsumidoGeneral"),
+                        feeAsumidoGeneralBoletos = row.FloatParse("feeAsumidoGeneral"),
                         numHabitacionPaquete = row.FloatParse("numHabitacionPaquete"),
                         tipoPasajeroPaq = row.StringParse("tipoPasajeroPaq"),
                         cantidadPasajeroPaq = row.FloatParse("cantidadPasajeroPaq"),
@@ -84,15 +88,17 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         cantDiasSeg = row.IntParse("cantDiasSeg"),
                         precioUnitarioSeg = row.FloatParse("precioUnitarioSeg"),
                         MontoReservaSeg = row.FloatParse("MontoReservaSeg"),
+                        IdInformacionPago_SF = row.StringParse("idinformacionpago_sf"),
                         accion_SF = row.StringParse("accion_SF"),
-                        IdInformacionPago_SF = row.StringParse("IdInformacionPago_SF"),
                         Id_Sucursal = row.StringParse("Id_Sucursal"),
                         Codigoweb = row.StringParse("Codigoweb"),
                         PaqueteId = row.StringParse("PaqueteId"),
                         SeguroId = row.StringParse("SeguroId"),
                         IdCotizacion = row.StringParse("IdCotizacion"),
                         OrdenServicio = row.StringParse("OrdenServicio"),
-                        OrdenDatos = row.StringParse("OrdenDatos")
+                        OrdenDatos = row.StringParse("OrdenDatos"),
+                        DescuentoSeg = row.FloatParse("DescuentoSeg"),
+                        MontoSeg = row.FloatParse("MontoSeg")
                     });
                 }
                 return informacionPagoNMList;
