@@ -62,14 +62,14 @@ namespace Expertia.Estructura.Controllers
                     /// Envío de CuentaNM a Salesforce                    
                     objEnvio = new { listadatos = detalleHotelNMSF };
                     QuickLog(objEnvio, "body_request.json", "DetalleHotelNM", previousClear: true); /// ♫ Trace
-
-
+                    
                     var responseDetalleHotelNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.DetalleHotelNMMethod, Method.POST, objEnvio, true, token);
                     if (responseDetalleHotelNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseDetalleHotelNM.Content);
-                        SFResponse = jsonResponse["respuestas"];
+                        QuickLog(jsonResponse, "body_response.json", "DetalleHotelNM", previousClear: true); /// ♫ Trace
 
+                        SFResponse = jsonResponse["respuestas"];
                         ListRptaHotelSF_Fail = new List<RptaHotelSF>();
                         foreach (var detalleHotelNM in jsonResponse["respuestas"])
                         {
@@ -113,6 +113,10 @@ namespace Expertia.Estructura.Controllers
                     else
                     {
                         error = responseDetalleHotelNM.StatusCode.ToString();
+                        if (responseDetalleHotelNM != null && responseDetalleHotelNM.Content != null)
+                        {
+                            QuickLog(responseDetalleHotelNM.Content, "body_response.json", "DetalleHotelNM", previousClear: true); /// ♫ Trace
+                        }
                     }
                 }
                 catch (Exception ex)

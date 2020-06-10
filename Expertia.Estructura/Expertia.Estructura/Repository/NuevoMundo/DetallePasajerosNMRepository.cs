@@ -76,6 +76,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     detallePasajerosNMList.Add(new DetallePasajerosNM()
                     {
                         idOportunidad_SF = row.StringParse("idOportunidad_SF"),
+                        idPasajero_SF = (Convert.IsDBNull(row["idPasajero_SF"]) == false ? row.StringParse("idPasajero_SF") : null),
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         id_reserva = row.IntParse("IdReserva"),
                         IdPasajero = row.StringParse("IdPasajero"),

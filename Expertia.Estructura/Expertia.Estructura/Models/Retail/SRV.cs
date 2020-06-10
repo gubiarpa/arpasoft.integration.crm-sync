@@ -8,11 +8,7 @@ using Expertia.Estructura.Models.Behavior;
 using Expertia.Estructura.Models.Auxiliar;
 
 namespace Expertia.Estructura.Models
-{
-    public class SRV
-    {
-    }
-
+{  
     public class Post_SRV
     {
         public int IdCot { get; set; }

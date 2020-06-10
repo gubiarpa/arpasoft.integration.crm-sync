@@ -60,16 +60,16 @@ namespace Expertia.Estructura.Controllers
                 try
                 {
                     /// Envío de Informacion de Canal de Comunicacion a Salesforce                    
-                    objEnvio = new { porDefinir = chatterNMSF }; /**POR DEFINIR**/
+                    objEnvio = new { listadatos = chatterNMSF }; /**POR DEFINIR**/
                     QuickLog(objEnvio, "body_request.json", "ChatterNM", previousClear: true); /// ♫ Trace
-
-
+                    
                     var responseChatterNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.ChatterNMMethod, Method.POST, objEnvio, true, token);
                     if (responseChatterNM.StatusCode.Equals(HttpStatusCode.OK))
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseChatterNM.Content);
-                        SFResponse = jsonResponse["respuestas"];
+                        QuickLog(jsonResponse, "body_response.json", "ChatterNM", previousClear: true); /// ♫ Trace
 
+                        SFResponse = jsonResponse["respuestas"];
                         ListRptaChatterSF_Fail = new List<RptaChatterSF>();
                         foreach (var chatterNM in jsonResponse["respuestas"])
                         {
@@ -113,6 +113,10 @@ namespace Expertia.Estructura.Controllers
                     else
                     {
                         error = responseChatterNM.StatusCode.ToString();
+                        if (responseChatterNM != null && responseChatterNM.Content != null)
+                        {
+                            QuickLog(responseChatterNM.Content, "body_response.json", "ChatterNM", previousClear: true); /// ♫ Trace
+                        }
                     }
                 }
                 catch (Exception ex)

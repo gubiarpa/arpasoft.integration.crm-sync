@@ -68,8 +68,9 @@ namespace Expertia.Estructura.Controllers
                     if (responseDetallePasajeroNM.StatusCode.Equals(HttpStatusCode.OK))
                     {                        
                         dynamic jsonResponse = new JavaScriptSerializer().DeserializeObject(responseDetallePasajeroNM.Content);
-                        SFResponse = jsonResponse["respuestas"];
+                        QuickLog(jsonResponse, "body_response.json", "DetallePasajerosNM", previousClear: true); /// ♫ Trace
 
+                        SFResponse = jsonResponse["respuestas"];
                         ListRptaPasajeroSF_Fail = new List<RptaPasajeroSF>();
                         foreach (var detallePasajeroNM in jsonResponse["respuestas"])
                         {
@@ -113,6 +114,10 @@ namespace Expertia.Estructura.Controllers
                     else
                     {
                         error = responseDetallePasajeroNM.StatusCode.ToString();
+                        if (responseDetallePasajeroNM != null && responseDetallePasajeroNM.Content != null)
+                        {
+                            QuickLog(responseDetallePasajeroNM.Content, "body_response.json", "DetallePasajeroNM", previousClear: true); /// ♫ Trace
+                        }
                     }
                 }
                 catch (Exception ex)

@@ -994,7 +994,7 @@ namespace Expertia.Estructura.Controllers
                 oNMailAlerta = null;
             }
         }
-
+        
 
         private void validacionAssociate(ref AssociateFile _fileAssociate, ref AssociateFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV)
         {
@@ -1056,7 +1056,7 @@ namespace Expertia.Estructura.Controllers
                         {
                             mensajeError += "La accion debe ser la misma en todos los files|";
                             break;
-                        }
+                        }                        
                         _fileSRV_Info = new FileSRV();
                         _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, fileSRV.idFilePTA);
                     }
@@ -1146,18 +1146,18 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        private FileSRV CargarInfoFile(int sucursal, int idfile)
+        public FileSRV CargarInfoFile(int sucursal, int idfile)
         {
-            _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
+            CotizacionSRV_AW_Repository _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
             FileSRV fileSRV = new FileSRV();
             string strIdFile = Convert.ToString(idfile);
-         
+
             strIdFile = strIdFile.Replace(",", "");
             DataTable dtImporteFile;
             dtImporteFile = _CotizacionSRV_Repository._Select_InfoFile(sucursal, idfile);
-           
-            if (dtImporteFile == null){}
-            else if (dtImporteFile.Rows.Count == 0){}
+
+            if (dtImporteFile == null) { }
+            else if (dtImporteFile.Rows.Count == 0) { }
             else
             {
                 DataRow drCliente = dtImporteFile.Rows[0];
@@ -1165,7 +1165,7 @@ namespace Expertia.Estructura.Controllers
                 double dblImporteSumaSOL = 0;
                 string cliente = "";
                 double monto = 0;
-                string moneda = "";                
+                string moneda = "";
                 string strIdMoneda = drCliente["ID_MONEDA"].ToString();
 
                 foreach (DataRow drImporteFile in dtImporteFile.Rows)
@@ -1188,7 +1188,7 @@ namespace Expertia.Estructura.Controllers
                         }
                     }
                 }
-                                
+
                 cliente = drCliente["NOMBRE_CLIENTE"].ToString();
 
                 if (strIdMoneda == "USD")
@@ -1199,7 +1199,7 @@ namespace Expertia.Estructura.Controllers
                 {
                     monto = dblImporteSumaSOL;
                 }
-                                
+
                 moneda = drCliente["ID_MONEDA"].ToString();
                 /*string fecha = Convert.ToDateTime(drCliente["FECHA_EMISION"]).ToShortDateString();*/
                 fileSRV.Cliente = cliente;
