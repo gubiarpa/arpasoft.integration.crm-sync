@@ -15,7 +15,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
-    /// CRMAFO06 : Envio de datos de File y actualización
+    /// Expertia 1 : Solicitud de facturacion del file / Desglose CA
     [RoutePrefix(RoutePrefix.SolicitarFactFileNM)]
     public class SolicitarFactFileNMController : BaseController
     {
@@ -24,10 +24,16 @@ namespace Expertia.Estructura.Controllers
         protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
 
         #region PublicMethods
-        [Route(RouteAction.Send)]
-        public IHttpActionResult Send(UnidadNegocio unidadNegocio)
+        [Route(RouteAction.Read)]
+        public IHttpActionResult Read(SolicitarFactFileNM solicitarFactFileNM)
         {
-            return Ok();
+            var operation = _solicitarFactFileNMRepository.SolicitarFactFile(solicitarFactFileNM);
+
+            return Ok(new
+            {
+                Codigo = operation[OutParameter.CodigoError],
+                Mensaje = operation[OutParameter.MensajeError]
+            });
         }
         #endregion
 

@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Models.Behavior;
 using System;
+using System.Collections.Generic;
 
 namespace Expertia.Estructura.Models
 {
@@ -10,7 +11,7 @@ namespace Expertia.Estructura.Models
         public string dk { get; set; }
         public string subcodigo { get; set; }
         public string comisionista { get; set; }
-        public string compania { get; set; }
+        public string campania { get; set; }
         public string numfilenm { get; set; }
         public string numfiledm { get; set; }
         public string ccb { get; set; }
@@ -30,34 +31,9 @@ namespace Expertia.Estructura.Models
         public string banco { get; set; }
         public string cantidadmillas { get; set; }
         public string montomillas { get; set; }
-        public float iddetallenrorecibo { get; set; }
-        public float idsucursal { get; set; }
-        public string nomsucursal { get; set; }
-        public string nrorecibo { get; set; }
-        public string montorecibo { get; set; }
-        //public string iddatosfacturacion { get; set; }
-        public float pasajeroadt { get; set; }
-        public float pasajerochd { get; set; }
-        public float pasajeroinf { get; set; }
-        public float idgruposervicio { get; set; }
-        public string gruposervicio { get; set; }
-        public float tarifaadt { get; set; }
-        public float tarifachd { get; set; }
-        public float tarifainf { get; set; }
-        public float montoadt { get; set; }
-        public float montochd { get; set; }
-        public float montoinf { get; set; }
-        //public string iddatosfacturacion { get; set; }
-        public string rutaarchivo { get; set; }
-        public string nomarchivo { get; set; }
-        public string urlarchivo { get; set; }
-        public float nrofiles { get; set; }
-        public string sucursal { get; set; }
-        public string fechaasociacion { get; set; }
-        public string cliente { get; set; }
-        public string importe { get; set; }
-        public string idoportunidadsf { get; set; }
-        public string idcotsrvsf { get; set; }
+        public List<ReciboDetalle> ReciboDetalleList { get; set; }
+        public List<TarifaDetalle> TarifaDetalleList { get; set; }
+        public List<Archivo> ArchivoList { get; set; }
         public string montocobrar { get; set; }
         public string observaciones { get; set; }
         //public string idoportunidadsf { get; set; }
@@ -66,5 +42,19 @@ namespace Expertia.Estructura.Models
         public string idusuariosrv { get; set; }
         public string codigo { get; set; }
         public string mensaje { get; set; }
+    }
+
+    public class Archivo
+    {
+        public string RutaArchivo { get; set; }
+        public string NomArchivo { get; set; }
+        public string UrlArchivo { get; set; }
+        public int NumeroFiles { get; set; }
+        public string Sucursal { get; set; }
+        public DateTime FechaAsociacion { get; set; }
+        public string Cliente { get; set; }
+        public float Importe { get; set; }
+        public int IdOportunidad_SF { get; set; }
+        public int IdCotSrv_SF { get; set; }
     }
 }
