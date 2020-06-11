@@ -42,14 +42,21 @@ namespace Expertia.Estructura.Models
         public string idusuariosrv { get; set; }
         public string codigo { get; set; }
         public string mensaje { get; set; }
+        #region Computadas
         public bool existeIdDatosFacturacion { get { return iddatosfacturacion != null; } }
+        public bool existeArchivoList { get { return (ArchivoList != null && ArchivoList.Count > 0); } }
+        #endregion
     }
 
     public class Archivo
     {
+        public int IdArchivo { get; set; }
         public string RutaArchivo { get; set; }
         public string NomArchivo { get; set; }
         public string UrlArchivo { get; set; }
+        public string ExtArchivo { get; set; }
+        public int IdDatosFacturacion { get; set; }
+        public int IdUsuWeb { get; set; }
         public int NumeroFiles { get; set; }
         public string Sucursal { get; set; }
         public DateTime FechaAsociacion { get; set; }

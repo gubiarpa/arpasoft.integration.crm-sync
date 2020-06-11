@@ -27,18 +27,24 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(SolicitarFactFileNM solicitarFactFileNM)
         {
-            var operation = _solicitarFactFileNMRepository.GuardarDesgloseCA(solicitarFactFileNM);
+            var operation = new Operation();
+                
+            var result = _solicitarFactFileNMRepository.GuardarDesgloseCA(solicitarFactFileNM);
 
-            if (solicitarFactFileNM.ArchivoList != null && solicitarFactFileNM.ArchivoList.Count > 0)
+            if (solicitarFactFileNM.existeArchivoList)
             {
-                var result = operation[ResultType.Success.ToString()].ToString();
-                _solicitarFactFileNMRepository.GuardarArchivo(solicitarFactFileNM, int.Parse(result), int.Parse(solicitarFactFileNM.idusuario));
+                _solicitarFactFileNMRepository.GuardarArchivo(solicitarFactFileNM, result, int.Parse(solicitarFactFileNM.idusuario));
+            }
+
+            if (solicitarFactFileNM.existeIdDatosFacturacion)
+            {
+                var archivoList = _solicitarFactFileNMRepository.ObtenerArchivos(solicitarFactFileNM.iddatosfacturacion);
             }
 
             return Ok(new
             {
-                Codigo = operation[OutParameter.CodigoError],
-                Mensaje = operation[OutParameter.MensajeError]
+                Codigo = DbResponseCode.Success,
+                Mensaje = string.Empty
             });
         }
         #endregion

@@ -107,19 +107,16 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         }
 
         #region Desglose
-        public Operation GuardarDesgloseCA(SolicitarFactFileNM solicitarFactFile)
+        public int GuardarDesgloseCA(SolicitarFactFileNM solicitarFactFile)
         {
             UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs;
             OracleTransaction objTx = null; OracleConnection objConn = null;
 
             try
             {
-                var operation = new Operation();
-
                 ExecuteConexionBegin(unidadNegocio.ToConnectionKey(), ref objTx, ref objConn);
 
                 var result = GuardarDatosFacturacion(solicitarFactFile, objTx, objConn);
-                operation[ResultType.Success.ToString()] = result;
 
                 if (solicitarFactFile.existeIdDatosFacturacion)
                 {
@@ -131,7 +128,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 GuardarDetalleNoRecibo(solicitarFactFile, objTx, objConn);
 
                 objTx.Commit();
-                return operation;
+                return result;
             }
             catch (Exception ex)
             {
@@ -252,10 +249,8 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         #endregion
 
         #region Archivo
-        public Operation GuardarArchivo(SolicitarFactFileNM solicitarFactFile, int idDatosFacturacion, int idUsuario)
+        public void GuardarArchivo(SolicitarFactFileNM solicitarFactFile, int idDatosFacturacion, int idUsuario)
         {
-            var operation = new Operation();
-
             foreach (var archivo in solicitarFactFile.ArchivoList)
             {
                 var spName = "APPWEBS.PKG_Desglose_CA.SP_INSERTAR_ARCHIVOS";
@@ -269,8 +264,49 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
                 ExecuteStoredProcedure(spName);
             }
+        }
 
-            return operation;
+        public List<Archivo> ObtenerArchivos(string idDatosFacturacion)
+        {
+            var spName = "APPWEBS.PKG_DESGLOSE_CA.SP_OBTIENE_ARCHIVOS";
+
+            AddParameter("pId_DatosFacturacion", OracleDbType.Int32, idDatosFacturacion);
+            AddParameter("pCurResult_out", OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+
+            ExecuteStoredProcedure(spName);
+
+            var result = ToArchivoList(GetDtParameter("pCurResult_out"));
+            return result;
+        }
+
+        private List<Archivo> ToArchivoList(DataTable dt)
+        {
+            try
+            {
+                var archivoList = new List<Archivo>();
+
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        archivoList.Add(new Archivo()
+                        {
+                            IdArchivo = row.IntParse("IDARCHIVO"),
+                            RutaArchivo = row.StringParse("RUTAARCHIVO"),
+                            NomArchivo = row.StringParse("NOMBREARCHIVO"),
+                            ExtArchivo = row.StringParse("EXTENSIONARCHIVO"),
+                            IdDatosFacturacion = row.IntParse("IDDATOSFACTURACION"),
+                            IdUsuWeb = row.IntParse("IDUSUWEBCREA"),
+                            UrlArchivo = row.StringParse("URLARCHVIO")
+                        });
+                    }
+                }
+                return archivoList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
     }
