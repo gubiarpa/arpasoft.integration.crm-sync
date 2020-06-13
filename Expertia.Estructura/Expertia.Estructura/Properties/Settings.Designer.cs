@@ -32,5 +32,15 @@ namespace Expertia.Estructura.Properties {
                 return ((string)(this["Expertia_Estructura_ws_compra_ws_compra"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.webfarefinder.com/ws_pax_aux_test/ws_pax_paxdoc.asmx")]
+        public string Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc {
+            get {
+                return ((string)(this["Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc"]));
+            }
+        }
     }
 }

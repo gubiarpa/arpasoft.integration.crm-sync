@@ -67,75 +67,88 @@ namespace Expertia.Estructura.Controllers
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// preparación de files para envio a Salesforce
-                var filesAsociadosNMSF = new List<object>();
+                var filesAsociadosNMSF = new List<object>();               
+                int _positionFor = 0;
+                int _totalRegistrosList = ListFilesAsociadosNM.Count() - 1;
+                
                 foreach (var fileAsociado in ListFilesAsociadosNM)
                 {
                     filesAsociadosNMSF.Add(fileAsociado.ToSalesforceEntity());
-                }
-
-                try
-                {
-                    /// Envío de CuentaNM a Salesforce                    
-                    objEnvio = new { listadatosOportunidad = filesAsociadosNMSF };
-                    QuickLog(objEnvio, "body_request.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
-
-                    var responseFileAsociadoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileAsociadoOPNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseFileAsociadoNM.StatusCode.Equals(HttpStatusCode.OK))
+                    if (!(_positionFor < _totalRegistrosList && fileAsociado.accion_SF == ListFilesAsociadosNM.ElementAt(_positionFor + 1).accion_SF))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseFileAsociadoNM.Content);
-                        QuickLog(jsonResponse, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
-
-                        SFResponse = jsonResponse["respuestas"];                        
-                        ListRptaFiles_Fail = new List<RptaFileNM_SF>();
-                        foreach (var detalleHotelNM in jsonResponse["respuestas"])
+                        /*Procesamos la Data*/
+                        try
                         {
-                            try
+                            /// Envío de Files a Salesforce                    
+                            objEnvio = new { listadatosOportunidad = filesAsociadosNMSF };
+                            QuickLog(objEnvio, "body_request.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+
+                            var responseFileAsociadoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileAsociadoOPNMMethod, Method.POST, objEnvio, true, token);
+                            if (responseFileAsociadoNM.StatusCode.Equals(HttpStatusCode.OK))
                             {
-                                #region Deserialize
-                                _rptaFileNM = new RptaFileNM_SF();
+                                dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseFileAsociadoNM.Content);
+                                QuickLog(jsonResponse, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
 
-                                _rptaFileNM.CodigoError = "OK";
-                                _rptaFileNM.MensajeError = "TST";
-                                _rptaFileNM.idOportunidad_SF = "006R000000WAUr4IAH";                                
-                                _rptaFileNM.Identificador_NM = "1";
-
-                                _rptaFileNM.CodigoError = detalleHotelNM[OutParameter.SF_Codigo];
-                                _rptaFileNM.MensajeError = detalleHotelNM[OutParameter.SF_Mensaje];
-                                _rptaFileNM.idOportunidad_SF = detalleHotelNM[OutParameter.SF_IdOportunidad2];                                
-                                _rptaFileNM.Identificador_NM = detalleHotelNM[OutParameter.SF_IdentificadorNM];
-                                #endregion
-
-                                #region ReturnToDB
-                                var updOperation = _fileOportunidadNMRepository.Update(_rptaFileNM);
-
-                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                SFResponse = jsonResponse["respuestas"];
+                                ListRptaFiles_Fail = new List<RptaFileNM_SF>();
+                                foreach (var detalleHotelNM in jsonResponse["respuestas"])
                                 {
-                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaFileNM.Identificador_NM.ToString() + "||||";
-                                    ListRptaFiles_Fail.Add(_rptaFileNM);
-                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                    try
+                                    {
+                                        #region Deserialize
+                                        _rptaFileNM = new RptaFileNM_SF();
+
+                                        _rptaFileNM.CodigoError = "OK";
+                                        _rptaFileNM.MensajeError = "TST";
+                                        _rptaFileNM.idOportunidad_SF = "006R000000WAUr4IAH";
+                                        _rptaFileNM.Identificador_NM = "1";
+
+                                        _rptaFileNM.CodigoError = detalleHotelNM[OutParameter.SF_Codigo];
+                                        _rptaFileNM.MensajeError = detalleHotelNM[OutParameter.SF_Mensaje];
+                                        _rptaFileNM.idOportunidad_SF = detalleHotelNM[OutParameter.SF_IdOportunidad2];
+                                        _rptaFileNM.Identificador_NM = detalleHotelNM[OutParameter.SF_IdentificadorNM];
+                                        #endregion
+
+                                        #region ReturnToDB
+                                        var updOperation = _fileOportunidadNMRepository.Update(_rptaFileNM);
+
+                                        if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                        {
+                                            error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaFileNM.Identificador_NM.ToString() + "||||";
+                                            ListRptaFiles_Fail.Add(_rptaFileNM);
+                                            /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                        }
+                                        #endregion
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                        ListRptaFiles_Fail.Add(_rptaFileNM);
+                                        /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                    }
                                 }
-                                #endregion
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
-                                ListRptaFiles_Fail.Add(_rptaFileNM);
-                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                error = responseFileAsociadoNM.StatusCode.ToString();
+                                if (responseFileAsociadoNM != null && responseFileAsociadoNM.Content != null)
+                                {
+                                    QuickLog(responseFileAsociadoNM.Content, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        error = responseFileAsociadoNM.StatusCode.ToString();
-                        if (responseFileAsociadoNM != null && responseFileAsociadoNM.Content != null)
+                        catch (Exception ex)
                         {
-                            QuickLog(responseFileAsociadoNM.Content, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+                            error = error + ex.Message + "||||";
+                        }
+
+                        if (_positionFor != _totalRegistrosList)
+                        {
+                            filesAsociadosNMSF = new List<object>();
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    error = ex.Message;
+
+                    _positionFor = _positionFor + 1;
                 }
 
                 return Ok(true);
