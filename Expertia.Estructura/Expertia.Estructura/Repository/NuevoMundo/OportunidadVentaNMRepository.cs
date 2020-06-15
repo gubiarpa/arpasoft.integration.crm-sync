@@ -30,9 +30,9 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 AddParameter("pCurResult_out", OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
 
                 ExecuteStoredProcedure(StoredProcedureName.AW_Get_DatosClienteXIdSF);
-
-                operation["pCurResult_out"] = ToClienteCot(GetDtParameter("pCurResult_out"));
-
+                List<ClienteCot> ListClients = (List<ClienteCot>)ToClienteCot(GetDtParameter("pCurResult_out"));
+                operation["pCurResult_out"] = (ListClients != null && ListClients.Count > 0 ? ListClients[0] : null);
+                                
                 return operation;
             }
             catch (Exception ex)
