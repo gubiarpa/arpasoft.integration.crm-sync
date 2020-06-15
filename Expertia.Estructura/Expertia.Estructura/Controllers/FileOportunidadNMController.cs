@@ -67,75 +67,88 @@ namespace Expertia.Estructura.Controllers
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// preparación de files para envio a Salesforce
-                var filesAsociadosNMSF = new List<object>();
+                var filesAsociadosNMSF = new List<object>();               
+                int _positionFor = 0;
+                int _totalRegistrosList = ListFilesAsociadosNM.Count() - 1;
+                
                 foreach (var fileAsociado in ListFilesAsociadosNM)
                 {
                     filesAsociadosNMSF.Add(fileAsociado.ToSalesforceEntity());
-                }
-
-                try
-                {
-                    /// Envío de CuentaNM a Salesforce                    
-                    objEnvio = new { listadatosOportunidad = filesAsociadosNMSF };
-                    QuickLog(objEnvio, "body_request.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
-
-                    var responseFileAsociadoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileAsociadoOPNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseFileAsociadoNM.StatusCode.Equals(HttpStatusCode.OK))
+                    if (!(_positionFor < _totalRegistrosList && fileAsociado.accion_SF == ListFilesAsociadosNM.ElementAt(_positionFor + 1).accion_SF))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseFileAsociadoNM.Content);
-                        QuickLog(jsonResponse, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
-
-                        SFResponse = jsonResponse["respuestas"];                        
-                        ListRptaFiles_Fail = new List<RptaFileNM_SF>();
-                        foreach (var detalleHotelNM in jsonResponse["respuestas"])
+                        /*Procesamos la Data*/
+                        try
                         {
-                            try
+                            /// Envío de Files a Salesforce                    
+                            objEnvio = new { listadatosOportunidad = filesAsociadosNMSF };
+                            QuickLog(objEnvio, "body_request.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+
+                            var responseFileAsociadoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileAsociadoOPNMMethod, Method.POST, objEnvio, true, token);
+                            if (responseFileAsociadoNM.StatusCode.Equals(HttpStatusCode.OK))
                             {
-                                #region Deserialize
-                                _rptaFileNM = new RptaFileNM_SF();
+                                dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseFileAsociadoNM.Content);
+                                QuickLog(jsonResponse, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
 
-                                _rptaFileNM.CodigoError = "OK";
-                                _rptaFileNM.MensajeError = "TST";
-                                _rptaFileNM.idOportunidad_SF = "006R000000WAUr4IAH";                                
-                                _rptaFileNM.Identificador_NM = "1";
-
-                                _rptaFileNM.CodigoError = detalleHotelNM[OutParameter.SF_Codigo];
-                                _rptaFileNM.MensajeError = detalleHotelNM[OutParameter.SF_Mensaje];
-                                _rptaFileNM.idOportunidad_SF = detalleHotelNM[OutParameter.SF_IdOportunidad2];                                
-                                _rptaFileNM.Identificador_NM = detalleHotelNM[OutParameter.SF_IdentificadorNM];
-                                #endregion
-
-                                #region ReturnToDB
-                                var updOperation = _fileOportunidadNMRepository.Update(_rptaFileNM);
-
-                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                SFResponse = jsonResponse["respuestas"];
+                                ListRptaFiles_Fail = new List<RptaFileNM_SF>();
+                                foreach (var detalleHotelNM in jsonResponse["respuestas"])
                                 {
-                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaFileNM.Identificador_NM.ToString() + "||||";
-                                    ListRptaFiles_Fail.Add(_rptaFileNM);
-                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                    try
+                                    {
+                                        #region Deserialize
+                                        _rptaFileNM = new RptaFileNM_SF();
+
+                                        _rptaFileNM.CodigoError = "OK";
+                                        _rptaFileNM.MensajeError = "TST";
+                                        _rptaFileNM.idOportunidad_SF = "006R000000WAUr4IAH";
+                                        _rptaFileNM.Identificador_NM = "1";
+
+                                        _rptaFileNM.CodigoError = detalleHotelNM[OutParameter.SF_Codigo];
+                                        _rptaFileNM.MensajeError = detalleHotelNM[OutParameter.SF_Mensaje];
+                                        _rptaFileNM.idOportunidad_SF = detalleHotelNM[OutParameter.SF_IdOportunidad2];
+                                        _rptaFileNM.Identificador_NM = detalleHotelNM[OutParameter.SF_IdentificadorNM];
+                                        #endregion
+
+                                        #region ReturnToDB
+                                        var updOperation = _fileOportunidadNMRepository.Update(_rptaFileNM);
+
+                                        if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                        {
+                                            error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaFileNM.Identificador_NM.ToString() + "||||";
+                                            ListRptaFiles_Fail.Add(_rptaFileNM);
+                                            /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                        }
+                                        #endregion
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                        ListRptaFiles_Fail.Add(_rptaFileNM);
+                                        /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                    }
                                 }
-                                #endregion
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
-                                ListRptaFiles_Fail.Add(_rptaFileNM);
-                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                error = responseFileAsociadoNM.StatusCode.ToString();
+                                if (responseFileAsociadoNM != null && responseFileAsociadoNM.Content != null)
+                                {
+                                    QuickLog(responseFileAsociadoNM.Content, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        error = responseFileAsociadoNM.StatusCode.ToString();
-                        if (responseFileAsociadoNM != null && responseFileAsociadoNM.Content != null)
+                        catch (Exception ex)
                         {
-                            QuickLog(responseFileAsociadoNM.Content, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+                            error = error + ex.Message + "||||";
+                        }
+
+                        if (_positionFor != _totalRegistrosList)
+                        {
+                            filesAsociadosNMSF = new List<object>();
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    error = ex.Message;
+
+                    _positionFor = _positionFor + 1;
                 }
 
                 return Ok(true);
@@ -163,7 +176,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Asociate(Oportunidad_FileNMRQ FileAssociate)
         {
             AssociateNMFileRS _responseAsociate = new AssociateNMFileRS();
-            CotizacionVta DtsCotizacionVta = new CotizacionVta();
+            CotizacionVta DtsCotizacionVta = null;
             UsuarioLogin DtsUsuarioLogin = null;                         
             
             _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
@@ -176,23 +189,20 @@ namespace Expertia.Estructura.Controllers
 
             ArrayList lstFechasCotVta = new ArrayList(); /*Duda*/
 
-            /*Se realizara el cambio de Estado a Facturado*/
+            /*Se realizara el cambio de Estado a Facturado*/            
             Int16 EstadoSeleccionado = (Int16)ENUM_ESTADOS_COT_VTA.Facturado;
-            bool bolCambioEstado = true;
+            bool bolCambioEstado = false;
 
             /*Datos que se quitaran, solo lo agregamos para tener una mejor vision*/                                    
             string ErrorAsociate = string.Empty;
             try
-            {
+            {                
                 /*Validaciones*/
-                validacionAssociateNM(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info);
+                validacionAssociateNM(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info, ref DtsCotizacionVta);
                 if (string.IsNullOrEmpty(_responseAsociate.codigo) == false) return Ok(new { respuesta = _responseAsociate });
 
                 if (FileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
                 {   
-                    /*Obtenemos los datos del SRV, etc*/
-                    DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV);
-
                     lstFilesPTACotVta = new List<FilePTACotVta>();
                     FilePTACotVta _FilePTACotVta = null;
                     bool UpdateResponse = true;
@@ -221,7 +231,7 @@ namespace Expertia.Estructura.Controllers
                         EstadoSeleccionado, bolCambioEstado, null, false, null, DtsUsuarioLogin.EsCounterAdminSRV,
                         (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : DtsUsuarioLogin.IdUsuario),
                         (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi),
-                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null);
+                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null,0);
                   
                     bool bolGeneroRC_OK = false;
                     try
@@ -464,7 +474,7 @@ namespace Expertia.Estructura.Controllers
                         Nullable<bool> bolUATPExoneradoFirmaCliente = default(Boolean?);
 
                         /*Si en el SRV es verdadero, en PTA es falso y viceversa*/
-                        bolUATPExoneradoFirmaCliente = true;
+                        /*bolUATPExoneradoFirmaCliente = true;
                         string hdMuestraModCompra = "1";
                         bool rbModCompraPresencial = false; bool rbModCompraNoPresencial = true;
 
@@ -477,7 +487,7 @@ namespace Expertia.Estructura.Controllers
                                 intIdModalidadCompra = 0;
                             if (intIdModalidadCompra >= 0)
                                 _CotizacionSRV_Repository._Update_ModalidadCompra(DtsCotizacionVta.IdCot, intIdModalidadCompra);
-                        }
+                        }*/
 
                         if (EstadoSeleccionado == (short)ENUM_ESTADOS_COT_VTA.Facturado || DtsCotizacionVta.IdEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
                         {                            
@@ -602,7 +612,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ErrorAsociate = ex.Message;
+                ErrorAsociate = ex.Message;              
                 return InternalServerError(ex);
             }
             finally
@@ -1109,7 +1119,7 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        private void validacionAssociateNM(ref Oportunidad_FileNMRQ _fileAssociate, ref AssociateNMFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV)
+        private void validacionAssociateNM(ref Oportunidad_FileNMRQ _fileAssociate, ref AssociateNMFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV, ref CotizacionVta _DtsCotizacionVta)
         {
             string mensajeError = string.Empty;
             bool bolEjecutarCarga = true;
@@ -1126,6 +1136,19 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie el codigo de SRV|";
             }
+            else {
+                /*Obtenemos los datos del SRV, etc*/
+                _DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(_fileAssociate.idCotSRV);
+                if(!(_DtsCotizacionVta != null && _DtsCotizacionVta.IdCot > 0))
+                {
+                    mensajeError += "No existe el codigo de SRV de lado de Expertia|";
+                }
+                else if(_DtsCotizacionVta.IdEstado != (Int16)ENUM_ESTADOS_COT_VTA.Facturado)
+                {
+                    mensajeError += "El estado de la cotizacion debe ser facturado|";
+                }
+            }
+
             if (_fileAssociate.idoportunidad_SF == null)
             {
                 mensajeError += "Envie el codigo de Oportunidad|";

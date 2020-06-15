@@ -28,8 +28,11 @@ namespace Expertia.Estructura.Repository.Behavior
             string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb,
             int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, Int16 pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta,
             bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, Nullable<int> pIntIdUsuWebCounterCrea, Nullable<int> pIntIdOfiCounterCrea,
-            Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile);
+            Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile,int OpcionalInsertPost = 1);
 
-        void _Update_ModalidadCompra(int pIntIdCot, Int16 pIntIdModalidadCompra);
+        void _Update_ModalidadCompra(int pIntIdCot, Int16 pIntIdModalidadCompra);        
+        void _Update_EsEmitido(int pIntIdCot, bool pBolEsEmitido);
+        bool _Update_CounterAdministrativo(int pIntIdCot, Nullable<int> pIntIdUsuWebCA);
+        void _Update_Requiere_FirmaCliente_Cot(int pIntIdCot, bool pBolRequiereFirma);
     }
 }
