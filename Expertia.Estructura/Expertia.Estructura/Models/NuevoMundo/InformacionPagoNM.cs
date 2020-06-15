@@ -17,7 +17,13 @@ namespace Expertia.Estructura.Models
         public string nombreHotel { get; set; }
         public float totalPagar { get; set; }
         public string descripcion { get; set; }
-        public string feeAsumidoGeneral { get; set; }
+        public float montodescuento { get; set; }
+        public string textodescuento { get; set; }
+        public string promowebcode { get; set; }
+        public float totalfacturar { get; set; }
+        public float MontoSeg { get; set; }
+        public float DescuentoSeg { get; set; }
+        public float feeAsumidoGeneralBoletos { get; set; }
         public float numHabitacionPaquete { get; set; }
         public string tipoPasajeroPaq { get; set; }
         public float cantidadPasajeroPaq { get; set; }

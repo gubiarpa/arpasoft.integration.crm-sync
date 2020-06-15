@@ -68,7 +68,7 @@ namespace Expertia.Estructura.Controllers
                     {
                         dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseSolicitudPagoNM.Content);
                         SFResponse = jsonResponse["respuestas"];
-
+                        QuickLog(SFResponse, "body_response.json", "SolicitudPagoNM", previousClear: true); /// ♫ Trace
                         ListRptaSolicitudPagoSF_Fail = new List<RptaSolicitudPagoSF>();
                         foreach (var solicitudPagoNM in jsonResponse["respuestas"])
                         {
@@ -77,11 +77,11 @@ namespace Expertia.Estructura.Controllers
                                 #region Deserialize
                                 _rptaSolicitudPagoSF = new RptaSolicitudPagoSF();
 
-                                _rptaSolicitudPagoSF.CodigoError = "OK";
-                                _rptaSolicitudPagoSF.MensajeError = "TST";
-                                _rptaSolicitudPagoSF.idOportunidad_SF = "006R000000WAUr4IAH";
-                                _rptaSolicitudPagoSF.IdRegSolicitudPago_SF = "006R000000WAUr4IAC";
-                                _rptaSolicitudPagoSF.Identificador_NM = "2";
+                                //_rptaSolicitudPagoSF.CodigoError = "OK";
+                                //_rptaSolicitudPagoSF.MensajeError = "TST";
+                                //_rptaSolicitudPagoSF.idOportunidad_SF = "006R000000WAUr4IAH";
+                                //_rptaSolicitudPagoSF.IdRegSolicitudPago_SF = "006R000000WAUr4IAC";
+                                //_rptaSolicitudPagoSF.Identificador_NM = "2";
 
                                 _rptaSolicitudPagoSF.CodigoError = solicitudPagoNM[OutParameter.SF_Codigo];
                                 _rptaSolicitudPagoSF.MensajeError = solicitudPagoNM[OutParameter.SF_Mensaje];
