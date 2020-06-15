@@ -309,6 +309,10 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "El Id de Cotizacion es obligatorio al actualizar|";
             }
+            else if (_oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "INSERT" && _oportunidadVentaNM.IdCotSRV != null)
+            {
+                mensajeError += "Al insertar el Id de Cotizacion debe ser nulo|";
+            }
             if (string.IsNullOrEmpty(_oportunidadVentaNM.idCuenta_SF))
             {
                 mensajeError += "La cuenta SF es un campo obligatorio|";
@@ -398,6 +402,11 @@ namespace Expertia.Estructura.Controllers
                 if (_oportunidadVentaNM.IdCotSRV != null && string.IsNullOrEmpty(mensajeError))
                 {
                     CotizacionVta = _cotizacionSRV_Repository.Get_Datos_CotizacionVta((int)_oportunidadVentaNM.IdCotSRV);
+
+                    if(CotizacionVta == null || CotizacionVta.IdCot == 0) {
+                        cargarError(ref _rptaOportunidadVentaNM, "No existe informacion de la cotizacion enviada|");
+                        return;
+                    }
 
                     /*Validaciones Valores Opcionales*/                    
                     if (_oportunidadVentaNM.Estado != CotizacionVta.IdEstado)
