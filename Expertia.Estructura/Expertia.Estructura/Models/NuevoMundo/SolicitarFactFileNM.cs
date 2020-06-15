@@ -36,8 +36,7 @@ namespace Expertia.Estructura.Models
         public List<Archivo> ArchivoList { get; set; }
         public string montocobrar { get; set; }
         public string observaciones { get; set; }
-        //public string idoportunidadsf { get; set; }
-        //public string idcotsrvsf { get; set; }
+        public bool enviarCA { get; set; }
         public string accionsf { get; set; }
         public string idusuariosrv { get; set; }
         public string codigo { get; set; }
