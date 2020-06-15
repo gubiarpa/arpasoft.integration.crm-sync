@@ -176,7 +176,7 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Asociate(Oportunidad_FileNMRQ FileAssociate)
         {
             AssociateNMFileRS _responseAsociate = new AssociateNMFileRS();
-            CotizacionVta DtsCotizacionVta = new CotizacionVta();
+            CotizacionVta DtsCotizacionVta = null;
             UsuarioLogin DtsUsuarioLogin = null;                         
             
             _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
@@ -189,23 +189,20 @@ namespace Expertia.Estructura.Controllers
 
             ArrayList lstFechasCotVta = new ArrayList(); /*Duda*/
 
-            /*Se realizara el cambio de Estado a Facturado*/
+            /*Se realizara el cambio de Estado a Facturado*/            
             Int16 EstadoSeleccionado = (Int16)ENUM_ESTADOS_COT_VTA.Facturado;
             bool bolCambioEstado = false;
 
             /*Datos que se quitaran, solo lo agregamos para tener una mejor vision*/                                    
             string ErrorAsociate = string.Empty;
             try
-            {
+            {                
                 /*Validaciones*/
-                validacionAssociateNM(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info);
+                validacionAssociateNM(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info, ref DtsCotizacionVta);
                 if (string.IsNullOrEmpty(_responseAsociate.codigo) == false) return Ok(new { respuesta = _responseAsociate });
 
                 if (FileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
                 {   
-                    /*Obtenemos los datos del SRV, etc*/
-                    DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV);
-
                     lstFilesPTACotVta = new List<FilePTACotVta>();
                     FilePTACotVta _FilePTACotVta = null;
                     bool UpdateResponse = true;
@@ -615,7 +612,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ErrorAsociate = ex.Message;
+                ErrorAsociate = ex.Message;              
                 return InternalServerError(ex);
             }
             finally
@@ -1122,7 +1119,7 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        private void validacionAssociateNM(ref Oportunidad_FileNMRQ _fileAssociate, ref AssociateNMFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV)
+        private void validacionAssociateNM(ref Oportunidad_FileNMRQ _fileAssociate, ref AssociateNMFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV, ref CotizacionVta _DtsCotizacionVta)
         {
             string mensajeError = string.Empty;
             bool bolEjecutarCarga = true;
@@ -1139,6 +1136,19 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie el codigo de SRV|";
             }
+            else {
+                /*Obtenemos los datos del SRV, etc*/
+                _DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(_fileAssociate.idCotSRV);
+                if(!(_DtsCotizacionVta != null && _DtsCotizacionVta.IdCot > 0))
+                {
+                    mensajeError += "No existe el codigo de SRV de lado de Expertia|";
+                }
+                else if(_DtsCotizacionVta.IdEstado != (Int16)ENUM_ESTADOS_COT_VTA.Facturado)
+                {
+                    mensajeError += "El estado de la cotizacion debe ser facturado|";
+                }
+            }
+
             if (_fileAssociate.idoportunidad_SF == null)
             {
                 mensajeError += "Envie el codigo de Oportunidad|";

@@ -880,8 +880,8 @@ namespace Expertia.Estructura.Repository.AppWebs
                             cotizacionVta.IdWeb = Convert.ToInt32(row["WEBS_CID"]);
                             cotizacionVta.IdLang = Convert.ToInt32(row["LANG_CID"]);
                             cotizacionVta.CantVecesFact = Convert.ToInt16(row["CANT_FACT"]);
-                            cotizacionVta.CodigoIATAPrincipal = (row["COT_IATA_PRINCIPAL"] == null ? string.Empty : Convert.ToString(row["COT_IATA_PRINCIPAL"]));                        
-                            if (row["EMPCOT_ID"] == null)
+                            cotizacionVta.CodigoIATAPrincipal = (Convert.IsDBNull(row["COT_IATA_PRINCIPAL"]) == true ? string.Empty : Convert.ToString(row["COT_IATA_PRINCIPAL"]));                        
+                            if (Convert.IsDBNull(row["EMPCOT_ID"]) == true)
                             {
                                 cotizacionVta.IdEmpCot = null;
                                 cotizacionVta.RazSocEmpCot = string.Empty;
@@ -891,19 +891,18 @@ namespace Expertia.Estructura.Repository.AppWebs
                                 //cotizacionVta.IdEmpCot = Convert.ToInt32(row["EMPCOT_ID"]);
                                 cotizacionVta.RazSocEmpCot = Convert.ToString(row["EMPCOT_RAZ_SOC"]);
                             }
-                            if (row["COT_DESTINOS_PREF"] != null)
+                            if (Convert.IsDBNull(row["COT_DESTINOS_PREF"]) == false)
                                 cotizacionVta.DestinosPref = Convert.ToString(row["COT_DESTINOS_PREF"]);                            
                             if (Convert.IsDBNull(row["COT_FEC_SAL"]) == false)
                                 cotizacionVta.FecSalida = (DateTime)row["COT_FEC_SAL"];
                             if (Convert.IsDBNull(row["COT_FEC_REG"]) == false)
                                 cotizacionVta.FecRegreso = (DateTime)row["COT_FEC_REG"];
-                            if (row["COT_CANT_ADT"] != null)
+                            if (Convert.IsDBNull(row["COT_CANT_ADT"]) == false)
                                 cotizacionVta.CantPaxAdulto = Convert.ToInt16(row["COT_CANT_ADT"]);
-                            if (Convert.IsDBNull(row["COT_CANT_CHD"]) == false)
-                            {
+                            if (Convert.IsDBNull(row["COT_CANT_CHD"]) == false)                            
                                 cotizacionVta.CantPaxNiños = Convert.ToInt16(row["COT_CANT_CHD"]);
-                            }
-                            cotizacionVta.EmailUsuWebCrea = Convert.ToString(row["PER_EMAIL"]);
+                            if (Convert.IsDBNull(row["PER_EMAIL"]) == false)
+                                cotizacionVta.EmailUsuWebCrea = Convert.ToString(row["PER_EMAIL"]);
                             if (Convert.IsDBNull(row["VUE_RESERVA_ID"]) == false)
                                 cotizacionVta.IdReservaVuelos = Convert.ToInt32(row["VUE_RESERVA_ID"]);
                             if (Convert.IsDBNull(row["PAQ_RESERVA_SUC"]) == false)
