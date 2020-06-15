@@ -45,6 +45,7 @@ namespace Expertia.Estructura.Models
         #region Computadas
         public bool existeIdDatosFacturacion { get { return iddatosfacturacion != null; } }
         public bool existeArchivoList { get { return (ArchivoList != null && ArchivoList.Count > 0); } }
+        public int idusuariosrv_SF { get { if (!int.TryParse(idusuariosrv, out int intIdUsuarioSrv)) intIdUsuarioSrv = 0; return intIdUsuarioSrv; } }
         #endregion
     }
 

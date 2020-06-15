@@ -2,6 +2,7 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Journeyou;
+using Expertia.Estructura.Repository.General;
 using Expertia.Estructura.Repository.NuevoMundo;
 using Expertia.Estructura.RestManager.Base;
 using Expertia.Estructura.Utils;
@@ -22,13 +23,14 @@ namespace Expertia.Estructura.Controllers
         private SolicitarFactFileNMRepository _solicitarFactFileNMRepository;
                
         protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
+        private DatosUsuario _datosUsuario;
 
         #region PublicMethods
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(SolicitarFactFileNM solicitarFactFileNM)
         {
-            var operation = new Operation();
-                
+            var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(solicitarFactFileNM.idusuariosrv_SF);
+
             var result = _solicitarFactFileNMRepository.GuardarDesgloseCA(solicitarFactFileNM);
 
             if (solicitarFactFileNM.existeArchivoList)
@@ -40,6 +42,9 @@ namespace Expertia.Estructura.Controllers
             {
                 var archivoList = _solicitarFactFileNMRepository.ObtenerArchivos(solicitarFactFileNM.iddatosfacturacion);
             }
+
+            //Dim pStrTextoPost As String = TemplateHtml(models, lstArchivos)
+            //var textoPost = FormatTemplate()
 
             return Ok(new
             {
