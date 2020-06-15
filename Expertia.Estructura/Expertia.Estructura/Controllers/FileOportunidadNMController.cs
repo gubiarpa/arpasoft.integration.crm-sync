@@ -191,7 +191,7 @@ namespace Expertia.Estructura.Controllers
 
             /*Se realizara el cambio de Estado a Facturado*/
             Int16 EstadoSeleccionado = (Int16)ENUM_ESTADOS_COT_VTA.Facturado;
-            bool bolCambioEstado = true;
+            bool bolCambioEstado = false;
 
             /*Datos que se quitaran, solo lo agregamos para tener una mejor vision*/                                    
             string ErrorAsociate = string.Empty;
@@ -234,7 +234,7 @@ namespace Expertia.Estructura.Controllers
                         EstadoSeleccionado, bolCambioEstado, null, false, null, DtsUsuarioLogin.EsCounterAdminSRV,
                         (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : DtsUsuarioLogin.IdUsuario),
                         (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi),
-                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null);
+                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null,0);
                   
                     bool bolGeneroRC_OK = false;
                     try
@@ -477,7 +477,7 @@ namespace Expertia.Estructura.Controllers
                         Nullable<bool> bolUATPExoneradoFirmaCliente = default(Boolean?);
 
                         /*Si en el SRV es verdadero, en PTA es falso y viceversa*/
-                        bolUATPExoneradoFirmaCliente = true;
+                        /*bolUATPExoneradoFirmaCliente = true;
                         string hdMuestraModCompra = "1";
                         bool rbModCompraPresencial = false; bool rbModCompraNoPresencial = true;
 
@@ -490,7 +490,7 @@ namespace Expertia.Estructura.Controllers
                                 intIdModalidadCompra = 0;
                             if (intIdModalidadCompra >= 0)
                                 _CotizacionSRV_Repository._Update_ModalidadCompra(DtsCotizacionVta.IdCot, intIdModalidadCompra);
-                        }
+                        }*/
 
                         if (EstadoSeleccionado == (short)ENUM_ESTADOS_COT_VTA.Facturado || DtsCotizacionVta.IdEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
                         {                            
