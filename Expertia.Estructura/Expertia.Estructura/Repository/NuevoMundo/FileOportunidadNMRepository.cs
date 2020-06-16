@@ -58,6 +58,30 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
             return operation;
         }
+
+        public string _Select_IdVendedorPTABy_IdUsuWeb(int pIntIdUsuWeb, Int16 pIntIdBD)
+        {           
+            string strParamReturn = string.Empty;
+            try
+            {
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input);
+                AddParameter("pNumIdEmpresaPTA_in", OracleDbType.Int32, pIntIdBD, ParameterDirection.Input);
+                AddParameter("pVarIdVendPTA_out", OracleDbType.Varchar2, null, ParameterDirection.Output, 3);
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_XIdVendPTA_Usuario);
+                strParamReturn = GetOutParameter("pVarIdVendPTA_out").ToString();
+                #endregion                                               
+                 
+                return strParamReturn;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            
+        }
+
         #endregion
 
         #region Parse
