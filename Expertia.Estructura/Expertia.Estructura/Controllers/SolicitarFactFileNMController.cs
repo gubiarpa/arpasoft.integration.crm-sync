@@ -32,6 +32,7 @@ namespace Expertia.Estructura.Controllers
         {
             _datosUsuario = new DatosUsuario();
             _datosOficina = new DatosOficina();
+            _solicitarFactFileNMRepository = new SolicitarFactFileNMRepository(UnidadNegocioKeys.AppWebs);
         }
 
         #region PublicMethods
