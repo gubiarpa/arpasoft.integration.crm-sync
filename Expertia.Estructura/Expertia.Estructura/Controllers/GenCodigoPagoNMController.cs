@@ -20,6 +20,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// Expertia_4 : Generar una nueva solicitud de pago Tarjeta C/D o actualizar la solicitud de pago
     [RoutePrefix(RoutePrefix.GenCodigoPagoNM)]
     public class GenCodigoPagoNMController : BaseController
     {

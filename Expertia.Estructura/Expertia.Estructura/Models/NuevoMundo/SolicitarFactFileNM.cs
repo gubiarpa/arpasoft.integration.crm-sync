@@ -36,8 +36,7 @@ namespace Expertia.Estructura.Models
         public List<Archivo> ArchivoList { get; set; }
         public string montocobrar { get; set; }
         public string observaciones { get; set; }
-        //public string idoportunidadsf { get; set; }
-        //public string idcotsrvsf { get; set; }
+        public bool enviarCA { get; set; }
         public string accionsf { get; set; }
         public string idusuariosrv { get; set; }
         public string codigo { get; set; }
@@ -45,6 +44,7 @@ namespace Expertia.Estructura.Models
         #region Computadas
         public bool existeIdDatosFacturacion { get { return iddatosfacturacion != null; } }
         public bool existeArchivoList { get { return (ArchivoList != null && ArchivoList.Count > 0); } }
+        public int idusuariosrv_SF { get { if (!int.TryParse(idusuariosrv, out int intIdUsuarioSrv)) intIdUsuarioSrv = 0; return intIdUsuarioSrv; } }
         #endregion
     }
 
