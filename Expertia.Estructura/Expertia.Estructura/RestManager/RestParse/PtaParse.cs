@@ -373,7 +373,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     oportunidadNM.idOportunidad_SF,
                     oportunidadNM.fechaRegistro,
                     oportunidadNM.Servicio,
-                    IdCanalVenta = "4", //oportunidadNM.IdCanalVenta,
+                    oportunidadNM.IdCanalVenta,
                     oportunidadNM.metabuscador,
                     oportunidadNM.CajaVuelos,
                     oportunidadNM.CajaHotel,
