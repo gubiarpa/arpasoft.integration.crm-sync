@@ -309,6 +309,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Update_EsEmitidoCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_ES_EMITIDO_COT";
         public const string AW_Update_CounterAdministrativo = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_CA_COT";
         public const string AW_Update_FirmaClienteCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_FIRMA_CLI_COT";
+        public const string AW_Get_XIdVendPTA_Usuario = "APPWEBS.PKG_PERSONAL.SP_GET_IDVENDPTA_USU";
         public const string AW_Update_UrgenteHoraEmision = AW_NM_Package + "." + "SP_UPD_URGENTE_EMISION_COT";
 
 
@@ -562,6 +563,8 @@ namespace Expertia.Estructura.Utils
 
     public static class Constantes_SRV
     {
+        public const Int16 INT_MAX_FILES_ASOCIADOS = 3;
+        public const Int16 INT_ID_BD_WEB_FAREFINDER = 1;
         public const string IP_GENERAL = "127.0.0.0";
         public const string ID_TIPO_POST_SRV_USUARIO = "2";
         public const string APP_NAME = "WebFareFinder";
