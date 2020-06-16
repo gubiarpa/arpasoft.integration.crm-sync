@@ -183,7 +183,8 @@ namespace Expertia.Estructura.Controllers
 
                     if(idCotizacion != null && idCotizacion > 0)
                     {
-                        _repository.RegistraOportunidad(oportunidadVentaNM.IdOportunidad_SF, (int)idCotizacion);
+                        /*_repository.RegistraOportunidad(oportunidadVentaNM.IdOportunidad_SF, (int)idCotizacion);*/
+                        _oportunidadVentaNMRepository.RegistraOportunidad(oportunidadVentaNM.IdOportunidad_SF, (int)idCotizacion);
                     }
 
                     /*DtsCotizacionVta = _cotizacionSRV_Repository.Get_Datos_CotizacionVta((int)idCotizacion);*/
@@ -398,7 +399,12 @@ namespace Expertia.Estructura.Controllers
                 RepositoryByBusiness(null);
                 UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(_oportunidadVentaNM.IdUsuarioSrv_SF);
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
-                
+
+                /*Validacion Oportunidad*/
+                int intCotizacion_SF = _oportunidadVentaNMRepository._Select_CotId_X_OportunidadSF(_oportunidadVentaNM.IdOportunidad_SF);
+                if(intCotizacion_SF <= 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE") { mensajeError += "No es posible actualizar si la oportunidad no esta registrada|"; }
+                else if (intCotizacion_SF > 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "INSERT") { mensajeError += "No es posible insertar si la oportunidad ya esta registrada|"; }
+
                 if (_oportunidadVentaNM.IdCotSRV != null && string.IsNullOrEmpty(mensajeError))
                 {
                     CotizacionVta = _cotizacionSRV_Repository.Get_Datos_CotizacionVta((int)_oportunidadVentaNM.IdCotSRV);

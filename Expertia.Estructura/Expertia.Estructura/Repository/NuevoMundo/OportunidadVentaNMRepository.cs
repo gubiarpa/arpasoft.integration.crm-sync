@@ -187,6 +187,32 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             return pNumIdNewCliCot_out;
         }
 
+        public int _Select_CotId_X_OportunidadSF(string _oportunidadSF)
+        {
+            int intCotizacion = 0;
+            try
+            {
+                #region Parameter                
+                AddParameter("pIdOportunidadSF_in", OracleDbType.Varchar2, _oportunidadSF, ParameterDirection.Input, 18);
+                AddParameter("CurResult_out", OracleDbType.RefCursor, null, ParameterDirection.Output);
+                #endregion
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_DatosCotXIdSF);
+
+                foreach (DataRow row in GetDtParameter("CurResult_out").Rows)
+                {
+                    if (Convert.IsDBNull(row["COT_ID"]) == false)
+                        intCotizacion = Convert.ToInt32(row["COT_ID"]);
+                }
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return intCotizacion;
+        }
+
         public void RegistraCuenta(string idCuentaSF,int idCuentaNM)
         {
             AddParameter("P_ID_CUENTA_SF", OracleDbType.NVarchar2, idCuentaSF);
@@ -194,6 +220,16 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
             #region Invoke
             ExecuteStoredProcedure(StoredProcedureName.AW_Insert_CuentaSF);
+            #endregion
+        }
+
+        public void RegistraOportunidad(string idOportunidadSF, int idCotizacionNM)
+        {
+            AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.NVarchar2, idOportunidadSF);
+            AddParameter("P_ID_COTIZACION_NM", OracleDbType.Int32, idCotizacionNM);
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Insert_OportunidadSF);
             #endregion
         }
 

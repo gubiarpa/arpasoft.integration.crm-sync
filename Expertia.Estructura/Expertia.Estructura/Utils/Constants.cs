@@ -298,8 +298,11 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_ChatterNM = AW_NM_Package + "." + "SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CHATTER";
         // CRMC008                
-        public const string AW_Get_DatosClienteXIdSF = "APPWEBS.CRM_PKG_ECOMMERCE.SP_GET_X_CODE_SF";        
+        public const string AW_Get_DatosClienteXIdSF = AW_NM_Package + "." + "SP_GET_X_CODE_SF";
+        public const string AW_Get_DatosCotXIdSF = AW_NM_Package + "." + "SP_GET_COT_X_OPORTUNIDAD_SF";
+        public const string AW_Insert_OportunidadSF = AW_NM_Package + "." + "SP_REGISTRAR_OPORTUNIDAD";
         public const string AW_Insert_CuentaSF = AW_NM_Package + "." + "SP_REGISTRAR_CUENTA";
+        public const string AW_Update_UrgenteHoraEmision = AW_NM_Package + "." + "SP_UPD_URGENTE_EMISION_COT";
         public const string AW_Update_Cliente_Cot = "APPWEBS.PKG_CLIENTE_COT.SP_ACTUALIZA_CLI";
         public const string AW_Update_Estado_Promo = "APPWEBS.PKG_ENVIO_PROMOCIONES.SP_ACTUALIZA_ESTADO_PROMO";
         public const string AW_Insert_CotizacionVta = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_COT";
@@ -309,8 +312,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Update_EsEmitidoCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_ES_EMITIDO_COT";
         public const string AW_Update_CounterAdministrativo = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_CA_COT";
         public const string AW_Update_FirmaClienteCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_FIRMA_CLI_COT";
-        public const string AW_Get_XIdVendPTA_Usuario = "APPWEBS.PKG_PERSONAL.SP_GET_IDVENDPTA_USU";
-        public const string AW_Update_UrgenteHoraEmision = AW_NM_Package + "." + "SP_UPD_URGENTE_EMISION_COT";
+        public const string AW_Get_XIdVendPTA_Usuario = "APPWEBS.PKG_PERSONAL.SP_GET_IDVENDPTA_USU";        
 
 
         // CRMC006
