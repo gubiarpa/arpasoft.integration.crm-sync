@@ -161,6 +161,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\ChatterNMController.cs" />
+    <Compile Include="Controllers\DocumentosEmisionNMController.cs" />
     <Compile Include="Controllers\OportunidadVentaNMController.cs" />
     <Compile Include="Controllers\SolicitarFactFileNMController.cs" />
     <Compile Include="Controllers\GenCodigoPagoNMController.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\DocumentosEmisionNM.cs" />
     <Compile Include="Models\NuevoMundo\InfoPagoNM.cs" />
     <Compile Include="Models\NuevoMundo\OportunidadVentaNM.cs" />
     <Compile Include="Models\NuevoMundo\SolicitarFactFileNM.cs" />
@@ -529,7 +531,9 @@
       <CachedSettingsPropName>Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\XD\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

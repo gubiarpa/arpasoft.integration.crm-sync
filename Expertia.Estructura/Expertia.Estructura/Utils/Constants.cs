@@ -65,6 +65,7 @@ namespace Expertia.Estructura.Utils
         public const string GenCodigoPagoNM = "api/gencodigopagonm";
         public const string SolicitarFactFileNM = "api/solicitarfactfilenm";
         public const string OportunidadVentaNM = "api/oportunidadventanm";
+        public const string DocumentosEmisionNM = "api/documentosemisionnm";
     }
 
     public enum ActionMethod
