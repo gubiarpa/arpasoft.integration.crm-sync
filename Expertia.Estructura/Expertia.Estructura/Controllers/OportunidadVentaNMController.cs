@@ -18,6 +18,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Configuration;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -52,7 +53,8 @@ namespace Expertia.Estructura.Controllers
                 List<ClienteCot> ListClientes = null;
                 ClienteCot Cliente_Cot = null;
                 CotizacionVta DtsCotizacionVta = null;
-                UsuarioLogin usuarioLogin = null;                
+                UsuarioLogin usuarioLogin = null;
+                DateTime _fechaIgnoredTriggerCuenta = Convert.ToDateTime(ConfigurationManager.AppSettings["DATO_IGNORED_TRIGGER_CUENTA"]);
 
                 valCreateOportunidadNM(ref oportunidadVentaNM, ref rptaOportunidadVentaNM, ref usuarioLogin, ref DtsCotizacionVta);
                 if (string.IsNullOrEmpty(rptaOportunidadVentaNM.codigo) == false) return Ok(new { respuesta = rptaOportunidadVentaNM });
@@ -87,7 +89,7 @@ namespace Expertia.Estructura.Controllers
                         oportunidadVentaNM.ApeMatCli, oportunidadVentaNM.EmailCli, Cliente_Cot.EmailAlterCliCot, null,
                         oportunidadVentaNM.EnviarPromociones.Equals("1"), Cliente_Cot.Direccion,
                         oportunidadVentaNM.NumDoc, oportunidadVentaNM.IdTipoDoc, oportunidadVentaNM.IdUsuarioSrv_SF,
-                        Webs_Cid.ID_WEB_WEBFAREFINDER, null, null);
+                        Webs_Cid.ID_WEB_WEBFAREFINDER, null, _fechaIgnoredTriggerCuenta);
 
                     bool valor = _oportunidadVentaNMRepository._Update_Estado_Promociones((int)intIdCliCot, oportunidadVentaNM.EnviarPromociones);
 
@@ -118,7 +120,7 @@ namespace Expertia.Estructura.Controllers
                     intIdCliCot = (int)_repository.InsertaClienteCotizacion(oportunidadVentaNM.NombreCli,oportunidadVentaNM.ApePatCli,
                                 oportunidadVentaNM.ApeMatCli,oportunidadVentaNM.EmailCli,null,null,oportunidadVentaNM.EnviarPromociones.Equals("1"),
                                 null,oportunidadVentaNM.NumDoc,oportunidadVentaNM.IdTipoDoc,oportunidadVentaNM.IdUsuarioSrv_SF,
-                                Webs_Cid.ID_WEB_WEBFAREFINDER,null,false,null,null)["pNumIdNewCliCot_out"];
+                                Webs_Cid.ID_WEB_WEBFAREFINDER,null,false,null, _fechaIgnoredTriggerCuenta)["pNumIdNewCliCot_out"];
 
                     if (intIdCliCot != null && intIdCliCot > 0)
                     {

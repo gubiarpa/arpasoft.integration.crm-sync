@@ -17,6 +17,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// CRMEC004 : Chatter
     [RoutePrefix(RoutePrefix.ChatterNM)]
     public class ChatterNMController : BaseController<object>
     {

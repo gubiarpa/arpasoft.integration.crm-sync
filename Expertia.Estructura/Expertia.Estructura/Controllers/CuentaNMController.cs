@@ -17,6 +17,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// CRMEC001 : Registro de Cuenta
     [RoutePrefix(RoutePrefix.CuentaNM)]
     public class CuentaNMController : BaseController<object>
     {

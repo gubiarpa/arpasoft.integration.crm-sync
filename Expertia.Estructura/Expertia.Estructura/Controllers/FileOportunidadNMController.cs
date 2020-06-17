@@ -39,9 +39,9 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
-        
+
         #region PublicMethods 
-        /*CRMAFO06*/
+        /*CRMAFO06 : Envio de datos de File y actualización*/
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
