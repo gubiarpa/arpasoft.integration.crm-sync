@@ -53,7 +53,7 @@ namespace Expertia.Estructura.Controllers
                 var archivoList = _solicitarFactFileNMRepository.ObtenerArchivos(solicitarFactFileNM.iddatosfacturacion);
             }
 
-            var textoPost = TemplateHtml(solicitarFactFileNM, solicitarFactFileNM.ArchivoList);
+            var textoPost = TemplateHtml(solicitarFactFileNM);
 
             if (solicitarFactFileNM.enviarCA)
             {
@@ -82,86 +82,91 @@ namespace Expertia.Estructura.Controllers
             return strRpta;
         }
 
-        private string TemplateHtml(SolicitarFactFileNM solicitarFactFileNM, List<Archivo> archivoList)
+        private string TemplateHtml(SolicitarFactFileNM solicitarFactFileNM)
         {
             try
             {
                 var str = GenerarHtmlByRender(@"~/App_Data/TemplateDesglose.html");
 
-                str = str
-                    .Replace("[DK]", solicitarFactFileNM.dk)
-                    .Replace("[campania]", solicitarFactFileNM.campania)
-                    .Replace("[SubCodigo]", solicitarFactFileNM.subcodigo)
+                str = str.Replace("[DK]", solicitarFactFileNM.dk);
+                str = str.Replace("[campania]", solicitarFactFileNM.campania);
+                str = str.Replace("[SubCodigo]", solicitarFactFileNM.subcodigo);
                     //.Replace("[Ejecutiva]", solicitarFactFileNM.ejecutiva)
-                    .Replace("[NumFileNM]", solicitarFactFileNM.numfilenm)
-                    .Replace("[NumFileDM]", solicitarFactFileNM.numfiledm)
-                    .Replace("[CCB]", solicitarFactFileNM.ccb)
-                    //.Replace("[Ruc]", solicitarFactFileNM.ruc)
-                    .Replace("[Razon]", solicitarFactFileNM.razonsocial)
-                    .Replace("[Correo]", solicitarFactFileNM.correo)
-                    .Replace("[TipoDocum]", solicitarFactFileNM.tipodocidentidad)
-                    //.Replace("[Descripcion_Doc_Cid]", solicitarFactFileNM.Descripcion_Doc_Cid)
-                    .Replace("[Documento]", solicitarFactFileNM.numdocidentidad)
-                    .Replace("[Nombre]", solicitarFactFileNM.nombre)
-                    .Replace("[ApellidoP]", solicitarFactFileNM.apepaterno)
-                    .Replace("[ApellidoM]", solicitarFactFileNM.apemateno)
-                    .Replace("[OaRipley]", solicitarFactFileNM.oaripley)
-                    .Replace("[MontoOA]", solicitarFactFileNM.oamonto)
-                    .Replace("[Banco]", solicitarFactFileNM.banco)
-                    .Replace("[CantidadMillas]", solicitarFactFileNM.cantidadmillas)
-                    .Replace("[MontoMillas]", solicitarFactFileNM.montomillas);
+                str = str.Replace("[NumFileNM]", solicitarFactFileNM.numfilenm);
+                str = str.Replace("[NumFileDM]", solicitarFactFileNM.numfiledm);
+                str = str.Replace("[CCB]", solicitarFactFileNM.ccb);
+                    //.Replace("[Ruc]", solicitarFactFileNM.ruc);
+                str = str.Replace("[Razon]", solicitarFactFileNM.razonsocial);
+                str = str.Replace("[Correo]", solicitarFactFileNM.correo);
+                str = str.Replace("[TipoDocum]", solicitarFactFileNM.tipodocidentidad);
+                    //.Replace("[Descripcion_Doc_Cid]", solicitarFactFileNM.Descripcion_Doc_Cid);
+                str = str.Replace("[Documento]", solicitarFactFileNM.numdocidentidad);
+                str = str.Replace("[Nombre]", solicitarFactFileNM.nombre);
+                str = str.Replace("[ApellidoP]", solicitarFactFileNM.apepaterno);
+                str = str.Replace("[ApellidoM]", solicitarFactFileNM.apemateno);
+                str = str.Replace("[OaRipley]", solicitarFactFileNM.oaripley);
+                str = str.Replace("[MontoOA]", solicitarFactFileNM.oamonto);
+                str = str.Replace("[Banco]", solicitarFactFileNM.banco);
+                str = str.Replace("[CantidadMillas]", solicitarFactFileNM.cantidadmillas);
+                str = str.Replace("[MontoMillas]", solicitarFactFileNM.montomillas);
 
                 // Template Detalles de N° Recibo
                 StringBuilder sbPostsRC = new StringBuilder();
-                foreach (var reciboDetalle in solicitarFactFileNM.ReciboDetalleList)
-                    sbPostsRC.Append(
-                        "<tr>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        reciboDetalle.Sucursal +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        reciboDetalle.NoRecibo +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        string.Format("{0:0.00}", reciboDetalle.MontoRecibo) +
-                        "</td>" +
-                        "</tr>");
-
+                if (!(solicitarFactFileNM.ReciboDetalleList == null || solicitarFactFileNM.ReciboDetalleList.Count == 0))
+                {
+                    foreach (var reciboDetalle in solicitarFactFileNM.ReciboDetalleList)
+                    {
+                        sbPostsRC.Append(
+                            "<tr>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            reciboDetalle.Sucursal +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            reciboDetalle.NoRecibo +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            string.Format("{0:0.00}", reciboDetalle.MontoRecibo) +
+                            "</td>" +
+                            "</tr>");
+                    }
+                }
                 str = str.Replace("[trContentRC]", sbPostsRC.ToString());
 
                 var sbPostsDTF = new StringBuilder();
                 var montoTotalADT = new double(); var montoTotalCHD = new double(); var montoTotalINF = new double();
-
-                foreach (var tarifaDetalle in solicitarFactFileNM.TarifaDetalleList)
+                if (!(solicitarFactFileNM.TarifaDetalleList == null || solicitarFactFileNM.TarifaDetalleList.Count == 0))
                 {
-                    sbPostsDTF.Append(
-                        "<tr>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        tarifaDetalle.GrupoServicio +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        tarifaDetalle.CantidadADT +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        string.Format("{0:0.00}", tarifaDetalle.MontoPorADT) +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        tarifaDetalle.CantidadCHD +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        string.Format("{0:0.00}", tarifaDetalle.MontoPorCHD) +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        tarifaDetalle.CantidadINF +
-                        "</td>" +
-                        "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
-                        string.Format("{0:0.00}", tarifaDetalle.MontoPorINF) +
-                        "</td>" +
-                        "</tr>");
+                    foreach (var tarifaDetalle in solicitarFactFileNM.TarifaDetalleList)
+                    {
+                        sbPostsDTF.Append(
+                            "<tr>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            tarifaDetalle.GrupoServicio +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            tarifaDetalle.CantidadADT +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            string.Format("{0:0.00}", tarifaDetalle.MontoPorADT) +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            tarifaDetalle.CantidadCHD +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            string.Format("{0:0.00}", tarifaDetalle.MontoPorCHD) +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            tarifaDetalle.CantidadINF +
+                            "</td>" +
+                            "<td style='font-size:12px; padding:5px; text-align:center; border-top:1px solid black;'>" +
+                            string.Format("{0:0.00}", tarifaDetalle.MontoPorINF) +
+                            "</td>" +
+                            "</tr>");
 
-                    montoTotalADT += tarifaDetalle.MontoPorADT;
-                    montoTotalCHD += tarifaDetalle.MontoPorCHD;
-                    montoTotalINF += tarifaDetalle.MontoPorINF;
+                        montoTotalADT += tarifaDetalle.MontoPorADT;
+                        montoTotalCHD += tarifaDetalle.MontoPorCHD;
+                        montoTotalINF += tarifaDetalle.MontoPorINF;
+                    }
                 }
 
                 sbPostsDTF.Append(
@@ -201,7 +206,8 @@ namespace Expertia.Estructura.Controllers
 
                 /// Template Archivos
                 var sbPostsArchivos = new StringBuilder();
-                if (archivoList != null)
+                var archivoList = solicitarFactFileNM.ArchivoList;
+                if (!(archivoList == null || archivoList.Count == 0))
                 {
                     foreach (var objArchivos in archivoList)
                         sbPostsArchivos.Append(
