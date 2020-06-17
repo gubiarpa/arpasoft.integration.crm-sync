@@ -276,12 +276,13 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 exMessage = ex.Message;
-                rptaOportunidadVentaNM.codigo = "ER";
-                rptaOportunidadVentaNM.mensaje = ex.Message;
-                rptaOportunidadVentaNM.IdCotSrv = null;
+                //rptaOportunidadVentaNM.codigo = "ER";
+                //rptaOportunidadVentaNM.mensaje = ex.Message;
+                //rptaOportunidadVentaNM.IdCotSrv = null;
                                 
-                objRespuesta = new { respuesta = rptaOportunidadVentaNM };
-                return Ok(objRespuesta);
+                //objRespuesta = new { respuesta = rptaOportunidadVentaNM };
+                //return Ok(objRespuesta);
+                return InternalServerError(ex);
             }
             finally
             {
@@ -360,7 +361,7 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "El comentario es un campo obligatorio|";
             }            
-            if (_oportunidadVentaNM.Estado < 0)
+            if (_oportunidadVentaNM.Estado <= 0)
             {
                 mensajeError += "Envie un estado valido|";
             }
@@ -368,11 +369,11 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Los Servicios Adicionales son un campo obligatorio|";
             }
-            if (_oportunidadVentaNM.ModoIngreso < 0)
+            if (_oportunidadVentaNM.ModoIngreso <= 0)
             {
                 mensajeError += "Envie un Modo de Ingreso valido|";
             }
-            if (_oportunidadVentaNM.CantidadAdultos < 0)
+            if (_oportunidadVentaNM.CantidadAdultos <= 0)
             {
                 mensajeError += "La cantidad de adultos es un campo obligatorio|";
             }
@@ -406,6 +407,7 @@ namespace Expertia.Estructura.Controllers
                 int intCotizacion_SF = _oportunidadVentaNMRepository._Select_CotId_X_OportunidadSF(_oportunidadVentaNM.IdOportunidad_SF);
                 if(intCotizacion_SF <= 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE") { mensajeError += "No es posible actualizar si la oportunidad no esta registrada|"; }
                 else if (intCotizacion_SF > 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "INSERT") { mensajeError += "No es posible insertar si la oportunidad ya esta registrada|"; }
+                else if (intCotizacion_SF > 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE" && intCotizacion_SF != _oportunidadVentaNM.IdCotSRV) { mensajeError += "La cotizacion enviada es diferente a la registrada|"; }
 
                 if (_oportunidadVentaNM.IdCotSRV != null && string.IsNullOrEmpty(mensajeError))
                 {

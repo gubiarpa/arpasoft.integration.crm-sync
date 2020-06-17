@@ -562,10 +562,10 @@ namespace Expertia.Estructura.Repository.AppWebs
         {
 
             int intIdPost = 0;
+            OracleTransaction objTx = null; OracleConnection objCnx = null;
             try
             {
-                UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs;
-                OracleTransaction objTx = null; OracleConnection objCnx = null;
+                UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs;                
                 ExecuteConexionBegin(unidadNegocio.ToConnectionKey(), ref objTx, ref objCnx);
                         
                 if(OpcionalInsertPost == 1)
@@ -661,6 +661,8 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
             catch(Exception ex)
             {
+                objTx.Rollback();
+                objTx.Dispose();                
                 throw new Exception(ex.ToString());
             }
             return intIdPost;
