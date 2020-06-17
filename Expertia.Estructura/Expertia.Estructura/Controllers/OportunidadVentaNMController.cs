@@ -18,6 +18,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Configuration;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -52,7 +53,8 @@ namespace Expertia.Estructura.Controllers
                 List<ClienteCot> ListClientes = null;
                 ClienteCot Cliente_Cot = null;
                 CotizacionVta DtsCotizacionVta = null;
-                UsuarioLogin usuarioLogin = null;                
+                UsuarioLogin usuarioLogin = null;
+                DateTime _fechaIgnoredTriggerCuenta = Convert.ToDateTime(ConfigurationManager.AppSettings["DATO_IGNORED_TRIGGER_CUENTA"]);
 
                 valCreateOportunidadNM(ref oportunidadVentaNM, ref rptaOportunidadVentaNM, ref usuarioLogin, ref DtsCotizacionVta);
                 if (string.IsNullOrEmpty(rptaOportunidadVentaNM.codigo) == false) return Ok(new { respuesta = rptaOportunidadVentaNM });
@@ -87,7 +89,7 @@ namespace Expertia.Estructura.Controllers
                         oportunidadVentaNM.ApeMatCli, oportunidadVentaNM.EmailCli, Cliente_Cot.EmailAlterCliCot, null,
                         oportunidadVentaNM.EnviarPromociones.Equals("1"), Cliente_Cot.Direccion,
                         oportunidadVentaNM.NumDoc, oportunidadVentaNM.IdTipoDoc, oportunidadVentaNM.IdUsuarioSrv_SF,
-                        Webs_Cid.ID_WEB_WEBFAREFINDER, null, null);
+                        Webs_Cid.ID_WEB_WEBFAREFINDER, null, _fechaIgnoredTriggerCuenta);
 
                     bool valor = _oportunidadVentaNMRepository._Update_Estado_Promociones((int)intIdCliCot, oportunidadVentaNM.EnviarPromociones);
 
@@ -118,7 +120,7 @@ namespace Expertia.Estructura.Controllers
                     intIdCliCot = (int)_repository.InsertaClienteCotizacion(oportunidadVentaNM.NombreCli,oportunidadVentaNM.ApePatCli,
                                 oportunidadVentaNM.ApeMatCli,oportunidadVentaNM.EmailCli,null,null,oportunidadVentaNM.EnviarPromociones.Equals("1"),
                                 null,oportunidadVentaNM.NumDoc,oportunidadVentaNM.IdTipoDoc,oportunidadVentaNM.IdUsuarioSrv_SF,
-                                Webs_Cid.ID_WEB_WEBFAREFINDER,null,false,null,null)["pNumIdNewCliCot_out"];
+                                Webs_Cid.ID_WEB_WEBFAREFINDER,null,false,null, _fechaIgnoredTriggerCuenta)["pNumIdNewCliCot_out"];
 
                     if (intIdCliCot != null && intIdCliCot > 0)
                     {
@@ -183,7 +185,8 @@ namespace Expertia.Estructura.Controllers
 
                     if(idCotizacion != null && idCotizacion > 0)
                     {
-                        _repository.RegistraOportunidad(oportunidadVentaNM.IdOportunidad_SF, (int)idCotizacion);
+                        /*_repository.RegistraOportunidad(oportunidadVentaNM.IdOportunidad_SF, (int)idCotizacion);*/
+                        _oportunidadVentaNMRepository.RegistraOportunidad(oportunidadVentaNM.IdOportunidad_SF, (int)idCotizacion);
                     }
 
                     /*DtsCotizacionVta = _cotizacionSRV_Repository.Get_Datos_CotizacionVta((int)idCotizacion);*/
@@ -273,12 +276,13 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 exMessage = ex.Message;
-                rptaOportunidadVentaNM.codigo = "ER";
-                rptaOportunidadVentaNM.mensaje = ex.Message;
-                rptaOportunidadVentaNM.IdCotSrv = null;
+                //rptaOportunidadVentaNM.codigo = "ER";
+                //rptaOportunidadVentaNM.mensaje = ex.Message;
+                //rptaOportunidadVentaNM.IdCotSrv = null;
                                 
-                objRespuesta = new { respuesta = rptaOportunidadVentaNM };
-                return Ok(objRespuesta);
+                //objRespuesta = new { respuesta = rptaOportunidadVentaNM };
+                //return Ok(objRespuesta);
+                return InternalServerError(ex);
             }
             finally
             {
@@ -357,7 +361,7 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "El comentario es un campo obligatorio|";
             }            
-            if (_oportunidadVentaNM.Estado < 0)
+            if (_oportunidadVentaNM.Estado <= 0)
             {
                 mensajeError += "Envie un estado valido|";
             }
@@ -365,11 +369,11 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Los Servicios Adicionales son un campo obligatorio|";
             }
-            if (_oportunidadVentaNM.ModoIngreso < 0)
+            if (_oportunidadVentaNM.ModoIngreso <= 0)
             {
                 mensajeError += "Envie un Modo de Ingreso valido|";
             }
-            if (_oportunidadVentaNM.CantidadAdultos < 0)
+            if (_oportunidadVentaNM.CantidadAdultos <= 0)
             {
                 mensajeError += "La cantidad de adultos es un campo obligatorio|";
             }
@@ -398,7 +402,13 @@ namespace Expertia.Estructura.Controllers
                 RepositoryByBusiness(null);
                 UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(_oportunidadVentaNM.IdUsuarioSrv_SF);
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
-                
+
+                /*Validacion Oportunidad*/
+                int intCotizacion_SF = _oportunidadVentaNMRepository._Select_CotId_X_OportunidadSF(_oportunidadVentaNM.IdOportunidad_SF);
+                if(intCotizacion_SF <= 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE") { mensajeError += "No es posible actualizar si la oportunidad no esta registrada|"; }
+                else if (intCotizacion_SF > 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "INSERT") { mensajeError += "No es posible insertar si la oportunidad ya esta registrada|"; }
+                else if (intCotizacion_SF > 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE" && intCotizacion_SF != _oportunidadVentaNM.IdCotSRV) { mensajeError += "La cotizacion enviada es diferente a la registrada|"; }
+
                 if (_oportunidadVentaNM.IdCotSRV != null && string.IsNullOrEmpty(mensajeError))
                 {
                     CotizacionVta = _cotizacionSRV_Repository.Get_Datos_CotizacionVta((int)_oportunidadVentaNM.IdCotSRV);

@@ -24,5 +24,7 @@ namespace Expertia.Estructura.Repository.Behavior
         bool _EsCounterAdministratiivo(int pIntIdOfi);
         void _Update_DatosReservaVuelo_Manual_Cot(int pIntIdCot, string pStrCodReserva, Int16 pIntIdMoneda, double pDblMontoVta);
         List<int> _Select_Pedidos_SinBancoBy_IdCot(int pIntIdCot);
+        int _Select_CotId_X_OportunidadSF(string _oportunidadSF);
+        void RegistraOportunidad(string idOportunidadSF, int idCotizacionNM);
     }
 }

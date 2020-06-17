@@ -37,6 +37,7 @@ namespace Expertia.Estructura.Utils
         Venta,
         FileOportunidadNM,
         GenCodigoPagoNM,
-        OportunidadVentaNM
+        OportunidadVentaNM,
+        DocumentoEmisionNM
     }
 }
