@@ -42,5 +42,15 @@ namespace Expertia.Estructura.Properties {
                 return ((string)(this["Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:24997/web_services/ws_crm.asmx")]
+        public string Expertia_Estructura_ws_crm_ws_crm {
+            get {
+                return ((string)(this["Expertia_Estructura_ws_crm_ws_crm"]));
+            }
+        }
     }
 }
