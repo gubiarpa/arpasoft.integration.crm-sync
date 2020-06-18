@@ -39,11 +39,20 @@ namespace Expertia.Estructura.Models
     {
         public string codigo { get; set; }
         public string mensaje { get; set; }
+        public List<FileNMRS> lstFiles { get; set; }
     }
 
     public class FileNM
     {
         public int? idFilePTA { get; set; }
         public short? Sucursal { get; set; }
+    }
+
+    public class FileNMRS
+    {
+        public int idFilePTA { get; set; }
+        public short sucursal { get; set; }
+        public string importe { get; set; }        
+        public string fecha { get; set; }        
     }
 }

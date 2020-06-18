@@ -79,7 +79,7 @@ namespace Expertia.Estructura.Models
     public class FileSRV
     {
         public int IdFilePTA { get; set; }
-        private DateTime Fecha { get; set; }
+        public DateTime Fecha { get; set; }
         public double Sucursal { get; set; }
         public string Cliente { get; set; }
         public double ImporteFact { get; set; }
