@@ -33,8 +33,9 @@ namespace Expertia.Estructura.Controllers
 
         #region PublicMethods
         [Route(RouteAction.Create)]
-        public IHttpActionResult Create(DatosPedido pedido)
-        {            
+        public IHttpActionResult Create(DatosPedido_NM pedido_NM)
+        {
+            var pedido = pedido_NM.ToRetail(); // Conversión a Retail
             Pedido_AW_Repository _pedidoRepository = new Pedido_AW_Repository();
             Models.PedidoRS _resultpedido = new Models.PedidoRS();
             UsuarioLogin DtsUsuarioLogin = null;

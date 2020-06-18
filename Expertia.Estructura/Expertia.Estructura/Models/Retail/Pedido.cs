@@ -97,6 +97,190 @@ namespace Expertia.Estructura.Models
         public int? NumCuotas { get; set; }
     }
 
+    #region NuevoMundo
+    public class DatosPedido_NM
+    {
+        public string Accion_SF { get; set; }
+        public string IdUsuario { get; set; }
+        public int? IdLang { get; set; }
+        public int? IdWeb { get; set; }
+        public string IPUsuario { get; set; }
+        public string Browser { get; set; }
+        public string DetalleServicio { get; set; }
+        public string CodePasarelaPago { get; set; }
+        public string Email { get; set; }
+        public int? TiempoExpiracionCIP { get; set; }
+        public string Monto { get; set; }
+        public int IdCotVta { get; set; }
+        public int? IdCanalVta { get; set; }
+        public string NombreClienteCot { get; set; }
+        public string ApellidoClienteCot { get; set; }
+        public UnidadNegocio UnidadNegocio { get; set; }
+        public string IdOportunidad_SF { get; set; }
+        public string IdSolicitudpago_SF { get; set; }
+        public SRV_NM SRV { get; set; }
+        public Pedido_NM Pedido { get; set; }
+        public string Resultado { get; set; }
+        public string FechaPasarela { get; set; }
+        public double MontoPagar { get; set; }
+        public string LineaAereaValidadora { get; set; }
+        public string RCGenerado { get; set; }
+        public string FormaPago { get; set; }
+        public string NumeroTarjeta { get; set; }
+        public string TipoTarjeta { get; set; }
+        public string EntidadBancaria { get; set; }
+        public string TitularTarjeta { get; set; }
+        public string DocumentoTitular { get; set; }
+        public string Expiracion { get; set; }
+        public string THReniec { get; set; }
+        public string MarcaTipoCambio { get; set; }
+        public string TipoTipoCambio { get; set; }
+        public string NivelTipoCambio { get; set; }
+        public string PaisTipoCambio { get; set; }
+        public string IPCliente { get; set; }
+        public float? Fee { get; set; }
+        public float? Pef { get; set; }
+        public float? Gem { get; set; }
+        public int? NumCuotas { get; set; }
+
+        #region ToRetail
+        public DatosPedido ToRetail()
+        {
+            var datosPedido = new DatosPedido()
+            {
+                accion_SF = this.Accion_SF,
+                IdUsuario = this.IdUsuario,
+                IdLang = this.IdLang,
+                IdWeb = this.IdWeb,
+                IPUsuario = this.IPUsuario,
+                Browser = this.Browser,
+                DetalleServicio = this.DetalleServicio,
+                CodePasarelaPago = this.CodePasarelaPago,
+                Email = this.Email,
+                TiempoExpiracionCIP = this.TiempoExpiracionCIP,
+                Monto = this.Monto,
+                IdCotVta = this.IdCotVta,
+                IdCanalVta = this.IdCanalVta,
+                NombreClienteCot = this.NombreClienteCot,
+                ApellidoClienteCot = this.ApellidoClienteCot,
+                UnidadNegocio = this.UnidadNegocio,
+                IdOportunidad_SF = this.IdOportunidad_SF,
+                IdSolicitudpago_SF = this.IdSolicitudpago_SF,
+                #region SRV
+                Codigo = this.SRV.Codigo,
+                FechaRegistro = this.SRV.FechaRegistro,
+                Estado = this.SRV.Estado,
+                ModoIngreso = this.SRV.ModoIngreso,
+                CanalVenta = this.SRV.CanalVenta,
+                Empresa = this.SRV.Empresa,
+                Cliente = this.SRV.Cliente,
+                DatosContacto = this.SRV.DatosContacto,
+                EmailContacto = this.SRV.EmailContacto,
+                RegistradoPor = this.SRV.RegistradoPor,
+                MetaBuscador = this.SRV.MetaBuscador,
+                OrdenAtencion = this.SRV.OrdenAtencion,
+                Evento = this.SRV.Evento,
+                UsuarioLogin = this.SRV.UsuarioLogin,
+                Moneda = this.SRV.Moneda,
+                #endregion
+                #region Pedido
+                NumeroPedido = this.Pedido.NumeroPedido,
+                TipoPasarela = this.Pedido.TipoPasarela,
+                CodigoAutorizacion = this.Pedido.CodigoAutorizacion,
+                FechaPedido = this.Pedido.FechaPedido,
+                CodigoLineaAerea = this.Pedido.CodigoLineaAerea,
+                DetalleServicioEc = this.Pedido.DetalleServicioEc,
+                TotalPagar = this.Pedido.TotalPagar,
+                ExpiracionPedido = this.Pedido.ExpiracionPedido,
+                MailDestinatario = this.Pedido.MailDestinatario,
+                #endregion
+                #region Pedido.Pasarela
+                Resultado = this.Pedido.Pasarela.Resultado,
+                FechaPasarela = this.Pedido.Pasarela.FechaPasarela,
+                MontoPagar = this.Pedido.Pasarela.MontoPagar,
+                LineaAereaValidadora = this.Pedido.Pasarela.LineaAereaValidadora,
+                RCGenerado = this.Pedido.Pasarela.RCGenerado,
+                FormaPago = this.Pedido.Pasarela.FormaPago,
+                NumeroTarjeta = this.Pedido.Pasarela.NumeroTarjeta,
+                TipoTarjeta = this.Pedido.Pasarela.TipoTarjeta,
+                EntidadBancaria = this.Pedido.Pasarela.EntidadBancaria,
+                TitularTarjeta = this.Pedido.Pasarela.TitularTarjeta,
+                DocumentoTitular = this.Pedido.Pasarela.DocumentoTitular,
+                Expiracion = this.Pedido.Pasarela.Expiracion,
+                THReniec = this.Pedido.Pasarela.THReniec,
+                MarcaTipoCambio = this.Pedido.Pasarela.MarcaTipoCambio,
+                TipoTipoCambio = this.Pedido.Pasarela.TipoTipoCambio,
+                NivelTipoCambio = this.Pedido.Pasarela.NivelTipoCambio,
+                PaisTipoCambio = this.Pedido.Pasarela.PaisTipoCambio,
+                IPCliente = this.Pedido.Pasarela.IPCliente,
+                #endregion
+                Fee = this.Fee,
+                Pef = this.Pef,
+                Gem = this.Gem,
+                NumCuotas = this.NumCuotas
+            };
+
+            return datosPedido;
+        }
+        #endregion
+    }
+
+    public class SRV_NM
+    {
+        public string Codigo { get; set; }
+        public string FechaRegistro { get; set; }
+        public string Estado { get; set; }
+        public string ModoIngreso { get; set; }
+        public string CanalVenta { get; set; }
+        public string Empresa { get; set; }
+        public string Cliente { get; set; }
+        public string DatosContacto { get; set; }
+        public string EmailContacto { get; set; }
+        public string RegistradoPor { get; set; }
+        public string MetaBuscador { get; set; }
+        public string OrdenAtencion { get; set; }
+        public string Evento { get; set; }
+        public string UsuarioLogin { get; set; }
+        public string Moneda { get; set; }
+    }
+
+    public class Pedido_NM
+    {
+        public string NumeroPedido { get; set; }
+        public string TipoPasarela { get; set; }
+        public string CodigoAutorizacion { get; set; }
+        public string FechaPedido { get; set; }
+        public string CodigoLineaAerea { get; set; }
+        public string DetalleServicioEc { get; set; }
+        public double TotalPagar { get; set; }
+        public string ExpiracionPedido { get; set; }
+        public string MailDestinatario { get; set; }
+        public Pasarela_NM Pasarela { get; set; }
+    }
+
+    public class Pasarela_NM
+    {
+        public string Resultado { get; set; }
+        public string FechaPasarela { get; set; }
+        public double MontoPagar { get; set; }
+        public string LineaAereaValidadora { get; set; }
+        public string RCGenerado { get; set; }
+        public string FormaPago { get; set; }
+        public string NumeroTarjeta { get; set; }
+        public string TipoTarjeta { get; set; }
+        public string EntidadBancaria { get; set; }
+        public string TitularTarjeta { get; set; }
+        public string DocumentoTitular { get; set; }
+        public string Expiracion { get; set; }
+        public string THReniec { get; set; }
+        public string MarcaTipoCambio { get; set; }
+        public string TipoTipoCambio { get; set; }
+        public string NivelTipoCambio { get; set; }
+        public string PaisTipoCambio { get; set; }
+        public string IPCliente { get; set; }
+    }
+    #endregion
+
     public class PedidoRS : ICrmApiResponse
     {       
         public string CodigoError { get; set; }
