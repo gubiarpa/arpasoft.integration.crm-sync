@@ -56,6 +56,7 @@ namespace Expertia.Estructura.Models
                 idusuariosrv = value.ToString();
             }
         }
+        public int intCotId => int.Parse(cotid.ToString());
         #endregion
     }
 

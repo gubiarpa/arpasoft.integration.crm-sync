@@ -2,6 +2,8 @@
 using Expertia.Estructura.Models;
 using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Journeyou;
+using Expertia.Estructura.Repository.AppWebs;
+using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Repository.General;
 using Expertia.Estructura.Repository.NuevoMundo;
 using Expertia.Estructura.RestManager.Base;
@@ -23,6 +25,7 @@ namespace Expertia.Estructura.Controllers
     public class SolicitarFactFileNMController : BaseController
     {
         private SolicitarFactFileNMRepository _solicitarFactFileNMRepository;
+        private ICotizacionSRV_Repository _cotizSrvRepository;
                
         protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
         private DatosUsuario _datosUsuario;
@@ -33,6 +36,7 @@ namespace Expertia.Estructura.Controllers
             _datosUsuario = new DatosUsuario();
             _datosOficina = new DatosOficina();
             _solicitarFactFileNMRepository = new SolicitarFactFileNMRepository(UnidadNegocioKeys.AppWebs);
+            _cotizSrvRepository = new CotizacionSRV_AW_Repository(UnidadNegocioKeys.AppWebs);
         }
 
         #region PublicMethods
@@ -58,12 +62,24 @@ namespace Expertia.Estructura.Controllers
             if (solicitarFactFileNM.enviarCA)
             {
                 var objOficina = _datosOficina.ObtieneOficinaXId(usuarioLogin.IdOfi);
+                if (_solicitarFactFileNMRepository.EsAreaCounterPresencial(usuarioLogin.IdOfi, usuarioLogin.IdDep, objOficina.bolEsRipley))
+                {
+                    _cotizSrvRepository._Liberar_UsuWeb_CA(solicitarFactFileNM.intCotId);
+                }
+
+                /*
+                _cotizSrvRepository.Inserta_Post_Cot(
+                    solicitarFactFileNM.intCotId,
+                    "1",
+                    textoPost,
+                    );
+                */
             }
 
             return Ok(new
             {
                 Codigo = DbResponseCode.Success,
-                Mensaje = string.Empty
+                Mensaje = result
             });
         }
         #endregion
