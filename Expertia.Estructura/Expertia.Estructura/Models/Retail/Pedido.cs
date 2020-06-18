@@ -192,9 +192,11 @@ namespace Expertia.Estructura.Models
                 PaisTipoCambio = this.Pedido.Pasarela.PaisTipoCambio,
                 IPCliente = this.Pedido.Pasarela.IPCliente,
                 #endregion
-                Fee = this.Fee,
-                Pef = this.Pef,
-                Gem = this.Gem,
+                #region Pedido.DesgloseFeeFacturacion
+                Fee = this.Pedido.DesgloseFeeFacturacion.Fee,
+                Pef = this.Pedido.DesgloseFeeFacturacion.Pef,
+                Gem = this.Pedido.DesgloseFeeFacturacion.Gem,
+                #endregion
                 NumCuotas = this.NumCuotas
             };
 
