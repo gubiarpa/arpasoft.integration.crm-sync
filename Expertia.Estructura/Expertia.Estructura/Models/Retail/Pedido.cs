@@ -120,29 +120,7 @@ namespace Expertia.Estructura.Models
         public string IdSolicitudpago_SF { get; set; }
         public SRV_NM SRV { get; set; }
         public Pedido_NM Pedido { get; set; }
-        public string Resultado { get; set; }
-        public string FechaPasarela { get; set; }
-        public double MontoPagar { get; set; }
-        public string LineaAereaValidadora { get; set; }
-        public string RCGenerado { get; set; }
-        public string FormaPago { get; set; }
-        public string NumeroTarjeta { get; set; }
-        public string TipoTarjeta { get; set; }
-        public string EntidadBancaria { get; set; }
-        public string TitularTarjeta { get; set; }
-        public string DocumentoTitular { get; set; }
-        public string Expiracion { get; set; }
-        public string THReniec { get; set; }
-        public string MarcaTipoCambio { get; set; }
-        public string TipoTipoCambio { get; set; }
-        public string NivelTipoCambio { get; set; }
-        public string PaisTipoCambio { get; set; }
-        public string IPCliente { get; set; }
-        public float? Fee { get; set; }
-        public float? Pef { get; set; }
-        public float? Gem { get; set; }
         public int? NumCuotas { get; set; }
-
         #region ToRetail
         public DatosPedido ToRetail()
         {
@@ -256,6 +234,7 @@ namespace Expertia.Estructura.Models
         public string ExpiracionPedido { get; set; }
         public string MailDestinatario { get; set; }
         public Pasarela_NM Pasarela { get; set; }
+        public DesgloseFeeFact_NM DesgloseFeeFacturacion { get; set; }
     }
 
     public class Pasarela_NM
@@ -278,6 +257,14 @@ namespace Expertia.Estructura.Models
         public string NivelTipoCambio { get; set; }
         public string PaisTipoCambio { get; set; }
         public string IPCliente { get; set; }
+    }
+
+    public class DesgloseFeeFact_NM
+    {
+        public float? Fee { get; set; }
+        public float? Pef { get; set; }
+        public float? Gem { get; set; }
+
     }
     #endregion
 
