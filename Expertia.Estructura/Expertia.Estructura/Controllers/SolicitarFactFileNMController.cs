@@ -79,7 +79,7 @@ namespace Expertia.Estructura.Controllers
             return Ok(new
             {
                 Codigo = DbResponseCode.Success,
-                Mensaje = result
+                Mensaje = "El proceso se realizó con éxito"
             });
         }
         #endregion
