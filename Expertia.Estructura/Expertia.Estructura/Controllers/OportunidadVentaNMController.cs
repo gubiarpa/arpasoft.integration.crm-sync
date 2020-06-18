@@ -195,16 +195,16 @@ namespace Expertia.Estructura.Controllers
                     idCotizacion = oportunidadVentaNM.IdCotSRV;
 
                     /**Cambios de Estado**/
-                    if (oportunidadVentaNM.Estado != DtsCotizacionVta.IdEstado)
+                    if (oportunidadVentaNM.idEstado != DtsCotizacionVta.IdEstado)
                     {
                         bolCambioEstado = true;
-                        if (oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.NoCompro)
+                        if (oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.NoCompro)
                         {
                             //strTextoPost = "<span class='texto_cambio_estado'>Cambio de estado a <strong>No Compro</strong></span>";
                         }
                     }
 
-                    if (oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA || oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA_Paq)
+                    if (oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA || oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA_Paq)
                     {
                         bolEsUrgenteEmision = true;
                         datFechaPlazoEmision = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " " + oportunidadVentaNM.HoraEmision + ":00");
@@ -242,7 +242,7 @@ namespace Expertia.Estructura.Controllers
                     /*Insertamos el Post*/
                     _cotizacionSRV_Repository.Inserta_Post_Cot(DtsCotizacionVta.IdCot, Constantes_SRV.ID_TIPO_POST_SRV_USUARIO, strTextoPost,
                         strIPUsuario, usuarioLogin.LoginUsuario, usuarioLogin.IdUsuario, usuarioLogin.IdDep, usuarioLogin.IdOfi, null, null,
-                        oportunidadVentaNM.Estado, bolCambioEstado, null, false, null, usuarioLogin.EsCounterAdminSRV,
+                        oportunidadVentaNM.idEstado, bolCambioEstado, null, false, null, usuarioLogin.EsCounterAdminSRV,
                         (usuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : usuarioLogin.IdUsuario),
                         (usuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : usuarioLogin.IdOfi),
                         (usuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : usuarioLogin.IdDep), bolEsUrgenteEmision,
@@ -251,14 +251,14 @@ namespace Expertia.Estructura.Controllers
                     /*Notas: En caso soliciten habilitar el Post, para la AutoAsignacion la estructura del Post es diferente, habria que hacer unas condicionales adicionales*/
 
                     /*Modalidad de Compra*/
-                    if (oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.Facturado && (usuarioLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM || usuarioLogin.IdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS || _oportunidadVentaNMRepository._EsCounterAdministratiivo(usuarioLogin.IdOfi))) //, usuarioLogin.IdDep, false))
+                    if (oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado && (usuarioLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM || usuarioLogin.IdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS || _oportunidadVentaNMRepository._EsCounterAdministratiivo(usuarioLogin.IdOfi))) //, usuarioLogin.IdDep, false))
                     {
                         _cotizacionSRV_Repository._Update_ModalidadCompra(DtsCotizacionVta.IdCot, (short)oportunidadVentaNM.ModalidadCompra);
                     }
 
                     if (usuarioLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM | usuarioLogin.IdOfi == Constantes_SRV.INT_ID_OFI_TRAVEL_STORE | usuarioLogin.IdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS | usuarioLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMV | usuarioLogin.IdOfi == 116)
                     {
-                        if (oportunidadVentaNM.MontoCompra != null && oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA && DtsCotizacionVta.IdReservaVuelos == null)
+                        if (oportunidadVentaNM.MontoCompra != null && oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA && DtsCotizacionVta.IdReservaVuelos == null)
                         {
                             _oportunidadVentaNMRepository._Update_DatosReservaVuelo_Manual_Cot(DtsCotizacionVta.IdCot, oportunidadVentaNM.CodReserva, Constantes_SRV.INT_ID_MONEDA_USD, System.Convert.ToDouble(oportunidadVentaNM.MontoCompra));
                         }
@@ -303,7 +303,8 @@ namespace Expertia.Estructura.Controllers
             
             if (_oportunidadVentaNM == null)
             {
-                mensajeError += "Envie correctamente los parametros de entrada - RQ Nulo|";
+                cargarError(ref _rptaOportunidadVentaNM, "Envie correctamente los parametros de entrada - RQ Nulo|");
+                return;                
             }
             if (string.IsNullOrEmpty(_oportunidadVentaNM.Accion_SF))
             {
@@ -361,9 +362,9 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "El comentario es un campo obligatorio|";
             }            
-            if (_oportunidadVentaNM.Estado <= 0)
+            if (string.IsNullOrEmpty(_oportunidadVentaNM.Estado))
             {
-                mensajeError += "Envie un estado valido|";
+                mensajeError += "El estado es un campo obligatorio|";
             }
             if (string.IsNullOrEmpty(_oportunidadVentaNM.ServiciosAdicionales))
             {
@@ -403,6 +404,9 @@ namespace Expertia.Estructura.Controllers
                 UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(_oportunidadVentaNM.IdUsuarioSrv_SF);
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
 
+                _oportunidadVentaNM.idEstado = (short)_oportunidadVentaNMRepository._Select_EstadoIdXName(_oportunidadVentaNM.Estado);
+                if (_oportunidadVentaNM.idEstado <= 0) { mensajeError += "Envie un estado valido|"; }                
+
                 /*Validacion Oportunidad*/
                 int intCotizacion_SF = _oportunidadVentaNMRepository._Select_CotId_X_OportunidadSF(_oportunidadVentaNM.IdOportunidad_SF);
                 if(intCotizacion_SF <= 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE") { mensajeError += "No es posible actualizar si la oportunidad no esta registrada|"; }
@@ -419,11 +423,11 @@ namespace Expertia.Estructura.Controllers
                     }
 
                     /*Validaciones Valores Opcionales*/                    
-                    if (_oportunidadVentaNM.Estado != CotizacionVta.IdEstado)
+                    if (_oportunidadVentaNM.idEstado != CotizacionVta.IdEstado)
                     {
-                        if (_oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA || _oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
+                        if (_oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA || _oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
                         {
-                            if (_oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
+                            if (_oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
                             {                                
                                 if (UserLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM | UserLogin.IdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS)
                                 {
@@ -435,7 +439,7 @@ namespace Expertia.Estructura.Controllers
                                 }
                             }
 
-                            if (_oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA && 
+                            if (_oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA && 
                                 (UserLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM | UserLogin.IdOfi == Constantes_SRV.INT_ID_OFI_TRAVEL_STORE |
                                 UserLogin.IdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS))
                             {
@@ -466,7 +470,7 @@ namespace Expertia.Estructura.Controllers
                                 }                                
                             }
 
-                            if (CotizacionVta.IdReservaVuelos == null && (_oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA || _oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA_Paq))
+                            if (CotizacionVta.IdReservaVuelos == null && (_oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA || _oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA_Paq))
                             {
                                 if (string.IsNullOrEmpty(_oportunidadVentaNM.CodReserva))
                                 {
@@ -482,7 +486,7 @@ namespace Expertia.Estructura.Controllers
                         }
                     }
 
-                    if (_oportunidadVentaNM.Estado == (short)ENUM_ESTADOS_COT_VTA.Cotizado)
+                    if (_oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.Cotizado)
                     {
                         if (_oportunidadVentaNMRepository._EsCounterAdministratiivo(UserLogin.IdOfi))
                         {

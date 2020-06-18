@@ -299,6 +299,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_ChatterNM = AW_NM_Package + "." + "SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CHATTER";
         // CRMC008                
+        public const string AW_Get_IdEstadoXName = AW_NM_Package + "." + "SP_GET_IDESTADO_X_NAME";
         public const string AW_Get_DatosClienteXIdSF = AW_NM_Package + "." + "SP_GET_X_CODE_SF";
         public const string AW_Get_DatosCotXIdSF = AW_NM_Package + "." + "SP_GET_COT_X_OPORTUNIDAD_SF";
         public const string AW_Insert_OportunidadSF = AW_NM_Package + "." + "SP_REGISTRAR_OPORTUNIDAD";

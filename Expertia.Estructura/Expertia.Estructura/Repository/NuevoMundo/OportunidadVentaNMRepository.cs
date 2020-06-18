@@ -213,6 +213,32 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             return intCotizacion;
         }
 
+        public int _Select_EstadoIdXName(string estadoName)
+        {
+            int intIdEdtadoCot = 0;
+            
+            try
+            {
+                #region Parameter                                
+                AddParameter("pNameEstCot", OracleDbType.Varchar2, estadoName, ParameterDirection.Input);                
+                AddParameter("pIdEstCot", OracleDbType.Int32, null, ParameterDirection.Output);
+
+                #endregion
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_IdEstadoXName);    
+                if (!int.TryParse(GetOutParameter("pIdEstCot").ToString(), out intIdEdtadoCot)) intIdEdtadoCot = 0;
+                   
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return intIdEdtadoCot;
+        }
+
         public void RegistraCuenta(string idCuentaSF,int idCuentaNM)
         {
             AddParameter("P_ID_CUENTA_SF", OracleDbType.NVarchar2, idCuentaSF);

@@ -24,7 +24,8 @@ namespace Expertia.Estructura.Models.NuevoMundo
         public string IdOportunidad_SF { get; set; }
         public int IdUsuarioSrv_SF { get; set; } // * cambio a int
         public string Accion_SF { get; set; }
-        public short Estado { get; set; }        
+        public short idEstado { get; set; }
+        public string Estado { get; set; }
         public bool? Emitido { get; set; }
         public bool? Asignarse { get; set; }
         public short? IdMotivoNoCompro { get; set; }

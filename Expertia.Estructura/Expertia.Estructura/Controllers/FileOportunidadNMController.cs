@@ -35,6 +35,7 @@ namespace Expertia.Estructura.Controllers
         private ICotizacionSRV_Repository _CotizacionSRV_Repository;
         private IFileSRVRetailRepository _FileSRVRetailRepository;
         private IPedidoRepository _PedidoRetail_Repository;
+        private IOportunidadVentaNMRepository _oportunidadVentaNMRepository;
         private FileOportunidadNMRepository _fileOportunidadNMRepository;
         #endregion
 
@@ -182,9 +183,10 @@ namespace Expertia.Estructura.Controllers
             _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
             _FileSRVRetailRepository = new FileSRVRetailRepository();
             _PedidoRetail_Repository = new Pedido_AW_Repository();
-
+                        
             List<FilePTACotVta> lstFilesPTACotVta = null;
             List<FilePTACotVta> lstFilesPTAOld = null;
+            List<FileNMRS> lstFilesResponse = null;
             List<FileSRV> ListFile_Info = null;
 
             ArrayList lstFechasCotVta = new ArrayList(); /*Duda*/
@@ -204,7 +206,10 @@ namespace Expertia.Estructura.Controllers
                 if (FileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
                 {   
                     lstFilesPTACotVta = new List<FilePTACotVta>();
+                    lstFilesResponse = new List<FileNMRS>();
+
                     FilePTACotVta _FilePTACotVta = null;
+                    FileNMRS _FileResponse = null;
                     bool UpdateResponse = true;
 
                     foreach (FileSRV fileSRV in ListFile_Info)
@@ -218,6 +223,13 @@ namespace Expertia.Estructura.Controllers
                             _FilePTACotVta.ImporteFacturado = fileSRV.ImporteFact;
                             _FilePTACotVta.Moneda = fileSRV.Moneda;
                             lstFilesPTACotVta.Add(_FilePTACotVta);
+
+                            _FileResponse = new FileNMRS();                            
+                            _FileResponse.idFilePTA = fileSRV.IdFilePTA;
+                            _FileResponse.sucursal = Convert.ToInt16(fileSRV.Sucursal);
+                            _FileResponse.importe = fileSRV.ImporteFact.ToString();
+                            _FileResponse.fecha =  fileSRV.Fecha.ToShortDateString();
+                            lstFilesResponse.Add(_FileResponse);
                         }
                     }
                                        
@@ -587,6 +599,7 @@ namespace Expertia.Estructura.Controllers
                                         
                     _responseAsociate.codigo = "OK";
                     _responseAsociate.mensaje = "Se asoció correctamente el/los file(s) al SRV " + FileAssociate.idCotSRV.ToString();
+                    _responseAsociate.lstFiles = lstFilesResponse;
                 }
                 else if (FileAssociate.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
                 {                    
@@ -605,6 +618,7 @@ namespace Expertia.Estructura.Controllers
                     }
                     _MsgDeleteAsociteFN = (string.IsNullOrEmpty(strFilesDesasociados) == false ? ("El usuario " + DtsUsuarioLogin.LoginUsuario + " ha desasociado " + strFilesDesasociados + " del SRV " + FileAssociate.idCotSRV.ToString() + ".") : _MsgDeleteAsociteFN);
 
+                    _responseAsociate.lstFiles = null;
                     _responseAsociate.mensaje = _MsgDeleteAsociteFN;
                     _responseAsociate.codigo = "OK";                    
                 }
@@ -633,8 +647,9 @@ namespace Expertia.Estructura.Controllers
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);
-            _fileOportunidadNMRepository = new FileOportunidadNMRepository(unidadNegocioKey);           
-            _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
+            _fileOportunidadNMRepository = new FileOportunidadNMRepository(unidadNegocioKey);
+            _oportunidadVentaNMRepository = new OportunidadVentaNMRepository(unidadNegocioKey);
+            _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository(unidadNegocioKey);
             _datosUsuario = new DatosUsuario(unidadNegocioKey);
             return unidadNegocioKey;
 
@@ -1127,12 +1142,17 @@ namespace Expertia.Estructura.Controllers
             
             if (_fileAssociate == null)
             {
-                mensajeError += "Envie correctamente los parametros de entrada - RQ Nulo|";
+                cargarError(ref _responseFile, "Envie correctamente los parametros de entrada - RQ Nulo|");
+                return;                
             }
             if (string.IsNullOrEmpty(_fileAssociate.accion_SF) == true || ((_fileAssociate.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE || _fileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)) == false)
             {
                 mensajeError += "Envie la accion correctamente para realizar el proceso de la lista de files [A-D]|";                
-            }            
+            }
+            if (_fileAssociate.idoportunidad_SF == null)
+            {
+                mensajeError += "Envie el codigo de Oportunidad|";
+            }
             if (_fileAssociate.idCotSRV <= 0)
             {
                 mensajeError += "Envie el codigo de SRV|";
@@ -1149,12 +1169,10 @@ namespace Expertia.Estructura.Controllers
                     mensajeError += "El estado de la cotizacion debe ser facturado|";
                 }
             }
-
-            if (_fileAssociate.idoportunidad_SF == null)
+            if (_fileAssociate.idUsuario <= 0)
             {
-                mensajeError += "Envie el codigo de Oportunidad|";
-            }                       
-
+                mensajeError += "Envie el ID del Usuario correctamente|";
+            }
             if (_fileAssociate.lstFiles == null)
             {
                 mensajeError += "Envie la lista de files a asociar/desasociar|";
@@ -1164,13 +1182,22 @@ namespace Expertia.Estructura.Controllers
                 mensajeError += "El maximo de files asociar es " + Constantes_SRV.INT_MAX_FILES_ASOCIADOS.ToString() + "|";
             }
 
-            if (_fileAssociate.idUsuario > 0)
+            if (string.IsNullOrEmpty(mensajeError) == false)
             {
-                /*Cargamos Datos del Usuario*/
-                RepositoryByBusiness(null);
-                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idUsuario));
-                if (UserLogin == null)
-                { mensajeError += "ID del Usuario no registrado|"; }
+                cargarError(ref _responseFile, mensajeError);
+                return;
+            }
+
+            
+            /*Cargamos Datos del Usuario*/
+            RepositoryByBusiness(null);
+            UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idUsuario));
+            if (UserLogin == null){mensajeError += "ID del Usuario no registrado|";}
+            else
+            {
+                int intCotizacion_SF = _oportunidadVentaNMRepository._Select_CotId_X_OportunidadSF(_fileAssociate.idoportunidad_SF);
+                if (intCotizacion_SF <= 0) { mensajeError += "La oportunidad no esta registrada|"; }                
+                else if (intCotizacion_SF > 0 && intCotizacion_SF != _fileAssociate.idCotSRV) { mensajeError += "La cotizacion enviada es diferente al relacionado con la oportunidad|"; }
                 else
                 {
                     /*Validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
@@ -1179,11 +1206,9 @@ namespace Expertia.Estructura.Controllers
                     {
                         mensajeError += "Ud. no tiene asignado un código de vendedor en PTA. Por favor, contáctese con Webmaster: webmaster@gruponuevomundo.com.pe.";
                     }
-                }
-
+                }                
             }
-            else{mensajeError += "Envie el ID del Usuario correctamente|";}
-
+            
             if (string.IsNullOrEmpty(mensajeError) == true)
             {
                 int posListFile = 0;
@@ -1298,7 +1323,15 @@ namespace Expertia.Estructura.Controllers
             {
                 _responseFile.codigo = "ER";
                 _responseFile.mensaje = "VA: " + mensajeError;
+                _responseFile.lstFiles = null;
             }
+        }
+
+        private void cargarError(ref AssociateNMFileRS _RptaFile, string errorText)
+        {
+            _RptaFile.codigo = "ER";
+            _RptaFile.mensaje = "VA: " + errorText;
+            _RptaFile.lstFiles = null;
         }
 
         private FileSRV CargarInfoFile(int sucursal, int idfile)
@@ -1356,10 +1389,12 @@ namespace Expertia.Estructura.Controllers
                 }
 
                 moneda = drCliente["ID_MONEDA"].ToString();
-                /*string fecha = Convert.ToDateTime(drCliente["FECHA_EMISION"]).ToShortDateString();*/
+                DateTime fecha = Convert.ToDateTime(drCliente["FECHA_EMISION"]);
+                
                 fileSRV.Cliente = cliente;
                 fileSRV.ImporteFact = monto;
                 fileSRV.Moneda = moneda;
+                fileSRV.Fecha = fecha;
                 fileSRV.IdFilePTA = idfile;
                 fileSRV.Sucursal = sucursal;
             }
