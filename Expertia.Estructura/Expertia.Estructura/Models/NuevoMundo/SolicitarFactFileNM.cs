@@ -42,9 +42,20 @@ namespace Expertia.Estructura.Models
         public string codigo { get; set; }
         public string mensaje { get; set; }
         #region Computadas
-        public bool existeIdDatosFacturacion { get { return iddatosfacturacion != null; } }
+        public bool existeIdDatosFacturacion { get { return !string.IsNullOrEmpty(iddatosfacturacion); } }
         public bool existeArchivoList { get { return (ArchivoList != null && ArchivoList.Count > 0); } }
-        public int idusuariosrv_SF { get { if (!int.TryParse(idusuariosrv, out int intIdUsuarioSrv)) intIdUsuarioSrv = 0; return intIdUsuarioSrv; } }
+        public int idusuariosrv_SF
+        {
+            get
+            {
+                if (!int.TryParse(idusuariosrv, out int intIdUsuarioSrv)) intIdUsuarioSrv = 0;
+                return intIdUsuarioSrv;
+            }
+            set
+            {
+                idusuariosrv = value.ToString();
+            }
+        }
         #endregion
     }
 
@@ -64,5 +75,13 @@ namespace Expertia.Estructura.Models
         public float Importe { get; set; }
         public int IdOportunidad_SF { get; set; }
         public int IdCotSrv_SF { get; set; }
+        #region Computadas
+        public bool IsValid => (
+            (IdArchivo > 0) &&
+            (!string.IsNullOrEmpty(RutaArchivo)) &&
+            (!string.IsNullOrEmpty(ExtArchivo)) &&
+            (IdUsuWeb > 0)
+            );
+        #endregion
     }
 }
