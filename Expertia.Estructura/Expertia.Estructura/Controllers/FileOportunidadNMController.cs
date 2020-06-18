@@ -228,7 +228,7 @@ namespace Expertia.Estructura.Controllers
                             _FileResponse.idFilePTA = fileSRV.IdFilePTA;
                             _FileResponse.sucursal = Convert.ToInt16(fileSRV.Sucursal);
                             _FileResponse.importe = fileSRV.ImporteFact.ToString();
-                            _FileResponse.fecha =  fileSRV.Fecha.ToShortDateString();
+                            _FileResponse.fecha = String.Format("{0:yyyy-MM-dd}", fileSRV.Fecha);
                             lstFilesResponse.Add(_FileResponse);
                         }
                     }
