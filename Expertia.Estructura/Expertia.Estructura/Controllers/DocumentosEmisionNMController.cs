@@ -13,6 +13,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Expertia.Estructura.ws_crm;
+using System.Configuration;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -44,6 +46,42 @@ namespace Expertia.Estructura.Controllers
                 if (string.IsNullOrEmpty(_DocEmisionRS.codigo) == false) return Ok(new { respuesta = _DocEmisionRS });
 
                 /**Llamamos al servicio del SRV**/
+               // ws_crm.ws_crm crmServiceSRV = new ws_crm.ws_crm();
+
+               // EnvioDocsRQ ServSRV_RQ = new EnvioDocsRQ()
+               // {
+               //     IdCotizacion = DocumentosEmision.idCotizacionSRV,
+               //     IdReserva = (int)DtsCotizacionVta.IdReservaVuelos,
+               //     Formato = "F",
+               //     IPUsuario = "127.0.0.0",
+               //     Email = DocumentosEmision.correo,
+               //     Token = ConfigurationManager.AppSettings["TOKEN_SERVICIO_SRV_CRM"],
+               //     Usuario_Session = new UsuarioSession()
+               //     {
+               //         IdUsuario = usuarioLogin.IdUsuario,
+               //         EmailUsuario = usuarioLogin.EmailUsuario,
+               //         LoginUsuario = usuarioLogin.LoginUsuario,
+               //         IdDep = usuarioLogin.IdDep,
+               //         IdOfi = usuarioLogin.IdOfi
+               //     }
+               // };
+
+               //EnvioDocsRS ServSRV_RS = crmServiceSRV.EnvioDocumentos(ServSRV_RQ);
+               //if(ServSRV_RS == null)
+               //{
+               //     _DocEmisionRS.codigo = "ER";
+               //     _DocEmisionRS.mensaje = "Sucedió un error inesperado (comunique a Sistemas).";
+               // }
+               //else if(ServSRV_RS.Codigo == "OK")
+               //{
+               //     _DocEmisionRS.codigo = "OK";
+               //     _DocEmisionRS.mensaje = (string.IsNullOrEmpty(ServSRV_RS.Mensaje) ? "Se envio el correo satisfactoriamente" : ServSRV_RS.Mensaje);
+               // }
+               //else
+               //{
+               //     _DocEmisionRS.codigo = "ER";
+               //     _DocEmisionRS.mensaje = (string.IsNullOrEmpty(ServSRV_RS.Mensaje) ? "Sucedió un error inesperado (comunique a Sistemas)." : ServSRV_RS.Mensaje);
+               // }
 
                 _DocEmisionRS.codigo = "OK";
                 _DocEmisionRS.mensaje = "Se envio el correo satisfactoriamente";

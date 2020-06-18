@@ -357,6 +357,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\ws_crm\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\ws_pax_aux.ws_pax_paxdoc\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -475,6 +480,14 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
     <None Include="Web References\ws_compra\ws_compra.disco" />
+    <Content Include="Web References\ws_crm\EnvioDocsRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_crm\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <None Include="Web References\ws_crm\ws_crm.disco" />
     <Content Include="Web References\ws_pax_aux.ws_pax_paxdoc\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -482,8 +495,11 @@
     <Content Include="Web References\ws_pax_aux.ws_pax_paxdoc\r_message.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
+    <None Include="Web References\ws_crm\ws_crm.wsdl" />
     <None Include="Web References\ws_pax_aux.ws_pax_paxdoc\ws_pax_paxdoc.disco" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -508,6 +524,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="http://localhost:24997/web_services/ws_crm.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ws_crm\</RelPath>
+      <UpdateFromURL>http://localhost:24997/web_services/ws_crm.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Expertia_Estructura_ws_crm_ws_crm</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://ti-qa-webservices.webfarefinder.com/gnm/ws_compra.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\ws_compra\</RelPath>
