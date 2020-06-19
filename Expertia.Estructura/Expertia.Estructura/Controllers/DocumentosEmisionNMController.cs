@@ -82,9 +82,7 @@ namespace Expertia.Estructura.Controllers
                     _DocEmisionRS.codigo = "ER";
                     _DocEmisionRS.mensaje = (string.IsNullOrEmpty(ServSRV_RS.Mensaje) ? "Sucedió un error inesperado (comunique a Sistemas)." : ServSRV_RS.Mensaje);
                 }
-
-                _DocEmisionRS.codigo = "OK";
-                _DocEmisionRS.mensaje = "Se envio el correo satisfactoriamente";
+                
                 return Ok(new { respuesta = _DocEmisionRS }); ;
             }
             catch (Exception ex)
