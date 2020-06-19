@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://localhost:24997/web_services/ws_crm.asmx?disco" filename="ws_crm.disco" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://localhost:24997/web_services/ws_crm.asmx?wsdl" filename="ws_crm.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx?disco" filename="ws_crm.disco" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx?wsdl" filename="ws_crm.wsdl" />
   </Results>
 </DiscoveryClientResultsFile>

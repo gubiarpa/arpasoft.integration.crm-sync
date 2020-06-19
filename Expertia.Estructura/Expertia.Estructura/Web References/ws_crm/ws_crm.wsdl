@@ -114,10 +114,10 @@
   </wsdl:binding>
   <wsdl:service name="ws_crm">
     <wsdl:port name="ws_crmSoap" binding="tns:ws_crmSoap">
-      <soap:address location="http://localhost:24997/web_services/ws_crm.asmx" />
+      <soap:address location="http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx" />
     </wsdl:port>
     <wsdl:port name="ws_crmSoap12" binding="tns:ws_crmSoap12">
-      <soap12:address location="http://localhost:24997/web_services/ws_crm.asmx" />
+      <soap12:address location="http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
