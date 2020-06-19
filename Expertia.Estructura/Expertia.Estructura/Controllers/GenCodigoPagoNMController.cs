@@ -27,9 +27,9 @@ namespace Expertia.Estructura.Controllers
         #region Properties       
         private IPedidoRepository _pedidoRepository;
         private IDatosUsuario _datosUsuario;
-        #endregion
         private GenCodigoPagoNMRepository _genCodigoPagoNMRepository;         
         protected override ControllerName _controllerName => ControllerName.GenCodigoPagoNM;
+        #endregion
 
         #region PublicMethods
         [Route(RouteAction.Create)]
@@ -46,7 +46,7 @@ namespace Expertia.Estructura.Controllers
             {
                 /*Validaciones*/
                 validacionPedido(ref pedido, ref _resultpedido, ref _return, ref DtsUsuarioLogin);
-                if (_return == true) return Ok(_resultpedido);
+                //if (_return == true) return Ok(_resultpedido);
 
                 RepositoryByBusiness(pedido.UnidadNegocio.ID);
                 
@@ -174,7 +174,6 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(GenCodigoPagoNM genCodigoPagoNM)
         {           
@@ -217,7 +216,9 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        #endregion
 
+        #region GenerarPedido
         private void GenerarPedido_Safetypay_Cash(DatosPedido pedido, 
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
@@ -353,21 +354,124 @@ namespace Expertia.Estructura.Controllers
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
+
         private void GenerarPedido_Safetypay_Internacional(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
+
         private void GenerarPedido_Independencia(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
+
         private void GenerarPedido_Pago_Efectivo(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
+            var datFechaActual = DateTime.Now;
+            var ddlHoraExpiraCIP = pedido.TiempoExpiracionCIP ?? 0;
+            var datFechaExpiraPago = datFechaActual.AddHours(ddlHoraExpiraCIP);
+            resultPedido.FechaExp = datFechaExpiraPago;
+
+            var intIdFormaPago = /*NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC;*/ 5;
+
+            try
+            {
+                var strEmailsCliPE = pedido.Email;
+                var dblMontoPagar = pedido.MontoPagar;
+                var intIdPedido = resultPedido.IdPedido;
+
+                var intIdWeb = pedido.IdWeb;
+                var intIdLang = pedido.IdLang;
+                var intIdCotVta = pedido.IdCotVta;
+
+                // Dim paymentRequest As New BEGenRequest
+                var paymentRequest = new ws_pagoefectivo.BEGenRequest();
+
+                paymentRequest.IdMoneda = ConfigAccess.GetValueInAppSettings("PE_MONEDA");
+                paymentRequest.Total = dblMontoPagar.ToString("0.00");
+                paymentRequest.MetodosPago = ConfigAccess.GetValueInAppSettings("PE_MEDIO_PAGO");
+                paymentRequest.Codtransaccion = intIdPedido.ToString("");
+                paymentRequest.ConceptoPago = string.Format("{0}: Orden {1}",
+                    ConfigAccess.GetValueInAppSettings("PE_COMERCIO_CONCEPTO_PAGO"),
+                    paymentRequest.Codtransaccion);
+                paymentRequest.EmailComercio = strEmailsCliPE;
+                paymentRequest.FechaAExpirar = datFechaExpiraPago.ToString("yyyy-MM-dd");
+                paymentRequest.UsuarioNombre = DtsUsuarioLogin.LoginUsuario;
+                paymentRequest.UsuarioApellidos = DtsUsuarioLogin.ApePatUsuario;
+                paymentRequest.UsuarioEmail = DtsUsuarioLogin.EmailUsuario;
+                paymentRequest.IdDepartamento = DtsUsuarioLogin.IdDep;
+                paymentRequest.IdOficina = DtsUsuarioLogin.IdOfi;
+
+                var paymentResponse = (new ws_pagoefectivo.ws_PagoEfectivo()).GenerarCIP(paymentRequest);
+
+                // Reintento de GENERACIÓN DE CIP
+                if (paymentResponse == null || paymentResponse.Estado != "1" || paymentResponse.Token == null)
+                {
+                    paymentResponse = (new ws_pagoefectivo.ws_PagoEfectivo()).GenerarCIP(paymentRequest);
+                }
+
+                var strCIP = resultPedido.CodigoCIP = paymentResponse.NumeroCip;
+
+                //  Enviar correo
+                var objEnviarCorreo = new EnviarCorreo();
+                var strEmailsCli = pedido.Email;
+
+                if (Enviar_SolicitudPagoServicioPagoEfectivo(
+                    intIdWeb ?? 0,
+                    intIdLang ?? 0,
+                    intIdCotVta,
+                    strEmailsCli,
+                    null,
+                    pedido.NombreClienteCot,
+                    pedido.ApellidoClienteCot,
+                    null,
+                    DtsUsuarioLogin.NomCompletoUsuario,
+                    DtsUsuarioLogin.EmailUsuario,
+                    short.Parse(pedido.FormaPago),
+                    strCIP,
+                    string.Empty,
+                    intIdPedido,
+                    dblMontoPagar,
+                    datFechaExpiraPago))
+                {
+                    resultPedido.CorreoEnviado = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
+        private bool Enviar_SolicitudPagoServicioPagoEfectivo(
+            int pIntIdWeb,
+            int pIntIdLang,
+            int? pIntIdCotVta,
+            string pStrEmailTO,
+            string pStrEMailCC,
+            string pStrNomCli,
+            string pStrApeCli,
+            string pStrURLPago,
+            string pStrNomCompletoUsuWeb,
+            string pStrEmailUsuWeb,
+            short pIntIdFormaPago,
+            string pStrCIP,
+            string pStrCodigoBarras,
+            int pIntIdPedido,
+            double pDblMontoPagar,
+            DateTime pDatFechaExpiraPago)
+        {
+            //var objCorreoWebBO = New CorreoWebBO
+            //var objCorreo As Correo = Nothing
+            //var objNMMail As New NMMail
+            //var objEncriptaCadena As New NuevoMundoSecurity.EncriptaCadena
+            return true;
+        }
+
         private void validacionPedido(ref DatosPedido _pedido, ref Models.PedidoRS _resultPedido, ref bool _return, ref UsuarioLogin UserLogin)
         {
             string mensajeError = string.Empty;

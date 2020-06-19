@@ -362,6 +362,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\ws_pagoefectivo\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\ws_pax_aux.ws_pax_paxdoc\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -496,6 +501,20 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
     <None Include="Web References\ws_crm\ws_crm.wsdl" />
+    <Content Include="Web References\ws_pagoefectivo\BEnotificacionResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_pagoefectivo\BEpaymentResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_pagoefectivo\BEWSConsultarCIPResponseMod1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_pagoefectivo\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <None Include="Web References\ws_pagoefectivo\ws_pagoefectivo.wsdl" />
     <None Include="Web References\ws_pax_aux.ws_pax_paxdoc\ws_pax_paxdoc.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -545,6 +564,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>Expertia_Estructura_ws_compra_ws_compra</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://webservices.webfarefinder.com/gnm/ws_pagoefectivo.asmx%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ws_pagoefectivo\</RelPath>
+      <UpdateFromURL>http://webservices.webfarefinder.com/gnm/ws_pagoefectivo.asmx%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Expertia_Estructura_ws_pagoefectivo_ws_PagoEfectivo</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://webservices.webfarefinder.com/ws_pax_aux_test/ws_pax_paxdoc.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>

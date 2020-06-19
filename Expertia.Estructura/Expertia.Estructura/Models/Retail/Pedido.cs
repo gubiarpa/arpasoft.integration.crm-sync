@@ -275,9 +275,12 @@ namespace Expertia.Estructura.Models
         public string CodigoError { get; set; }
         public string MensajeError { get; set; }        
         public int IdPedido { get; set; }
-        public bool CorreoEnviado { get; set; }
+        public string LinkPago { get; set; }
+        public string CodigoCIP { get; set; }
+        public DateTime FechaExp { get; set; }
         public string CodigoTransaction { get; set; }
         public string CodigoOperacion { get; set; }
+        public bool CorreoEnviado { get; set; }
     }
 
     public class PedidosProcesados
