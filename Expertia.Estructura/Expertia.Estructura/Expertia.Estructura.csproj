@@ -483,10 +483,10 @@
     <Content Include="Web References\ws_crm\EnvioDocsRS.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
-    <Content Include="Web References\ws_crm\Reference.map">
+    <None Include="Web References\ws_crm\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <None Include="Web References\ws_crm\ws_crm.disco" />
     <Content Include="Web References\ws_pax_aux.ws_pax_paxdoc\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -524,10 +524,10 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://localhost:24997/web_services/ws_crm.asmx">
+    <WebReferenceUrl Include="http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\ws_crm\</RelPath>
-      <UpdateFromURL>http://localhost:24997/web_services/ws_crm.asmx</UpdateFromURL>
+      <UpdateFromURL>http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
