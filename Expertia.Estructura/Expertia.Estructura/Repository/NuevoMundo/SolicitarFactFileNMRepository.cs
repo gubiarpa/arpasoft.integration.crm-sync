@@ -232,5 +232,20 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             }
         }
         #endregion
+
+        #region CounterPresencial
+        public Boolean EsAreaCounterPresencial(int pIntIdOfi, int pIntIdDep, Boolean pBolEsRipley)
+        {
+            if ((pIntIdOfi == Constantes_SRV.INT_ID_OFI_CORPORATIVO_VACACIONAL && pIntIdDep == Constantes_SRV.INT_ID_DEP_COUNTER) ||
+                (pIntIdOfi == Constantes_SRV.INT_ID_OFI_NMV && pIntIdDep == Constantes_SRV.INT_ID_DEP_COUNTER) ||
+                (pIntIdOfi == Constantes_SRV.INT_ID_OFI_CALL_CENTER && pIntIdDep == Constantes_SRV.INT_ID_DEP_CALL_CENTER) ||
+                (pIntIdOfi == Constantes_SRV.INT_ID_OFI_NMV && pIntIdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS) ||
+                (pIntIdOfi == Constantes_SRV.INT_ID_OFI_NMV && pIntIdDep == Constantes_SRV.INT_ID_DEP_LARCOMAR) ||
+                pBolEsRipley)
+                return true;
+            else
+                return false;
+        }
+        #endregion
     }
 }
