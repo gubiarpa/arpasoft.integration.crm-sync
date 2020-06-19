@@ -421,7 +421,7 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie el monto|";
             }
-            if (_pedido.Monto.Contains(","))
+            if (!string.IsNullOrEmpty(_pedido.Monto) && _pedido.Monto.Contains(","))
             {
                 mensajeError += "El uso de la coma (,) no es válido como separador decimal.";
             }
