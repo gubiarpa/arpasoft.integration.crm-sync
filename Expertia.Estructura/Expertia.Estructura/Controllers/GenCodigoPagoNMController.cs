@@ -371,7 +371,7 @@ namespace Expertia.Estructura.Controllers
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
-            var datFechaActual = DateTime.Now;
+            DateTime datFechaActual = DateTime.Now;
             var ddlHoraExpiraCIP = pedido.TiempoExpiracionCIP ?? 0;
             var datFechaExpiraPago = datFechaActual.AddHours(ddlHoraExpiraCIP);
             resultPedido.FechaExp = datFechaExpiraPago;
