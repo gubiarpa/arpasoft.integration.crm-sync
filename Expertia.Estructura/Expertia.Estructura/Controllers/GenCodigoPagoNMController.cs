@@ -155,12 +155,17 @@ namespace Expertia.Estructura.Controllers
                 };
                 _CotizacionSRV.ProcesosPostCotizacion(_PostSRV_RQ);
 
+                _resultpedido.CodigoError = "OK";
+                _resultpedido.MensajeError = "El proceso se realizó exitosamente";
+
                 return Ok(_resultpedido);
 
             }
             catch (Exception ex)
             {
                 errorPedido = ex.Message;
+                _resultpedido.CodigoError = "ER";
+                _resultpedido.MensajeError = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -374,7 +379,7 @@ namespace Expertia.Estructura.Controllers
             var datFechaActual = DateTime.Now;
             var ddlHoraExpiraCIP = pedido.TiempoExpiracionCIP ?? 0;
             var datFechaExpiraPago = datFechaActual.AddHours(ddlHoraExpiraCIP);
-            resultPedido.FechaExp = datFechaExpiraPago;
+            resultPedido.FechaExpiracion = datFechaExpiraPago;
 
             var intIdFormaPago = /*NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC;*/ 5;
 
