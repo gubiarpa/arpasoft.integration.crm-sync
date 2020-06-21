@@ -111,6 +111,21 @@ namespace Expertia.Estructura.Controllers
                 {
                     GenerarPedido_Independencia(pedido, _resultpedido, DtsUsuarioLogin);
                 }
+
+                #region LinkPago
+                if ((new List<string>() {
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_VISA, 
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_MASTERCARD,
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_AMERICANEX,
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_DINERS}).Contains(pedido.CodePasarelaPago))
+                {
+                    _resultpedido.LinkPago = ObtieneLinkPago(pedido.IdWeb ?? 0, _resultpedido.IdPedido, pedido.IdCotVta);
+                }
+                else
+                {
+                    _resultpedido.LinkPago = string.Empty;
+                }
+                #endregion
                 
                 /*Inserta Forma de Pedido  General para todos las metodos de pago*/
                 _pedidoRepository.InsertFormaPagoPedidoNM(pedido, _resultpedido, intIdFormaPago);
@@ -376,7 +391,7 @@ namespace Expertia.Estructura.Controllers
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
-            var datFechaActual = DateTime.Now;
+            DateTime datFechaActual = DateTime.Now;
             var ddlHoraExpiraCIP = pedido.TiempoExpiracionCIP ?? 0;
             var datFechaExpiraPago = datFechaActual.AddHours(ddlHoraExpiraCIP);
             resultPedido.FechaExpiracion = datFechaExpiraPago;
@@ -475,6 +490,33 @@ namespace Expertia.Estructura.Controllers
             //var objNMMail As New NMMail
             //var objEncriptaCadena As New NuevoMundoSecurity.EncriptaCadena
             return true;
+        }
+
+        private string ObtieneLinkPago(int pIntIdWeb, int pIntIdPedido, int pIntIdCotSRV)
+        {
+            EncriptaCadena objNMEncriptaCadena = new EncriptaCadena();
+            try
+            {
+                string strURLPago = "";
+                if (pIntIdWeb == Webs_Cid.ID_WEB_NM_PERUTRIP)
+                    strURLPago = ConfigAccess.GetValueInAppSettings("URL_PAGO_SERVICIO_ONLINE_PERUTRIP");
+                else if (pIntIdWeb == Webs_Cid.DM_WEB_ID)
+                    strURLPago = ConfigAccess.GetValueInAppSettings("URL_PAGO_SERVICIO_ONLINE_DM");
+                else
+                    strURLPago = ConfigAccess.GetValueInAppSettings("URL_PAGO_SERVICIO_ONLINE");
+
+                string strIdEncrypt = objNMEncriptaCadena.DES_Encrypt(pIntIdPedido + ";" + pIntIdCotSRV, objNMEncriptaCadena.GetKEY(EncriptaCadena.TIPO_KEY.KEY_ENCRIPTA_NRO_PEDIDO_PAGO_ONLINE));
+
+                return strURLPago + "?id=" + strIdEncrypt;
+            }
+            catch (Exception ex)
+            {
+                return "Error";
+            }
+            finally
+            {
+                objNMEncriptaCadena = null;
+            }
         }
 
         private void validacionPedido(ref DatosPedido _pedido, ref Models.PedidoRS _resultPedido, ref bool _return, ref UsuarioLogin UserLogin)
