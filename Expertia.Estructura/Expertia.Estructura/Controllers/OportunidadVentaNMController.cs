@@ -231,7 +231,7 @@ namespace Expertia.Estructura.Controllers
                     /*Asignarse*/
                     if (oportunidadVentaNM.Asignarse == true)
                     {
-                        bool bolAsignado = _cotizacionSRV_Repository._Update_CounterAdministrativo((int)oportunidadVentaNM.IdCotSRV, Convert.ToInt32(oportunidadVentaNM.counterAsignado));
+                        bool bolAsignado = _cotizacionSRV_Repository._Update_CounterAdministrativo((int)oportunidadVentaNM.IdCotSRV, oportunidadVentaNM.counterAsignado);
                         //messageOK = (bolAsignado == false ? "La cotización ya ha sido asignado a un counter administrativo." : messageOK);
                     }
 
@@ -523,7 +523,7 @@ namespace Expertia.Estructura.Controllers
 
                     /*Validacion : Asignarse - Emitido*/
                     bool Asignar = false, Emitir = false; ;
-                    _oportunidadVentaNM.Asignarse = ((string.IsNullOrEmpty(_oportunidadVentaNM.counterAsignado) == false && ValidateProcess.isInt32(_oportunidadVentaNM.counterAsignado) == true) ? true : false);
+                    _oportunidadVentaNM.Asignarse = ((_oportunidadVentaNM.counterAsignado != null && _oportunidadVentaNM.counterAsignado > 0) ? true : false);
 
                     /*El codigo si permite la reasignacion pero el store procedure no.*/
                     if (_oportunidadVentaNM.Asignarse == true || _oportunidadVentaNM.Emitido == true)
@@ -534,7 +534,7 @@ namespace Expertia.Estructura.Controllers
                             {                           
                                 if (CotizacionVta.IdUsuWebCA.HasValue)
                                 {
-                                    if (Convert.ToInt32(_oportunidadVentaNM.counterAsignado) == CotizacionVta.IdUsuWebCA.Value)
+                                    if (_oportunidadVentaNM.counterAsignado == CotizacionVta.IdUsuWebCA.Value)
                                         Asignar = false;
                                     else
                                         Asignar = true;
@@ -554,7 +554,7 @@ namespace Expertia.Estructura.Controllers
                                 {
                                     if (CotizacionVta.IdUsuWebCA.HasValue)
                                     {
-                                        if (Convert.ToInt32(_oportunidadVentaNM.counterAsignado) == CotizacionVta.IdUsuWebCA.Value)
+                                        if (_oportunidadVentaNM.counterAsignado == CotizacionVta.IdUsuWebCA.Value)
                                             Asignar = false;
                                         else
                                             Asignar = true;

@@ -28,7 +28,7 @@ namespace Expertia.Estructura.Models.NuevoMundo
         public string Estado { get; set; }
         public bool? Emitido { get; set; }
         public bool Asignarse { get; set; }
-        public string counterAsignado { get; set; }        
+        public int? counterAsignado { get; set; }        
         public string IdMotivoNoCompro { get; set; }
         public DateTime? fechaPlazoEmision { get; set; }
         public string CodReserva { get; set; }

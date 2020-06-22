@@ -27,7 +27,7 @@ namespace Expertia.Estructura.Models
         public int? IdUsuarioSrv { get; set; }        
         public string requiereFirmaCliente { get; set; }
         /*public string counterRegistro { get; set; }*//*Desestimados*/
-        public string counterAsignado { get; set; }
+        public int? counterAsignado { get; set; }
         public List<ReservasOportunidad_NM> ListReservas { get; set; }
         public string IdLoginWeb { get; set; }
         public string EmpresaCliente { get; set; }
@@ -37,10 +37,10 @@ namespace Expertia.Estructura.Models
         public string telefonoCliente { get; set; }
         public string IdMotivoNoCompro { get; set; }
         public bool Emitido { get; set; }
-        public string fechaPlazoEmision { get; set; }
+        public DateTime? fechaPlazoEmision { get; set; }
         public string CiudadIata { get; set; }
         public float? MontoEstimado { get; set; }
-        public short? ModalidadCompra { get; set; }
+        public string ModalidadCompra { get; set; }
         public string tipoCotizacion { get; set; }        
         /*public int idUserLogin { get; set; }*//*Desestimados*/
         public string accion_SF { get; set; }                
