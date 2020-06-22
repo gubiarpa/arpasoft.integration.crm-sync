@@ -26,6 +26,7 @@ namespace Expertia.Estructura.Repository.Behavior
         List<int> _Select_Pedidos_SinBancoBy_IdCot(int pIntIdCot);
         int _Select_CotId_X_OportunidadSF(string _oportunidadSF);
         void RegistraOportunidad(string idOportunidadSF, int idCotizacionNM);
+        void UpdateOportunidad(string idOportunidadSF, int idCotizacionNM, string estadoRegistro);
         int _Select_EstadoIdXName(string estadoName);
     }
 }

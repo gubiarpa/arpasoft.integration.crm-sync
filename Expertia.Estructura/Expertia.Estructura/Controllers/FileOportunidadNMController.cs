@@ -37,6 +37,7 @@ namespace Expertia.Estructura.Controllers
         private IPedidoRepository _PedidoRetail_Repository;
         private IOportunidadVentaNMRepository _oportunidadVentaNMRepository;
         private FileOportunidadNMRepository _fileOportunidadNMRepository;
+        private ISucursalesNMRepository _SucursalesNMRepository;
         #endregion
 
         protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
@@ -650,6 +651,7 @@ namespace Expertia.Estructura.Controllers
             _fileOportunidadNMRepository = new FileOportunidadNMRepository(unidadNegocioKey);
             _oportunidadVentaNMRepository = new OportunidadVentaNMRepository(unidadNegocioKey);
             _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository(unidadNegocioKey);
+            _SucursalesNMRepository = new SucursalesNMRepository(UnidadNegocioKeys.NuevoMundo);
             _datosUsuario = new DatosUsuario(unidadNegocioKey);
             return unidadNegocioKey;
 
@@ -1139,7 +1141,8 @@ namespace Expertia.Estructura.Controllers
         {
             string mensajeError = string.Empty, strIdVendedor = string.Empty;
             bool bolEjecutarCarga = true;
-            
+            bool bolExitoValSucursal = true;
+
             if (_fileAssociate == null)
             {
                 cargarError(ref _responseFile, "Envie correctamente los parametros de entrada - RQ Nulo|");
@@ -1212,6 +1215,7 @@ namespace Expertia.Estructura.Controllers
             if (string.IsNullOrEmpty(mensajeError) == true)
             {
                 int posListFile = 0;
+                IEnumerable<SucursalNM> sucursalesNM = null;
                 FileSRV _fileSRV_Info = null;
                 DataTable _dtfilesAsociadosSRV = _FileSRVRetailRepository._SelectFilesIdBy_IdCot(_fileAssociate.idCotSRV); /*Cargamos Files Asociados*/
                             
@@ -1269,6 +1273,42 @@ namespace Expertia.Estructura.Controllers
 
                             if (bolEjecutarCarga == true)
                             {
+                                /*Validacion de sucursales*/
+                                bolExitoValSucursal = false;
+                                sucursalesNM = (IEnumerable<SucursalNM>)(_SucursalesNMRepository._Select_SucursalesBy_Vendedor(strIdVendedor))[OutParameter.CursorDtosGenerico];
+                                if (!(sucursalesNM == null || sucursalesNM.ToList().Count.Equals(0)))
+                                {
+                                    foreach (var sucursal in sucursalesNM)
+                                    {
+                                        if (sucursal.IdSucursal == fileSRV.Sucursal)
+                                        {
+                                            bolExitoValSucursal = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (bolExitoValSucursal == false)
+                                {
+                                    sucursalesNM = (IEnumerable<SucursalNM>)(_fileOportunidadNMRepository._Select_SucursalAdic_ByIdUsuWeb(UserLogin.IdUsuario))[OutParameter.CursorDtosGenerico];
+                                    if (!(sucursalesNM == null || sucursalesNM.ToList().Count.Equals(0)))
+                                    {
+                                        foreach (var sucursal in sucursalesNM)
+                                        {
+                                            if (sucursal.IdSucursal == fileSRV.Sucursal)
+                                            {
+                                                bolExitoValSucursal = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (bolExitoValSucursal == false)
+                                {
+                                    mensajeError += "El usuario " + UserLogin.LoginUsuario + " no tiene configurado la sucursal " + fileSRV.Sucursal + " para realizar la asociación de los files|";                                    
+                                    break;
+                                }
+
+                                /*Carga de Files*/
                                 _fileSRV_Info = new FileSRV();
                                 _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, (int)fileSRV.idFilePTA);
                             }

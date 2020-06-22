@@ -193,6 +193,7 @@ namespace Expertia.Estructura.Controllers
                 }
                 else {
                     idCotizacion = oportunidadVentaNM.IdCotSRV;
+                    short? IdMotivoCierrePerdido = null;                    
 
                     /**Cambios de Estado**/
                     if (oportunidadVentaNM.idEstado != DtsCotizacionVta.IdEstado)
@@ -200,6 +201,7 @@ namespace Expertia.Estructura.Controllers
                         bolCambioEstado = true;
                         if (oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.NoCompro)
                         {
+                            IdMotivoCierrePerdido = Convert.ToInt16(oportunidadVentaNM.IdMotivoNoCompro);                            
                             //strTextoPost = "<span class='texto_cambio_estado'>Cambio de estado a <strong>No Compro</strong></span>";
                         }
                     }
@@ -207,7 +209,7 @@ namespace Expertia.Estructura.Controllers
                     if (oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA || oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.DerivadoCA_Paq)
                     {
                         bolEsUrgenteEmision = true;
-                        datFechaPlazoEmision = Convert.ToDateTime(DateTime.Now.ToShortDateString() + " " + oportunidadVentaNM.HoraEmision + ":00");
+                        datFechaPlazoEmision = oportunidadVentaNM.fechaPlazoEmision; //Convert.ToDateTime(DateTime.Now.ToShortDateString() + " " + oportunidadVentaNM.HoraEmision + ":00");
                         //strTextoPost = "<span class='texto_cambio_estado'>EMISIÓN ANTES DE: " + string.Format("dd/MM/yyyy HH:mm", datFechaPlazoEmision) + "</span><br>";
                     }
 
@@ -229,7 +231,7 @@ namespace Expertia.Estructura.Controllers
                     /*Asignarse*/
                     if (oportunidadVentaNM.Asignarse == true)
                     {
-                        bool bolAsignado = _cotizacionSRV_Repository._Update_CounterAdministrativo((int)oportunidadVentaNM.IdCotSRV, usuarioLogin.IdUsuario);
+                        bool bolAsignado = _cotizacionSRV_Repository._Update_CounterAdministrativo((int)oportunidadVentaNM.IdCotSRV, Convert.ToInt32(oportunidadVentaNM.counterAsignado));
                         //messageOK = (bolAsignado == false ? "La cotización ya ha sido asignado a un counter administrativo." : messageOK);
                     }
 
@@ -246,9 +248,12 @@ namespace Expertia.Estructura.Controllers
                         (usuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : usuarioLogin.IdUsuario),
                         (usuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : usuarioLogin.IdOfi),
                         (usuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : usuarioLogin.IdDep), bolEsUrgenteEmision,
-                        datFechaPlazoEmision, oportunidadVentaNM.IdMotivoNoCompro, null, oportunidadVentaNM.MontoEstimado, 0);
+                        datFechaPlazoEmision, IdMotivoCierrePerdido, null, oportunidadVentaNM.MontoEstimado, 0);
                     /*Notas: En caso soliciten habilitar el Post, para el valor Emitido la estructura del Post es diferente, habria que hacer unas condicionales adicionales*/
                     /*Notas: En caso soliciten habilitar el Post, para la AutoAsignacion la estructura del Post es diferente, habria que hacer unas condicionales adicionales*/
+
+                    /*Actualizamos el estado de la oportunidad*/
+                    _oportunidadVentaNMRepository.UpdateOportunidad(oportunidadVentaNM.IdOportunidad_SF, (int)idCotizacion, Estados_Oportunidad.ID_ST_REGI_NO_ENVIO);
 
                     /*Modalidad de Compra*/
                     if (oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado && (usuarioLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM || usuarioLogin.IdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS || _oportunidadVentaNMRepository._EsCounterAdministratiivo(usuarioLogin.IdOfi))) //, usuarioLogin.IdDep, false))
@@ -370,6 +375,10 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Los Servicios Adicionales son un campo obligatorio|";
             }
+            if (string.IsNullOrEmpty(_oportunidadVentaNM.tipoCotizacion))
+            {
+                mensajeError += "El tipo de cotizacion es un campo obligatorio|";
+            }
             if (_oportunidadVentaNM.ModoIngreso <= 0)
             {
                 mensajeError += "Envie un Modo de Ingreso valido|";
@@ -443,9 +452,9 @@ namespace Expertia.Estructura.Controllers
                                 (UserLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM | UserLogin.IdOfi == Constantes_SRV.INT_ID_OFI_TRAVEL_STORE |
                                 UserLogin.IdDep == Constantes_SRV.INT_ID_DEP_SISTEMAS))
                             {
-                                if (string.IsNullOrEmpty(_oportunidadVentaNM.HoraEmision))
+                                if (_oportunidadVentaNM.fechaPlazoEmision == null)
                                 {
-                                    cargarError(ref _rptaOportunidadVentaNM, "Debe enviar la hora de emisión|");
+                                    cargarError(ref _rptaOportunidadVentaNM, "Debe enviar la fecha y hora de emisión|");
                                     return;                                                                      
                                 }
                             }
@@ -484,6 +493,20 @@ namespace Expertia.Estructura.Controllers
                                 }                                
                             }
                         }
+
+                        if (_oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.NoCompro)
+                        {
+                            if(string.IsNullOrEmpty(_oportunidadVentaNM.IdMotivoNoCompro))
+                            {
+                                cargarError(ref _rptaOportunidadVentaNM, "Debe ingresar el motivo del cierre perdido.");
+                                return;
+                            }
+                            else if(ValidateProcess.isInt32(_oportunidadVentaNM.IdMotivoNoCompro) == false)
+                            {
+                                cargarError(ref _rptaOportunidadVentaNM, "Envie un motivo correcto de cierre perdido.");
+                                return;
+                            }
+                        }
                     }
 
                     if (_oportunidadVentaNM.idEstado == (short)ENUM_ESTADOS_COT_VTA.Cotizado)
@@ -500,36 +523,45 @@ namespace Expertia.Estructura.Controllers
 
                     /*Validacion : Asignarse - Emitido*/
                     bool Asignar = false, Emitir = false; ;
+                    _oportunidadVentaNM.Asignarse = ((string.IsNullOrEmpty(_oportunidadVentaNM.counterAsignado) == false && ValidateProcess.isInt32(_oportunidadVentaNM.counterAsignado) == true) ? true : false);
+
+                    /*El codigo si permite la reasignacion pero el store procedure no.*/
                     if (_oportunidadVentaNM.Asignarse == true || _oportunidadVentaNM.Emitido == true)
                     {                    
                         if (UserLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMVCOM || (UserLogin.IdOfi == Constantes_SRV.INT_ID_OFI_NMV && UserLogin.IdDep == Constantes_SRV.INT_ID_DEP_EMERGENCIAS) || UserLogin.EsSupervisorSRV)
                         {
-                            if (CotizacionVta.IdUsuWebCA.HasValue)
-                            {
-                                if (UserLogin.IdUsuario == CotizacionVta.IdUsuWebCA.Value)
-                                    Asignar = false;
-                                else
-                                    Asignar = true;
-                            }
-                            else
-                                Asignar = true;
-
-                            if (!CotizacionVta.EsEmitido)
-                                Emitir = true;
-                        }
-                        else if (UserLogin.EsCounterAdminSRV)
-                        {
-                            if (_oportunidadVentaNMRepository._EsCounterAdministratiivo(CotizacionVta.IdOfi) && _oportunidadVentaNMRepository._EsCounterAdministratiivo(UserLogin.IdOfi))
-                            {
+                            if(_oportunidadVentaNM.Asignarse == true)
+                            {                           
                                 if (CotizacionVta.IdUsuWebCA.HasValue)
                                 {
-                                    if (UserLogin.IdUsuario == CotizacionVta.IdUsuWebCA.Value)
+                                    if (Convert.ToInt32(_oportunidadVentaNM.counterAsignado) == CotizacionVta.IdUsuWebCA.Value)
                                         Asignar = false;
                                     else
                                         Asignar = true;
                                 }
                                 else
                                     Asignar = true;
+                            }
+
+                            if (_oportunidadVentaNM.Emitido == true && (!CotizacionVta.EsEmitido))
+                                Emitir = true;
+                        }
+                        else if (UserLogin.EsCounterAdminSRV)
+                        {
+                            if (_oportunidadVentaNMRepository._EsCounterAdministratiivo(CotizacionVta.IdOfi) && _oportunidadVentaNMRepository._EsCounterAdministratiivo(UserLogin.IdOfi))
+                            {
+                                if (_oportunidadVentaNM.Asignarse == true)
+                                {
+                                    if (CotizacionVta.IdUsuWebCA.HasValue)
+                                    {
+                                        if (Convert.ToInt32(_oportunidadVentaNM.counterAsignado) == CotizacionVta.IdUsuWebCA.Value)
+                                            Asignar = false;
+                                        else
+                                            Asignar = true;
+                                    }
+                                    else
+                                        Asignar = true;
+                                }
                             }
                         }
 

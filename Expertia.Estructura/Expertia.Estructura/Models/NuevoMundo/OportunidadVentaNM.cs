@@ -27,14 +27,15 @@ namespace Expertia.Estructura.Models.NuevoMundo
         public short idEstado { get; set; }
         public string Estado { get; set; }
         public bool? Emitido { get; set; }
-        public bool? Asignarse { get; set; }
-        public short? IdMotivoNoCompro { get; set; }
-        public string HoraEmision { get; set; }
+        public bool Asignarse { get; set; }
+        public string counterAsignado { get; set; }        
+        public string IdMotivoNoCompro { get; set; }
+        public DateTime? fechaPlazoEmision { get; set; }
         public string CodReserva { get; set; }
         public float? MontoCompra { get; set; }
         public float? MontoEstimado { get; set; }        
         public short? ModalidadCompra { get; set; }
-        /*public string Tipo { get; set; }*//*Desestimado*/
+        public string tipoCotizacion { get; set; }        
         public bool? RequiereFirmaCliente { get; set; }        
         public string ServiciosAdicionales { get; set; }
         public short ModoIngreso { get; set; } // * cambio a short
