@@ -13,11 +13,12 @@ namespace Expertia.Estructura.Models
         public string Servicio { get; set; }
         public string IdCanalVenta { get; set; }
         public string metabuscador { get; set; }
-        public bool CajaVuelos { get; set; }
+        /*Desestimados*/
+        /*public bool CajaVuelos { get; set; } 
         public bool CajaHotel { get; set; }
         public bool CajaPaquetes { get; set; }
         public bool CajaServicios { get; set; }
-        public bool CajaSeguro { get; set; }
+        public bool CajaSeguro { get; set; }*/
         public string modoIngreso { get; set; }
         public string ordenAtencion { get; set; }
         public string evento { get; set; }
@@ -25,19 +26,23 @@ namespace Expertia.Estructura.Models
         public int IdCotSRV { get; set; }
         public int? IdUsuarioSrv { get; set; }        
         public string requiereFirmaCliente { get; set; }
-        public string counterAsignado { get; set; }
+        /*public string counterRegistro { get; set; }*//*Desestimados*/
+        public int? counterAsignado { get; set; }
         public List<ReservasOportunidad_NM> ListReservas { get; set; }
+        public string IdLoginWeb { get; set; }
         public string EmpresaCliente { get; set; }
         public string nombreCliente { get; set; }
         public string apellidosCliente { get; set; }
-        public string IdLoginWeb { get; set; }
+        public string emailUserLogin { get; set; }        
         public string telefonoCliente { get; set; }
-        public string esEmitido { get; set; }
-        public string fechaPlazoEmision { get; set; }
-        public string cot_IataPrincipal { get; set; }
-        public string tipoCotizacion { get; set; }
-        public string emailUserLogin { get; set; }
-        public int idUserLogin { get; set; }
+        public string IdMotivoNoCompro { get; set; }
+        public bool Emitido { get; set; }
+        public DateTime? fechaPlazoEmision { get; set; }
+        public string CiudadIata { get; set; }
+        public float? MontoEstimado { get; set; }
+        public string ModalidadCompra { get; set; }
+        public string tipoCotizacion { get; set; }        
+        /*public int idUserLogin { get; set; }*//*Desestimados*/
         public string accion_SF { get; set; }                
     }
 

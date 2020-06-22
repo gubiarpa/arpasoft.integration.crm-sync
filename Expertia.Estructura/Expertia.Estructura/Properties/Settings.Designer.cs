@@ -12,7 +12,7 @@ namespace Expertia.Estructura.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.8.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -30,6 +30,36 @@ namespace Expertia.Estructura.Properties {
         public string Expertia_Estructura_ws_compra_ws_compra {
             get {
                 return ((string)(this["Expertia_Estructura_ws_compra_ws_compra"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.webfarefinder.com/ws_pax_aux_test/ws_pax_paxdoc.asmx")]
+        public string Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc {
+            get {
+                return ((string)(this["Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx")]
+        public string Expertia_Estructura_ws_crm_ws_crm {
+            get {
+                return ((string)(this["Expertia_Estructura_ws_crm_ws_crm"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://webservices.webfarefinder.com/gnm/ws_pagoefectivo.asmx")]
+        public string Expertia_Estructura_ws_pagoefectivo_ws_PagoEfectivo {
+            get {
+                return ((string)(this["Expertia_Estructura_ws_pagoefectivo_ws_PagoEfectivo"]));
             }
         }
     }

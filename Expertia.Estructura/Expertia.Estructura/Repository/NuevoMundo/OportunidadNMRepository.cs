@@ -73,7 +73,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 EmergenciaReservaSeguro_NM objEmergenciaReservaSeguro_NM = null;
 
                 var oportunidadNMList = new List<OportunidadNM>();
-
+                
                 foreach (DataRow row in dt.Rows)
                 {
                     if(Cot_IdTempo != row.IntParse("IdCotSRV"))
@@ -86,27 +86,39 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                             fechaRegistro = row.StringParse("fechaRegistro"),
                             Servicio = row.StringParse("Servicio"),
                             IdCanalVenta = row.StringParse("IdCanalVenta"),
-                            metabuscador = row.StringParse("metabuscador"),
-                            CajaVuelos = (row.IntParse("CajaVuelos") > 0 ? true : false),
-                            CajaHotel = (row.IntParse("CajaHotel") > 0 ? true : false),
-                            CajaPaquetes = (row.IntParse("CajaPaquetes") > 0 ? true : false),
-                            CajaServicios = (row.IntParse("CajaServicios") > 0 ? true : false),
-                            CajaSeguro = (row.IntParse("CajaSeguro") > 0 ? true : false),
+                            metabuscador = row.StringParse("metabuscador"),                            
                             modoIngreso = row.StringParse("modoIngreso"),
                             ordenAtencion = row.StringParse("ordenAtencion"),
                             evento = row.StringParse("evento"),
                             Estado = row.StringParse("Estado"),
                             requiereFirmaCliente = row.StringParse("requiereFirmaCliente"),
-                            IdCotSRV = row.IntParse("IdCotSRV"),                           
-                            counterAsignado = row.StringParse("counterAsignado"),
+                            IdCotSRV = row.IntParse("IdCotSRV"),                                                        
+                            IdLoginWeb = row.StringParse("idLoginWeb"),
                             EmpresaCliente = row.StringParse("EmpresaCliente"),
                             nombreCliente = row.StringParse("nombreCliente"),
                             apellidosCliente = row.StringParse("apeliidosCliente"),
-                            IdLoginWeb = row.StringParse("idLoginWeb"),
+                            emailUserLogin = row.StringParse("emailUserLogin"),
                             telefonoCliente = row.StringParse("telefonoCliente"),
+                            IdMotivoNoCompro = (Convert.IsDBNull(row["IdMotivoNoCompro"]) == false ? row.StringParse("IdMotivoNoCompro") : null),
+                            Emitido = (Convert.IsDBNull(row["Emitido"]) == false ? (row.IntParse("Emitido") == 1 ? true : false) : false),                            
+                            CiudadIata = (Convert.IsDBNull(row["CiudadIata"]) == false ? row.StringParse("CiudadIata") : null),
+                            ModalidadCompra = (Convert.IsDBNull(row["ModalidadCompra"]) == false ? row.StringParse("ModalidadCompra") : null),
+                            tipoCotizacion = row.StringParse("tipoCotizacion"),
                             accion_SF = row.StringParse("accion_SF")
                         });
 
+                        if (Convert.IsDBNull(row["fechaPlazoEmision"]) == false)
+                        {
+                            oportunidadNMList[oportunidadNMList.Count - 1].fechaPlazoEmision = Convert.ToDateTime(row.StringParse("fechaPlazoEmision"));
+                        }
+                        if (Convert.IsDBNull(row["counterAsignado"]) == false)
+                        {
+                            oportunidadNMList[oportunidadNMList.Count - 1].counterAsignado = row.IntParse("counterAsignado");
+                        }                        
+                        if (Convert.IsDBNull(row["MontoEstimado"]) == false)
+                        {
+                            oportunidadNMList[oportunidadNMList.Count - 1].MontoEstimado = row.IntParse("MontoEstimado");
+                        }
                         if (Convert.IsDBNull(row["IdUsuarioSrv"]) == false)
                         {
                             oportunidadNMList[oportunidadNMList.Count - 1].IdUsuarioSrv = row.IntParse("IdUsuarioSrv");

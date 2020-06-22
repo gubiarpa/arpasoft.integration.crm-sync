@@ -558,22 +558,29 @@ namespace Expertia.Estructura.Repository.AppWebs
             string pStrIPUsuCrea, string pStrLoginUsuCrea, int pIntIdUsuWeb,
             int pIntIdDep, int pIntIdOfi, List<ArchivoPostCot> pLstArchivos, List<FilePTACotVta> pLstFilesPTA, Int16 pIntIdEstado, bool pBolCambioEstado, string pLstFechasCotVta,
             bool pBolEsAutomatico, string pBytArchivoMail, bool pBolEsCounterAdmin, Nullable<int> pIntIdUsuWebCounterCrea, Nullable<int> pIntIdOfiCounterCrea,
-            Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile)
+            Nullable<int> pIntIdDepCounterCrea, Nullable<bool> pBolEsUrgenteEmision, Nullable<DateTime> pDatFecPlazoEmision, Nullable<Int16> pIntIdMotivoNoCompro, string pStrOtroMotivoNoCompro, Nullable<Double> pDblMontoEstimadoFile, int OpcionalInsertPost = 1)
         {
 
             int intIdPost = 0;
+            OracleTransaction objTx = null; OracleConnection objCnx = null;
             try
             {
-                UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs;
-                OracleTransaction objTx = null; OracleConnection objCnx = null;
+                UnidadNegocioKeys? unidadNegocio = UnidadNegocioKeys.AppWebs;                
                 ExecuteConexionBegin(unidadNegocio.ToConnectionKey(), ref objTx, ref objCnx);
                         
-                intIdPost = _Insert_Post_Cot(pIntIdCot, pStrTipoPost, pStrTextoPost, pStrIPUsuCrea,
-                                        pStrLoginUsuCrea, pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pLstArchivos, pLstFilesPTA, pIntIdEstado,
-                                        pBolCambioEstado, pLstFechasCotVta, pBolEsAutomatico, pBytArchivoMail, pBolEsCounterAdmin,
-                                        pIntIdUsuWebCounterCrea, pIntIdOfiCounterCrea, pIntIdDepCounterCrea, pBolEsUrgenteEmision,
-                                        pDatFecPlazoEmision, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, pDblMontoEstimadoFile, objTx);
-                        
+                if(OpcionalInsertPost == 1)
+                {
+                    intIdPost = _Insert_Post_Cot(pIntIdCot, pStrTipoPost, pStrTextoPost, pStrIPUsuCrea,
+                                            pStrLoginUsuCrea, pIntIdUsuWeb, pIntIdDep, pIntIdOfi, pLstArchivos, pLstFilesPTA, pIntIdEstado,
+                                            pBolCambioEstado, pLstFechasCotVta, pBolEsAutomatico, pBytArchivoMail, pBolEsCounterAdmin,
+                                            pIntIdUsuWebCounterCrea, pIntIdOfiCounterCrea, pIntIdDepCounterCrea, pBolEsUrgenteEmision,
+                                            pDatFecPlazoEmision, pIntIdMotivoNoCompro, pStrOtroMotivoNoCompro, pDblMontoEstimadoFile, objTx);
+                }
+                else
+                {
+                    _Update_UrgenteHoraEmision(pIntIdCot, pBolEsUrgenteEmision, pDatFecPlazoEmision, objTx);
+                }
+
                 if (pBolCambioEstado)
                 {
                     if (pBolEsCounterAdmin)
@@ -654,6 +661,8 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
             catch(Exception ex)
             {
+                objTx.Rollback();
+                objTx.Dispose();                
                 throw new Exception(ex.ToString());
             }
             return intIdPost;
@@ -731,6 +740,115 @@ namespace Expertia.Estructura.Repository.AppWebs
             }
         }
 
+        private void _Update_UrgenteHoraEmision(int pIntIdCot, bool? pBolEsUrgenteEmision, DateTime? pDatFecPlazoEmision, OracleTransaction pObjTx)
+        {
+            try
+            {
+                #region Parameter
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                if (pBolEsUrgenteEmision.HasValue)
+                {
+                    if (pBolEsUrgenteEmision.Value)
+                    {
+                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "1", ParameterDirection.Input, 1);
+                    }
+                    else
+                    {
+                        AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, "0", ParameterDirection.Input, 1);
+                    }
+
+                }
+                else
+                {
+                    AddParameter("pChrEsUrgenteEmision_in", OracleDbType.Char, null, ParameterDirection.Input, 1);
+                }
+
+                if (pDatFecPlazoEmision.HasValue)
+                {
+                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Date, pDatFecPlazoEmision.Value, ParameterDirection.Input);
+                }
+                else
+                {
+                    AddParameter("pDatFecPlazoEmision_in", OracleDbType.Date, null, ParameterDirection.Input);
+                }
+                #endregion
+
+                #region Invoke
+                ExecuteStorePBeginCommit(StoredProcedureName.AW_Update_UrgenteHoraEmision, pObjTx, null, false);                
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        public void _Update_EsEmitido(int pIntIdCot, bool pBolEsEmitido)
+        {
+            try
+            {
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                if (pBolEsEmitido)
+                    AddParameter("pChrEsEmitido_in", OracleDbType.Char, "1", ParameterDirection.Input, 1);
+                else
+                    AddParameter("pChrEsEmitido_in", OracleDbType.Char, "0", ParameterDirection.Input, 1);
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_EsEmitidoCot, true);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }         
+        }
+
+        public bool _Update_CounterAdministrativo(int pIntIdCot, Nullable<int> pIntIdUsuWebCA)
+        {            
+            bool bolAsignado = false;
+            try
+            {
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                AddParameter("pNumIdUsuWebCA_in", OracleDbType.Int32, pIntIdUsuWebCA, ParameterDirection.Input);
+                AddParameter("pChrAsignado_out", OracleDbType.Char, null, ParameterDirection.Output, 1);
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_CounterAdministrativo, true);
+                #endregion
+                
+                string strAsignado = Convert.ToString(GetOutParameter("pChrAsignado_out"));
+                if (strAsignado == "1")
+                    bolAsignado = true;
+                     
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            return bolAsignado;
+        }
+
+        public void _Update_Requiere_FirmaCliente_Cot(int pIntIdCot, bool pBolRequiereFirma)
+        {
+            try
+            {                       
+                AddParameter("pNumIdCot_in", OracleDbType.Int32, pIntIdCot, ParameterDirection.Input);
+                if (pBolRequiereFirma)
+                    AddParameter("pChrRequiereFirma_in", OracleDbType.Char, "1", ParameterDirection.Input, 1);
+                else
+                    AddParameter("pChrRequiereFirma_in", OracleDbType.Char, "0", ParameterDirection.Input, 1);
+
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Update_FirmaClienteCot, true);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }                 
+        }
+
+
         #region Auxiliares
         private CotizacionVta FillDtsCotizacion(DataTable dt = null)
         {
@@ -764,8 +882,8 @@ namespace Expertia.Estructura.Repository.AppWebs
                             cotizacionVta.IdWeb = Convert.ToInt32(row["WEBS_CID"]);
                             cotizacionVta.IdLang = Convert.ToInt32(row["LANG_CID"]);
                             cotizacionVta.CantVecesFact = Convert.ToInt16(row["CANT_FACT"]);
-                            cotizacionVta.CodigoIATAPrincipal = (row["COT_IATA_PRINCIPAL"] == null ? string.Empty : Convert.ToString(row["COT_IATA_PRINCIPAL"]));                        
-                            if (row["EMPCOT_ID"] == null)
+                            cotizacionVta.CodigoIATAPrincipal = (Convert.IsDBNull(row["COT_IATA_PRINCIPAL"]) == true ? string.Empty : Convert.ToString(row["COT_IATA_PRINCIPAL"]));                        
+                            if (Convert.IsDBNull(row["EMPCOT_ID"]) == true)
                             {
                                 cotizacionVta.IdEmpCot = null;
                                 cotizacionVta.RazSocEmpCot = string.Empty;
@@ -775,103 +893,102 @@ namespace Expertia.Estructura.Repository.AppWebs
                                 //cotizacionVta.IdEmpCot = Convert.ToInt32(row["EMPCOT_ID"]);
                                 cotizacionVta.RazSocEmpCot = Convert.ToString(row["EMPCOT_RAZ_SOC"]);
                             }
-                            if (row["COT_DESTINOS_PREF"] != null)
-                                cotizacionVta.DestinosPref = Convert.ToString(row["COT_DESTINOS_PREF"]);
-                            //if (row["COT_FEC_SAL"] != null)
-                                //cotizacionVta.FecSalida = (DateTime)row["COT_FEC_SAL"];
-                           // if (row["COT_FEC_REG"] != null)
-                                //cotizacionVta.FecRegreso = (DateTime)row["COT_FEC_REG"];
-                            //if (row["COT_CANT_ADT"] != null)
-                            //    cotizacionVta.CantPaxAdulto = Convert.ToInt16(row["COT_CANT_ADT"]);
-                            //if (row["COT_CANT_CHD"] != null)
-                            //{
-                            //    cotizacionVta.CantPaxNiños = Convert.ToInt16(row["COT_CANT_CHD"]);
-                            //}                                
-                            //cotizacionVta.EmailUsuWebCrea = Convert.ToString(row["PER_EMAIL"]);
-                            //if (row["VUE_RESERVA_ID"] != null)
-                            //    cotizacionVta.IdReservaVuelos = Convert.ToInt32(row["VUE_RESERVA_ID"]);
-                            //if (row["PAQ_RESERVA_SUC"] != null)
-                            //    cotizacionVta.IdSucursalReservaPaquete = Convert.ToInt16(row["PAQ_RESERVA_SUC"]);
-                            //if (row["PAQ_RESERVA_ID"] != null)
-                            //    cotizacionVta.IdReservaPaquete = Convert.ToInt32(row["PAQ_RESERVA_ID"]);
-                            //if (row["PAQ_RESERVA_TIPO"] != null)
-                            //    cotizacionVta.TipoPaquete = Convert.ToString(row["PAQ_RESERVA_TIPO"]);
-                            //if (row["COT_FIRMA_CLI"] != null)
-                            //{
-                            //    if (Convert.ToString(row["COT_FIRMA_CLI"]) == "1")
-                            //        cotizacionVta.RequiereFirmaCliente = true;
-                            //    else
-                            //        cotizacionVta.RequiereFirmaCliente = false;
-                            //}
-                            //if (row["RES_VUE_PNR_MANUAL"] != null)
-                            //    cotizacionVta.CodReservaVueManual = Convert.ToString(row["RES_VUE_PNR_MANUAL"]);
-                            //if (row["RES_VUE_MONTO_MANUAL"] != null)
-                            //    cotizacionVta.MontoReservaVueManual = Convert.ToDouble(row["RES_VUE_MONTO_MANUAL"]);
-                            //if (row["VEND_ID"] != null)
-                            //    cotizacionVta.IdVendedorPTACrea = Convert.ToString(row["VEND_ID"]);
-                            //if (row["ID_MOD_COMPRA"] != null)
-                            //    cotizacionVta.IdModalidadCompra = Convert.ToInt16(row["ID_MOD_COMPRA"]);
-                            //if (row["ES_URGENTE"] != null)
-                            //{
-                            //    if (row["ES_URGENTE"].ToString() == "1")
-                            //        cotizacionVta.EsUrgenteEmision = true;
-                            //    else
-                            //        cotizacionVta.EsUrgenteEmision = false;
-                            //}
-                            //if (row["FECHA_PLAZO_EMISION"] != null)
-                            //    cotizacionVta.FechaPlazoEmision = (DateTime)row["FECHA_PLAZO_EMISION"];
-                            //if (row["USUWEB_ID_CA"] != null)
-                            //    cotizacionVta.IdUsuWebCA = Convert.ToInt32(row["USUWEB_ID_CA"]);
-                            //if (row["USUWEB_LOGIN_CA"] != null)
-                            //    cotizacionVta.LoginUsuWebCA = Convert.ToString(row["USUWEB_LOGIN_CA"]);
-                            //if (row["ES_EMITIDO"] != null)
-                            //{
-                            //    if (row["ES_EMITIDO"].ToString() == "1")
-                            //        cotizacionVta.EsEmitido = true;
-                            //}
-                            //if (row["COMPRA_ID"] != null)
-                            //    cotizacionVta.IdCompra = Convert.ToInt32(row["COMPRA_ID"]);
-                            //if (row["AUTO_RES_ID"] != null)
-                            //    cotizacionVta.IdReservaAuto = Convert.ToInt32(row["AUTO_RES_ID"]);
-                            //if (row["SEGURO_RES_ID"] != null)
-                            //    cotizacionVta.IdReservaSeguro = Convert.ToInt32(row["SEGURO_RES_ID"]);
-                            //if (row["NOM_GRUPO"] != null)
-                            //    cotizacionVta.NomGrupo = Convert.ToString(row["NOM_GRUPO"]);
-                            //if (row["MONTO_ESTIMADO_FILE"] != null)
-                            //    cotizacionVta.MontoEstimadoFile = Convert.ToDouble(row["MONTO_ESTIMADO_FILE"]);
+                            if (Convert.IsDBNull(row["COT_DESTINOS_PREF"]) == false)
+                                cotizacionVta.DestinosPref = Convert.ToString(row["COT_DESTINOS_PREF"]);                            
+                            if (Convert.IsDBNull(row["COT_FEC_SAL"]) == false)
+                                cotizacionVta.FecSalida = (DateTime)row["COT_FEC_SAL"];
+                            if (Convert.IsDBNull(row["COT_FEC_REG"]) == false)
+                                cotizacionVta.FecRegreso = (DateTime)row["COT_FEC_REG"];
+                            if (Convert.IsDBNull(row["COT_CANT_ADT"]) == false)
+                                cotizacionVta.CantPaxAdulto = Convert.ToInt16(row["COT_CANT_ADT"]);
+                            if (Convert.IsDBNull(row["COT_CANT_CHD"]) == false)                            
+                                cotizacionVta.CantPaxNiños = Convert.ToInt16(row["COT_CANT_CHD"]);
+                            if (Convert.IsDBNull(row["PER_EMAIL"]) == false)
+                                cotizacionVta.EmailUsuWebCrea = Convert.ToString(row["PER_EMAIL"]);
+                            if (Convert.IsDBNull(row["VUE_RESERVA_ID"]) == false)
+                                cotizacionVta.IdReservaVuelos = Convert.ToInt32(row["VUE_RESERVA_ID"]);
+                            if (Convert.IsDBNull(row["PAQ_RESERVA_SUC"]) == false)
+                                cotizacionVta.IdSucursalReservaPaquete = Convert.ToInt16(row["PAQ_RESERVA_SUC"]);
+                            if (Convert.IsDBNull(row["PAQ_RESERVA_ID"]) == false)
+                                cotizacionVta.IdReservaPaquete = Convert.ToInt32(row["PAQ_RESERVA_ID"]);
+                            if (Convert.IsDBNull(row["PAQ_RESERVA_TIPO"]) == false)
+                                cotizacionVta.TipoPaquete = Convert.ToString(row["PAQ_RESERVA_TIPO"]);
+                            if (Convert.IsDBNull(row["COT_FIRMA_CLI"]) == false)
+                            {
+                                if (Convert.ToString(row["COT_FIRMA_CLI"]) == "1")
+                                    cotizacionVta.RequiereFirmaCliente = true;
+                                else
+                                    cotizacionVta.RequiereFirmaCliente = false;
+                            }
+                            if (Convert.IsDBNull(row["RES_VUE_PNR_MANUAL"]) == false)
+                                cotizacionVta.CodReservaVueManual = Convert.ToString(row["RES_VUE_PNR_MANUAL"]);
+                            if (Convert.IsDBNull(row["RES_VUE_MONTO_MANUAL"]) == false)
+                                cotizacionVta.MontoReservaVueManual = Convert.ToDouble(row["RES_VUE_MONTO_MANUAL"]);
+                            if (Convert.IsDBNull(row["VEND_ID"]) == false)
+                                cotizacionVta.IdVendedorPTACrea = Convert.ToString(row["VEND_ID"]);
+                            if (Convert.IsDBNull(row["ID_MOD_COMPRA"]) == false)
+                                cotizacionVta.IdModalidadCompra = Convert.ToInt16(row["ID_MOD_COMPRA"]);
+                            if (Convert.IsDBNull(row["ES_URGENTE"]) == false)
+                            {
+                                if (row["ES_URGENTE"].ToString() == "1")
+                                    cotizacionVta.EsUrgenteEmision = true;
+                                else
+                                    cotizacionVta.EsUrgenteEmision = false;
+                            }
+                            if (Convert.IsDBNull(row["FECHA_PLAZO_EMISION"]) == false)
+                                cotizacionVta.FechaPlazoEmision = (DateTime)row["FECHA_PLAZO_EMISION"];
+                            if (Convert.IsDBNull(row["USUWEB_ID_CA"]) == false)
+                                cotizacionVta.IdUsuWebCA = Convert.ToInt32(row["USUWEB_ID_CA"]);
+                            if (Convert.IsDBNull(row["USUWEB_LOGIN_CA"]) == false)
+                                cotizacionVta.LoginUsuWebCA = Convert.ToString(row["USUWEB_LOGIN_CA"]);
+                            if (Convert.IsDBNull(row["ES_EMITIDO"]) == false)
+                            {
+                                if (row["ES_EMITIDO"].ToString() == "1")
+                                    cotizacionVta.EsEmitido = true;
+                            }
+                            if (Convert.IsDBNull(row["COMPRA_ID"]) == false)
+                                cotizacionVta.IdCompra = Convert.ToInt32(row["COMPRA_ID"]);
+                            if (Convert.IsDBNull(row["AUTO_RES_ID"]) == false)
+                                cotizacionVta.IdReservaAuto = Convert.ToInt32(row["AUTO_RES_ID"]);
+                            if (Convert.IsDBNull(row["SEGURO_RES_ID"]) == false)
+                                cotizacionVta.IdReservaSeguro = Convert.ToInt32(row["SEGURO_RES_ID"]);
+                            if (Convert.IsDBNull(row["NOM_GRUPO"]) == false)
+                                cotizacionVta.NomGrupo = Convert.ToString(row["NOM_GRUPO"]);
+                            if (Convert.IsDBNull(row["MONTO_ESTIMADO_FILE"]) == false)
+                                cotizacionVta.MontoEstimadoFile = Convert.ToDouble(row["MONTO_ESTIMADO_FILE"]);
 
-                            //if (row["HOTEL_RES_ID"] != null)
-                            //    cotizacionVta.IdReservaHotel = Convert.ToInt32(row["HOTEL_RES_ID"]);
+                            if (Convert.IsDBNull(row["HOTEL_RES_ID"]) == false)
+                                cotizacionVta.IdReservaHotel = Convert.ToInt32(row["HOTEL_RES_ID"]);
 
-                            //if (row["ES_AEREO"] != null)
-                            //    cotizacionVta.EsAereo = Convert.ToInt32(row["ES_AEREO"]);
-                            //if (row["ID_OATENCION"] != null)
-                            //    cotizacionVta.IdOAtencion = Convert.ToInt32(row["ID_OATENCION"]);
-                            //if (row["ID_EVENTO"] != null)
-                            //    cotizacionVta.IdEvento = Convert.ToInt32(row["ID_EVENTO"]);
-                            //if (row["IDUSERLOGIN"] != null)
-                            //{
-                            //    if (row["CLICOT_EMAIL"] != null)
-                            //        cotizacionVta.CliCod_Mail = Convert.ToString(row["CLICOT_EMAIL"]);
-                            //}
-                            //if (row["ID_RESERVAMT"] != null)
-                            //    cotizacionVta.IdReserva2MT = Convert.ToInt32(row["ID_RESERVAMT"]);                           
-                            //if (row["ES_PAQ_DINAMIC"] != null)
-                            //    cotizacionVta.EsPaqDinamico = Convert.ToString(row["ES_PAQ_DINAMIC"]);
-                            //if (row["HOTEL_RES_ID"] != null)
-                            //    cotizacionVta.HotelResId = Convert.ToInt32(row["HOTEL_RES_ID"]);
-                            //if (row["METABUSCADOR"] != null)
-                            //    cotizacionVta.Metabuscador = Convert.ToString(row["METABUSCADOR"]);
+                            if (Convert.IsDBNull(row["ES_AEREO"]) == false)
+                                cotizacionVta.EsAereo = Convert.ToInt32(row["ES_AEREO"]);
+                            if (Convert.IsDBNull(row["ID_OATENCION"]) == false)
+                                cotizacionVta.IdOAtencion = Convert.ToInt32(row["ID_OATENCION"]);
+                            if (Convert.IsDBNull(row["ID_EVENTO"]) == false)
+                                cotizacionVta.IdEvento = Convert.ToInt32(row["ID_EVENTO"]);
+                            if (Convert.IsDBNull(row["IDUSERLOGIN"]) == false)
+                            {
+                                if (Convert.IsDBNull(row["CLICOT_EMAIL"]) == false)
+                                    cotizacionVta.CliCod_Mail = Convert.ToString(row["CLICOT_EMAIL"]);
+                            }
+                            if (Convert.IsDBNull(row["ID_RESERVAMT"]) == false)
+                                cotizacionVta.IdReserva2MT = Convert.ToInt32(row["ID_RESERVAMT"]);
+                            if (Convert.IsDBNull(row["ES_PAQ_DINAMIC"]) == false)
+                                cotizacionVta.EsPaqDinamico = Convert.ToString(row["ES_PAQ_DINAMIC"]);
+                            if (Convert.IsDBNull(row["HOTEL_RES_ID"]) == false)
+                                cotizacionVta.HotelResId = Convert.ToInt32(row["HOTEL_RES_ID"]);
+                            if (Convert.IsDBNull(row["METABUSCADOR"]) == false)
+                                cotizacionVta.Metabuscador = Convert.ToString(row["METABUSCADOR"]);
                         }
                         #endregion                             
                     }
                 }
                 return cotizacionVta;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
         }
         #endregion

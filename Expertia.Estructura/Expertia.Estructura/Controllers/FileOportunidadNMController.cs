@@ -35,13 +35,15 @@ namespace Expertia.Estructura.Controllers
         private ICotizacionSRV_Repository _CotizacionSRV_Repository;
         private IFileSRVRetailRepository _FileSRVRetailRepository;
         private IPedidoRepository _PedidoRetail_Repository;
+        private IOportunidadVentaNMRepository _oportunidadVentaNMRepository;
         private FileOportunidadNMRepository _fileOportunidadNMRepository;
+        private ISucursalesNMRepository _SucursalesNMRepository;
         #endregion
 
         protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
-        
+
         #region PublicMethods 
-        /*CRMAFO06*/
+        /*CRMAFO06 : Envio de datos de File y actualización*/
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(UnidadNegocio unidadNegocio)
         {
@@ -67,75 +69,88 @@ namespace Expertia.Estructura.Controllers
                 var crmServer = authSf[OutParameter.SF_UrlAuth].ToString();
 
                 /// preparación de files para envio a Salesforce
-                var filesAsociadosNMSF = new List<object>();
+                var filesAsociadosNMSF = new List<object>();               
+                int _positionFor = 0;
+                int _totalRegistrosList = ListFilesAsociadosNM.Count() - 1;
+                
                 foreach (var fileAsociado in ListFilesAsociadosNM)
                 {
                     filesAsociadosNMSF.Add(fileAsociado.ToSalesforceEntity());
-                }
-
-                try
-                {
-                    /// Envío de CuentaNM a Salesforce                    
-                    objEnvio = new { listadatosOportunidad = filesAsociadosNMSF };
-                    QuickLog(objEnvio, "body_request.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
-
-                    var responseFileAsociadoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileAsociadoOPNMMethod, Method.POST, objEnvio, true, token);
-                    if (responseFileAsociadoNM.StatusCode.Equals(HttpStatusCode.OK))
+                    if (!(_positionFor < _totalRegistrosList && fileAsociado.accion_SF == ListFilesAsociadosNM.ElementAt(_positionFor + 1).accion_SF))
                     {
-                        dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseFileAsociadoNM.Content);
-                        QuickLog(jsonResponse, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
-
-                        SFResponse = jsonResponse["respuestas"];                        
-                        ListRptaFiles_Fail = new List<RptaFileNM_SF>();
-                        foreach (var detalleHotelNM in jsonResponse["respuestas"])
+                        /*Procesamos la Data*/
+                        try
                         {
-                            try
+                            /// Envío de Files a Salesforce                    
+                            objEnvio = new { listadatosOportunidad = filesAsociadosNMSF };
+                            QuickLog(objEnvio, "body_request.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+
+                            var responseFileAsociadoNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.FileAsociadoOPNMMethod, Method.POST, objEnvio, true, token);
+                            if (responseFileAsociadoNM.StatusCode.Equals(HttpStatusCode.OK))
                             {
-                                #region Deserialize
-                                _rptaFileNM = new RptaFileNM_SF();
+                                dynamic jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseFileAsociadoNM.Content);
+                                QuickLog(jsonResponse, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
 
-                                _rptaFileNM.CodigoError = "OK";
-                                _rptaFileNM.MensajeError = "TST";
-                                _rptaFileNM.idOportunidad_SF = "006R000000WAUr4IAH";                                
-                                _rptaFileNM.Identificador_NM = "1";
-
-                                _rptaFileNM.CodigoError = detalleHotelNM[OutParameter.SF_Codigo];
-                                _rptaFileNM.MensajeError = detalleHotelNM[OutParameter.SF_Mensaje];
-                                _rptaFileNM.idOportunidad_SF = detalleHotelNM[OutParameter.SF_IdOportunidad2];                                
-                                _rptaFileNM.Identificador_NM = detalleHotelNM[OutParameter.SF_IdentificadorNM];
-                                #endregion
-
-                                #region ReturnToDB
-                                var updOperation = _fileOportunidadNMRepository.Update(_rptaFileNM);
-
-                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                SFResponse = jsonResponse["respuestas"];
+                                ListRptaFiles_Fail = new List<RptaFileNM_SF>();
+                                foreach (var detalleHotelNM in jsonResponse["respuestas"])
                                 {
-                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaFileNM.Identificador_NM.ToString() + "||||";
-                                    ListRptaFiles_Fail.Add(_rptaFileNM);
-                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                    try
+                                    {
+                                        #region Deserialize
+                                        _rptaFileNM = new RptaFileNM_SF();
+
+                                        _rptaFileNM.CodigoError = "OK";
+                                        _rptaFileNM.MensajeError = "TST";
+                                        _rptaFileNM.idOportunidad_SF = "006R000000WAUr4IAH";
+                                        _rptaFileNM.Identificador_NM = "1";
+
+                                        _rptaFileNM.CodigoError = detalleHotelNM[OutParameter.SF_Codigo];
+                                        _rptaFileNM.MensajeError = detalleHotelNM[OutParameter.SF_Mensaje];
+                                        _rptaFileNM.idOportunidad_SF = detalleHotelNM[OutParameter.SF_IdOportunidad2];
+                                        _rptaFileNM.Identificador_NM = detalleHotelNM[OutParameter.SF_IdentificadorNM];
+                                        #endregion
+
+                                        #region ReturnToDB
+                                        var updOperation = _fileOportunidadNMRepository.Update(_rptaFileNM);
+
+                                        if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                        {
+                                            error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaFileNM.Identificador_NM.ToString() + "||||";
+                                            ListRptaFiles_Fail.Add(_rptaFileNM);
+                                            /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                        }
+                                        #endregion
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                        ListRptaFiles_Fail.Add(_rptaFileNM);
+                                        /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                    }
                                 }
-                                #endregion
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
-                                ListRptaFiles_Fail.Add(_rptaFileNM);
-                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                error = responseFileAsociadoNM.StatusCode.ToString();
+                                if (responseFileAsociadoNM != null && responseFileAsociadoNM.Content != null)
+                                {
+                                    QuickLog(responseFileAsociadoNM.Content, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        error = responseFileAsociadoNM.StatusCode.ToString();
-                        if (responseFileAsociadoNM != null && responseFileAsociadoNM.Content != null)
+                        catch (Exception ex)
                         {
-                            QuickLog(responseFileAsociadoNM.Content, "body_response.json", "FileOportunidadNM", previousClear: true); /// ♫ Trace
+                            error = error + ex.Message + "||||";
+                        }
+
+                        if (_positionFor != _totalRegistrosList)
+                        {
+                            filesAsociadosNMSF = new List<object>();
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    error = ex.Message;
+
+                    _positionFor = _positionFor + 1;
                 }
 
                 return Ok(true);
@@ -163,38 +178,39 @@ namespace Expertia.Estructura.Controllers
         public IHttpActionResult Asociate(Oportunidad_FileNMRQ FileAssociate)
         {
             AssociateNMFileRS _responseAsociate = new AssociateNMFileRS();
-            CotizacionVta DtsCotizacionVta = new CotizacionVta();
+            CotizacionVta DtsCotizacionVta = null;
             UsuarioLogin DtsUsuarioLogin = null;                         
             
             _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
             _FileSRVRetailRepository = new FileSRVRetailRepository();
             _PedidoRetail_Repository = new Pedido_AW_Repository();
-
+                        
             List<FilePTACotVta> lstFilesPTACotVta = null;
             List<FilePTACotVta> lstFilesPTAOld = null;
+            List<FileNMRS> lstFilesResponse = null;
             List<FileSRV> ListFile_Info = null;
 
             ArrayList lstFechasCotVta = new ArrayList(); /*Duda*/
 
-            /*Se realizara el cambio de Estado a Facturado*/
+            /*Se realizara el cambio de Estado a Facturado*/            
             Int16 EstadoSeleccionado = (Int16)ENUM_ESTADOS_COT_VTA.Facturado;
-            bool bolCambioEstado = true;
+            bool bolCambioEstado = false;
 
             /*Datos que se quitaran, solo lo agregamos para tener una mejor vision*/                                    
             string ErrorAsociate = string.Empty;
             try
-            {
+            {                
                 /*Validaciones*/
-                validacionAssociateNM(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info);
+                validacionAssociateNM(ref FileAssociate, ref _responseAsociate, ref DtsUsuarioLogin, ref ListFile_Info, ref DtsCotizacionVta);
                 if (string.IsNullOrEmpty(_responseAsociate.codigo) == false) return Ok(new { respuesta = _responseAsociate });
 
                 if (FileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
                 {   
-                    /*Obtenemos los datos del SRV, etc*/
-                    DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(FileAssociate.idCotSRV);
-
                     lstFilesPTACotVta = new List<FilePTACotVta>();
+                    lstFilesResponse = new List<FileNMRS>();
+
                     FilePTACotVta _FilePTACotVta = null;
+                    FileNMRS _FileResponse = null;
                     bool UpdateResponse = true;
 
                     foreach (FileSRV fileSRV in ListFile_Info)
@@ -208,6 +224,13 @@ namespace Expertia.Estructura.Controllers
                             _FilePTACotVta.ImporteFacturado = fileSRV.ImporteFact;
                             _FilePTACotVta.Moneda = fileSRV.Moneda;
                             lstFilesPTACotVta.Add(_FilePTACotVta);
+
+                            _FileResponse = new FileNMRS();                            
+                            _FileResponse.idFilePTA = fileSRV.IdFilePTA;
+                            _FileResponse.sucursal = Convert.ToInt16(fileSRV.Sucursal);
+                            _FileResponse.importe = fileSRV.ImporteFact.ToString();
+                            _FileResponse.fecha = String.Format("{0:yyyy-MM-dd}", fileSRV.Fecha);
+                            lstFilesResponse.Add(_FileResponse);
                         }
                     }
                                        
@@ -221,7 +244,7 @@ namespace Expertia.Estructura.Controllers
                         EstadoSeleccionado, bolCambioEstado, null, false, null, DtsUsuarioLogin.EsCounterAdminSRV,
                         (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdUsuWeb : DtsUsuarioLogin.IdUsuario),
                         (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdOfi : DtsUsuarioLogin.IdOfi),
-                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null);
+                        (DtsUsuarioLogin.EsCounterAdminSRV == true ? DtsCotizacionVta.IdDep : DtsUsuarioLogin.IdDep), null, null, null, null, null,0);
                   
                     bool bolGeneroRC_OK = false;
                     try
@@ -464,7 +487,7 @@ namespace Expertia.Estructura.Controllers
                         Nullable<bool> bolUATPExoneradoFirmaCliente = default(Boolean?);
 
                         /*Si en el SRV es verdadero, en PTA es falso y viceversa*/
-                        bolUATPExoneradoFirmaCliente = true;
+                        /*bolUATPExoneradoFirmaCliente = true;
                         string hdMuestraModCompra = "1";
                         bool rbModCompraPresencial = false; bool rbModCompraNoPresencial = true;
 
@@ -477,7 +500,7 @@ namespace Expertia.Estructura.Controllers
                                 intIdModalidadCompra = 0;
                             if (intIdModalidadCompra >= 0)
                                 _CotizacionSRV_Repository._Update_ModalidadCompra(DtsCotizacionVta.IdCot, intIdModalidadCompra);
-                        }
+                        }*/
 
                         if (EstadoSeleccionado == (short)ENUM_ESTADOS_COT_VTA.Facturado || DtsCotizacionVta.IdEstado == (short)ENUM_ESTADOS_COT_VTA.Facturado)
                         {                            
@@ -576,24 +599,27 @@ namespace Expertia.Estructura.Controllers
                     }
                                         
                     _responseAsociate.codigo = "OK";
-                    _responseAsociate.mensaje = "Se asoció correctamente el file al SRV " + FileAssociate.idCotSRV.ToString();
+                    _responseAsociate.mensaje = "Se asoció correctamente el/los file(s) al SRV " + FileAssociate.idCotSRV.ToString();
+                    _responseAsociate.lstFiles = lstFilesResponse;
                 }
                 else if (FileAssociate.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
-                {
-                    string _MsgDeleteAsocite = string.Empty;string _MsgDeleteAsociteFN = string.Empty;
+                {                    
+                    string _MsgDeleteAsociteFN = string.Empty, _MsgDeleteAsocite = string.Empty, strFilesDesasociados = string.Empty;
                     foreach(FileSRV _fileDS in ListFile_Info)
                     {
                         _FileSRVRetailRepository._Delete_Cot_File(FileAssociate.idCotSRV, _fileDS.IdFilePTA);
 
-                        _MsgDeleteAsocite = "Usuario " + DtsUsuarioLogin.LoginUsuario + " ha eliminado el File " + _fileDS.IdFilePTA.ToString() + " del SRV " + FileAssociate.idCotSRV.ToString() + ".";
-                        _MsgDeleteAsociteFN = _MsgDeleteAsociteFN + _MsgDeleteAsocite;
-
+                        strFilesDesasociados = (string.IsNullOrEmpty(strFilesDesasociados) ? "el file " : strFilesDesasociados.Replace("el file ", "los files ")) + _fileDS.IdFilePTA.ToString() + (_fileDS.IdFilePTA == ListFile_Info[ListFile_Info.Count - 1].IdFilePTA ? "" : ", ");
+                        _MsgDeleteAsocite = "El usuario " + DtsUsuarioLogin.LoginUsuario + " ha desasociado el File " + _fileDS.IdFilePTA.ToString() + " del SRV " + FileAssociate.idCotSRV.ToString() + ".";
+                        
                         _FileSRVRetailRepository._Insert(DtsUsuarioLogin.IdUsuario, Constantes_FileRetail.PAGE_DESASOCIARSRV,
                              _MsgDeleteAsocite,1, Webs_Cid.ID_WEB_WEBFAREFINDER, 
                              Constantes_FileRetail.PAGE_DESASOCIARSRV + "/PKG_COTIZACION_VTA_WFF/SP_DEL_COTIZACION_FILE", 
                              "127.0.0.0");
                     }
-                                        
+                    _MsgDeleteAsociteFN = (string.IsNullOrEmpty(strFilesDesasociados) == false ? ("El usuario " + DtsUsuarioLogin.LoginUsuario + " ha desasociado " + strFilesDesasociados + " del SRV " + FileAssociate.idCotSRV.ToString() + ".") : _MsgDeleteAsociteFN);
+
+                    _responseAsociate.lstFiles = null;
                     _responseAsociate.mensaje = _MsgDeleteAsociteFN;
                     _responseAsociate.codigo = "OK";                    
                 }
@@ -602,7 +628,7 @@ namespace Expertia.Estructura.Controllers
             }
             catch (Exception ex)
             {
-                ErrorAsociate = ex.Message;
+                ErrorAsociate = ex.Message;              
                 return InternalServerError(ex);
             }
             finally
@@ -622,8 +648,10 @@ namespace Expertia.Estructura.Controllers
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);
-            _fileOportunidadNMRepository = new FileOportunidadNMRepository(unidadNegocioKey);           
-            _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository();
+            _fileOportunidadNMRepository = new FileOportunidadNMRepository(unidadNegocioKey);
+            _oportunidadVentaNMRepository = new OportunidadVentaNMRepository(unidadNegocioKey);
+            _CotizacionSRV_Repository = new CotizacionSRV_AW_Repository(unidadNegocioKey);
+            _SucursalesNMRepository = new SucursalesNMRepository(UnidadNegocioKeys.NuevoMundo);
             _datosUsuario = new DatosUsuario(unidadNegocioKey);
             return unidadNegocioKey;
 
@@ -1109,103 +1137,192 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
-        private void validacionAssociateNM(ref Oportunidad_FileNMRQ _fileAssociate, ref AssociateNMFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV)
+        private void validacionAssociateNM(ref Oportunidad_FileNMRQ _fileAssociate, ref AssociateNMFileRS _responseFile, ref UsuarioLogin UserLogin, ref List<FileSRV> ListFile_InfoSRV, ref CotizacionVta _DtsCotizacionVta)
         {
-            string mensajeError = string.Empty;
+            string mensajeError = string.Empty, strIdVendedor = string.Empty;
             bool bolEjecutarCarga = true;
+            bool bolExitoValSucursal = true;
 
             if (_fileAssociate == null)
             {
-                mensajeError += "Envie correctamente los parametros de entrada - RQ Nulo|";
+                cargarError(ref _responseFile, "Envie correctamente los parametros de entrada - RQ Nulo|");
+                return;                
             }
             if (string.IsNullOrEmpty(_fileAssociate.accion_SF) == true || ((_fileAssociate.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE || _fileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)) == false)
             {
                 mensajeError += "Envie la accion correctamente para realizar el proceso de la lista de files [A-D]|";                
-            }            
-            if (_fileAssociate.idCotSRV <= 0)
-            {
-                mensajeError += "Envie el codigo de SRV|";
             }
             if (_fileAssociate.idoportunidad_SF == null)
             {
                 mensajeError += "Envie el codigo de Oportunidad|";
             }
-
+            if (_fileAssociate.idCotSRV <= 0)
+            {
+                mensajeError += "Envie el codigo de SRV|";
+            }
+            else {
+                /*Obtenemos los datos del SRV, etc*/
+                _DtsCotizacionVta = _CotizacionSRV_Repository.Get_Datos_CotizacionVta(_fileAssociate.idCotSRV);
+                if(!(_DtsCotizacionVta != null && _DtsCotizacionVta.IdCot > 0))
+                {
+                    mensajeError += "No existe el codigo de SRV de lado de Expertia|";
+                }
+                else if(_DtsCotizacionVta.IdEstado != (Int16)ENUM_ESTADOS_COT_VTA.Facturado)
+                {
+                    mensajeError += "El estado de la cotizacion debe ser facturado|";
+                }
+            }
+            if (_fileAssociate.idUsuario <= 0)
+            {
+                mensajeError += "Envie el ID del Usuario correctamente|";
+            }
             if (_fileAssociate.lstFiles == null)
             {
                 mensajeError += "Envie la lista de files a asociar/desasociar|";
             }
-            else if (_fileAssociate.lstFiles.Count > 3)
+            else if (_fileAssociate.lstFiles.Count > Constantes_SRV.INT_MAX_FILES_ASOCIADOS)
             {
-                mensajeError += "El maximo de files asociar es 3|";
+                mensajeError += "El maximo de files asociar es " + Constantes_SRV.INT_MAX_FILES_ASOCIADOS.ToString() + "|";
             }
-            else if(string.IsNullOrEmpty(mensajeError) == true)
+
+            if (string.IsNullOrEmpty(mensajeError) == false)
+            {
+                cargarError(ref _responseFile, mensajeError);
+                return;
+            }
+
+            
+            /*Cargamos Datos del Usuario*/
+            RepositoryByBusiness(null);
+            UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idUsuario));
+            if (UserLogin == null){mensajeError += "ID del Usuario no registrado|";}
+            else
+            {
+                int intCotizacion_SF = _oportunidadVentaNMRepository._Select_CotId_X_OportunidadSF(_fileAssociate.idoportunidad_SF);
+                if (intCotizacion_SF <= 0) { mensajeError += "La oportunidad no esta registrada|"; }                
+                else if (intCotizacion_SF > 0 && intCotizacion_SF != _fileAssociate.idCotSRV) { mensajeError += "La cotizacion enviada es diferente al relacionado con la oportunidad|"; }
+                else
+                {
+                    /*Validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
+                    strIdVendedor = _fileOportunidadNMRepository._Select_IdVendedorPTABy_IdUsuWeb(UserLogin.IdUsuario, Constantes_SRV.INT_ID_BD_WEB_FAREFINDER);
+                    if (string.IsNullOrEmpty(strIdVendedor) == true || strIdVendedor == "0")
+                    {
+                        mensajeError += "Ud. no tiene asignado un código de vendedor en PTA. Por favor, contáctese con Webmaster: webmaster@gruponuevomundo.com.pe.";
+                    }
+                }                
+            }
+            
+            if (string.IsNullOrEmpty(mensajeError) == true)
             {
                 int posListFile = 0;
+                IEnumerable<SucursalNM> sucursalesNM = null;
                 FileSRV _fileSRV_Info = null;
-                System.Data.DataTable _dtfilesAsociadosSRV = null;
-                foreach (FileNM fileSRV in _fileAssociate.lstFiles) /*Aqui se tendra que validar si existe registro del File con la Sucursal asociadas al vendedor (configurado en base al UsuarioId)*/
+                DataTable _dtfilesAsociadosSRV = _FileSRVRetailRepository._SelectFilesIdBy_IdCot(_fileAssociate.idCotSRV); /*Cargamos Files Asociados*/
+                            
+                if (_dtfilesAsociadosSRV != null && _dtfilesAsociadosSRV.Rows.Count >= Constantes_SRV.INT_MAX_FILES_ASOCIADOS && _fileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
                 {
-                    if (fileSRV == null)
+                    mensajeError += "Ya existen " + Constantes_SRV.INT_MAX_FILES_ASOCIADOS.ToString() +  " files asociados a esta cotización|";
+                }
+                else if((_dtfilesAsociadosSRV == null || _dtfilesAsociadosSRV.Rows.Count == 0) && _fileAssociate.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
+                {
+                    mensajeError += "No es posible desasociar files no asociados a esta cotización|";
+                }
+                else
+                {
+                    foreach (FileNM fileSRV in _fileAssociate.lstFiles)
                     {
-                        mensajeError += "Envie el registro " + posListFile + " de la lista de files|";
-                        break;
-                    }
-                    if (fileSRV.idFilePTA == null || fileSRV.Sucursal == null) /*Pueden enviar null*/
-                    {
-                        continue;
-                    }
-                    if (fileSRV.idFilePTA <= 0)
-                    {
-                        mensajeError += "Envie el IdFile del registro " + posListFile + " de la lista de files|";
-                        break;
-                    }
-                    if (fileSRV.Sucursal <= 0)
-                    {
-                        mensajeError += "Envie la SucursalId del registro " + posListFile + " de la lista de files|";
-                        break;
-                    }
-                    if (string.IsNullOrEmpty(mensajeError) == false) { break; }
-
-                    /*Cargamos Files Asociados*/
-                    if (posListFile == 0)
-                    {
-                        _dtfilesAsociadosSRV = _FileSRVRetailRepository._SelectFilesIdBy_IdCot(_fileAssociate.idCotSRV);
-                    }
-
-                    /*Realizamos la conexion a la BD*/
-                    if (_fileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
-                    {
-                        _fileSRV_Info = null;
-                        bolEjecutarCarga = true;
-
-                        if (_dtfilesAsociadosSRV != null && _dtfilesAsociadosSRV.Rows.Count > 0)
+                        if (fileSRV == null)
                         {
-                            foreach (DataRow row in _dtfilesAsociadosSRV.Rows)
+                            mensajeError += "Envie el registro " + posListFile + " de la lista de files|";
+                            break;
+                        }
+                        if (fileSRV.idFilePTA == null || fileSRV.Sucursal == null) /*Pueden enviar null*/
+                        {
+                            continue;
+                        }
+                        if (fileSRV.idFilePTA <= 0)
+                        {
+                            mensajeError += "Envie el IdFile del registro " + posListFile + " de la lista de files|";
+                            break;
+                        }
+                        if (fileSRV.Sucursal <= 0)
+                        {
+                            mensajeError += "Envie la SucursalId del registro " + posListFile + " de la lista de files|";
+                            break;
+                        }
+                        
+                        if (string.IsNullOrEmpty(mensajeError) == false) { break; }                                        
+
+                        /*Realizamos la conexion a la BD*/
+                        if (_fileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
+                        {
+                            _fileSRV_Info = null;
+                            bolEjecutarCarga = true;
+
+                            if (_dtfilesAsociadosSRV != null && _dtfilesAsociadosSRV.Rows.Count > 0)
                             {
-                                if (row.IntParse("FILE_ID") == fileSRV.idFilePTA && row.IntParse("SUC_ID") == fileSRV.Sucursal)
+                                foreach (DataRow row in _dtfilesAsociadosSRV.Rows)
                                 {
-                                    bolEjecutarCarga = false;
+                                    if (row.IntParse("FILE_ID") == fileSRV.idFilePTA && row.IntParse("SUC_ID") == fileSRV.Sucursal)
+                                    {
+                                        bolEjecutarCarga = false;
+                                        break;
+                                    }                                
+                                }
+                            }
+
+                            if (bolEjecutarCarga == true)
+                            {
+                                /*Validacion de sucursales*/
+                                bolExitoValSucursal = false;
+                                sucursalesNM = (IEnumerable<SucursalNM>)(_SucursalesNMRepository._Select_SucursalesBy_Vendedor(strIdVendedor))[OutParameter.CursorDtosGenerico];
+                                if (!(sucursalesNM == null || sucursalesNM.ToList().Count.Equals(0)))
+                                {
+                                    foreach (var sucursal in sucursalesNM)
+                                    {
+                                        if (sucursal.IdSucursal == fileSRV.Sucursal)
+                                        {
+                                            bolExitoValSucursal = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (bolExitoValSucursal == false)
+                                {
+                                    sucursalesNM = (IEnumerable<SucursalNM>)(_fileOportunidadNMRepository._Select_SucursalAdic_ByIdUsuWeb(UserLogin.IdUsuario))[OutParameter.CursorDtosGenerico];
+                                    if (!(sucursalesNM == null || sucursalesNM.ToList().Count.Equals(0)))
+                                    {
+                                        foreach (var sucursal in sucursalesNM)
+                                        {
+                                            if (sucursal.IdSucursal == fileSRV.Sucursal)
+                                            {
+                                                bolExitoValSucursal = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (bolExitoValSucursal == false)
+                                {
+                                    mensajeError += "El usuario " + UserLogin.LoginUsuario + " no tiene configurado la sucursal " + fileSRV.Sucursal + " para realizar la asociación de los files|";                                    
                                     break;
-                                }                                
+                                }
+
+                                /*Carga de Files*/
+                                _fileSRV_Info = new FileSRV();
+                                _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, (int)fileSRV.idFilePTA);
                             }
                         }
-
-                        if (bolEjecutarCarga == true)
+                        else if (_fileAssociate.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
                         {
-                            _fileSRV_Info = new FileSRV();
-                            _fileSRV_Info = CargarInfoFile((int)fileSRV.Sucursal, (int)fileSRV.idFilePTA);
-                        }
-                    }
-                    else if (_fileAssociate.accion_SF == Constantes_FileRetail.STR_DESASOCIAR_FILE)
-                    {
-                        _fileSRV_Info = null;                        
-                        if (_dtfilesAsociadosSRV != null && _dtfilesAsociadosSRV.Rows.Count > 0)
-                        {
+                            _fileSRV_Info = null;
+                            bolEjecutarCarga = false;
+                            
                             foreach (DataRow row in _dtfilesAsociadosSRV.Rows)
                             {
                                 if (row.IntParse("FILE_ID") == fileSRV.idFilePTA && row.IntParse("SUC_ID") == fileSRV.Sucursal)
                                 {
+                                    bolEjecutarCarga = true;
                                     _fileSRV_Info = new FileSRV()
                                     {
                                         IdFilePTA = row.IntParse("FILE_ID"),
@@ -1213,47 +1330,48 @@ namespace Expertia.Estructura.Controllers
                                     };
                                 }
                             }
+
+                            if (bolEjecutarCarga == false)
+                            {
+                                mensajeError += "No existe asociacion del SRV " + _fileAssociate.idCotSRV.ToString() + " con el file " + fileSRV.idFilePTA.ToString() + "|";
+                                break;
+                            }
                         }
-                        else
+
+                        if (_fileSRV_Info != null)
                         {
-                            mensajeError += "No existe asociacion del SRV " + _fileAssociate.idCotSRV.ToString() + " con el file " + fileSRV.idFilePTA.ToString() + "|";
-                            break;
+                            if (ListFile_InfoSRV == null) { ListFile_InfoSRV = new List<FileSRV>(); }
+                            ListFile_InfoSRV.Add(_fileSRV_Info);                        
                         }
+
+                        if (string.IsNullOrEmpty(mensajeError) == false) { break; }
+                        posListFile++;
                     }
 
-                    if (_fileSRV_Info != null)
+                    if (ListFile_InfoSRV == null && string.IsNullOrEmpty(mensajeError) == true)
                     {
-                        if (ListFile_InfoSRV == null) { ListFile_InfoSRV = new List<FileSRV>(); }
-                        ListFile_InfoSRV.Add(_fileSRV_Info);                        
+                        mensajeError += "No hay informacion/asociacion con los datos proporcionados de los File|";
                     }
-
-                    if (string.IsNullOrEmpty(mensajeError) == false) { break; }
-                    posListFile++;
+                    else if(ListFile_InfoSRV != null && _dtfilesAsociadosSRV != null && ((ListFile_InfoSRV.Count) + _dtfilesAsociadosSRV.Rows.Count) > Constantes_SRV.INT_MAX_FILES_ASOCIADOS && _fileAssociate.accion_SF == Constantes_FileRetail.STR_ASOCIAR_FILE)
+                    {
+                        mensajeError += "Excede el máximo permitido entre files asociados y por asociar en esta cotización|";
+                    }
                 }
-            }
-
-            if (ListFile_InfoSRV == null)
-            {
-                mensajeError += "No hay informacion/asociacion con los datos proporcionados de los File|";
-            }
-
-            if (_fileAssociate.idUsuario > 0)
-            {
-                /*Cargamos Datos del Usuario*/
-                RepositoryByBusiness(null);
-                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idUsuario));
-                if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
-            }
-            else
-            {
-                mensajeError += "Envie el ID del Usuario correctamente|";
             }
 
             if (string.IsNullOrEmpty(mensajeError) == false)
             {
                 _responseFile.codigo = "ER";
                 _responseFile.mensaje = "VA: " + mensajeError;
+                _responseFile.lstFiles = null;
             }
+        }
+
+        private void cargarError(ref AssociateNMFileRS _RptaFile, string errorText)
+        {
+            _RptaFile.codigo = "ER";
+            _RptaFile.mensaje = "VA: " + errorText;
+            _RptaFile.lstFiles = null;
         }
 
         private FileSRV CargarInfoFile(int sucursal, int idfile)
@@ -1311,10 +1429,12 @@ namespace Expertia.Estructura.Controllers
                 }
 
                 moneda = drCliente["ID_MONEDA"].ToString();
-                /*string fecha = Convert.ToDateTime(drCliente["FECHA_EMISION"]).ToShortDateString();*/
+                DateTime fecha = Convert.ToDateTime(drCliente["FECHA_EMISION"]);
+                
                 fileSRV.Cliente = cliente;
                 fileSRV.ImporteFact = monto;
                 fileSRV.Moneda = moneda;
+                fileSRV.Fecha = fecha;
                 fileSRV.IdFilePTA = idfile;
                 fileSRV.Sucursal = sucursal;
             }

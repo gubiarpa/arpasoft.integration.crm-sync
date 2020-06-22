@@ -65,6 +65,7 @@ namespace Expertia.Estructura.Utils
         public const string GenCodigoPagoNM = "api/gencodigopagonm";
         public const string SolicitarFactFileNM = "api/solicitarfactfilenm";
         public const string OportunidadVentaNM = "api/oportunidadventanm";
+        public const string DocumentosEmisionNM = "api/documentosemisionnm";
     }
 
     public enum ActionMethod
@@ -298,8 +299,25 @@ namespace Expertia.Estructura.Utils
         // CRMEC004
         public const string AW_Get_ChatterNM = AW_NM_Package + "." + "SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CHATTER";
-        // CRMC008
-        public const string AW_Set_CotServ = AW_NM_Package + "." + "SP_INSERTA_SERVICIO_COT";
+        // CRMC008                        
+        public const string AW_Get_Ofi_Es_CA = AW_NM_Package + "." + "SP_OFI_ES_CA";
+        public const string AW_Get_IdEstadoXName = AW_NM_Package + "." + "SP_GET_IDESTADO_X_NAME";
+        public const string AW_Get_DatosClienteXIdSF = AW_NM_Package + "." + "SP_GET_X_CODE_SF";
+        public const string AW_Get_DatosCotXIdSF = AW_NM_Package + "." + "SP_GET_COT_X_OPORTUNIDAD_SF";
+        public const string AW_Update_OportunidadSF = AW_NM_Package + "." + "SP_UPDATE_ENVIO_OPORTUNIDAD";
+        public const string AW_Insert_OportunidadSF = AW_NM_Package + "." + "SP_REGISTRAR_OPORTUNIDAD";
+        public const string AW_Insert_CuentaSF = AW_NM_Package + "." + "SP_REGISTRAR_CUENTA";
+        public const string AW_Update_UrgenteHoraEmision = AW_NM_Package + "." + "SP_UPD_URGENTE_EMISION_COT";
+        public const string AW_Update_Cliente_Cot = "APPWEBS.PKG_CLIENTE_COT.SP_ACTUALIZA_CLI";
+        public const string AW_Update_Estado_Promo = "APPWEBS.PKG_ENVIO_PROMOCIONES.SP_ACTUALIZA_ESTADO_PROMO";
+        public const string AW_Insert_CotizacionVta = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_COT";
+        public const string AW_Insert_Servicios_Cotizacion = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_INSERTA_SERVICIO_COT";
+        public const string AW_Update_ReservaVueloManual = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_RES_VUE_MANUAL";
+        public const string AW_Get_PedidosSinBanco = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_SIN_BANCO";
+        public const string AW_Update_EsEmitidoCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_ES_EMITIDO_COT";
+        public const string AW_Update_CounterAdministrativo = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_CA_COT";
+        public const string AW_Update_FirmaClienteCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_FIRMA_CLI_COT";              
+
 
         // CRMC006
         public const string AW_Get_FileOportunidadNM = AW_NM_Package + "." + "SP_LISTAR_FILE_ASOCIADO";
@@ -307,6 +325,12 @@ namespace Expertia.Estructura.Utils
 
         public const string AW_Generar_Codigo_PagoNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_GENERACION_CODIGO_PAGO";
         public const string AW_Solicitar_Facturacion_FileNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_SOLICITAR_FACTURACION_FILE";
+
+        //Expertia_2
+        public const string AW_Get_XIdVendPTA_Usuario = "APPWEBS.PKG_PERSONAL.SP_GET_IDVENDPTA_USU";
+        public const string AW_GetSucursalXVendedor = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_SUCURSAL_X_VEND";
+        public const string AW_GetSucursalAdicXUsuarioWeb = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_SUCADIC_X_USUWEB";
+
         #endregion
     }
 
@@ -404,6 +428,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorInformacionPagoNM = "P_INFO_PAGO";
         public const string CursorChatterNM = "P_CHATTER";
         public const string CursorFileAsociadossNM = "P_FILES_ASOCIADOS";
+        public const string CursorDtosGenerico = "pCurResult_out";
         #endregion
 
         #region Fields
@@ -551,11 +576,19 @@ namespace Expertia.Estructura.Utils
         public const Int16 INT_ID_EMPRESA_GNM_CONDOR_TRAVEL = 13;
     }
 
+    public static class Estados_Oportunidad
+    {
+        public const string ID_ST_REGI_NO_ENVIO = "2";
+    }
+
     public static class Constantes_SRV
     {
+        public const Int16 INT_MAX_FILES_ASOCIADOS = 3;
+        public const Int16 INT_ID_BD_WEB_FAREFINDER = 1;
         public const string IP_GENERAL = "127.0.0.0";
         public const string ID_TIPO_POST_SRV_USUARIO = "2";
         public const string APP_NAME = "WebFareFinder";
+        public const Int16 INT_ID_MONEDA_USD = 147;
 
         #region Estados
         public const short ID_ESTADO_COT_PENDIENTE_PAGO = 11;
@@ -571,7 +604,10 @@ namespace Expertia.Estructura.Utils
         public const int INT_ID_OFI_CALL_CENTER = 66;
         public const int INT_ID_DEP_CALL_CENTER = 3;
         public const int INT_ID_DEP_SISTEMAS = 11;
+        public const int INT_ID_OFI_TRAVEL_STORE = 123;
         public const int INT_ID_DEP_LARCOMAR = 71;
+        public const int INT_ID_OFI_NMVCOM = 62;
+        public const int INT_ID_DEP_EMERGENCIAS = 70;
         #endregion
         #region Otros
         public const int INT_ID_AREA_NMVCOM_METAS = 2;
@@ -720,7 +756,8 @@ namespace Expertia.Estructura.Utils
         PrePagado = 7,
         NoCompro = 8,
         Reconfirmado = 9,
-        DerivadoCA = 13
+        DerivadoCA = 13,
+        DerivadoCA_Paq = 21
     }
 
     public static class UtilityCorreo

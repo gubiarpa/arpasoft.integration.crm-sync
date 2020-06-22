@@ -369,49 +369,37 @@ namespace Expertia.Estructura.RestManager.RestParse
             {
                 return new
                 {
-                    oportunidadNM.idCuenta_SF,
+                    oportunidadNM.idCuenta_SF,                    
                     oportunidadNM.Identificador_NM,
                     oportunidadNM.idOportunidad_SF,
                     oportunidadNM.fechaRegistro,
                     oportunidadNM.Servicio,
-                    IdCanalVenta = "4", //oportunidadNM.IdCanalVenta,
-                    oportunidadNM.metabuscador,
-                    oportunidadNM.CajaVuelos,
-                    oportunidadNM.CajaHotel,
-                    oportunidadNM.CajaPaquetes,
-                    oportunidadNM.CajaServicios,
-                    oportunidadNM.CajaSeguro,
+                    oportunidadNM.IdCanalVenta,
+                    oportunidadNM.metabuscador,                    
                     oportunidadNM.modoIngreso,
                     oportunidadNM.ordenAtencion,
                     oportunidadNM.evento,
                     oportunidadNM.Estado,
                     oportunidadNM.IdCotSRV,
                     oportunidadNM.IdUsuarioSrv,
-                    oportunidadNM.requiereFirmaCliente,
+                    oportunidadNM.requiereFirmaCliente,                    
                     oportunidadNM.counterAsignado,
                     datosReservas = (oportunidadNM.ListReservas == null ? null :
                         oportunidadNM.ListReservas.ToSalesforceEntity()
                     ),
+                    idLoginWeb = oportunidadNM.IdLoginWeb,
                     oportunidadNM.EmpresaCliente,
                     oportunidadNM.nombreCliente,
                     oportunidadNM.apellidosCliente,
-                    idLoginWeb = oportunidadNM.IdLoginWeb,
+                    oportunidadNM.emailUserLogin,                    
                     oportunidadNM.telefonoCliente,
-
-                    //oportunidadNM.esEmitido,
-                    //oportunidadNM.fechaPlazoEmision,
-                    //oportunidadNM.cot_IataPrincipal,
-                    //oportunidadNM.tipoCotizacion,
-                    //oportunidadNM.emailUserLogin,
-                    //oportunidadNM.idUserLogin,
-
-                    esEmitido = "",
-                    fechaPlazoEmision = "",
-                    cot_IataPrincipal = "CUZ",
-                    tipoCotizacion = "",
-                    emailUserLogin = "",
-                    idUserLogin = 1,
-
+                    oportunidadNM.IdMotivoNoCompro,
+                    oportunidadNM.Emitido,
+                    oportunidadNM.fechaPlazoEmision,
+                    oportunidadNM.CiudadIata,
+                    oportunidadNM.MontoEstimado,
+                    oportunidadNM.ModalidadCompra,
+                    oportunidadNM.tipoCotizacion,                    
                     oportunidadNM.accion_SF
                 };
             }
@@ -476,7 +464,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                                     ReservasOp_NM.EmergenciaSeguro.Apellido,
                                     ReservasOp_NM.EmergenciaSeguro.Telefono,
                                     ReservasOp_NM.EmergenciaSeguro.Email
-                                })*/
+                                })
                             }
                         );
                     }

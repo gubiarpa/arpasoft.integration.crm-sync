@@ -17,23 +17,28 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Script.Serialization;
+//using PaymentLocationType = Expertia.Estructura.ws_compra.PaymentLocationType;
+//using PaymentStepType = Expertia.Estructura.ws_compra.PaymentStepType;
+//using PaymentInstructionType = Expertia.Estructura.ws_compra.PaymentInstructionType;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// Expertia_4 : Generar una nueva solicitud de pago Tarjeta C/D o actualizar la solicitud de pago
     [RoutePrefix(RoutePrefix.GenCodigoPagoNM)]
     public class GenCodigoPagoNMController : BaseController
     {
         #region Properties       
         private IPedidoRepository _pedidoRepository;
         private IDatosUsuario _datosUsuario;
-        #endregion
         private GenCodigoPagoNMRepository _genCodigoPagoNMRepository;         
         protected override ControllerName _controllerName => ControllerName.GenCodigoPagoNM;
+        #endregion
 
         #region PublicMethods
         [Route(RouteAction.Create)]
-        public IHttpActionResult Create(DatosPedido pedido)
-        {            
+        public IHttpActionResult Create(DatosPedido_NM pedido_NM)
+        {
+            var pedido = pedido_NM.ToRetail(); // Conversión a Retail
             Pedido_AW_Repository _pedidoRepository = new Pedido_AW_Repository();
             Models.PedidoRS _resultpedido = new Models.PedidoRS();
             UsuarioLogin DtsUsuarioLogin = null;
@@ -44,7 +49,7 @@ namespace Expertia.Estructura.Controllers
             {
                 /*Validaciones*/
                 validacionPedido(ref pedido, ref _resultpedido, ref _return, ref DtsUsuarioLogin);
-                if (_return == true) return Ok(_resultpedido);
+                //if (_return == true) return Ok(_resultpedido);
 
                 RepositoryByBusiness(pedido.UnidadNegocio.ID);
                 
@@ -109,6 +114,21 @@ namespace Expertia.Estructura.Controllers
                 {
                     GenerarPedido_Independencia(pedido, _resultpedido, DtsUsuarioLogin);
                 }
+
+                #region LinkPago
+                if ((new List<string>() {
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_VISA, 
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_MASTERCARD,
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_AMERICANEX,
+                    Constantes_MetodoDePago.CODE_FPAGO_TARJETA_DINERS}).Contains(pedido.CodePasarelaPago))
+                {
+                    _resultpedido.LinkPago = ObtieneLinkPago(pedido.IdWeb ?? 0, _resultpedido.IdPedido, pedido.IdCotVta);
+                }
+                else
+                {
+                    _resultpedido.LinkPago = string.Empty;
+                }
+                #endregion
                 
                 /*Inserta Forma de Pedido  General para todos las metodos de pago*/
                 _pedidoRepository.InsertFormaPagoPedidoNM(pedido, _resultpedido, intIdFormaPago);
@@ -153,12 +173,17 @@ namespace Expertia.Estructura.Controllers
                 };
                 _CotizacionSRV.ProcesosPostCotizacion(_PostSRV_RQ);
 
+                _resultpedido.CodigoError = "OK";
+                _resultpedido.MensajeError = "El proceso se realizó exitosamente";
+
                 return Ok(_resultpedido);
 
             }
             catch (Exception ex)
             {
                 errorPedido = ex.Message;
+                _resultpedido.CodigoError = "ER";
+                _resultpedido.MensajeError = ex.Message;
                 return InternalServerError(ex);
             }
             finally
@@ -171,7 +196,6 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
-
 
         [Route(RouteAction.Send)]
         public IHttpActionResult Send(GenCodigoPagoNM genCodigoPagoNM)
@@ -214,8 +238,10 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
+        #endregion
 
-
+        #region GenerarPedido
+        // Método de Pago: SC
         private void GenerarPedido_Safetypay_Cash(DatosPedido pedido, 
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
@@ -346,26 +372,284 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        // Método de Pago: SO
         private void GenerarPedido_Safetypay_Online(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
+            var strEmailsCli = pedido.Email;
+            var ws_SafetyPay = new ws_compra.ws_compra();
+            var request = new CustomOnlinePaymentRequestType();
+            var objAmountType = new ws_compra.AmountType();
+            objAmountType.CurrencyID = CurrencyEnumType.USD.ToString();
+            objAmountType.Value = decimal.TryParse(pedido.MontoPagar.ToString(), out decimal dblMontoPagar) ? dblMontoPagar : 0;
+            request.BankID = string.Empty;
+            request.TransactionIdentifier = string.Empty;
+            request.MerchantAccount = string.Empty;
+            request.MerchantSalesID = resultPedido.IdPedido.ToString();
+            request.TrackingCode = "0";
+            request.ExpirationTime = pedido.TiempoExpiracionCIP ?? 0 * 60;
+            request.ExpirationTimeSpecified = true;
+
+            request.Language = pedido.IdWeb == Webs_Cid.DM_WEB_ID ? "PE": "ES";
+            request.CountryID = "PER";
+            request.Amount = objAmountType;
+            request.TransactionOkURL = pedido.IdWeb == Webs_Cid.DM_WEB_ID ?
+                "http://www.destinosmundialesperu.com/" :
+                "http://www.nmviajes.com/";
+            request.TransactionErrorURL = pedido.IdWeb == Webs_Cid.DM_WEB_ID ?
+                "http://www.destinosmundialesperu.com/" :
+                "http://www.nmviajes.com/seguros#";
+
+            request.SendEmailToShopper = true;
+            if (request.SendEmailToShopper) request.CustomerInformation_Value = DtsUsuarioLogin.EmailUsuario;
+            request.IdDepartamento = DtsUsuarioLogin.IdDep;
+            request.IdOficina = DtsUsuarioLogin.IdOfi;
+            request.ApplicationID = (short)(pedido.IdWeb ?? 0);
+
+
+            //var respond As ws_srv_gnm.ws_compra.RptaPagoSafetyPay
+            ws_compra.RptaPagoSafetyPay respond;
+            if (pedido.IdWeb == Webs_Cid.DM_WEB_ID)
+            {
+                request.WebId = pedido.IdWeb ?? 0;
+                respond = ws_SafetyPay.GenerarPago_SafetyPay_OnlineDM(request);
+            }
+            else
+            {
+                request.IdDepartamento = DtsUsuarioLogin.IdDep;
+                request.IdOficina = DtsUsuarioLogin.IdOfi;
+                respond = ws_SafetyPay.GenerarPago_SafetyPay_Online(request);
+            }
+
+            
+            var objRptaPagoSafetyPay = (new Pedido_AW_Repository()).Get_Rpta_SagetyPay(resultPedido.IdPedido);
+
+            var lstPaymentType = new List<Models.PaymentLocationType>();
+
+            if (respond.lst_PaymentLocationType != null)
+            {
+                var lstPaymentStep = new List<Models.PaymentStepType>();
+                var lstPaymentInstructions = new List<Models.PaymentInstructionType>();
+
+                foreach (var objPaymentLocationTypeRSTmp in respond.lst_PaymentLocationType)
+                {
+                    var objPaymentLocationTypeRS = new Models.PaymentLocationType();
+                    objPaymentLocationTypeRS.Id = objPaymentLocationTypeRSTmp.ID;
+
+                    foreach (var objPaymentStepRSTmp in objPaymentLocationTypeRSTmp.lst_PaymentStepType)
+                    {
+                        var objPaymentStepRS = new Models.PaymentStepType();
+                        objPaymentStepRS.Step = objPaymentStepRSTmp.Step;
+                        objPaymentStepRS.StepSpecified = objPaymentStepRSTmp.StepSpecified;
+                        objPaymentStepRS.Value = objPaymentStepRSTmp.Value;
+                        lstPaymentStep.Add(objPaymentStepRS);
+                    }
+
+                    if (objPaymentLocationTypeRSTmp.PaymentInstructions != null)
+                    {
+                        foreach (var objPaymentInstructionTypeRSTmp in objPaymentLocationTypeRSTmp.PaymentInstructions)
+                        {
+                            var objPaymentInstructionsRS = new Models.PaymentInstructionType();
+                            objPaymentInstructionsRS.Name = objPaymentInstructionTypeRSTmp.Name;
+                            objPaymentInstructionsRS.Value = objPaymentInstructionTypeRSTmp.Value;
+                            lstPaymentInstructions.Add(objPaymentInstructionsRS);
+                        }
+                    }
+
+                    objPaymentLocationTypeRS.lstPaymentStepType = lstPaymentStep;
+                    objPaymentLocationTypeRS.Name = objPaymentLocationTypeRSTmp.Name;
+                    objPaymentLocationTypeRS.PaymentInstructions = lstPaymentInstructions.ToArray();
+                    objPaymentLocationTypeRS.PaymentSteps = lstPaymentStep.ToArray();
+                    lstPaymentType.Add(objPaymentLocationTypeRS);
+                }
+            }
+            var intIdFormaPago = Constantes_Pedido.ID_FORMA_PAGO_SAFETYPAY_ONLINE;
+
+            try
+            {
+                var objEnviarCorreo = new EnviarCorreo();
+                var datFechaActual = DateTime.Now;
+                //var datFechaExpiraPago As Date
+                var strExpirationDateTime = respond.ExpirationDateTime;
+                var arrExp = strExpirationDateTime.Split('(');
+                var datFechaExpiraPago = resultPedido.FechaExpiracion = datFechaActual.AddHours(pedido.TiempoExpiracionCIP ?? 0);
+
+                resultPedido.CorreoEnviado = objEnviarCorreo.Enviar_SolicitudPagoServicioSafetyPay(
+                    pedido.IdUsuario.ToString(),
+                    Convert.ToInt32(pedido.IdWeb),
+                    Convert.ToInt32(pedido.IdLang),
+                    pedido.IdCotVta,
+                    pedido.Email,
+                    null,
+                    pedido.NombreClienteCot,
+                    pedido.ApellidoClienteCot,
+                    null,
+                    DtsUsuarioLogin.NomCompletoUsuario,
+                    DtsUsuarioLogin.EmailUsuario,
+                    (pedido.CodePasarelaPago == Constantes_SafetyPay.CodeSafetyPayOnline ? Constantes_Pedido.ID_FORMA_PAGO_SAFETYPAY_ONLINE : Convert.ToInt16(0)),
+                    objRptaPagoSafetyPay.TransaccionIdentifier,
+                    resultPedido.IdPedido,
+                    Convert.ToDouble(pedido.Monto),
+                    objRptaPagoSafetyPay.ExpirationDateTime,
+                    objRptaPagoSafetyPay.lstAmountType,
+                    lstPaymentType);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+
+        // Método de Pago: SI
         private void GenerarPedido_Safetypay_Internacional(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
+
+        // Método de Pago: IN { Descartado en el proyecto }
         private void GenerarPedido_Independencia(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
+
+        // Método de Pago: PE
         private void GenerarPedido_Pago_Efectivo(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
+            DateTime datFechaActual = DateTime.Now;
+            var ddlHoraExpiraCIP = pedido.TiempoExpiracionCIP ?? 0;
+            var datFechaExpiraPago = datFechaActual.AddHours(ddlHoraExpiraCIP);
+            resultPedido.FechaExpiracion = datFechaExpiraPago;
+
+            var intIdFormaPago = Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC;
+
+            try
+            {
+                var strEmailsCliPE = pedido.Email;
+                var dblMontoPagar = pedido.MontoPagar;
+                var intIdPedido = resultPedido.IdPedido;
+
+                var intIdWeb = pedido.IdWeb;
+                var intIdLang = pedido.IdLang;
+                var intIdCotVta = pedido.IdCotVta;
+
+                // Dim paymentRequest As New BEGenRequest
+                var paymentRequest = new ws_pagoefectivo.BEGenRequest();
+
+                paymentRequest.IdMoneda = ConfigAccess.GetValueInAppSettings("PE_MONEDA");
+                paymentRequest.Total = dblMontoPagar.ToString("0.00");
+                paymentRequest.MetodosPago = ConfigAccess.GetValueInAppSettings("PE_MEDIO_PAGO");
+                paymentRequest.Codtransaccion = intIdPedido.ToString("");
+                paymentRequest.ConceptoPago = string.Format("{0}: Orden {1}",
+                    ConfigAccess.GetValueInAppSettings("PE_COMERCIO_CONCEPTO_PAGO"),
+                    paymentRequest.Codtransaccion);
+                paymentRequest.EmailComercio = strEmailsCliPE;
+                paymentRequest.FechaAExpirar = datFechaExpiraPago.ToString("yyyy-MM-dd");
+                paymentRequest.UsuarioNombre = DtsUsuarioLogin.LoginUsuario;
+                paymentRequest.UsuarioApellidos = DtsUsuarioLogin.ApePatUsuario;
+                paymentRequest.UsuarioEmail = DtsUsuarioLogin.EmailUsuario;
+                paymentRequest.IdDepartamento = DtsUsuarioLogin.IdDep;
+                paymentRequest.IdOficina = DtsUsuarioLogin.IdOfi;
+
+                var paymentResponse = (new ws_pagoefectivo.ws_PagoEfectivo()).GenerarCIP(paymentRequest);
+
+                // Reintento de GENERACIÓN DE CIP
+                if (paymentResponse == null || paymentResponse.Estado != "1" || paymentResponse.Token == null)
+                {
+                    paymentResponse = (new ws_pagoefectivo.ws_PagoEfectivo()).GenerarCIP(paymentRequest);
+                }
+
+                var strCIP = resultPedido.CodigoCIP = paymentResponse.NumeroCip;
+
+                //  Enviar correo
+                var objEnviarCorreo = new EnviarCorreo();
+                var strEmailsCli = pedido.Email;
+
+                if (Enviar_SolicitudPagoServicioPagoEfectivo(
+                    intIdWeb ?? 0,
+                    intIdLang ?? 0,
+                    intIdCotVta,
+                    strEmailsCli,
+                    null,
+                    pedido.NombreClienteCot,
+                    pedido.ApellidoClienteCot,
+                    null,
+                    DtsUsuarioLogin.NomCompletoUsuario,
+                    DtsUsuarioLogin.EmailUsuario,
+                    short.Parse(pedido.FormaPago),
+                    strCIP,
+                    string.Empty,
+                    intIdPedido,
+                    dblMontoPagar,
+                    datFechaExpiraPago))
+                {
+                    resultPedido.CorreoEnviado = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
+        #endregion
+
+        #region Auxiliar
+        private bool Enviar_SolicitudPagoServicioPagoEfectivo(
+            int pIntIdWeb,
+            int pIntIdLang,
+            int? pIntIdCotVta,
+            string pStrEmailTO,
+            string pStrEMailCC,
+            string pStrNomCli,
+            string pStrApeCli,
+            string pStrURLPago,
+            string pStrNomCompletoUsuWeb,
+            string pStrEmailUsuWeb,
+            short pIntIdFormaPago,
+            string pStrCIP,
+            string pStrCodigoBarras,
+            int pIntIdPedido,
+            double pDblMontoPagar,
+            DateTime pDatFechaExpiraPago)
+        {
+            //var objCorreoWebBO = New CorreoWebBO
+            //var objCorreo As Correo = Nothing
+            //var objNMMail As New NMMail
+            //var objEncriptaCadena As New NuevoMundoSecurity.EncriptaCadena
+            return true;
+        }
+
+        private string ObtieneLinkPago(int pIntIdWeb, int pIntIdPedido, int pIntIdCotSRV)
+        {
+            EncriptaCadena objNMEncriptaCadena = new EncriptaCadena();
+            try
+            {
+                string strURLPago = "";
+                if (pIntIdWeb == Webs_Cid.ID_WEB_NM_PERUTRIP)
+                    strURLPago = ConfigAccess.GetValueInAppSettings("URL_PAGO_SERVICIO_ONLINE_PERUTRIP");
+                else if (pIntIdWeb == Webs_Cid.DM_WEB_ID)
+                    strURLPago = ConfigAccess.GetValueInAppSettings("URL_PAGO_SERVICIO_ONLINE_DM");
+                else
+                    strURLPago = ConfigAccess.GetValueInAppSettings("URL_PAGO_SERVICIO_ONLINE");
+
+                string strIdEncrypt = objNMEncriptaCadena.DES_Encrypt(pIntIdPedido + ";" + pIntIdCotSRV, objNMEncriptaCadena.GetKEY(EncriptaCadena.TIPO_KEY.KEY_ENCRIPTA_NRO_PEDIDO_PAGO_ONLINE));
+
+                return strURLPago + "?id=" + strIdEncrypt;
+            }
+            catch (Exception ex)
+            {
+                return "Error";
+            }
+            finally
+            {
+                objNMEncriptaCadena = null;
+            }
+        }
+
         private void validacionPedido(ref DatosPedido _pedido, ref Models.PedidoRS _resultPedido, ref bool _return, ref UsuarioLogin UserLogin)
         {
             string mensajeError = string.Empty;
@@ -419,7 +703,7 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "Envie el monto|";
             }
-            if (_pedido.Monto.Contains(","))
+            if (!string.IsNullOrEmpty(_pedido.Monto) && _pedido.Monto.Contains(","))
             {
                 mensajeError += "El uso de la coma (,) no es válido como separador decimal.";
             }
@@ -483,9 +767,7 @@ namespace Expertia.Estructura.Controllers
             else
                 return true;
         }
-        #endregion
 
-        #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);

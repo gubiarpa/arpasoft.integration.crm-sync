@@ -5,5 +5,14 @@
     <Setting Name="Expertia_Estructura_ws_compra_ws_compra" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://ti-qa-webservices.webfarefinder.com/gnm/ws_compra.asmx</Value>
     </Setting>
+    <Setting Name="Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://webservices.webfarefinder.com/ws_pax_aux_test/ws_pax_paxdoc.asmx</Value>
+    </Setting>
+    <Setting Name="Expertia_Estructura_ws_crm_ws_crm" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx</Value>
+    </Setting>
+    <Setting Name="Expertia_Estructura_ws_pagoefectivo_ws_PagoEfectivo" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://webservices.webfarefinder.com/gnm/ws_pagoefectivo.asmx</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

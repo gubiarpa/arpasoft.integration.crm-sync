@@ -17,6 +17,7 @@ using System.Web.Script.Serialization;
 
 namespace Expertia.Estructura.Controllers
 {
+    /// CRMEC003_3 : Registro de Detalle del Hotel
     [RoutePrefix(RoutePrefix.DetalleHotelNM)]
     public class DetalleHotelNMController : BaseController<object>
     {

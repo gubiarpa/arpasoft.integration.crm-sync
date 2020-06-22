@@ -161,6 +161,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Base\BaseController.cs" />
     <Compile Include="Controllers\ChatterNMController.cs" />
+    <Compile Include="Controllers\DocumentosEmisionNMController.cs" />
     <Compile Include="Controllers\OportunidadVentaNMController.cs" />
     <Compile Include="Controllers\SolicitarFactFileNMController.cs" />
     <Compile Include="Controllers\GenCodigoPagoNMController.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Models\Auxiliar\Telefono.cs" />
     <Compile Include="Models\Journeyou\CotizacionJY.cs" />
     <Compile Include="Models\Lead.cs" />
+    <Compile Include="Models\NuevoMundo\DocumentosEmisionNM.cs" />
     <Compile Include="Models\NuevoMundo\InfoPagoNM.cs" />
     <Compile Include="Models\NuevoMundo\OportunidadVentaNM.cs" />
     <Compile Include="Models\NuevoMundo\SolicitarFactFileNM.cs" />
@@ -240,6 +242,7 @@
     <Compile Include="Models\NuevoMundo\DetallePasajerosNM.cs" />
     <Compile Include="Models\NuevoMundo\DetalleItinerarioNM.cs" />
     <Compile Include="Models\NuevoMundo\OportunidadNM.cs" />
+    <Compile Include="Models\NuevoMundo\SucursalNM.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Retail\ArchivoCliCot.cs" />
     <Compile Include="Models\Retail\ArchivoPostCot.cs" />
@@ -295,6 +298,7 @@
     <Compile Include="Repository\Behavior\IRegionCuentaRepository.cs" />
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
     <Compile Include="Repository\Behavior\ISubcodigoRepository.cs" />
+    <Compile Include="Repository\Behavior\ISucursalesNMRepository.cs" />
     <Compile Include="Repository\Behavior\IVentaCT.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
     <Compile Include="Repository\Condor\Cotizacion_CT_Repository.cs" />
@@ -327,6 +331,7 @@
     <Compile Include="Repository\NuevoMundo\DetalleItinerarioNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\OportunidadNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\CuentaNMRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\SucursalesNMRepository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FileSRVRetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
@@ -351,6 +356,21 @@
     <Compile Include="Utils\Retail\UsuarioLogin.cs" />
     <Compile Include="Utils\ValidateProcess.cs" />
     <Compile Include="Web References\ws_compra\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\ws_crm\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\ws_pagoefectivo\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\ws_pax_aux.ws_pax_paxdoc\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -468,13 +488,47 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
     <None Include="Web References\ws_compra\ws_compra.disco" />
-    <Content Include="Web.config" />
+    <Content Include="Web References\ws_crm\EnvioDocsRS.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <None Include="Web References\ws_crm\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\ws_crm\ws_crm.disco" />
+    <Content Include="Web References\ws_pax_aux.ws_pax_paxdoc\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web References\ws_pax_aux.ws_pax_paxdoc\r_message.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <None Include="Web References\ws_crm\ws_crm.wsdl" />
+    <Content Include="Web References\ws_pagoefectivo\BEnotificacionResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_pagoefectivo\BEpaymentResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_pagoefectivo\BEWSConsultarCIPResponseMod1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <Content Include="Web References\ws_pagoefectivo\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
+    <None Include="Web References\ws_pagoefectivo\ws_pagoefectivo.wsdl" />
+    <None Include="Web References\ws_pax_aux.ws_pax_paxdoc\ws_pax_paxdoc.disco" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <None Include="Web References\ws_pax_aux.ws_pax_paxdoc\ws_pax_paxdoc.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
@@ -492,6 +546,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ws_crm\</RelPath>
+      <UpdateFromURL>http://ti-qa.webfarefinder.com/web_services/ws_crm.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Expertia_Estructura_ws_crm_ws_crm</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://ti-qa-webservices.webfarefinder.com/gnm/ws_compra.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\ws_compra\</RelPath>
@@ -503,8 +568,32 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>Expertia_Estructura_ws_compra_ws_compra</CachedSettingsPropName>
     </WebReferenceUrl>
+    <WebReferenceUrl Include="http://webservices.webfarefinder.com/gnm/ws_pagoefectivo.asmx%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ws_pagoefectivo\</RelPath>
+      <UpdateFromURL>http://webservices.webfarefinder.com/gnm/ws_pagoefectivo.asmx%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Expertia_Estructura_ws_pagoefectivo_ws_PagoEfectivo</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://webservices.webfarefinder.com/ws_pax_aux_test/ws_pax_paxdoc.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\ws_pax_aux.ws_pax_paxdoc\</RelPath>
+      <UpdateFromURL>http://webservices.webfarefinder.com/ws_pax_aux_test/ws_pax_paxdoc.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>Expertia_Estructura_ws_pax_aux_ws_pax_paxdoc_ws_pax_paxdoc</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\XD\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
