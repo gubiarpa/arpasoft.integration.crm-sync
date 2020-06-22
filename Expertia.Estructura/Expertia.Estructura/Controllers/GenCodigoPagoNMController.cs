@@ -373,6 +373,53 @@ namespace Expertia.Estructura.Controllers
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
+            var strEmailsCli = pedido.Email;
+            var ws_SafetyPay = new ws_compra.ws_compra();
+            var request = new CustomOnlinePaymentRequestType();
+            var objAmountType = new ws_compra.AmountType();
+            objAmountType.CurrencyID = CurrencyEnumType.USD.ToString();
+            objAmountType.Value = decimal.TryParse(pedido.MontoPagar.ToString(), out decimal dblMontoPagar) ? dblMontoPagar : 0;
+            request.BankID = string.Empty;
+            request.TransactionIdentifier = string.Empty;
+            request.MerchantAccount = string.Empty;
+            request.MerchantSalesID = resultPedido.IdPedido.ToString();
+            request.TrackingCode = "0";
+            request.ExpirationTime = pedido.TiempoExpiracionCIP ?? 0 * 60;
+            request.ExpirationTimeSpecified = true;
+
+            request.Language = pedido.IdWeb == Webs_Cid.DM_WEB_ID ? "PE": "ES";
+            request.CountryID = "PER";
+            request.Amount = objAmountType;
+            request.TransactionOkURL = pedido.IdWeb == Webs_Cid.DM_WEB_ID ?
+                "http://www.destinosmundialesperu.com/" :
+                "http://www.nmviajes.com/";
+            request.TransactionErrorURL = pedido.IdWeb == Webs_Cid.DM_WEB_ID ?
+                "http://www.destinosmundialesperu.com/" :
+                "http://www.nmviajes.com/seguros#";
+
+            request.SendEmailToShopper = true;
+            if (request.SendEmailToShopper) request.CustomerInformation_Value = DtsUsuarioLogin.EmailUsuario;
+            request.IdDepartamento = DtsUsuarioLogin.IdDep;
+            request.IdOficina = DtsUsuarioLogin.IdOfi;
+            request.ApplicationID = (short)(pedido.IdWeb ?? 0);
+
+
+            //var respond As ws_srv_gnm.ws_compra.RptaPagoSafetyPay
+            ws_compra.RptaPagoSafetyPay respond;
+            if (pedido.IdWeb == Webs_Cid.DM_WEB_ID)
+            {
+                request.WebId = pedido.IdWeb ?? 0;
+                respond = ws_SafetyPay.GenerarPago_SafetyPay_OnlineDM(request);
+            }
+            else
+            {
+                request.IdDepartamento = DtsUsuarioLogin.IdDep;
+                request.IdOficina = DtsUsuarioLogin.IdOfi;
+                respond = ws_SafetyPay.GenerarPago_SafetyPay_Online(request);
+            }
+
+            //NuevoMundoUtility.RptaPagoSafetyPay = objPasarelaPagoBO.Obtiene_Rpta_SafetyPay(intIdPedido)
+            var objRptaPagoSafetyPay = (new Pedido_AW_Repository()).Get_Rpta_SagetyPay(resultPedido.IdPedido);
         }
 
         private void GenerarPedido_Safetypay_Internacional(DatosPedido pedido,
@@ -396,7 +443,7 @@ namespace Expertia.Estructura.Controllers
             var datFechaExpiraPago = datFechaActual.AddHours(ddlHoraExpiraCIP);
             resultPedido.FechaExpiracion = datFechaExpiraPago;
 
-            var intIdFormaPago = /*NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC;*/ 5;
+            var intIdFormaPago = Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC;
 
             try
             {
