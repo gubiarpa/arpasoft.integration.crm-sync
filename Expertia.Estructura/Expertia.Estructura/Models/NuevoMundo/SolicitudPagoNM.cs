@@ -13,7 +13,7 @@ namespace Expertia.Estructura.Models
         public string estado1 { get; set; }
         public string estado2 { get; set; }
         public string resultado { get; set; }
-        public string montoPagar { get; set; }
+        public float montoPagar { get; set; }
         public string rcGenerado { get; set; }
         public string lineaAereaValidadora { get; set; }
         public string formaPago { get; set; }
@@ -44,7 +44,7 @@ namespace Expertia.Estructura.Models
         public string accion_SF { get; set; }
         public int idFormpaPago { get; set; }
         public float igv { get; set; }
-        public float montoPagarDbl { get; set; }
+        public string nroCuotas { get; set; }
         public int WebCid { get; set; }
         public int IdCotizacion { get; set; }
         public string CodigoError { get; set; }
@@ -52,6 +52,7 @@ namespace Expertia.Estructura.Models
         public string IdRegSolicitudPago_SF { get; set;}
         public string codigoPago { get; set; }
         public string fechaExpiracion { get; set; }
+        public string email { get; set; }
     }
 
     public class RptaSolicitudPagoSF : ICrmApiResponse

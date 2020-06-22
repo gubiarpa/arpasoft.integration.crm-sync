@@ -22,6 +22,7 @@ namespace Expertia.Estructura.Models
         public string promowebcode { get; set; }
         public float totalfacturar { get; set; }
         public float MontoSeg { get; set; }
+        public string paq_reserva_tipo { get; set; }
         public float DescuentoSeg { get; set; }
         public float feeAsumidoGeneralBoletos { get; set; }
         public float numHabitacionPaquete { get; set; }
@@ -33,8 +34,10 @@ namespace Expertia.Estructura.Models
         public float precioTotalPorHabitacionPaq { get; set; }
         public float precioTotalHabitacionesPaq { get; set; }
         public float gastosAdministrativosPaq { get; set; }
-        public string tarjetaDeTurismo { get; set; }
-        public string tarjetaDeAsistencia { get; set; }
+        public float tarjetaDeTurismo { get; set; }
+        public float tarjetaDeAsistencia { get; set; }
+        public string paq_reserva_id { get; set; }//Nuevo
+        public float precioTotalActividadesPaq { get; set; }//falta en SP
         public float precioTotalPagarPaq { get; set; }
         public string textoDescuentoPaq { get; set; }
         public float montoDescuentoPaq { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.NuevoMundo;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Repository.Behavior;
 using Expertia.Estructura.Utils;
@@ -40,6 +41,50 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
             return operation;
         }
+        public Operation Update(RptaInformacionPagoSF oRptaInformacionPagoSF)
+        {
+            var operation = new Operation();
+
+            #region Parameters  
+            AddParameter(OutParameter.CodigoError, OracleDbType.Varchar2, oRptaInformacionPagoSF.CodigoError, ParameterDirection.Input, 2);
+            AddParameter(OutParameter.MensajeError, OracleDbType.Varchar2, oRptaInformacionPagoSF.MensajeError, ParameterDirection.Input, 1000);
+
+            AddParameter(OutParameter.SF_IDOPORTUNIDAD_NM, OracleDbType.Varchar2, oRptaInformacionPagoSF.idOportunidad_SF);
+            AddParameter(OutParameter.SF_IdInformacionPagoNM, OracleDbType.Varchar2, oRptaInformacionPagoSF.IdInfoPago_SF);
+            AddParameter(OutParameter.IdCodeIdentifyNM, OracleDbType.Varchar2, oRptaInformacionPagoSF.CodigoServicio_NM); //iderntificador nm
+            AddParameter(OutParameter.IdIdentificadorNM, OracleDbType.Int64, Convert.ToInt64(oRptaInformacionPagoSF.Identificador_NM)); //P_IDENTIFY_NM_CAMB id _reserva
+            AddParameter(OutParameter.IdActualizados, OracleDbType.Int32, DBNull.Value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Upd_InformacionPagoNM);
+            operation[OutParameter.IdActualizados] = GetOutParameter(OutParameter.IdActualizados);
+            #endregion
+
+            return operation;
+        }
+        //
+
+        public Operation GetListPagosServicio( int pIntCodWeb_in, int pIntCodCot_in, int pIntCodSuc_in, string tpCharTipoPaquete)
+        {
+            var operation = new Operation();
+
+            #region Parameters
+            /// (1) P_CODIGO_ERROR
+            AddParameter("pIntCodWeb_in", OracleDbType.Int32, pIntCodWeb_in);
+            AddParameter("pIntCodCot_in", OracleDbType.Int32, pIntCodCot_in);
+            AddParameter("pIntCodSuc_in", OracleDbType.Int32, pIntCodSuc_in);
+            AddParameter("tpCharTipoPaquete", OracleDbType.Varchar2, tpCharTipoPaquete);
+            AddParameter(OutParameter.CursorInformacionPagoNM, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Get_ListInformacionPagoNM);
+            operation[OutParameter.CursorInformacionPagoNM] = ToListPagosServicio(GetDtParameter(OutParameter.CursorInformacionPagoNM));
+            #endregion
+
+            return operation;
+        }
         #endregion
 
         #region Parse
@@ -62,7 +107,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         tarifaNeto = row.FloatParse("tarifaNeto"),
                         impuestos = row.FloatParse("impuestos"),
                         cargos = row.FloatParse("cargos"),
-                        montodescuento = row.FloatParse("montodescuquixento"),
+                        montodescuento = row.FloatParse("montodescuento"),
                         textodescuento = row.StringParse("textodescuento"),
                         promowebcode = row.StringParse("promowebcode"),
                         totalfacturar = row.FloatParse("totalfacturar"),
@@ -79,8 +124,8 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         precioTotalPorHabitacionPaq = row.FloatParse("precioTotalPorHabitacionPaq"),
                         precioTotalHabitacionesPaq = row.FloatParse("precioTotalHabitacionesPaq"),
                         gastosAdministrativosPaq = row.FloatParse("gastosAdministrativosPaq"),
-                        tarjetaDeTurismo = row.StringParse("tarjetaDeTurismo"),
-                        tarjetaDeAsistencia = row.StringParse("tarjetaDeAsistencia"),
+                        tarjetaDeTurismo = row.FloatParse("tarjetaDeTurismo"),
+                        tarjetaDeAsistencia = row.FloatParse("tarjetaDeAsistencia"),
                         precioTotalPagarPaq = row.FloatParse("precioTotalPagarPaq"),
                         textoDescuentoPaq = row.StringParse("textoDescuentoPaq"),
                         montoDescuentoPaq = row.FloatParse("montoDescuentoPaq"),
@@ -98,10 +143,35 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         OrdenServicio = row.StringParse("OrdenServicio"),
                         OrdenDatos = row.StringParse("OrdenDatos"),
                         DescuentoSeg = row.FloatParse("DescuentoSeg"),
-                        MontoSeg = row.FloatParse("MontoSeg")
+                        MontoSeg = row.FloatParse("MontoSeg"),
+                        paq_reserva_tipo = row.StringParse("paq_reserva_tipo")
                     });
                 }
                 return informacionPagoNMList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private IEnumerable<PagosServicioPaquete> ToListPagosServicio(DataTable dt)
+        {
+            try
+            {
+                var LPagosServicioPaquete = new List<PagosServicioPaquete>();
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    LPagosServicioPaquete.Add(new PagosServicioPaquete()
+                    {
+                        descripcionServ = row.StringParse("descripcionServ"),
+                        pasajerosServ = row.FloatParse("pasajerosServ"),
+                        precioServ = row.FloatParse("precioServ"),
+
+                    });
+                }
+                return LPagosServicioPaquete;
             }
             catch (Exception ex)
             {

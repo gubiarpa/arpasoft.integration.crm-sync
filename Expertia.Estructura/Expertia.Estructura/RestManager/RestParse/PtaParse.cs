@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.NuevoMundo;
 using Expertia.Estructura.Models.Retail;
 using Expertia.Estructura.Utils;
 using System;
@@ -328,7 +329,7 @@ namespace Expertia.Estructura.RestManager.RestParse
             try
             {
                 return new
-                {                    
+                {
                     cuentaNM.idCuenta_SF,
                     cuentaNM.idCuenta_NM,
                     cuentaNM.nombreCliente,
@@ -337,21 +338,21 @@ namespace Expertia.Estructura.RestManager.RestParse
                     cuentaNM.emailCliente,
                     cuentaNM.enviarPromociones,
                     cuentaNM.tipoTelefono1,
-                    cuentaNM.pais1,                    
+                    cuentaNM.pais1,
                     cuentaNM.codArea1,
                     cuentaNM.Anexo1,
                     cuentaNM.numero1,
                     cuentaNM.tipoTelefono2,
-                    cuentaNM.pais2,                                        
+                    cuentaNM.pais2,
                     cuentaNM.codArea2,
                     cuentaNM.Anexo2,
                     cuentaNM.numero2,
                     cuentaNM.tipoTelefono3,
-                    cuentaNM.pais3,                                        
+                    cuentaNM.pais3,
                     cuentaNM.codArea3,
                     cuentaNM.Anexo3,
                     cuentaNM.numero3,
-                    Direccion = cuentaNM.direccion,                    
+                    Direccion = cuentaNM.direccion,
                     cuentaNM.idUsuarioSrv_SF,
                     cuentaNM.accion_SF,
                 };
@@ -426,13 +427,13 @@ namespace Expertia.Estructura.RestManager.RestParse
             {
                 if (ListReservasOp_NM != null && ListReservasOp_NM.Count > 0)
                 {
-                    var objListReservasOp_NM = new List<object>();                    
+                    var objListReservasOp_NM = new List<object>();
                     foreach (ReservasOportunidad_NM ReservasOp_NM in ListReservasOp_NM)
                     {
                         objListReservasOp_NM.Add(
                             new
                             {
-                                ReservasOp_NM.IdReserva,                                
+                                ReservasOp_NM.IdReserva,
                                 ReservasOp_NM.codReserva,
                                 fechaCreacion = ReservasOp_NM.fechaCreación,
                                 ReservasOp_NM.estadoVenta,
@@ -447,7 +448,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                                 ReservasOp_NM.descripPaquete,
                                 ReservasOp_NM.destinoPaquetes,
                                 ReservasOp_NM.fechasPaquetes,
-                                ReservasOp_NM.Proveedor,    
+                                ReservasOp_NM.Proveedor,
                                 PlanSeguro = "",
                                 Plan = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.Plan),
                                 CantPasajeros = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.CantPasajeros),
@@ -455,7 +456,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                                 FechaSalida = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.FechaSalida),
                                 FechaRetorno = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.FechaRetorno),
                                 Edades = (ReservasOp_NM.PlanSeguro == null ? null : ReservasOp_NM.PlanSeguro.Edades),
-                                EmergenciaSeguro = "",                                
+                                EmergenciaSeguro = "",
                                 Nombre = (ReservasOp_NM.EmergenciaSeguro == null ? null : ReservasOp_NM.EmergenciaSeguro.Nombre),
                                 Apellido = (ReservasOp_NM.EmergenciaSeguro == null ? null : ReservasOp_NM.EmergenciaSeguro.Apellido),
                                 Telefono = (ReservasOp_NM.EmergenciaSeguro == null ? null : ReservasOp_NM.EmergenciaSeguro.Telefono),
@@ -617,7 +618,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     solicitudPagoNM.CodAutorTarj,
                     solicitudPagoNM.TipoImporte,
                     solicitudPagoNM.MontoImporte,
-                    solicitudPagoNM.PlazoDePago,
+                    solicitudPagoNM.PlazoDePago, //
                     solicitudPagoNM.Error,
                     solicitudPagoNM.CodCanje,
                     solicitudPagoNM.Puntos,
@@ -627,7 +628,15 @@ namespace Expertia.Estructura.RestManager.RestParse
                     solicitudPagoNM.GEM,
                     solicitudPagoNM.PEF,
                     solicitudPagoNM.accion_SF
-                    ,solicitudPagoNM.IdRegSolicitudPago_SF
+                    ,
+                    solicitudPagoNM.IdRegSolicitudPago_SF//
+                    ,
+                    solicitudPagoNM.fechaExpiracion//
+                    ,
+                    solicitudPagoNM.codigoPago//
+                    ,
+                    solicitudPagoNM.nroCuotas,
+                    solicitudPagoNM.email
                 };
             }
             catch (Exception ex)
@@ -636,28 +645,47 @@ namespace Expertia.Estructura.RestManager.RestParse
             }
         }
 
-        public static object ToSalesforceEntity(this InformacionPagoNM informacionPagoNM)
+        public static object ToSalesforceEntity(this InfoPagoNM infoPagoNM)
         {
             try
             {
+
                 return new
                 {
-                    informacionPagoNM.idOportunidad_SF,
-                    informacionPagoNM.tipoServicio,
-                    informacionPagoNM.tipoPasajero,
-                    informacionPagoNM.totalBoleto,
-                    informacionPagoNM.tarifaNeto,
-                    informacionPagoNM.impuestos,
-                    informacionPagoNM.cargos,
-                    informacionPagoNM.numHabitacionPaquete,
-                    informacionPagoNM.cantidadPasajeroPaq,
-                    informacionPagoNM.precioUnitarioPaq,
-                    informacionPagoNM.totalUnitarioPaq,
-                    informacionPagoNM.precioTotalPorHabitacionPaq,
-                    informacionPagoNM.precioTotalHabitacionesPaq,
-                    informacionPagoNM.gastosAdministrativosPaq,
-                    informacionPagoNM.precioTotalPagarPaq,
-                    informacionPagoNM.accion_SF
+                    infoPagoNM.idOportunidad_SF,
+                    infoPagoNM.Identificador_NM,
+                    infoPagoNM.IdInformacionPago_SF,
+                    infoPagoNM.ListPago_Boleto_Servicios,
+                    //Aqui Lista ListPago_Boleto_Servicios
+
+                    infoPagoNM.totalPagar,
+                    infoPagoNM.montoDescuento,
+                    infoPagoNM.textoDescuento,
+                    infoPagoNM.promoWebCode,
+                    infoPagoNM.totalFacturar,
+                    infoPagoNM.feeAsumidoGeneralBoletos,
+                    infoPagoNM.ListPagosDesglose_Paquete,
+                    //Aqui Lista ListPagosDesglose_Paquete
+
+                    infoPagoNM.precioTotalHabitacionesPaq,
+                    infoPagoNM.gastosAdministrativosPaq,
+                    infoPagoNM.tarjetaDeTurismo,
+                    infoPagoNM.tarjetaDeAsistencia,
+                    //oInfoPagoNM.PaqueteId = infoPagoNM.PaqueteId,
+                    infoPagoNM.ListPagosServicio_Paquete,
+                    //Aqui Lista ListPagosServicio_Paquete
+
+                    infoPagoNM.precioTotalActividadesPaq,
+                    infoPagoNM.textoDescuentoPaq,
+                    infoPagoNM.montoDescuentoPaq,
+                    infoPagoNM.totalFacturarPaq,
+                    infoPagoNM.precioTotalPagarPaq,
+                    infoPagoNM.cantDiasSeg,
+                    infoPagoNM.precioUnitarioSeg,
+                    infoPagoNM.MontoSeg,
+                    infoPagoNM.DescuentoSeg,
+                    infoPagoNM.MontoReservaSeg,
+                    infoPagoNM.accion_SF,
                 };
             }
             catch (Exception ex)
@@ -701,7 +729,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     fileOportunidadNM.importe,
                     fileOportunidadNM.sucursal,
                     fileOportunidadNM.fecha,
-                    fileOportunidadNM.accion_SF                   
+                    fileOportunidadNM.accion_SF
                 };
             }
             catch (Exception ex)

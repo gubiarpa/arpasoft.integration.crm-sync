@@ -78,15 +78,15 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         idOportunidad_SF = row.StringParse("IdOportunidad_SF"),
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         IdPedido = row.IntParse("NRO_PEDIDO"),
-                        pasarela = row.StringParse("FormaPago"), //row.StringParse("Pasarela"),
+                        pasarela = row.StringParse("Pasarela"), //row.StringParse("Pasarela"),
                         fechaPedido = row.DateTimeParse("FechaPedido").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
                         estado1 = row.StringParse("Estado1"),
                         estado2 = row.StringParse("Estado2"),
                         resultado = row.StringParse("Resultado"),
-                        montoPagar = row.StringParse("MontoPagar"),
+                        montoPagar = row.FloatParse("MontoPagar"),
                         rcGenerado = row.StringParse("RcGenerado"),
                         lineaAereaValidadora = row.StringParse("LineaAereaValidadora"),
-                        formaPago = row.StringParse("FormaPago"),
+                        formaPago = row.StringParse("idFormpaPago"),//row.StringParse("FormaPago"),
                         entidadBancaria = row.StringParse("EntidadBancaria"),
                         nroTarjeta = row.StringParse("NroTarjeta"),
                         titularTarjeta = row.StringParse("TitularTarjeta"),
@@ -102,77 +102,90 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         CodAutorTarj = row.StringParse("CodAutorTarj"),
                         TipoImporte = row.StringParse("TipoImporte"),
                         MontoImporte = row.StringParse("MontoImporte"),
-                        PlazoDePago = row.StringParse("PlazoDePago"),
+                        PlazoDePago = row.DateTimeParse("PlazoDePago").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
                         Error = row.StringParse("Error"),
                         CodCanje = row.StringParse("CodCanje"),
                         Puntos = row.StringParse("Puntos"),
                         ipCliente = row.StringParse("IpCliente"),
-                        docTitular = row.StringParse("DocTitular"),                        
+                        docTitular = row.StringParse("DocTitular"),
                         accion_SF = row.StringParse("Accion_SF"),
                         WebCid = row.IntParse("WEBS_CID"),
                         IdCotizacion = row.IntParse("COTSRV_ID"),
                         idFormpaPago = row.IntParse("idFormpaPago"),
                         igv = row.FloatParse("IGV"),
-                        montoPagarDbl = row.FloatParse("MontoPagarDbl"),
-                        IdRegSolicitudPago_SF ="",
+                        nroCuotas = row.StringParse("NroCuotas"),
+                        IdRegSolicitudPago_SF = row.StringParse("IDREGSOLICITUDPAGO_SF"),
                         codigoPago = row.StringParse("CodigoPago"),
-                        fechaExpiracion = row.StringParse("FechaExpiracionPago")
+                        fechaExpiracion = row.DateTimeParse("FechaExpiracionPago").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
+                        email = row.StringParse("email")
                     };
-
-                    if ("56789".Contains(objSolicitudPagoNM.idFormpaPago.ToString()) == true)
+                    if (string.IsNullOrWhiteSpace(objSolicitudPagoNM.nroCuotas))
                     {
-                        /*Calculo del GEM Y PEF*/
-                        double dblIGV = objSolicitudPagoNM.igv / (double)100;
-                        double dblTopeMonto = System.Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_TOPE_MONTO_COMISION]);
-                        double dblMontoComision1 = Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_MONTO_COMISION1]);
-                        double dblMontoComision2 = Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_MONTO_COMISION2]);
-                        double dblPctajeComision = Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_PCTAJE_COMISION]);
-                        double dblComisionIGV = 0;
-                        double dblMontoPagar = objSolicitudPagoNM.montoPagarDbl;
-                        double dblComisionIGVTope = ((dblMontoComision2 * dblIGV) + dblMontoComision2);
-
-                        double dblPEF = 0;
-                        double dblGEM = 0;
-                        if (dblMontoPagar >= dblTopeMonto)
-                        {
-                            double dblComision = ((dblMontoPagar * dblPctajeComision) / 100);
-                            dblComisionIGV = dblComision + (dblComision * dblIGV);
-
-                            if (dblComisionIGV > dblComisionIGVTope)
-                            {
-                                dblPEF = dblComisionIGVTope; ;
-                            }                                    
-                            else
-                            {
-                                dblPEF = dblComisionIGV;// ((dblMontoPagar * dblPctajeComision) / 100) + dblComisionIGV
-                            }                                    
-                        }
-                        else
-                        {
-                            dblComisionIGV = dblMontoComision1 + (dblMontoComision1 * dblIGV);
-                            // dblPEF = dblMontoComision1 + dblComisionIGV
-                            dblPEF = dblComisionIGV;
-                        }
-
-                            
-                        objSolicitudPagoNM.FEE = (Convert.IsDBNull(row["FEE"]) == false ? row.FloatParse("FEE") : 0);                            
-                        if (objSolicitudPagoNM.FEE.HasValue)
-                        {
-                            dblGEM = (double)objSolicitudPagoNM.FEE - dblPEF;
-                        }
-                        else
-                        {
-                            dblGEM = -1;
-                        }
-                                                       
-                        objSolicitudPagoNM.PEF = (float)dblPEF;                            
-                        if (dblGEM >= 0)
-                        {
-                            objSolicitudPagoNM.GEM = (float)dblGEM;                            
-                        }
+                        objSolicitudPagoNM.nroCuotas = "0";
                     }
+                    objSolicitudPagoNM.FEE =-2 ;
+                    objSolicitudPagoNM.GEM = 1;
+                    objSolicitudPagoNM.PEF = 1;
+                    //if ("56789".Contains(objSolicitudPagoNM.idFormpaPago.ToString()) == true)
+                    //{
+                    //    /*Calculo del GEM Y PEF*/
+                    //    double dblIGV = objSolicitudPagoNM.igv / (double)100;
+                    //    double dblTopeMonto = System.Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_TOPE_MONTO_COMISION]);
+                    //    double dblMontoComision1 = Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_MONTO_COMISION1]);
+                    //    double dblMontoComision2 = Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_MONTO_COMISION2]);
+                    //    double dblPctajeComision = Convert.ToDouble(ConfigurationManager.AppSettings[Constantes_FEE.DBL_PAGOEFECTIVO_PCTAJE_COMISION]);
+                    //    double dblComisionIGV = 0;
+                    //    double dblMontoPagar = objSolicitudPagoNM.montoPagar;
+                    //    double dblComisionIGVTope = ((dblMontoComision2 * dblIGV) + dblMontoComision2);
 
-                    if(string.IsNullOrEmpty(objSolicitudPagoNM.LinkPago) == false && objSolicitudPagoNM.LinkPago == "SI")
+                    //    double dblPEF = 0;
+                    //    double dblGEM = 0;
+                    //    if (dblMontoPagar >= dblTopeMonto)
+                    //    {
+                    //        double dblComision = ((dblMontoPagar * dblPctajeComision) / 100);
+                    //        dblComisionIGV = dblComision + (dblComision * dblIGV);
+
+                    //        if (dblComisionIGV > dblComisionIGVTope)
+                    //        {
+                    //            dblPEF = dblComisionIGVTope; ;
+                    //        }                                    
+                    //        else
+                    //        {
+                    //            dblPEF = dblComisionIGV;// ((dblMontoPagar * dblPctajeComision) / 100) + dblComisionIGV
+                    //        }                                    
+                    //    }
+                    //    else
+                    //    {
+                    //        dblComisionIGV = dblMontoComision1 + (dblMontoComision1 * dblIGV);
+                    //        // dblPEF = dblMontoComision1 + dblComisionIGV
+                    //        dblPEF = dblComisionIGV;
+                    //    }
+
+
+                    //    objSolicitudPagoNM.FEE = (Convert.IsDBNull(row["FEE"]) == false ? row.FloatParse("FEE") : 0);                            
+                    //    if (objSolicitudPagoNM.FEE.HasValue)
+                    //    {
+                    //        dblGEM = (double)objSolicitudPagoNM.FEE - dblPEF;
+                    //    }
+                    //    else
+                    //    {
+                    //        dblGEM = -1;
+                    //    }
+
+                    //    objSolicitudPagoNM.PEF = (float)dblPEF;                            
+                    //    if (dblGEM >= 0)
+                    //    {
+                    //        objSolicitudPagoNM.GEM = (float)dblGEM;                            
+                    //    }
+                    //    if (objSolicitudPagoNM.FEE==0 )
+                    //    {
+                    //        objSolicitudPagoNM.FEE = 1;
+                    //        objSolicitudPagoNM.GEM = 1;
+                    //        objSolicitudPagoNM.PEF = 1;
+                    //    }
+                    //}
+
+                    if (string.IsNullOrEmpty(objSolicitudPagoNM.LinkPago) == false && objSolicitudPagoNM.LinkPago == "SI")
                     {
                         objSolicitudPagoNM.LinkPago = Obtiene_LinkPago(objSolicitudPagoNM.WebCid, objSolicitudPagoNM.IdPedido, objSolicitudPagoNM.IdCotizacion);
                     }

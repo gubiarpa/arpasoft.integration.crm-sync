@@ -294,6 +294,7 @@ namespace Expertia.Estructura.Utils
         // CRMEC003_5
         public const string AW_Get_InformacionPagoNM = AW_NM_Package + "." + "SP_LISTAR_INFO_PAGO";
         public const string AW_Upd_InformacionPagoNM = AW_NM_Package + "." + "SP_ACTUALIZAR_INFO_PAGO";
+        public const string AW_Get_ListInformacionPagoNM = AW_NM_Package + "." + "SP_LISTAR_SERV_ADIC_PAQUETE";
         // CRMEC004
         public const string AW_Get_ChatterNM = AW_NM_Package + "." + "SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CHATTER";
@@ -431,6 +432,7 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdOportunidad = "ID_OPORTUNIDAD_SF";
         public const string SF_IDOPORTUNIDAD_NM = "P_IDOPORTUNIDAD_SF";
         public const string SF_IdOportunidad2 = "idOportunidad_SF";
+        public const string SF_IdOportunidad3 = "idOportunidadSF";
         public const string SF_IdCuenta = "ID_CUENTA_SF";
         public const string SF_IDCUENTA_NM = "P_IDCUENTA_SF";
         public const string SF_IdCuenta2 = "idCuenta_SF";        
@@ -452,6 +454,7 @@ namespace Expertia.Estructura.Utils
         public const string SF_IdRegSolicitudPago = "IdRegSolicitudPago_SF";
         public const string SF_IdRegSolicitudPago_NM = "P_IDSOLICPAGO_SF";
         public const string SF_IdInformacionPago = "IdInformacionPago_SF";
+        public const string SF_IdInformacionPago2 = "idInformacionPago_SF";
         public const string SF_IdInformacionPagoNM = "P_IDINFOPAGO_SF";        
         public const string SF_IdRegPostCotSrv = "IdRegPostCotSrv_SF";
         public const string SF_IDPOSTCOTSRV_NM = "P_IDPOSTCOTSRV_SF";
