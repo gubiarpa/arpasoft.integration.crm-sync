@@ -259,6 +259,17 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             #endregion
         }
 
+        public void UpdateOportunidad(string idOportunidadSF, int idCotizacionNM,string estadoRegistro)
+        {
+            AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.NVarchar2, idOportunidadSF);
+            AddParameter("P_ID_COTIZACION_NM", OracleDbType.Int32, idCotizacionNM);
+            AddParameter("P_ST_REGI", OracleDbType.NVarchar2, estadoRegistro);
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Update_OportunidadSF);
+            #endregion
+        }
+
         public void _Update_DatosReservaVuelo_Manual_Cot(int pIntIdCot, string pStrCodReserva, Int16 pIntIdMoneda, double pDblMontoVta)
         {
             try
@@ -338,41 +349,26 @@ namespace Expertia.Estructura.Repository.NuevoMundo
 
         public bool _EsCounterAdministratiivo(int pIntIdOfi)
         {
-            return false;
-            /**Programar Funcion**/
-            //NMConnection objNMConnection = new NMConnection();
-            //OracleCommand objCommand = new OracleCommand();
-            //NMOracleParameter objNMOraParam = new NMOracleParameter();
-            //try
-            //{
-            //    objCommand.CommandText = "begin :resultado := " + System.Data.strUsuario_WebsOracle + ".PKG_OFICINA.FN_OFI_ES_CA(:pNumIdOfi_in); end;";
-            //    objCommand.CommandType = CommandType.Text;
+            bool resultFn = false;
 
-            //    OracleParameter objParam1 = objCommand.Parameters.Add("rv", OracleDbType.Int16);
-            //    objParam1.Direction = ParameterDirection.ReturnValue;
+            try
+            {
+                #region Parameter                                
+                AddParameter("pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                AddParameter("P_OFI_ES_CA", OracleDbType.Int32, null, ParameterDirection.Output);                
+                #endregion
 
-            //    objNMOraParam.AddParameter(objCommand, "pNumIdOfi_in", OracleDbType.Int32, pIntIdOfi, ParameterDirection.Input);
+                #region Invoke
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_Ofi_Es_CA);                                
+                resultFn = (Convert.IsDBNull(GetOutParameter("P_OFI_ES_CA")) == false && GetOutParameter("P_OFI_ES_CA").ToString() == "1" ? true : false);
+                #endregion
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-            //    objNMConnection.Oracle_WebsConectar();
-            //    objCommand.Connection = objNMConnection.objOracleConexion_Webs;
-            //    objCommand.ExecuteNonQuery();
-            //    if (objParam1.Value.ToString == "1")
-            //        return true;
-            //    else
-            //        return false;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.ToString());
-            //}
-            //finally
-            //{
-            //    objNMConnection.Oracle_WebsDesconectar();
-            //    objCommand.Dispose();
-            //    objNMConnection = null/* TODO Change to default(_) if this is not a reference type */;
-            //    objCommand = null/* TODO Change to default(_) if this is not a reference type */;
-            //    objNMOraParam = null/* TODO Change to default(_) if this is not a reference type */;
-            //}
+            return resultFn;
         }
 
 

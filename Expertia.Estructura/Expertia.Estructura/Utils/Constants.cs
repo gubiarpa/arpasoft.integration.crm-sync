@@ -298,10 +298,12 @@ namespace Expertia.Estructura.Utils
         // CRMEC004
         public const string AW_Get_ChatterNM = AW_NM_Package + "." + "SP_LISTAR_CHATTER";
         public const string AW_Upd_ChatterNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CHATTER";
-        // CRMC008                
+        // CRMC008                        
+        public const string AW_Get_Ofi_Es_CA = AW_NM_Package + "." + "SP_OFI_ES_CA";
         public const string AW_Get_IdEstadoXName = AW_NM_Package + "." + "SP_GET_IDESTADO_X_NAME";
         public const string AW_Get_DatosClienteXIdSF = AW_NM_Package + "." + "SP_GET_X_CODE_SF";
         public const string AW_Get_DatosCotXIdSF = AW_NM_Package + "." + "SP_GET_COT_X_OPORTUNIDAD_SF";
+        public const string AW_Update_OportunidadSF = AW_NM_Package + "." + "SP_UPDATE_ENVIO_OPORTUNIDAD";
         public const string AW_Insert_OportunidadSF = AW_NM_Package + "." + "SP_REGISTRAR_OPORTUNIDAD";
         public const string AW_Insert_CuentaSF = AW_NM_Package + "." + "SP_REGISTRAR_CUENTA";
         public const string AW_Update_UrgenteHoraEmision = AW_NM_Package + "." + "SP_UPD_URGENTE_EMISION_COT";
@@ -313,8 +315,7 @@ namespace Expertia.Estructura.Utils
         public const string AW_Get_PedidosSinBanco = "APPWEBS.PKG_PAGO_ONLINE.SP_GET_PEDIDOS_SIN_BANCO";
         public const string AW_Update_EsEmitidoCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_ES_EMITIDO_COT";
         public const string AW_Update_CounterAdministrativo = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_CA_COT";
-        public const string AW_Update_FirmaClienteCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_FIRMA_CLI_COT";
-        public const string AW_Get_XIdVendPTA_Usuario = "APPWEBS.PKG_PERSONAL.SP_GET_IDVENDPTA_USU";        
+        public const string AW_Update_FirmaClienteCot = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_UPD_FIRMA_CLI_COT";              
 
 
         // CRMC006
@@ -323,6 +324,12 @@ namespace Expertia.Estructura.Utils
 
         public const string AW_Generar_Codigo_PagoNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_GENERACION_CODIGO_PAGO";
         public const string AW_Solicitar_Facturacion_FileNM = "APPWEBS.CRM_PKG_ECOMMERCE.SP_SOLICITAR_FACTURACION_FILE";
+
+        //Expertia_2
+        public const string AW_Get_XIdVendPTA_Usuario = "APPWEBS.PKG_PERSONAL.SP_GET_IDVENDPTA_USU";
+        public const string AW_GetSucursalXVendedor = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_SUCURSAL_X_VEND";
+        public const string AW_GetSucursalAdicXUsuarioWeb = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_SUCADIC_X_USUWEB";
+
         #endregion
     }
 
@@ -420,6 +427,7 @@ namespace Expertia.Estructura.Utils
         public const string CursorInformacionPagoNM = "P_INFO_PAGO";
         public const string CursorChatterNM = "P_CHATTER";
         public const string CursorFileAsociadossNM = "P_FILES_ASOCIADOS";
+        public const string CursorDtosGenerico = "pCurResult_out";
         #endregion
 
         #region Fields
@@ -563,6 +571,11 @@ namespace Expertia.Estructura.Utils
         public const Int16 INT_ID_EMPRESA_GNM_TRAVELACE = 8;
         public const Int16 INT_ID_EMPRESA_GNM_AGCORP = 35;
         public const Int16 INT_ID_EMPRESA_GNM_CONDOR_TRAVEL = 13;
+    }
+
+    public static class Estados_Oportunidad
+    {
+        public const string ID_ST_REGI_NO_ENVIO = "2";
     }
 
     public static class Constantes_SRV

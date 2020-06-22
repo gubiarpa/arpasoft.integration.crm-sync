@@ -1,4 +1,5 @@
 ﻿using Expertia.Estructura.Models;
+using Expertia.Estructura.Models.NuevoMundo;
 using Expertia.Estructura.Repository.Base;
 using Expertia.Estructura.Utils;
 using Oracle.ManagedDataAccess.Client;
@@ -82,9 +83,47 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             
         }
 
+        public Operation _Select_SucursalAdic_ByIdUsuWeb(int pIntIdUsuWeb)
+        {
+            var operation = new Operation();
+
+            #region Parameters
+            AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, pIntIdUsuWeb, ParameterDirection.Input);
+            AddParameter("pCurResult_out", OracleDbType.RefCursor, null, ParameterDirection.Output);
+            #endregion
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_GetSucursalAdicXUsuarioWeb);
+            operation[OutParameter.CursorDtosGenerico] = ToSucursalesNM(GetDtParameter("pCurResult_out"));
+            #endregion
+                       
+            return operation;
+        }
         #endregion
 
         #region Parse
+        private IEnumerable<SucursalNM> ToSucursalesNM(DataTable dt)
+        {
+            try
+            {
+                var sucursalesNMList = new List<SucursalNM>();
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    sucursalesNMList.Add(new SucursalNM()
+                    {
+                        IdSucursal = row.IntParse("SUC_ID"),
+                        Descripcion = row.StringParse("SUC_NOM")
+                    });
+                }
+                return sucursalesNMList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private IEnumerable<FileOportunidadNM> ToFileOportunidadNM(DataTable dt)
         {
             try

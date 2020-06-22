@@ -242,6 +242,7 @@
     <Compile Include="Models\NuevoMundo\DetallePasajerosNM.cs" />
     <Compile Include="Models\NuevoMundo\DetalleItinerarioNM.cs" />
     <Compile Include="Models\NuevoMundo\OportunidadNM.cs" />
+    <Compile Include="Models\NuevoMundo\SucursalNM.cs" />
     <Compile Include="Models\Oportunidad.cs" />
     <Compile Include="Models\Retail\ArchivoCliCot.cs" />
     <Compile Include="Models\Retail\ArchivoPostCot.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Repository\Behavior\IRegionCuentaRepository.cs" />
     <Compile Include="Repository\Behavior\ISameSPName.cs" />
     <Compile Include="Repository\Behavior\ISubcodigoRepository.cs" />
+    <Compile Include="Repository\Behavior\ISucursalesNMRepository.cs" />
     <Compile Include="Repository\Behavior\IVentaCT.cs" />
     <Compile Include="Repository\Condor\Contacto_CT_Repository.cs" />
     <Compile Include="Repository\Condor\Cotizacion_CT_Repository.cs" />
@@ -329,6 +331,7 @@
     <Compile Include="Repository\NuevoMundo\DetalleItinerarioNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\OportunidadNMRepository.cs" />
     <Compile Include="Repository\NuevoMundo\CuentaNMRepository.cs" />
+    <Compile Include="Repository\NuevoMundo\SucursalesNMRepository.cs" />
     <Compile Include="Repository\Retail\CotizacionSRV_RetailRepository.cs" />
     <Compile Include="Repository\Retail\FileSRVRetailRepository.cs" />
     <Compile Include="Repository\Retail\FactFileRetailRepository.cs" />
