@@ -17,6 +17,9 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Script.Serialization;
+//using PaymentLocationType = Expertia.Estructura.ws_compra.PaymentLocationType;
+//using PaymentStepType = Expertia.Estructura.ws_compra.PaymentStepType;
+//using PaymentInstructionType = Expertia.Estructura.ws_compra.PaymentInstructionType;
 
 namespace Expertia.Estructura.Controllers
 {
@@ -235,10 +238,10 @@ namespace Expertia.Estructura.Controllers
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
-
         #endregion
 
         #region GenerarPedido
+        // Método de Pago: SC
         private void GenerarPedido_Safetypay_Cash(DatosPedido pedido, 
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
@@ -369,24 +372,150 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        // Método de Pago: SO
         private void GenerarPedido_Safetypay_Online(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
+            var strEmailsCli = pedido.Email;
+            var ws_SafetyPay = new ws_compra.ws_compra();
+            var request = new CustomOnlinePaymentRequestType();
+            var objAmountType = new ws_compra.AmountType();
+            objAmountType.CurrencyID = CurrencyEnumType.USD.ToString();
+            objAmountType.Value = decimal.TryParse(pedido.MontoPagar.ToString(), out decimal dblMontoPagar) ? dblMontoPagar : 0;
+            request.BankID = string.Empty;
+            request.TransactionIdentifier = string.Empty;
+            request.MerchantAccount = string.Empty;
+            request.MerchantSalesID = resultPedido.IdPedido.ToString();
+            request.TrackingCode = "0";
+            request.ExpirationTime = pedido.TiempoExpiracionCIP ?? 0 * 60;
+            request.ExpirationTimeSpecified = true;
+
+            request.Language = pedido.IdWeb == Webs_Cid.DM_WEB_ID ? "PE": "ES";
+            request.CountryID = "PER";
+            request.Amount = objAmountType;
+            request.TransactionOkURL = pedido.IdWeb == Webs_Cid.DM_WEB_ID ?
+                "http://www.destinosmundialesperu.com/" :
+                "http://www.nmviajes.com/";
+            request.TransactionErrorURL = pedido.IdWeb == Webs_Cid.DM_WEB_ID ?
+                "http://www.destinosmundialesperu.com/" :
+                "http://www.nmviajes.com/seguros#";
+
+            request.SendEmailToShopper = true;
+            if (request.SendEmailToShopper) request.CustomerInformation_Value = DtsUsuarioLogin.EmailUsuario;
+            request.IdDepartamento = DtsUsuarioLogin.IdDep;
+            request.IdOficina = DtsUsuarioLogin.IdOfi;
+            request.ApplicationID = (short)(pedido.IdWeb ?? 0);
+
+
+            //var respond As ws_srv_gnm.ws_compra.RptaPagoSafetyPay
+            ws_compra.RptaPagoSafetyPay respond;
+            if (pedido.IdWeb == Webs_Cid.DM_WEB_ID)
+            {
+                request.WebId = pedido.IdWeb ?? 0;
+                respond = ws_SafetyPay.GenerarPago_SafetyPay_OnlineDM(request);
+            }
+            else
+            {
+                request.IdDepartamento = DtsUsuarioLogin.IdDep;
+                request.IdOficina = DtsUsuarioLogin.IdOfi;
+                respond = ws_SafetyPay.GenerarPago_SafetyPay_Online(request);
+            }
+
+            
+            var objRptaPagoSafetyPay = (new Pedido_AW_Repository()).Get_Rpta_SagetyPay(resultPedido.IdPedido);
+
+            var lstPaymentType = new List<Models.PaymentLocationType>();
+
+            if (respond.lst_PaymentLocationType != null)
+            {
+                var lstPaymentStep = new List<Models.PaymentStepType>();
+                var lstPaymentInstructions = new List<Models.PaymentInstructionType>();
+
+                foreach (var objPaymentLocationTypeRSTmp in respond.lst_PaymentLocationType)
+                {
+                    var objPaymentLocationTypeRS = new Models.PaymentLocationType();
+                    objPaymentLocationTypeRS.Id = objPaymentLocationTypeRSTmp.ID;
+
+                    foreach (var objPaymentStepRSTmp in objPaymentLocationTypeRSTmp.lst_PaymentStepType)
+                    {
+                        var objPaymentStepRS = new Models.PaymentStepType();
+                        objPaymentStepRS.Step = objPaymentStepRSTmp.Step;
+                        objPaymentStepRS.StepSpecified = objPaymentStepRSTmp.StepSpecified;
+                        objPaymentStepRS.Value = objPaymentStepRSTmp.Value;
+                        lstPaymentStep.Add(objPaymentStepRS);
+                    }
+
+                    if (objPaymentLocationTypeRSTmp.PaymentInstructions != null)
+                    {
+                        foreach (var objPaymentInstructionTypeRSTmp in objPaymentLocationTypeRSTmp.PaymentInstructions)
+                        {
+                            var objPaymentInstructionsRS = new Models.PaymentInstructionType();
+                            objPaymentInstructionsRS.Name = objPaymentInstructionTypeRSTmp.Name;
+                            objPaymentInstructionsRS.Value = objPaymentInstructionTypeRSTmp.Value;
+                            lstPaymentInstructions.Add(objPaymentInstructionsRS);
+                        }
+                    }
+
+                    objPaymentLocationTypeRS.lstPaymentStepType = lstPaymentStep;
+                    objPaymentLocationTypeRS.Name = objPaymentLocationTypeRSTmp.Name;
+                    objPaymentLocationTypeRS.PaymentInstructions = lstPaymentInstructions.ToArray();
+                    objPaymentLocationTypeRS.PaymentSteps = lstPaymentStep.ToArray();
+                    lstPaymentType.Add(objPaymentLocationTypeRS);
+                }
+            }
+            var intIdFormaPago = Constantes_Pedido.ID_FORMA_PAGO_SAFETYPAY_ONLINE;
+
+            try
+            {
+                var objEnviarCorreo = new EnviarCorreo();
+                var datFechaActual = DateTime.Now;
+                //var datFechaExpiraPago As Date
+                var strExpirationDateTime = respond.ExpirationDateTime;
+                var arrExp = strExpirationDateTime.Split('(');
+                var datFechaExpiraPago = resultPedido.FechaExpiracion = datFechaActual.AddHours(pedido.TiempoExpiracionCIP ?? 0);
+
+                resultPedido.CorreoEnviado = objEnviarCorreo.Enviar_SolicitudPagoServicioSafetyPay(
+                    pedido.IdUsuario.ToString(),
+                    Convert.ToInt32(pedido.IdWeb),
+                    Convert.ToInt32(pedido.IdLang),
+                    pedido.IdCotVta,
+                    pedido.Email,
+                    null,
+                    pedido.NombreClienteCot,
+                    pedido.ApellidoClienteCot,
+                    null,
+                    DtsUsuarioLogin.NomCompletoUsuario,
+                    DtsUsuarioLogin.EmailUsuario,
+                    (pedido.CodePasarelaPago == Constantes_SafetyPay.CodeSafetyPayOnline ? Constantes_Pedido.ID_FORMA_PAGO_SAFETYPAY_ONLINE : Convert.ToInt16(0)),
+                    objRptaPagoSafetyPay.TransaccionIdentifier,
+                    resultPedido.IdPedido,
+                    Convert.ToDouble(pedido.Monto),
+                    objRptaPagoSafetyPay.ExpirationDateTime,
+                    objRptaPagoSafetyPay.lstAmountType,
+                    lstPaymentType);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
+        // Método de Pago: SI
         private void GenerarPedido_Safetypay_Internacional(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
 
+        // Método de Pago: IN { Descartado en el proyecto }
         private void GenerarPedido_Independencia(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
 
+        // Método de Pago: PE
         private void GenerarPedido_Pago_Efectivo(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
@@ -396,7 +525,7 @@ namespace Expertia.Estructura.Controllers
             var datFechaExpiraPago = datFechaActual.AddHours(ddlHoraExpiraCIP);
             resultPedido.FechaExpiracion = datFechaExpiraPago;
 
-            var intIdFormaPago = /*NMConstantesUtility.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC;*/ 5;
+            var intIdFormaPago = Constantes_FileRetail.INT_ID_FORMA_PAGO_PAGOEFECTIVO_EC;
 
             try
             {
@@ -466,7 +595,9 @@ namespace Expertia.Estructura.Controllers
                 throw ex;
             }
         }
+        #endregion
 
+        #region Auxiliar
         private bool Enviar_SolicitudPagoServicioPagoEfectivo(
             int pIntIdWeb,
             int pIntIdLang,
@@ -636,9 +767,7 @@ namespace Expertia.Estructura.Controllers
             else
                 return true;
         }
-        #endregion
 
-        #region Auxiliar
         protected override UnidadNegocioKeys? RepositoryByBusiness(UnidadNegocioKeys? unidadNegocioKey)
         {
             unidadNegocioKey = (unidadNegocioKey == null ? UnidadNegocioKeys.AppWebs : unidadNegocioKey);
