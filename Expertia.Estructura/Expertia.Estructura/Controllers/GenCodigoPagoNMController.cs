@@ -241,6 +241,7 @@ namespace Expertia.Estructura.Controllers
         #endregion
 
         #region GenerarPedido
+        // Método de Pago: SC
         private void GenerarPedido_Safetypay_Cash(DatosPedido pedido, 
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
@@ -371,6 +372,7 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        // Método de Pago: SO
         private void GenerarPedido_Safetypay_Online(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
@@ -471,7 +473,7 @@ namespace Expertia.Estructura.Controllers
                 //var datFechaExpiraPago As Date
                 var strExpirationDateTime = respond.ExpirationDateTime;
                 var arrExp = strExpirationDateTime.Split('(');
-                var datFechaExpiraPago = datFechaActual.AddHours(pedido.TiempoExpiracionCIP ?? 0);
+                var datFechaExpiraPago = resultPedido.FechaExpiracion = datFechaActual.AddHours(pedido.TiempoExpiracionCIP ?? 0);
 
                 resultPedido.CorreoEnviado = objEnviarCorreo.Enviar_SolicitudPagoServicioSafetyPay(
                     pedido.IdUsuario.ToString(),
@@ -499,18 +501,21 @@ namespace Expertia.Estructura.Controllers
             }
         }
 
+        // Método de Pago: SI
         private void GenerarPedido_Safetypay_Internacional(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
 
+        // Método de Pago: IN { Descartado en el proyecto }
         private void GenerarPedido_Independencia(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
         {
         }
 
+        // Método de Pago: PE
         private void GenerarPedido_Pago_Efectivo(DatosPedido pedido,
                                       Models.PedidoRS resultPedido,
                                       UsuarioLogin DtsUsuarioLogin)
