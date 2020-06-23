@@ -8,5 +8,6 @@ namespace Expertia.Estructura.Repository.Behavior
     public interface IDatosUsuario
     {
         UsuarioLogin Get_Dts_Usuario_Personal(int UsuarioID);
+        UsuarioLogin Get_Dts_Usuario_Personal_NM(int UsuarioID);
     }
 }

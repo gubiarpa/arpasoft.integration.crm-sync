@@ -43,7 +43,8 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(SolicitarFactFileNM solicitarFactFileNM)
         {
-            var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal(solicitarFactFileNM.idusuariosrv_SF);
+            var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal_NM(solicitarFactFileNM.idusuariosrv_SF);
+            if (usuarioLogin != null && usuarioLogin.IdUsuario != solicitarFactFileNM.idusuariosrv_SF) { solicitarFactFileNM.idusuariosrv_SF = usuarioLogin.IdUsuario; }
 
             var result = _solicitarFactFileNMRepository.GuardarDesgloseCA(solicitarFactFileNM);
 

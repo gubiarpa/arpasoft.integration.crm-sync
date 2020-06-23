@@ -1194,8 +1194,9 @@ namespace Expertia.Estructura.Controllers
             
             /*Cargamos Datos del Usuario*/
             RepositoryByBusiness(null);
-            UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_fileAssociate.idUsuario));
+            UserLogin = _datosUsuario.Get_Dts_Usuario_Personal_NM(Convert.ToInt32(_fileAssociate.idUsuario));
             if (UserLogin == null){mensajeError += "ID del Usuario no registrado|";}
+            else if (UserLogin.IdUsuario != _fileAssociate.idUsuario) { _fileAssociate.idUsuario = UserLogin.IdUsuario; }            
             else
             {
                 int intCotizacion_SF = _oportunidadVentaNMRepository._Select_CotId_X_OportunidadSF(_fileAssociate.idoportunidad_SF);

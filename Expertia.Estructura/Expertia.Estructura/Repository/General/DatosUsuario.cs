@@ -41,6 +41,28 @@ namespace Expertia.Estructura.Repository.General
             }
         }
 
+        public UsuarioLogin Get_Dts_Usuario_Personal_NM(int UsuarioID)
+        {
+            try
+            {
+                #region Parameter
+                AddParameter("pNumIdUsuWeb_in", OracleDbType.Int32, UsuarioID, ParameterDirection.Input);
+                AddParameter(OutParameter.CursorDtosPersonal, OracleDbType.RefCursor, DBNull.Value, ParameterDirection.Output);
+                #endregion
+
+                #region Invoke                
+                ExecuteStoredProcedure(StoredProcedureName.AW_Get_Datos_Usuario_NM);
+                UsuarioLogin _DtosUsuario = FillDatosUsuarioPersonal(GetDtParameter(OutParameter.CursorDtosPersonal));
+                #endregion
+
+                return _DtosUsuario;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private UsuarioLogin FillDatosUsuarioPersonal(DataTable dt = null)
         {
             try

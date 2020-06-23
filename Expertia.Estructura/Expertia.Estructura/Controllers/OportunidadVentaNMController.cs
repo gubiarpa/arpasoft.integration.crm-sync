@@ -410,8 +410,9 @@ namespace Expertia.Estructura.Controllers
             {                
                 /*Cargamos Datos del Usuario*/
                 RepositoryByBusiness(null);
-                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(_oportunidadVentaNM.IdUsuarioSrv_SF);
+                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal_NM(_oportunidadVentaNM.IdUsuarioSrv_SF);
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
+                else if (UserLogin.IdUsuario != _oportunidadVentaNM.IdUsuarioSrv_SF) { _oportunidadVentaNM.IdUsuarioSrv_SF = UserLogin.IdUsuario; }
 
                 _oportunidadVentaNM.idEstado = (short)_oportunidadVentaNMRepository._Select_EstadoIdXName(_oportunidadVentaNM.Estado);
                 if (_oportunidadVentaNM.idEstado <= 0) { mensajeError += "Envie un estado valido|"; }                
@@ -421,6 +422,15 @@ namespace Expertia.Estructura.Controllers
                 if(intCotizacion_SF <= 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE") { mensajeError += "No es posible actualizar si la oportunidad no esta registrada|"; }
                 else if (intCotizacion_SF > 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "INSERT") { mensajeError += "No es posible insertar si la oportunidad ya esta registrada|"; }
                 else if (intCotizacion_SF > 0 && _oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE" && intCotizacion_SF != _oportunidadVentaNM.IdCotSRV) { mensajeError += "La cotizacion enviada es diferente a la registrada|"; }
+                else
+                {
+                    /*Adicionalmente si envian el id de un counter administrativo y este no existe modificar por el counter por defecto*/
+                    if (_oportunidadVentaNM.Accion_SF.ToUpper().Trim() == "UPDATE" && _oportunidadVentaNM.counterAsignado != null && _oportunidadVentaNM.counterAsignado > 0)
+                    {
+                        UsuarioLogin UserLoginCA = _datosUsuario.Get_Dts_Usuario_Personal_NM((Int32)_oportunidadVentaNM.counterAsignado);
+                        if (UserLoginCA != null && UserLoginCA.IdUsuario != _oportunidadVentaNM.counterAsignado) { _oportunidadVentaNM.counterAsignado = UserLoginCA.IdUsuario; }
+                    }
+                }
 
                 if (_oportunidadVentaNM.IdCotSRV != null && string.IsNullOrEmpty(mensajeError))
                 {

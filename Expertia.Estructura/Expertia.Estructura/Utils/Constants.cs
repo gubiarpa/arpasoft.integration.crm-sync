@@ -274,6 +274,7 @@ namespace Expertia.Estructura.Utils
 
         /* *** NUEVO MUNDO *** */
         public const string AW_NM_Package = "APPWEBS.CRM_PKG_ECOMMERCE";
+        public const string AW_Get_Datos_Usuario_NM = AW_NM_Package + "." + "SP_OBTIENE_DATOS_X_USUARIO";
         // CRMEC001
         public const string AW_Get_CuentaNM = AW_NM_Package + "." + "SP_LISTAR_CUENTA";
         public const string AW_Upd_CuentaNM = AW_NM_Package + "." + "SP_ACTUALIZAR_CUENTA";

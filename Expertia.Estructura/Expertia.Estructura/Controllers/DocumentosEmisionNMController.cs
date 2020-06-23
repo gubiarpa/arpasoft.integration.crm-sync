@@ -44,6 +44,7 @@ namespace Expertia.Estructura.Controllers
 
                 ValidateNM(DocumentosEmision, ref _DocEmisionRS, ref usuarioLogin, ref DtsCotizacionVta);
                 if (string.IsNullOrEmpty(_DocEmisionRS.codigo) == false) return Ok(new { respuesta = _DocEmisionRS });
+                if(usuarioLogin.IdUsuario != DocumentosEmision.IdUsuarioSrv_SF) { DocumentosEmision.IdUsuarioSrv_SF = usuarioLogin.IdUsuario; }
 
                 /**Llamamos al servicio del SRV**/
                 ws_crm.ws_crm crmServiceSRV = new ws_crm.ws_crm();
@@ -136,7 +137,7 @@ namespace Expertia.Estructura.Controllers
             {
                 /*Cargamos Datos del Usuario*/
                 RepositoryByBusiness(null);
-                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(_docsEmisionNM.IdUsuarioSrv_SF);
+                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal_NM(_docsEmisionNM.IdUsuarioSrv_SF);
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
 
                 /*Validacion Oportunidad*/

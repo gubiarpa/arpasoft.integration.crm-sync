@@ -719,8 +719,9 @@ namespace Expertia.Estructura.Controllers
             {
                 /*Cargamos Datos del Usuario*/
                 _datosUsuario = new DatosUsuario(_pedido.UnidadNegocio.ID);
-                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal(Convert.ToInt32(_pedido.IdUsuario));
+                UserLogin = _datosUsuario.Get_Dts_Usuario_Personal_NM(Convert.ToInt32(_pedido.IdUsuario));
                 if (UserLogin == null) { mensajeError += "ID del Usuario no registrado|"; }
+                else if (UserLogin.IdUsuario != Convert.ToInt32(_pedido.IdUsuario)) { _pedido.IdUsuario = UserLogin.IdUsuario.ToString(); }
             }
             else
             {
