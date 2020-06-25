@@ -16,6 +16,29 @@ namespace Expertia.Estructura.Repository.NuevoMundo
         {
         }
 
+        public void RegistraSolicitudPagoSF(string idSolicitudPagoSF, string idOportunidadSF, int idPedidoNM)
+        {
+            AddParameter("P_ID_SOLIC_PAGO_SF", OracleDbType.NVarchar2, idSolicitudPagoSF);
+            AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.NVarchar2, idOportunidadSF);
+            AddParameter("P_ID_PEDIDO_NM", OracleDbType.Int32, idPedidoNM);
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Insert_SolicitudPagoSF);
+            #endregion
+        }
+
+        public void UpdateSolicitudPagoSF(string idSolicitudPagoSF, string idOportunidadSF, int idPedidoNM, string estadoRegistro)
+        {
+            AddParameter("P_ID_SOLIC_PAGO_SF", OracleDbType.NVarchar2, idSolicitudPagoSF);
+            AddParameter("P_ID_OPORTUNIDAD_SF", OracleDbType.NVarchar2, idOportunidadSF);
+            AddParameter("P_ID_PEDIDO_NM", OracleDbType.Int32, idPedidoNM);
+            AddParameter("P_ST_REGI", OracleDbType.NVarchar2, estadoRegistro);
+
+            #region Invoke
+            ExecuteStoredProcedure(StoredProcedureName.AW_Update_SolicitudPagoSF);
+            #endregion
+        }
+
         public Operation GenerarCodigoPago(GenCodigoPagoNM genCodigoPago)
         {
             var operation = new Operation();

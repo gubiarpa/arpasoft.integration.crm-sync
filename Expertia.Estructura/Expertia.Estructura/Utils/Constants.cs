@@ -332,6 +332,10 @@ namespace Expertia.Estructura.Utils
         public const string AW_GetSucursalXVendedor = "NUEVOMUNDO.PKG_WEB_PTA.SP_GET_SUCURSAL_X_VEND";
         public const string AW_GetSucursalAdicXUsuarioWeb = "APPWEBS.PKG_COTIZACION_VTA_WFF.SP_OBTIENE_SUCADIC_X_USUWEB";
 
+        //Expertia_4        
+        public const string AW_Update_SolicitudPagoSF = AW_NM_Package + "." + "SP_UPDATE_ENVIO_SOLIC_PAGO_SF";
+        public const string AW_Insert_SolicitudPagoSF = AW_NM_Package + "." + "SP_REGISTRAR_SOLIC_PAGO_SF";
+
         #endregion
     }
 

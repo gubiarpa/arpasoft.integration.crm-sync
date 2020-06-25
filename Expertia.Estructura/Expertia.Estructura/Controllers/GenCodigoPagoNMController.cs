@@ -51,13 +51,24 @@ namespace Expertia.Estructura.Controllers
                 validacionPedido(ref pedido, ref _resultpedido, ref _return, ref DtsUsuarioLogin);
                 //if (_return == true) return Ok(_resultpedido);
 
-                RepositoryByBusiness(pedido.UnidadNegocio.ID);
-                
+                RepositoryByBusiness(pedido.UnidadNegocio.ID);                
+
                 /*Generamos el Pedido*/
                 var operation = _pedidoRepository.CreateNM(pedido);
                 if (operation[Operation.Result].ToString() == ResultType.Success.ToString() && Convert.ToInt32(operation[OutParameter.IdPedido].ToString()) > 0)
                 {
                     _resultpedido.IdPedido = Convert.ToInt32(operation[OutParameter.IdPedido].ToString());
+
+                    /*Solo debe quedar la validacion del pedido(Modificar al agregar un par de validaciones en el lugar correcto)*/
+                    if (_resultpedido.IdPedido > 0 && string.IsNullOrEmpty(pedido_NM.IdOportunidad_SF) == false && string.IsNullOrEmpty(pedido_NM.IdSolicitudpago_SF) == false  && string.IsNullOrEmpty(pedido_NM.Accion_SF) == false && pedido_NM.Accion_SF.ToUpper().Trim() == "INSERT")
+                    {                        
+                        _genCodigoPagoNMRepository.RegistraSolicitudPagoSF(pedido_NM.IdSolicitudpago_SF, pedido_NM.IdOportunidad_SF, _resultpedido.IdPedido);
+                    }
+                    else if (_resultpedido.IdPedido > 0 && string.IsNullOrEmpty(pedido_NM.IdOportunidad_SF) == false && string.IsNullOrEmpty(pedido_NM.IdSolicitudpago_SF) == false && string.IsNullOrEmpty(pedido_NM.Accion_SF) == false && pedido_NM.Accion_SF.ToUpper().Trim() == "UPDATE")
+                    {
+                        _genCodigoPagoNMRepository.UpdateSolicitudPagoSF(pedido_NM.IdSolicitudpago_SF, pedido_NM.IdOportunidad_SF, _resultpedido.IdPedido, Estados_Oportunidad.ID_ST_REGI_NO_ENVIO);
+                    }
+
                     ///Actualizamos el campo solicitado por CRM SalesForce asociado al numero de pedido
                     _pedidoRepository.Update_Pedido_SolicitudPago_SF(_resultpedido.IdPedido, pedido.IdCotVta, pedido.IdOportunidad_SF, pedido.IdSolicitudpago_SF);
                 }
