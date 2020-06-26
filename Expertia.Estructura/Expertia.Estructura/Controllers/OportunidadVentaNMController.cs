@@ -292,10 +292,10 @@ namespace Expertia.Estructura.Controllers
             finally
             {
                 (new
-                {
+                {                    
                     Body = oportunidadVentaNM,
-                    IdCotSrv = idCotizacion,
-                    Error = exMessage
+                    Response = rptaOportunidadVentaNM,
+                    Exception = exMessage
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
