@@ -102,7 +102,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         CodAutorTarj = row.StringParse("CodAutorTarj"),
                         TipoImporte = row.StringParse("TipoImporte"),
                         MontoImporte = row.StringParse("MontoImporte"),
-                        PlazoDePago = row.DateTimeParse("PlazoDePago").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
+                        PlazoDePago =  (row.StringParse("PlazoDePago")=="") ? null : row.DateTimeParse("PlazoDePago").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
                         Error = row.StringParse("Error"),
                         CodCanje = row.StringParse("CodCanje"),
                         Puntos = row.StringParse("Puntos"),
@@ -116,7 +116,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         nroCuotas = row.StringParse("NroCuotas"),
                         IdRegSolicitudPago_SF = row.StringParse("IDREGSOLICITUDPAGO_SF"),
                         codigoPago = row.StringParse("CodigoPago"),
-                        fechaExpiracion = row.DateTimeParse("FechaExpiracionPago").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
+                        fechaExpiracion = row.StringParse("FechaExpiracionPago") ,
                         email = row.StringParse("email")
                     };
                     if (string.IsNullOrWhiteSpace(objSolicitudPagoNM.nroCuotas))
