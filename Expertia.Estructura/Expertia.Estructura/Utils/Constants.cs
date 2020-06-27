@@ -588,6 +588,7 @@ namespace Expertia.Estructura.Utils
 
     public static class Constantes_SRV
     {
+        public const Int16 INT_SUM_HORAS_FECHAS_ENV_SF = 5;
         public const Int16 INT_MAX_FILES_ASOCIADOS = 3;
         public const Int16 INT_ID_BD_WEB_FAREFINDER = 1;
         public const string IP_GENERAL = "127.0.0.0";
