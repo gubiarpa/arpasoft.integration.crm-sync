@@ -57,7 +57,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                 else
                     AddParameter("pChrRecibePromo_in", OracleDbType.Char, "0", ParameterDirection.Input, 1);
                 AddParameter("pVarDirecCliCot_in", OracleDbType.Varchar2, pStrDirecCliCot, ParameterDirection.Input, 100);
-                if (pStrIdTipDoc.Trim() == "-1")
+                if (pStrIdTipDoc == null || pStrIdTipDoc.Trim() == "-1")
                     AddParameter("pChrIdTipDoc_in", OracleDbType.Char, null, ParameterDirection.Input, 3);
                 else
                     AddParameter("pChrIdTipDoc_in", OracleDbType.Char, pStrIdTipDoc, ParameterDirection.Input, 3);
