@@ -178,7 +178,7 @@ namespace Expertia.Estructura.Controllers
                     idCotizacion = _oportunidadVentaNMRepository.Inserta_Cot_Vta(oportunidadVentaNM.ModoIngreso, oportunidadVentaNM.Comentario,
                         usuarioLogin.NomCompletoUsuario, usuarioLogin.LoginUsuario, strIPUsuario, (int)intIdCliCot,
                         usuarioLogin.IdUsuario, intIdDep, intIdOfi, Webs_Cid.ID_WEB_WEBFAREFINDER, Lang_Cid.IdLangSpa,
-                        oportunidadVentaNM.IdCanalVenta, oportunidadVentaNM.ServiciosAdicionales.Split(','),
+                        oportunidadVentaNM.IdCanalVenta, oportunidadVentaNM.ServiciosAdicionales.Split(';'),
                         oportunidadVentaNM.CiudadIata, null, 0, oportunidadVentaNM.IdDestino, oportunidadVentaNM.FechaIngreso,
                         oportunidadVentaNM.Fecharegreso, oportunidadVentaNM.CantidadAdultos, oportunidadVentaNM.CantidadNinos,
                         string.Empty, null, null, null, null, null, null, null, null, string.Empty, null);
@@ -343,9 +343,19 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "El apellido paterno del cliente es un campo obligatorio|";
             }
-            if (string.IsNullOrEmpty(_oportunidadVentaNM.EmailCli))
+            if (!(string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(_oportunidadVentaNM.NumDoc) == false && (new List<string> { "DNI", "PSP", "CEX" }).Contains(_oportunidadVentaNM.IdTipoDoc)))
             {
-                mensajeError += "El correo del cliente es un campo obligatorio|";
+                if (string.IsNullOrEmpty(_oportunidadVentaNM.EmailCli))
+                {
+                    mensajeError += "El correo del cliente es un campo obligatorio|";
+                }                
+            }
+            else if (string.IsNullOrEmpty(_oportunidadVentaNM.EmailCli))
+            {
+                if (!(string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(_oportunidadVentaNM.NumDoc) == false && (new List<string> { "DNI", "PSP", "CEX" }).Contains(_oportunidadVentaNM.IdTipoDoc)))
+                {
+                    mensajeError += "El tipo y número de documento del cliente es un campo obligatorio|";
+                }
             }
             if (string.IsNullOrEmpty(_oportunidadVentaNM.CiudadIata))
             {
