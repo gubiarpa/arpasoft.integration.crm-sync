@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Behavior;
+using Expertia.Estructura.Utils;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -133,7 +134,7 @@ namespace Expertia.Estructura.Models
                 IPUsuario = this.IPUsuario,
                 Browser = this.Browser,
                 DetalleServicio = this.DetalleServicio,
-                CodePasarelaPago = this.CodePasarelaPago,
+                CodePasarelaPago = this.FixCodePasarela(),
                 Email = this.Email,
                 TiempoExpiracionCIP = this.TiempoExpiracionCIP,
                 Monto = this.Monto,
@@ -201,6 +202,35 @@ namespace Expertia.Estructura.Models
             };
 
             return datosPedido;
+        }
+
+        private string FixCodePasarela()
+        {
+            switch (this.CodePasarelaPago)
+            {
+                case "Visa Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_VISA;
+                case "Mastercard Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_MASTERCARD;
+                case "Diners Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_DINERS;
+                case "American Express Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_AMERICANEX;
+                case "UATP":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_UATP;
+                case "PagoEfectivo Cash":
+                case "PagoEfectivo Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_PAGOEFECTIVO;
+                case "Online SafetyPay":
+                    return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_ONLINE;
+                case "Efectivo SafetyPay":
+                    return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_CASH;
+                case "Online SafetyPay Internacional":
+                    return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_INTERN;
+                case "Payu":
+                default:
+                    return this.CodePasarelaPago;
+            }
         }
         #endregion
     }
