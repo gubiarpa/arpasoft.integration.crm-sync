@@ -201,7 +201,7 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
-                    Request = pedido,
+                    Request = pedido_NM,
                     Response = _resultpedido,
                     Exception = errorPedido
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
