@@ -145,7 +145,7 @@ namespace Expertia.Estructura.Repository.Retail
                 AddParameter("pVarEmailAlterCliCot_in", OracleDbType.Varchar2, pStrEmailAlterCliCot);
                 AddParameter("pChrRecibePromo_in", OracleDbType.Varchar2, pBolRecibePromo ? "1" : "0");
                 AddParameter("pVarDirecCliCot_in", OracleDbType.Varchar2, pStrDirecCliCot);
-                AddParameter("pChrIdTipDoc_in", OracleDbType.Varchar2, pStrIdTipDoc.Trim().Equals("-1") ? null : pStrIdTipDoc);
+                AddParameter("pChrIdTipDoc_in", OracleDbType.Varchar2, pStrIdTipDoc == null || pStrIdTipDoc.Trim().Equals("-1") ? null : pStrIdTipDoc);
                 AddParameter("pVarNumDocCliCot_in", OracleDbType.Varchar2, pStrNumDocCliCot);
                 AddParameter("pNumIdUsuWeb_in", OracleDbType.Varchar2, pIntIdUsuWeb);
                 AddParameter("pNumIdWeb_in", OracleDbType.Varchar2, pIntIdWeb);

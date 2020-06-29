@@ -79,7 +79,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         IdPedido = row.IntParse("NRO_PEDIDO"),
                         pasarela = row.StringParse("Pasarela"), //row.StringParse("Pasarela"),
-                        fechaPedido = row.DateTimeParse("FechaPedido").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
+                        fechaPedido = row.DateTimeParse("FechaPedido").AddHours(Constantes_SRV.INT_SUM_HORAS_FECHAS_ENV_SF).ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
                         estado1 = row.StringParse("Estado1"),
                         estado2 = row.StringParse("Estado2"),
                         resultado = row.StringParse("Resultado"),
@@ -102,7 +102,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         CodAutorTarj = row.StringParse("CodAutorTarj"),
                         TipoImporte = row.StringParse("TipoImporte"),
                         MontoImporte = row.StringParse("MontoImporte"),
-                        PlazoDePago =  (row.StringParse("PlazoDePago")=="") ? null : row.DateTimeParse("PlazoDePago").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
+                        PlazoDePago =  (row.StringParse("PlazoDePago")=="") ? null : row.DateTimeParse("PlazoDePago").AddHours(Constantes_SRV.INT_SUM_HORAS_FECHAS_ENV_SF).ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
                         Error = row.StringParse("Error"),
                         CodCanje = row.StringParse("CodCanje"),
                         Puntos = row.StringParse("Puntos"),
@@ -123,9 +123,13 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     {
                         objSolicitudPagoNM.nroCuotas = "0";
                     }
-                    objSolicitudPagoNM.FEE =-2 ;
-                    objSolicitudPagoNM.GEM = 1;
-                    objSolicitudPagoNM.PEF = 1;
+                    if ("56789".Contains(objSolicitudPagoNM.idFormpaPago.ToString()) == true)
+                    {
+                        objSolicitudPagoNM.FEE = (Convert.IsDBNull(row["FEE"]) == false ? row.FloatParse("FEE") : 0);
+                    }
+                    //objSolicitudPagoNM.FEE =-2 ;
+                    //objSolicitudPagoNM.GEM = 1;
+                    //objSolicitudPagoNM.PEF = 1;
                     //if ("56789".Contains(objSolicitudPagoNM.idFormpaPago.ToString()) == true)
                     //{
                     //    /*Calculo del GEM Y PEF*/
@@ -148,11 +152,11 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     //        if (dblComisionIGV > dblComisionIGVTope)
                     //        {
                     //            dblPEF = dblComisionIGVTope; ;
-                    //        }                                    
+                    //        }
                     //        else
                     //        {
                     //            dblPEF = dblComisionIGV;// ((dblMontoPagar * dblPctajeComision) / 100) + dblComisionIGV
-                    //        }                                    
+                    //        }
                     //    }
                     //    else
                     //    {
@@ -162,7 +166,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     //    }
 
 
-                    //    objSolicitudPagoNM.FEE = (Convert.IsDBNull(row["FEE"]) == false ? row.FloatParse("FEE") : 0);                            
+                    //    objSolicitudPagoNM.FEE = (Convert.IsDBNull(row["FEE"]) == false ? row.FloatParse("FEE") : 0);
                     //    if (objSolicitudPagoNM.FEE.HasValue)
                     //    {
                     //        dblGEM = (double)objSolicitudPagoNM.FEE - dblPEF;
@@ -172,12 +176,12 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                     //        dblGEM = -1;
                     //    }
 
-                    //    objSolicitudPagoNM.PEF = (float)dblPEF;                            
+                    //    objSolicitudPagoNM.PEF = (float)dblPEF;
                     //    if (dblGEM >= 0)
                     //    {
-                    //        objSolicitudPagoNM.GEM = (float)dblGEM;                            
+                    //        objSolicitudPagoNM.GEM = (float)dblGEM;
                     //    }
-                    //    if (objSolicitudPagoNM.FEE==0 )
+                    //    if (objSolicitudPagoNM.FEE == 0)
                     //    {
                     //        objSolicitudPagoNM.FEE = 1;
                     //        objSolicitudPagoNM.GEM = 1;
