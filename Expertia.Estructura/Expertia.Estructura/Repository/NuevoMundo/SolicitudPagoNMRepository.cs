@@ -116,7 +116,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         nroCuotas = row.StringParse("NroCuotas"),
                         IdRegSolicitudPago_SF = row.StringParse("IDREGSOLICITUDPAGO_SF"),
                         codigoPago = row.StringParse("CodigoPago"),
-                        fechaExpiracion = row.StringParse("FechaExpiracionPago") ,
+                        fechaExpiracion = (row.StringParse("FechaExpiracionPago") == "") ? null : row.DateTimeParse("FechaExpiracionPago").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"), //row.StringParse("FechaExpiracionPago") ,
                         email = row.StringParse("email")
                     };
                     if (string.IsNullOrWhiteSpace(objSolicitudPagoNM.nroCuotas))
