@@ -39,6 +39,11 @@ namespace Expertia.Estructura.Models
         public bool Emitido { get; set; }
         public DateTime? fechaPlazoEmision { get; set; }
         public string CiudadIata { get; set; }
+        public string ServiciosAdicionales { get; set; }        
+        public short CantidadAdultos { get; set; }
+        public short? CantidadNinos { get; set; }
+        public DateTime? FechaIngreso { get; set; }
+        public DateTime? Fecharegreso { get; set; }
         public float? MontoEstimado { get; set; }
         public string ModalidadCompra { get; set; }
         public string tipoCotizacion { get; set; }        
