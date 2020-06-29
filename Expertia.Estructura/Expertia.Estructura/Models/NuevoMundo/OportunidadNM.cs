@@ -19,7 +19,7 @@ namespace Expertia.Estructura.Models
         public bool CajaPaquetes { get; set; }
         public bool CajaServicios { get; set; }
         public bool CajaSeguro { get; set; }*/
-        public string modoIngreso { get; set; }
+        public short modoIngreso { get; set; }
         public string ordenAtencion { get; set; }
         public string evento { get; set; }
         public string Estado { get; set; }

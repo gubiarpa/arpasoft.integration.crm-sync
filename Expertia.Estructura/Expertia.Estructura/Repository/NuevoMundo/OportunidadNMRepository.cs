@@ -87,7 +87,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                             Servicio = row.StringParse("Servicio"),
                             IdCanalVenta = row.StringParse("IdCanalVenta"),
                             metabuscador = row.StringParse("metabuscador"),                            
-                            modoIngreso = row.StringParse("modoIngreso"),
+                            modoIngreso = Convert.ToInt16(row["modoIngreso"]),
                             ordenAtencion = row.StringParse("ordenAtencion"),
                             evento = row.StringParse("evento"),
                             Estado = row.StringParse("Estado"),
