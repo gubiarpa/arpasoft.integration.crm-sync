@@ -165,10 +165,11 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Request = objEnvio,
+                    Response = SFResponse,
                     Rpta_NoUpdate_Fail = ListRptaFiles_Fail,
-                    UnidadNegocio = unidadNegocio.Descripcion,
-                    Error = error,
-                    LegacySystems = ListFilesAsociadosNM
+                    Exception = error,
+                    //LegacySystems = ListFilesAsociadosNM
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }

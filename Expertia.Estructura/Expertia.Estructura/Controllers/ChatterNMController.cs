@@ -136,11 +136,11 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Request = objEnvio,
                     Response = SFResponse,
-                    Rpta_NoUpdate_Fail = ListRptaChatterSF_Fail,                    
-                    UnidadNegocio = unidadNegocio.Descripcion,
-                    Error = error,
-                    LegacySystems = chatterNMs
+                    Rpta_NoUpdate_Fail = ListRptaChatterSF_Fail,                                        
+                    Exception = error
+                    //LegacySystems = chatterNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }

@@ -136,11 +136,11 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Request = objEnvio,
                     Response = SFResponse,
-                    Rpta_NoUpdate_Fail = ListRptaHotelSF_Fail,                    
-                    UnidadNegocio = unidadNegocio.Descripcion,
-                    Error = error,
-                    LegacySystems = detalleHotelNMs
+                    Rpta_NoUpdate_Fail = ListRptaHotelSF_Fail,
+                    Exception = error
+                    //LegacySystems = detalleHotelNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
