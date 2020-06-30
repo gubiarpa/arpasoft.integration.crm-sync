@@ -27,7 +27,7 @@ namespace Expertia.Estructura.Controllers
         private SolicitarFactFileNMRepository _solicitarFactFileNMRepository;
         private ICotizacionSRV_Repository _cotizSrvRepository;
                
-        protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
+        protected override ControllerName _controllerName => ControllerName.SolicitarFactFileNM;
         private DatosUsuario _datosUsuario;
         private DatosOficina _datosOficina;
 
@@ -43,6 +43,7 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(SolicitarFactFileNM solicitarFactFileNM)
         {
+            var codMessage = string.Empty;
             var exMessage = string.Empty;
             try
             {
@@ -79,20 +80,20 @@ namespace Expertia.Estructura.Controllers
                         );
                     */
                 }
-
+                codMessage = "OK"; exMessage = "El proceso se realizó con éxito";
                 return Ok(new
                 {
-                    Codigo = DbResponseCode.Success,
-                    Mensaje = "El proceso se realizó con éxito"
+                    Codigo = codMessage,
+                    Mensaje = exMessage
                 });
             }
             catch (Exception ex)
             {
-                exMessage = ex.Message;
+                codMessage = "ER"; exMessage = ex.Message;
                 return Ok(new
                 {
-                    Codigo = "ER",
-                    Mensaje = ex.Message
+                    Codigo = codMessage,
+                    Mensaje = exMessage
                 });
             }
             finally
@@ -102,7 +103,7 @@ namespace Expertia.Estructura.Controllers
                     Request = solicitarFactFileNM,
                     Response = new
                     {
-                        Codigo = "ER",
+                        Codigo = codMessage,
                         Mensaje = exMessage
                     }
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
