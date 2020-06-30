@@ -6,6 +6,7 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace Expertia.Estructura.Repository.NuevoMundo
 {
@@ -79,7 +80,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         idPostCotSrv = row.IntParse("idPostCotSrv"),
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         cabecera = row.StringParse("cabecera"),
-                        texto = row.StringParse("texto"),
+                        texto = LimpiaHTML(row.StringParse("texto")),
                         fecha = row.StringParse("fecha"),
                         accion_SF = row.StringParse("accion_SF")
                     });
@@ -90,6 +91,11 @@ namespace Expertia.Estructura.Repository.NuevoMundo
             {
                 throw ex;
             }
+        }
+
+        public static String LimpiaHTML(String html)
+        {
+            return Regex.Replace(html.Replace("<br>", Environment.NewLine), "<.*?>", String.Empty);
         }
         #endregion
     }

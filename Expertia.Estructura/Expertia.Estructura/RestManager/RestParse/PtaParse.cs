@@ -397,6 +397,7 @@ namespace Expertia.Estructura.RestManager.RestParse
                     oportunidadNM.Emitido,
                     oportunidadNM.fechaPlazoEmision,
                     oportunidadNM.CiudadIata,
+                    //oportunidadNM.IdDestino,
                     //oportunidadNM.ServiciosAdicionales,
                     //oportunidadNM.CantidadAdultos,
                     //oportunidadNM.CantidadNinos,

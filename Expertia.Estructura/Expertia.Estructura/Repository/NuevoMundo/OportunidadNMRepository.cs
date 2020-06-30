@@ -102,6 +102,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                             IdMotivoNoCompro = (Convert.IsDBNull(row["IdMotivoNoCompro"]) == false ? row.StringParse("IdMotivoNoCompro") : null),
                             Emitido = (Convert.IsDBNull(row["Emitido"]) == false ? (row.IntParse("Emitido") == 1 ? true : false) : false),                            
                             CiudadIata = (Convert.IsDBNull(row["CiudadIata"]) == false ? row.StringParse("CiudadIata") : null),
+                            IdDestino = (Convert.IsDBNull(row["IdDestino"]) == false ? row.StringParse("IdDestino") : null),
                             ServiciosAdicionales = (Convert.IsDBNull(row["ServiciosAdicionales"]) == false ? row.StringParse("ServiciosAdicionales") : null),
                             CantidadAdultos = (Convert.IsDBNull(row["CantidadAdultos"]) == false ? Convert.ToInt16(row["CantidadAdultos"]) : (Int16)0),
                             CantidadNinos = (Convert.IsDBNull(row["CantidadNinos"]) == false ? Convert.ToInt16(row["CantidadNinos"]) : (Int16)0),
