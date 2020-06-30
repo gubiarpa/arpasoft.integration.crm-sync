@@ -72,7 +72,7 @@ namespace Expertia.Estructura.Controllers
 
                 if (!(Cliente_Cot != null))
                 {                
-                    if (string.IsNullOrEmpty(oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(oportunidadVentaNM.NumDoc) == false && (new List<string> { "DNI", "PSP", "CEX" }).Contains(oportunidadVentaNM.IdTipoDoc))
+                    if (string.IsNullOrEmpty(oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(oportunidadVentaNM.NumDoc) == false)
                         ListClientes = (List<ClienteCot>)_repository.SelectByDocumento(oportunidadVentaNM.IdTipoDoc, oportunidadVentaNM.NumDoc)["pCurResult_out"];
                     else
                         ListClientes = (List<ClienteCot>)_repository.SelectByEmail(oportunidadVentaNM.EmailCli)["pCurResult_out"];
@@ -304,8 +304,14 @@ namespace Expertia.Estructura.Controllers
         #region Helpers
         private void valCreateOportunidadNM(ref OportunidadVentaNM _oportunidadVentaNM, ref RptaOportunidadVentaNM _rptaOportunidadVentaNM, ref UsuarioLogin UserLogin, ref CotizacionVta CotizacionVta)
         {   
-            string mensajeError = string.Empty;
-            
+            string mensajeError = string.Empty;            
+            Dictionary<string, string> TipoDocumentos = new Dictionary<string, string>()
+            {
+                { "DNI", "DNI" },
+                { "CEX", "CARNÉ DE EXTRANJERÍA" },
+                { "PSP", "PASAPORTE" }
+            };
+
             if (_oportunidadVentaNM == null)
             {
                 cargarError(ref _rptaOportunidadVentaNM, "Envie correctamente los parametros de entrada - RQ Nulo|");
@@ -343,7 +349,7 @@ namespace Expertia.Estructura.Controllers
             {
                 mensajeError += "El apellido paterno del cliente es un campo obligatorio|";
             }
-            if (!(string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(_oportunidadVentaNM.NumDoc) == false && (new List<string> { "DNI", "PSP", "CEX" }).Contains(_oportunidadVentaNM.IdTipoDoc)))
+            if (!(string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(_oportunidadVentaNM.NumDoc) == false && TipoDocumentos.Values.Contains(_oportunidadVentaNM.IdTipoDoc.Trim().ToUpper())))
             {
                 if (string.IsNullOrEmpty(_oportunidadVentaNM.EmailCli))
                 {
@@ -352,19 +358,27 @@ namespace Expertia.Estructura.Controllers
             }
             else if (string.IsNullOrEmpty(_oportunidadVentaNM.EmailCli))
             {
-                if (!(string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(_oportunidadVentaNM.NumDoc) == false && (new List<string> { "DNI", "PSP", "CEX" }).Contains(_oportunidadVentaNM.IdTipoDoc)))
+                if (!(string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && string.IsNullOrEmpty(_oportunidadVentaNM.NumDoc) == false && TipoDocumentos.Values.Contains(_oportunidadVentaNM.IdTipoDoc.Trim().ToUpper())))
                 {
                     mensajeError += "El tipo y número de documento del cliente es un campo obligatorio|";
                 }
+            }
+            if (string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && (TipoDocumentos.Values.Contains(_oportunidadVentaNM.IdTipoDoc.Trim().ToUpper()) == false)){
+                mensajeError += "El tipo de documento no es un valor soportado|";
+            }
+            else
+            {
+                string NameTipoDoc = _oportunidadVentaNM.IdTipoDoc.Trim().ToUpper();
+                _oportunidadVentaNM.IdTipoDoc = TipoDocumentos.Where(p => p.Value == NameTipoDoc).FirstOrDefault().Key;
             }
             if (string.IsNullOrEmpty(_oportunidadVentaNM.CiudadIata))
             {
                 mensajeError += "La Ciudad Iata es un campo obligatorio|";
             }
-            if (string.IsNullOrEmpty(_oportunidadVentaNM.IdDestino))
-            {
-                mensajeError += "Los destinos principales es un campo obligatorio|";
-            }
+            //if (string.IsNullOrEmpty(_oportunidadVentaNM.IdDestino))
+            //{
+            //    mensajeError += "Los destinos principales es un campo obligatorio|";
+            //}
             if (string.IsNullOrEmpty(_oportunidadVentaNM.EnviarPromociones))
             {
                 mensajeError += "La opcion de envio de promociones es un campo obligatorio 0 - 1|";

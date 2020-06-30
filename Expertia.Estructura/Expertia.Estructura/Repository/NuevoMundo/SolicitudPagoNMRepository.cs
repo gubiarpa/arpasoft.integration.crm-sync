@@ -79,7 +79,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         Identificador_NM = row.StringParse("Identificador_NM"),
                         IdPedido = row.IntParse("NRO_PEDIDO"),
                         pasarela = row.StringParse("Pasarela"), //row.StringParse("Pasarela"),
-                        fechaPedido = row.DateTimeParse("FechaPedido").AddHours(Constantes_SRV.INT_SUM_HORAS_FECHAS_ENV_SF).ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
+                        fechaPedido = row.DateTimeParse("FechaPedido").ToString("yyyy-MM-dd'T'HH:mm:ss+00:00"),
                         estado1 = row.StringParse("Estado1"),
                         estado2 = row.StringParse("Estado2"),
                         resultado = row.StringParse("Resultado"),
