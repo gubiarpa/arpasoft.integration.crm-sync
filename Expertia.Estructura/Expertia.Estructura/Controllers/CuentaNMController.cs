@@ -34,9 +34,10 @@ namespace Expertia.Estructura.Controllers
             IEnumerable<CuentaNM> cuentasNMs = null;
             List<RptaCuentaSF> ListRptaCuentaSF_Fail = new List<RptaCuentaSF>();
             RptaCuentaSF _rptaCuentaSF = null;
-            
+                        
             object SFResponse = null;
             string exceptionMsg = string.Empty;
+            object objEnvio = null;
 
             try
             {                                
@@ -61,7 +62,7 @@ namespace Expertia.Estructura.Controllers
                 try
                 {
                     /// Envío de CuentaNM a Salesforce
-                    var objEnvio = new { listadatosCuenta = cuentaNMSF };
+                    objEnvio = new { listadatosCuenta = cuentaNMSF };
                     QuickLog(objEnvio, "body_request.json", "CuentaNM", previousClear: true); /// ♫ Trace
                     
                     var responseCuentaNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.CuentaNMMethod, Method.POST, objEnvio, true, token);
@@ -124,17 +125,18 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 cuentasNMs = null;
+                exceptionMsg = exceptionMsg + " / " + ex.Message;
                 return InternalServerError(ex);                
             }
             finally
             {
                 (new
                 {
+                    Request = objEnvio,
                     Response = SFResponse,
-                    Rpta_NoUpdate_Fail = ListRptaCuentaSF_Fail,
-                    UnidadNegocio = unidadNegocio.Descripcion,
-                    Exception = exceptionMsg,
-                    LegacySystems = cuentasNMs
+                    Rpta_NoUpdate_Fail = ListRptaCuentaSF_Fail,                    
+                    Exception = exceptionMsg 
+                    //LegacySystems = cuentasNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);                
             }
         }

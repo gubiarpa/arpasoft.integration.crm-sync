@@ -38,7 +38,6 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Create)]
         public IHttpActionResult Create(DatosPedido_NM pedido_NM)
         {
-            var pedido = pedido_NM.ToRetail(); // Conversión a Retail
             Pedido_AW_Repository _pedidoRepository = new Pedido_AW_Repository();
             Models.PedidoRS _resultpedido = new Models.PedidoRS();
             UsuarioLogin DtsUsuarioLogin = null;
@@ -47,6 +46,7 @@ namespace Expertia.Estructura.Controllers
             bool _return = false;
             try
             {
+                var pedido = pedido_NM.ToRetail(); // Conversión a Retail
                 /*Validaciones*/
                 validacionPedido(ref pedido, ref _resultpedido, ref _return, ref DtsUsuarioLogin);
                 //if (_return == true) return Ok(_resultpedido);
@@ -188,20 +188,19 @@ namespace Expertia.Estructura.Controllers
                 _resultpedido.MensajeError = "El proceso se realizó exitosamente";
 
                 return Ok(_resultpedido);
-
             }
             catch (Exception ex)
             {
                 errorPedido = ex.Message;
                 _resultpedido.CodigoError = "ER";
                 _resultpedido.MensajeError = ex.Message;
-                return InternalServerError(ex);
+                return Ok(_resultpedido);
             }
             finally
             {
                 (new
                 {
-                    Request = pedido,
+                    Request = pedido_NM,
                     Response = _resultpedido,
                     Exception = errorPedido
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);

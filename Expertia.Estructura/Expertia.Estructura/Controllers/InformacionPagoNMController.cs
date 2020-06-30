@@ -230,11 +230,11 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Request = objEnvio,
                     Response = jsonResponse,
                     Rpta_NoUpdate_Fail = ListRptaInformacionPagoSF,
-                    UnidadNegocio = unidadNegocio.Descripcion,
-                    Error = error,
-                    LegacySystems = lInfoPagoNM
+                    Exception = error
+                    //LegacySystems = lInfoPagoNM
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }

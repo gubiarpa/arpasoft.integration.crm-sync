@@ -1,5 +1,6 @@
 ﻿using Expertia.Estructura.Models.Auxiliar;
 using Expertia.Estructura.Models.Behavior;
+using Expertia.Estructura.Utils;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -124,6 +125,19 @@ namespace Expertia.Estructura.Models
         #region ToRetail
         public DatosPedido ToRetail()
         {
+            #region ProteccionFormaPago
+            if (
+                (this.Pedido != null) ||
+                (this.Pedido.Pasarela != null) ||
+                (this.Pedido.Pasarela.FormaPago == null) ||
+                (this.Pedido.Pasarela.FormaPago == string.Empty) ||
+                (this.Pedido.Pasarela.FormaPago.Equals("0"))
+                )
+            {
+                throw new Exception("Forma de Pago Inválida");
+            }
+            #endregion
+
             var datosPedido = new DatosPedido()
             {
                 accion_SF = this.Accion_SF,
@@ -133,7 +147,7 @@ namespace Expertia.Estructura.Models
                 IPUsuario = this.IPUsuario,
                 Browser = this.Browser,
                 DetalleServicio = this.DetalleServicio,
-                CodePasarelaPago = this.CodePasarelaPago,
+                CodePasarelaPago = this.FixCodePasarela(),
                 Email = this.Email,
                 TiempoExpiracionCIP = this.TiempoExpiracionCIP,
                 Monto = this.Monto,
@@ -145,21 +159,21 @@ namespace Expertia.Estructura.Models
                 IdOportunidad_SF = this.IdOportunidad_SF,
                 IdSolicitudpago_SF = this.IdSolicitudpago_SF,
                 #region SRV
-                Codigo = this.SRV.Codigo,
-                FechaRegistro = this.SRV.FechaRegistro,
-                Estado = this.SRV.Estado,
-                ModoIngreso = this.SRV.ModoIngreso,
-                CanalVenta = this.SRV.CanalVenta,
-                Empresa = this.SRV.Empresa,
-                Cliente = this.SRV.Cliente,
-                DatosContacto = this.SRV.DatosContacto,
-                EmailContacto = this.SRV.EmailContacto,
-                RegistradoPor = this.SRV.RegistradoPor,
-                MetaBuscador = this.SRV.MetaBuscador,
-                OrdenAtencion = this.SRV.OrdenAtencion,
-                Evento = this.SRV.Evento,
-                UsuarioLogin = this.SRV.UsuarioLogin,
-                Moneda = this.SRV.Moneda,
+                Codigo = this.SRV == null ? string.Empty : this.SRV.Codigo,
+                FechaRegistro = this.SRV == null ? string.Empty : this.SRV.FechaRegistro,
+                Estado = this.SRV == null ? string.Empty : this.SRV.Estado,
+                ModoIngreso = this.SRV == null ? string.Empty : this.SRV.ModoIngreso,
+                CanalVenta = this.SRV == null ? string.Empty : this.SRV.CanalVenta,
+                Empresa = this.SRV == null ? string.Empty : this.SRV.Empresa,
+                Cliente = this.SRV == null ? string.Empty : this.SRV.Cliente,
+                DatosContacto = this.SRV == null ? string.Empty : this.SRV.DatosContacto,
+                EmailContacto = this.SRV == null ? string.Empty : this.SRV.EmailContacto,
+                RegistradoPor = this.SRV == null ? string.Empty : this.SRV.RegistradoPor,
+                MetaBuscador = this.SRV == null ? string.Empty : this.SRV.MetaBuscador,
+                OrdenAtencion = this.SRV == null ? string.Empty : this.SRV.OrdenAtencion,
+                Evento = this.SRV == null ? string.Empty : this.SRV.Evento,
+                UsuarioLogin = this.SRV == null ? string.Empty : this.SRV.UsuarioLogin,
+                Moneda = this.SRV == null ? string.Empty : this.SRV.Moneda,
                 #endregion
                 #region Pedido
                 NumeroPedido = this.Pedido.NumeroPedido,
@@ -201,6 +215,37 @@ namespace Expertia.Estructura.Models
             };
 
             return datosPedido;
+        }
+
+        private string FixCodePasarela()
+        {
+            switch (this.CodePasarelaPago)
+            {
+                case "Visa Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_VISA;
+                case "Mastercard Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_MASTERCARD;
+                case "Diners Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_DINERS;
+                case "American Express Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_AMERICANEX;
+                case "UATP":
+                    return Constantes_MetodoDePago.CODE_FPAGO_TARJETA_UATP;
+                case "PagoEfectivo Cash":
+                case "PagoEfectivo Online":
+                    return Constantes_MetodoDePago.CODE_FPAGO_PAGOEFECTIVO;
+                case "Online SafetyPay":
+                    return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_ONLINE;
+                case "Efectivo SafetyPay":
+                    return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_CASH;
+                case "Online SafetyPay Internacional":
+                    return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_INTERN;
+                case "No Definido":
+                    return string.Empty;
+                case "Payu":
+                default:
+                    throw new Exception("No existe forma de pago");
+            }
         }
         #endregion
     }

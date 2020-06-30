@@ -27,7 +27,7 @@ namespace Expertia.Estructura.Controllers
         private SolicitarFactFileNMRepository _solicitarFactFileNMRepository;
         private ICotizacionSRV_Repository _cotizSrvRepository;
                
-        protected override ControllerName _controllerName => ControllerName.FileOportunidadNM;
+        protected override ControllerName _controllerName => ControllerName.SolicitarFactFileNM;
         private DatosUsuario _datosUsuario;
         private DatosOficina _datosOficina;
 
@@ -43,45 +43,71 @@ namespace Expertia.Estructura.Controllers
         [Route(RouteAction.Read)]
         public IHttpActionResult Read(SolicitarFactFileNM solicitarFactFileNM)
         {
-            var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal_NM(solicitarFactFileNM.idusuariosrv_SF);
-            if (usuarioLogin != null && usuarioLogin.IdUsuario != solicitarFactFileNM.idusuariosrv_SF) { solicitarFactFileNM.idusuariosrv_SF = usuarioLogin.IdUsuario; }
-
-            var result = _solicitarFactFileNMRepository.GuardarDesgloseCA(solicitarFactFileNM);
-
-            if (solicitarFactFileNM.existeArchivoList)
+            var codMessage = string.Empty;
+            var exMessage = string.Empty;
+            try
             {
-                _solicitarFactFileNMRepository.GuardarArchivo(solicitarFactFileNM, result, int.Parse(solicitarFactFileNM.idusuario));
-            }
+                var usuarioLogin = _datosUsuario.Get_Dts_Usuario_Personal_NM(solicitarFactFileNM.idusuariosrv_SF);
+                if (usuarioLogin != null && usuarioLogin.IdUsuario != solicitarFactFileNM.idusuariosrv_SF) { solicitarFactFileNM.idusuariosrv_SF = usuarioLogin.IdUsuario; }
 
-            if (solicitarFactFileNM.existeIdDatosFacturacion)
-            {
-                var archivoList = _solicitarFactFileNMRepository.ObtenerArchivos(solicitarFactFileNM.iddatosfacturacion);
-            }
+                var result = _solicitarFactFileNMRepository.GuardarDesgloseCA(solicitarFactFileNM);
 
-            var textoPost = TemplateHtml(solicitarFactFileNM);
-
-            if (solicitarFactFileNM.enviarCA)
-            {
-                var objOficina = _datosOficina.ObtieneOficinaXId(usuarioLogin.IdOfi);
-                if (_solicitarFactFileNMRepository.EsAreaCounterPresencial(usuarioLogin.IdOfi, usuarioLogin.IdDep, objOficina.bolEsRipley))
+                if (solicitarFactFileNM.existeArchivoList)
                 {
-                    _cotizSrvRepository._Liberar_UsuWeb_CA(solicitarFactFileNM.intCotId);
+                    _solicitarFactFileNMRepository.GuardarArchivo(solicitarFactFileNM, result, int.Parse(solicitarFactFileNM.idusuario));
                 }
 
-                /*
-                _cotizSrvRepository.Inserta_Post_Cot(
-                    solicitarFactFileNM.intCotId,
-                    "1",
-                    textoPost,
-                    );
-                */
-            }
+                if (solicitarFactFileNM.existeIdDatosFacturacion)
+                {
+                    var archivoList = _solicitarFactFileNMRepository.ObtenerArchivos(solicitarFactFileNM.iddatosfacturacion);
+                }
 
-            return Ok(new
+                var textoPost = TemplateHtml(solicitarFactFileNM);
+
+                if (solicitarFactFileNM.enviarCA)
+                {
+                    var objOficina = _datosOficina.ObtieneOficinaXId(usuarioLogin.IdOfi);
+                    if (_solicitarFactFileNMRepository.EsAreaCounterPresencial(usuarioLogin.IdOfi, usuarioLogin.IdDep, objOficina.bolEsRipley))
+                    {
+                        _cotizSrvRepository._Liberar_UsuWeb_CA(solicitarFactFileNM.intCotId);
+                    }
+
+                    /*
+                    _cotizSrvRepository.Inserta_Post_Cot(
+                        solicitarFactFileNM.intCotId,
+                        "1",
+                        textoPost,
+                        );
+                    */
+                }
+                codMessage = "OK"; exMessage = "El proceso se realizó con éxito";
+                return Ok(new
+                {
+                    Codigo = codMessage,
+                    Mensaje = exMessage
+                });
+            }
+            catch (Exception ex)
             {
-                Codigo = DbResponseCode.Success,
-                Mensaje = "El proceso se realizó con éxito"
-            });
+                codMessage = "ER"; exMessage = ex.Message;
+                return Ok(new
+                {
+                    Codigo = codMessage,
+                    Mensaje = exMessage
+                });
+            }
+            finally
+            {
+                (new
+                {
+                    Request = solicitarFactFileNM,
+                    Response = new
+                    {
+                        Codigo = codMessage,
+                        Mensaje = exMessage
+                    }
+                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+            }
         }
         #endregion
 

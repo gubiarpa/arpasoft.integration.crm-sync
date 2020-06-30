@@ -127,11 +127,11 @@ namespace Expertia.Estructura.Controllers
             {
                 (new
                 {
+                    Request = objEnvio,
                     Response = SFResponse,
                     Rpta_NoUpdate_Fail = ListRptaSolicitudPagoSF_Fail,
-                    UnidadNegocio = unidadNegocio.Descripcion,
-                    Error = error,
-                    LegacySystems = solicitudPagoNMs
+                    Exception = error
+                    //LegacySystems = solicitudPagoNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }

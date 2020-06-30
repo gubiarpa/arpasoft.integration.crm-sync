@@ -19,7 +19,7 @@ namespace Expertia.Estructura.Models
         public bool CajaPaquetes { get; set; }
         public bool CajaServicios { get; set; }
         public bool CajaSeguro { get; set; }*/
-        public string modoIngreso { get; set; }
+        public short modoIngreso { get; set; }
         public string ordenAtencion { get; set; }
         public string evento { get; set; }
         public string Estado { get; set; }
@@ -39,6 +39,12 @@ namespace Expertia.Estructura.Models
         public bool Emitido { get; set; }
         public DateTime? fechaPlazoEmision { get; set; }
         public string CiudadIata { get; set; }
+        public string IdDestino { get; set; }
+        public string ServiciosAdicionales { get; set; }        
+        public short CantidadAdultos { get; set; }
+        public short? CantidadNinos { get; set; }
+        public DateTime? FechaIngreso { get; set; }
+        public DateTime? Fecharegreso { get; set; }
         public float? MontoEstimado { get; set; }
         public string ModalidadCompra { get; set; }
         public string tipoCotizacion { get; set; }        

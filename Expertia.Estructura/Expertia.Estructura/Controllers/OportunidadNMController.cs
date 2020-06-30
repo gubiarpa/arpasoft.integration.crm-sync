@@ -33,9 +33,11 @@ namespace Expertia.Estructura.Controllers
             IEnumerable<OportunidadNM> oportunidadNMs = null;
             List<RptaOportunidadSF> ListRptaOportunidadSF_Fail = new List<RptaOportunidadSF>();
             RptaOportunidadSF _rptaOportunidadSF = null;
-
+                        
             object SFResponse = null;
             string exceptionMsg = string.Empty;
+            object objEnvio = null;
+
             try
             {
                 var _unidadNegocio = RepositoryByBusiness(unidadNegocio.Descripcion.ToUnidadNegocio());
@@ -59,7 +61,7 @@ namespace Expertia.Estructura.Controllers
                 /// II. Enviar Oportunidad a Salesforce
                 try
                 {   
-                    var objEnvio = new { ListadatosOportunidades = oportunidadNMSF};                    
+                    objEnvio = new { ListadatosOportunidades = oportunidadNMSF};                    
                     QuickLog(objEnvio, "body_request.json", "OportunidadNM",previousClear: true); /// ♫ Trace
 
                     var responseOportunidadNM = RestBase.ExecuteByKeyWithServer(crmServer, SalesforceKeys.OportunidadNMMethod, Method.POST, objEnvio, true, token);
@@ -122,17 +124,18 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 oportunidadNMs = null;
+                exceptionMsg = exceptionMsg + " / " + ex.Message;
                 return InternalServerError(ex);
             }
             finally
             {
                 (new
-                {                    
+                {
+                    Request = objEnvio,
                     Response = SFResponse,
-                    Rpta_NoUpdate_Fail = ListRptaOportunidadSF_Fail,
-                    UnidadNegocio = unidadNegocio.Descripcion,
-                    Exception = exceptionMsg,
-                    LegacySystems = oportunidadNMs
+                    Rpta_NoUpdate_Fail = ListRptaOportunidadSF_Fail,                    
+                    Exception = exceptionMsg
+                    //LegacySystems = oportunidadNMs
                 }).TryWriteLogObject(_logFileManager, _clientFeatures);
             }
         }
