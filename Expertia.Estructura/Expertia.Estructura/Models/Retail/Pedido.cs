@@ -125,6 +125,19 @@ namespace Expertia.Estructura.Models
         #region ToRetail
         public DatosPedido ToRetail()
         {
+            #region ProteccionFormaPago
+            if (
+                (this.Pedido != null) ||
+                (this.Pedido.Pasarela != null) ||
+                (this.Pedido.Pasarela.FormaPago == null) ||
+                (this.Pedido.Pasarela.FormaPago == string.Empty) ||
+                (this.Pedido.Pasarela.FormaPago.Equals("0"))
+                )
+            {
+                throw new Exception("Forma de Pago Inválida");
+            }
+            #endregion
+
             var datosPedido = new DatosPedido()
             {
                 accion_SF = this.Accion_SF,
@@ -227,9 +240,11 @@ namespace Expertia.Estructura.Models
                     return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_CASH;
                 case "Online SafetyPay Internacional":
                     return Constantes_MetodoDePago.CODE_FPAGO_SAFETYPAY_INTERN;
+                case "No Definido":
+                    return string.Empty;
                 case "Payu":
                 default:
-                    return this.CodePasarelaPago;
+                    throw new Exception("No existe forma de pago");
             }
         }
         #endregion
