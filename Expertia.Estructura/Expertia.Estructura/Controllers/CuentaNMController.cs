@@ -125,6 +125,7 @@ namespace Expertia.Estructura.Controllers
             catch (Exception ex)
             {
                 cuentasNMs = null;
+                exceptionMsg = exceptionMsg + " / " + ex.Message;
                 return InternalServerError(ex);                
             }
             finally
