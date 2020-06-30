@@ -70,46 +70,40 @@ namespace Expertia.Estructura.Controllers
                         SFResponse = jsonResponse["respuestas"];
                         QuickLog(SFResponse, "body_response.json", "SolicitudPagoNM", previousClear: true); /// ♫ Trace
                         ListRptaSolicitudPagoSF_Fail = new List<RptaSolicitudPagoSF>();
-                        //foreach (var itemsolicitudPagoNMs in solicitudPagoNMs)
-                        //{
-                            foreach (var solicitudPagoNM in jsonResponse["respuestas"])
+
+                        foreach (var solicitudPagoNM in jsonResponse["respuestas"])
+                        {
+                            try
                             {
-                                //if (itemsolicitudPagoNMs.idOportunidad_SF == solicitudPagoNM[OutParameter.SF_IdOportunidad2])
-                                //{
-                                    try
-                                    {
-                                        #region Deserialize
-                                        _rptaSolicitudPagoSF = new RptaSolicitudPagoSF();
+                                #region Deserialize
+                                _rptaSolicitudPagoSF = new RptaSolicitudPagoSF();
 
-                                        _rptaSolicitudPagoSF.CodigoError = solicitudPagoNM[OutParameter.SF_Codigo];
-                                        _rptaSolicitudPagoSF.MensajeError = solicitudPagoNM[OutParameter.SF_Mensaje];
-                                        _rptaSolicitudPagoSF.idOportunidad_SF = solicitudPagoNM[OutParameter.SF_IdOportunidad2];
-                                        _rptaSolicitudPagoSF.IdRegSolicitudPago_SF = solicitudPagoNM[OutParameter.SF_IdRegSolicitudPago];
-                                        _rptaSolicitudPagoSF.Identificador_NM = solicitudPagoNM[OutParameter.SF_IdentificadorNM];
-                                        #endregion
+                                _rptaSolicitudPagoSF.CodigoError = solicitudPagoNM[OutParameter.SF_Codigo];
+                                _rptaSolicitudPagoSF.MensajeError = solicitudPagoNM[OutParameter.SF_Mensaje];
+                                _rptaSolicitudPagoSF.idOportunidad_SF = solicitudPagoNM[OutParameter.SF_IdOportunidad2];
+                                _rptaSolicitudPagoSF.IdRegSolicitudPago_SF = solicitudPagoNM[OutParameter.SF_IdRegSolicitudPago];
+                                _rptaSolicitudPagoSF.Identificador_NM = solicitudPagoNM[OutParameter.SF_IdentificadorNM];
+                                #endregion
 
-                                        #region ReturnToDB
-                                        var updOperation = _solicitudPagoNMRepository.Update(_rptaSolicitudPagoSF);
+                                #region ReturnToDB
+                                var updOperation = _solicitudPagoNMRepository.Update(_rptaSolicitudPagoSF);
 
-                                        if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
-                                        {
-                                            error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaSolicitudPagoSF.Identificador_NM.ToString() + "||||";
-                                            ListRptaSolicitudPagoSF_Fail.Add(_rptaSolicitudPagoSF);
-                                            /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
-                                        }
-                                        
-                                        #endregion
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
-                                        ListRptaSolicitudPagoSF_Fail.Add(_rptaSolicitudPagoSF);
-                                        /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
-                                    }
-                      
-                                //}
+                                if (Convert.IsDBNull(updOperation[OutParameter.IdActualizados]) == true || updOperation[OutParameter.IdActualizados].ToString().ToLower().Contains("null") || Convert.ToInt32(updOperation[OutParameter.IdActualizados].ToString()) <= 0)
+                                {
+                                    error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaSolicitudPagoSF.Identificador_NM.ToString() + "||||";
+                                    ListRptaSolicitudPagoSF_Fail.Add(_rptaSolicitudPagoSF);
+                                    /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                                }
+
+                                #endregion
                             }
-                        //}
+                            catch (Exception ex)
+                            {
+                                error = error + "Error en el Proceso de Actualizacion - Response SalesForce : " + ex.Message + "||||";
+                                ListRptaSolicitudPagoSF_Fail.Add(_rptaSolicitudPagoSF);
+                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
+                            }
+                        }
                     }
                     else
                     {
