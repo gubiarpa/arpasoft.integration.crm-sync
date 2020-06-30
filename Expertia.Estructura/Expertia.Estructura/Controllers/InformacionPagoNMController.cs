@@ -82,7 +82,11 @@ namespace Expertia.Estructura.Controllers
                         oInfoPagoNM.IdInformacionPago_SF = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).IdInformacionPago_SF;
 
                         //Aqui Lista ListPago_Boleto_Servicios
-                        oInfoPagoNM.ListPago_Boleto_Servicios = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF)
+                        if (true)
+                        {
+
+                        }
+                        oInfoPagoNM.ListPago_Boleto_Servicios = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF && !string.IsNullOrWhiteSpace(x.reservaID))
                             .Select(x => new PagoBoletoServicios
                             {
                                 reservaID = x.reservaID,
@@ -96,7 +100,7 @@ namespace Expertia.Estructura.Controllers
                             }).ToList();
 
 
-                        oInfoPagoNM.totalPagar = oInfoPagoNM.ListPago_Boleto_Servicios.Sum(x => x.totalBoleto);//informacionPagoNMs.(x => x.idOportunidad_SF == item.idOportunidad_SF).totalPagar;
+                        oInfoPagoNM.totalPagar = oInfoPagoNM.ListPago_Boleto_Servicios.Sum(x => x.totalBoleto);
                         oInfoPagoNM.montoDescuento = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).montodescuento;
                         oInfoPagoNM.textoDescuento = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textodescuento;
                         oInfoPagoNM.promoWebCode = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).promowebcode;
@@ -105,7 +109,7 @@ namespace Expertia.Estructura.Controllers
                         ////Aqui Lista ListPagosDesglose_Paquete
 
 
-                        oInfoPagoNM.ListPagosDesglose_Paquete = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF)
+                        oInfoPagoNM.ListPagosDesglose_Paquete = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF && !string.IsNullOrWhiteSpace(x.PaqueteId))
                             .Select(x => new PagosDesglosePaquete
                             {
                                 precioTotalPorHabitacionPaq = x.precioTotalPorHabitacionPaq,
@@ -128,12 +132,16 @@ namespace Expertia.Estructura.Controllers
                         oInfoPagoNM.tarjetaDeAsistencia = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).tarjetaDeAsistencia;
 
                         ////Aqui Lista ListPagosServicio_Paquete =>GetListPagosServicio
+                        
+                        if (!string.IsNullOrWhiteSpace(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId))
+                        {
+                            int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId, out PaqueteId);
+                            int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).Id_Sucursal, out id_sucursal);
+                            int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).Codigoweb, out codigoweb);
+                            string paq_reserva_tipo = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).paq_reserva_tipo;
+                            oInfoPagoNM.ListPagosServicio_Paquete = ((IEnumerable<PagosServicioPaquete>)(_informacionPagoNMRepository.GetListPagosServicio(codigoweb, PaqueteId, id_sucursal, paq_reserva_tipo))[OutParameter.CursorInformacionPagoNM]).ToList();
 
-                        int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).Id_Sucursal, out id_sucursal);
-                        int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).Codigoweb, out codigoweb);
-                        int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId, out PaqueteId);
-                        string paq_reserva_tipo = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).paq_reserva_tipo;
-                        oInfoPagoNM.ListPagosServicio_Paquete = ((IEnumerable<PagosServicioPaquete>)(_informacionPagoNMRepository.GetListPagosServicio(codigoweb, PaqueteId, id_sucursal, paq_reserva_tipo))[OutParameter.CursorInformacionPagoNM]).ToList();
+                        }
 
                         oInfoPagoNM.precioTotalActividadesPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioTotalActividadesPaq;
                         oInfoPagoNM.textoDescuentoPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textoDescuentoPaq;
@@ -168,25 +176,26 @@ namespace Expertia.Estructura.Controllers
 
                         jsonResponse = (new JavaScriptSerializer()).DeserializeObject(responseInformacionPagoNM.Content);
                         QuickLog(jsonResponse, "body_response.json", "InformacionPagoNM"); /// ♫ Trace
-                        string[] cidigoServicio = null;
+                        string[] codigoServicio = null;
                         string oportunidad = string.Empty;
                         ListRptaInformacionPagoSF = new List<RptaInformacionPagoSF>();
-                        //foreach (var informacionPagoNM in informacionPagoNMs)
-                        //{
+
                         foreach (var jsResponse in jsonResponse["respuestas"])
                         {
                             oportunidad = jsResponse[OutParameter.SF_IdOportunidad3];
-                            //if (informacionPagoNM.idOportunidad_SF == oportunidad)
-                            //{
-                            cidigoServicio = jsResponse[OutParameter.SF_IdentificadorNM].Split('-');
+
+                            codigoServicio = jsResponse[OutParameter.SF_IdentificadorNM].Split('-');
                             _rptaInformacionPagoSF = new RptaInformacionPagoSF();
 
                             _rptaInformacionPagoSF.CodigoError = jsResponse[OutParameter.SF_Codigo];
                             _rptaInformacionPagoSF.MensajeError = jsResponse[OutParameter.SF_Mensaje];
                             _rptaInformacionPagoSF.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad3];
                             _rptaInformacionPagoSF.IdInfoPago_SF = jsResponse[OutParameter.SF_IdInformacionPago2];
-                            _rptaInformacionPagoSF.CodigoServicio_NM = cidigoServicio[0].ToString();
-                            _rptaInformacionPagoSF.Identificador_NM = cidigoServicio[1].ToString();
+                            if (_rptaInformacionPagoSF.CodigoError !="ER" && codigoServicio.Count()>0)
+                            {
+                                _rptaInformacionPagoSF.CodigoServicio_NM = codigoServicio[0].ToString();
+                                _rptaInformacionPagoSF.Identificador_NM = codigoServicio[1].ToString();
+                            }
 
                             var updOperation = _informacionPagoNMRepository.Update(_rptaInformacionPagoSF);
 
@@ -194,13 +203,9 @@ namespace Expertia.Estructura.Controllers
                             {
                                 error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaInformacionPagoSF.Identificador_NM.ToString() + "||||";
                                 ListRptaInformacionPagoSF.Add(_rptaInformacionPagoSF);
-                                /*Analizar si se deberia grabar en una tabla de bd para posteriormente darle seguimiento*/
-                            }
-                            //    break;
-                            //}
-                            //cuentaNM.Actualizados = int.Parse(updateResponse[OutParameter.IdActualizados].ToString());
+                               
+                            }                        
                         }
-                        //}
                     }
                     else
                     {
