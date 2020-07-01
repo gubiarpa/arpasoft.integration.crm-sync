@@ -158,15 +158,19 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                             PCCOfficeID = row.StringParse("PCC_OfficeID"),
                             IATA = row.StringParse("IATA"),
                             RUCEmpresa = row.StringParse("RUC_Empresa"),
-                            razonSocial = null,//row.StringParse("razonSocial"),
-                            aceptarPoliticas = true,//(row.IntParse("aceptarPoliticas") == 1 ? true : false),
-                            ruc = null, //row.IntParse("RUC"),
+                            razonSocial = row.StringParse("razonsocial"),
+                            aceptarPoliticas = (row.IntParse("aceptarPoliticas") == 1 ? true : false),                            
                             descripPaquete = row.StringParse("descripPaquete"),
                             destinoPaquetes = row.StringParse("destinoPaquetes"),
                             fechasPaquetes = row.StringParse("fechasPaquetes"),
                             Proveedor = row.StringParse("Proveedor")
                         };
-                        
+
+                        if (Convert.IsDBNull(row["ruc"]) == false)
+                        {
+                            ObjReservasOportunidad_NM.ruc = row.FloatParse("ruc");
+                        }
+
                         if (Convert.IsDBNull(row["PlanSeguro"]) == false)
                         {
                             objPlanReservaSeguro_NM = new PlanReservaSeguro_NM() {
