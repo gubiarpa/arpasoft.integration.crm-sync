@@ -59,9 +59,9 @@ namespace Expertia.Estructura.Repository.AppWebs
 
         public Operation CreateNM(DatosPedido pedido)
         {
+            var operation = new Operation();
             try
             {
-                var operation = new Operation();
                 int intIdNewPedido = 0;
 
                 #region Parameter
@@ -74,7 +74,7 @@ namespace Expertia.Estructura.Repository.AppWebs
                 AddParameter("pNumIdLang_in", OracleDbType.Int32, pedido.IdLang, ParameterDirection.Input);
                 AddParameter("pVarIP_in", OracleDbType.Varchar2, (string.IsNullOrEmpty(pedido.IPUsuario) ? "127.0.0.0" : pedido.IPUsuario), ParameterDirection.Input, 30);
                 AddParameter("pVarBrowser_in", OracleDbType.Varchar2, (string.IsNullOrEmpty(pedido.Browser) ? "Servicio Saleforce" : pedido.IPUsuario), ParameterDirection.Input, 200);
-                AddParameter("pNumIdCotSRV_in", OracleDbType.Int32, pedido.IdCotVta, ParameterDirection.Input);
+                AddParameter("pNumIdCotSRV_in", OracleDbType.Int32, pedido.IdCotVtaNullable, ParameterDirection.Input);
                 AddParameter("pVarDetalleServ_in", OracleDbType.Varchar2, pedido.DetalleServicio, ParameterDirection.Input, 1000);
                 AddParameter("pNumMonto_in", OracleDbType.Double, Convert.ToDouble(pedido.Monto), ParameterDirection.Input);
 
@@ -93,13 +93,15 @@ namespace Expertia.Estructura.Repository.AppWebs
                     _Update_Pedido_EsUATP(intIdNewPedido, pedido);
                 }
                 #endregion
-
+                
                 return operation;
             }
             catch (Exception ex)
             {
-                throw ex;
+                var exMessage = "Pedido_AW_Repository.CreateNM: " + ex.Message;
+                throw new Exception(exMessage);
             }
+            
         }
 
         public void _Update_Pedido_EsUATP(int intIdNewPedido, DatosPedido pedido)
