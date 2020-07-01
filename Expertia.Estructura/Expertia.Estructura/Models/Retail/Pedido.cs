@@ -127,8 +127,8 @@ namespace Expertia.Estructura.Models
         {
             #region ProteccionFormaPago
             if (
-                (this.Pedido != null) ||
-                (this.Pedido.Pasarela != null) ||
+                (this.Pedido == null) ||
+                (this.Pedido.Pasarela == null) ||
                 (this.Pedido.Pasarela.FormaPago == null) ||
                 (this.Pedido.Pasarela.FormaPago == string.Empty) ||
                 (this.Pedido.Pasarela.FormaPago.Equals("0"))
