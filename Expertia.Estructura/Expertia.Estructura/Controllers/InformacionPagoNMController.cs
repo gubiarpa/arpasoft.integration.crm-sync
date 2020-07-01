@@ -101,11 +101,11 @@ namespace Expertia.Estructura.Controllers
 
 
                         oInfoPagoNM.totalPagar = oInfoPagoNM.ListPago_Boleto_Servicios.Sum(x => x.totalBoleto);
-                        oInfoPagoNM.montoDescuento = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).montodescuento;
+                        oInfoPagoNM.montoDescuento = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x => x.montodescuento);
                         oInfoPagoNM.textoDescuento = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textodescuento;
                         oInfoPagoNM.promoWebCode = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).promowebcode;
                         oInfoPagoNM.totalFacturar = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).totalfacturar;
-                        oInfoPagoNM.feeAsumidoGeneralBoletos = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).feeAsumidoGeneralBoletos;
+                        oInfoPagoNM.feeAsumidoGeneralBoletos = oInfoPagoNM.totalPagar - oInfoPagoNM.montoDescuento;//  informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).feeAsumidoGeneralBoletos;
                         ////Aqui Lista ListPagosDesglose_Paquete
 
 
