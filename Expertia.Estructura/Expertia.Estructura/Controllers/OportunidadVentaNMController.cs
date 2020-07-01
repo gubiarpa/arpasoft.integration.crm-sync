@@ -363,14 +363,18 @@ namespace Expertia.Estructura.Controllers
                     mensajeError += "El tipo y número de documento del cliente es un campo obligatorio|";
                 }
             }
-            if (string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false && (TipoDocumentos.Values.Contains(_oportunidadVentaNM.IdTipoDoc.Trim().ToUpper()) == false)){
-                mensajeError += "El tipo de documento no es un valor soportado|";
-            }
-            else
+            if (string.IsNullOrEmpty(_oportunidadVentaNM.IdTipoDoc) == false)
             {
-                string NameTipoDoc = _oportunidadVentaNM.IdTipoDoc.Trim().ToUpper();
-                _oportunidadVentaNM.IdTipoDoc = TipoDocumentos.Where(p => p.Value == NameTipoDoc).FirstOrDefault().Key;
-            }
+                if (TipoDocumentos.Values.Contains(_oportunidadVentaNM.IdTipoDoc.Trim().ToUpper()))
+                {
+                    string NameTipoDoc = _oportunidadVentaNM.IdTipoDoc.Trim().ToUpper();
+                    _oportunidadVentaNM.IdTipoDoc = TipoDocumentos.Where(p => p.Value == NameTipoDoc).FirstOrDefault().Key;
+                }
+                else
+                {
+                    mensajeError += "El tipo de documento no es un valor soportado|";
+                }                
+            }            
             if (string.IsNullOrEmpty(_oportunidadVentaNM.CiudadIata))
             {
                 mensajeError += "La Ciudad Iata es un campo obligatorio|";
