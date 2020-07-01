@@ -65,7 +65,7 @@ namespace Expertia.Estructura.Models
     {
         public string IdReserva { get; set; }
         public string codReserva { get; set; }
-        public string fechaCreación { get; set; }
+        public DateTime fechaCreación { get; set; }
         public string estadoVenta { get; set; }
         public string codigoAerolinea { get; set; }
         public string Tipo { get; set; }
