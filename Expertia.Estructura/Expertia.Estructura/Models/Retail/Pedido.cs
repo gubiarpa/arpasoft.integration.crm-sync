@@ -96,6 +96,15 @@ namespace Expertia.Estructura.Models
         public float? Pef { get; set; }
         public float? Gem { get; set; }
         public int? NumCuotas { get; set; }
+        public int? IdCotVtaNullable
+        {
+            get
+            {
+                int? idCotVtaNullable = null;
+                if (this.IdCotVta > 0) idCotVtaNullable = IdCotVta;
+                return idCotVtaNullable;
+            }
+        }
     }
 
     #region NuevoMundo
