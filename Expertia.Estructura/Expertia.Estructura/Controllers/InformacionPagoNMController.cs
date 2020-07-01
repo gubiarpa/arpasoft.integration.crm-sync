@@ -104,8 +104,8 @@ namespace Expertia.Estructura.Controllers
                         oInfoPagoNM.montoDescuento = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x => x.montodescuento);
                         oInfoPagoNM.textoDescuento = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textodescuento;
                         oInfoPagoNM.promoWebCode = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).promowebcode;
-                        oInfoPagoNM.totalFacturar = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).totalfacturar;
-                        oInfoPagoNM.feeAsumidoGeneralBoletos = oInfoPagoNM.totalPagar - oInfoPagoNM.montoDescuento;//  informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).feeAsumidoGeneralBoletos;
+                        oInfoPagoNM.totalFacturar = oInfoPagoNM.totalPagar - oInfoPagoNM.montoDescuento; 
+                        oInfoPagoNM.feeAsumidoGeneralBoletos = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x=>x.feeAsumidoGeneralBoletos);
                         ////Aqui Lista ListPagosDesglose_Paquete
 
 
@@ -126,13 +126,13 @@ namespace Expertia.Estructura.Controllers
                             }).ToList();
 
 
-                        oInfoPagoNM.precioTotalHabitacionesPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioTotalHabitacionesPaq;
-                        oInfoPagoNM.gastosAdministrativosPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).gastosAdministrativosPaq;
+                        oInfoPagoNM.precioTotalHabitacionesPaq = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x => x.precioTotalHabitacionesPaq);
+                        oInfoPagoNM.gastosAdministrativosPaq = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x => x.gastosAdministrativosPaq);
                         oInfoPagoNM.tarjetaDeTurismo = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).tarjetaDeTurismo;
                         oInfoPagoNM.tarjetaDeAsistencia = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).tarjetaDeAsistencia;
 
                         ////Aqui Lista ListPagosServicio_Paquete =>GetListPagosServicio
-                        
+
                         if (!string.IsNullOrWhiteSpace(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId))
                         {
                             int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId, out PaqueteId);
@@ -143,11 +143,11 @@ namespace Expertia.Estructura.Controllers
 
                         }
 
-                        oInfoPagoNM.precioTotalActividadesPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioTotalActividadesPaq;
+                        oInfoPagoNM.precioTotalActividadesPaq =  oInfoPagoNM.ListPagosServicio_Paquete.Sum(x => x.precioServ);
+                        oInfoPagoNM.precioTotalPagarPaq = oInfoPagoNM.precioTotalHabitacionesPaq + oInfoPagoNM.gastosAdministrativosPaq + oInfoPagoNM.precioTotalActividadesPaq; // informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x=>x.precioTotalPagarPaq);
                         oInfoPagoNM.textoDescuentoPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textoDescuentoPaq;
-                        oInfoPagoNM.montoDescuentoPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).montoDescuentoPaq;
-                        oInfoPagoNM.totalFacturarPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).totalFacturarPaq;
-                        oInfoPagoNM.precioTotalPagarPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioTotalPagarPaq;
+                        oInfoPagoNM.montoDescuentoPaq = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x=>x.montoDescuentoPaq);
+                        oInfoPagoNM.totalFacturarPaq = oInfoPagoNM.precioTotalPagarPaq + oInfoPagoNM.montoDescuentoPaq;//          informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x => x.totalFacturarPaq);                    
                         oInfoPagoNM.cantDiasSeg = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).cantDiasSeg;
                         oInfoPagoNM.precioUnitarioSeg = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioUnitarioSeg;
                         oInfoPagoNM.MontoSeg = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).MontoSeg;
@@ -191,7 +191,7 @@ namespace Expertia.Estructura.Controllers
                             _rptaInformacionPagoSF.MensajeError = jsResponse[OutParameter.SF_Mensaje];
                             _rptaInformacionPagoSF.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad3];
                             _rptaInformacionPagoSF.IdInfoPago_SF = jsResponse[OutParameter.SF_IdInformacionPago2];
-                            if (_rptaInformacionPagoSF.CodigoError !="ER" && codigoServicio.Count()>0)
+                            if (_rptaInformacionPagoSF.CodigoError != "ER" && codigoServicio.Count() > 0)
                             {
                                 _rptaInformacionPagoSF.CodigoServicio_NM = codigoServicio[0].ToString();
                                 _rptaInformacionPagoSF.Identificador_NM = codigoServicio[1].ToString();
@@ -203,8 +203,8 @@ namespace Expertia.Estructura.Controllers
                             {
                                 error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaInformacionPagoSF.Identificador_NM.ToString() + "||||";
                                 ListRptaInformacionPagoSF.Add(_rptaInformacionPagoSF);
-                               
-                            }                        
+
+                            }
                         }
                     }
                     else
