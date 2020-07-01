@@ -151,22 +151,22 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         ObjReservasOportunidad_NM = new ReservasOportunidad_NM() {
                             IdReserva = row.StringParse("IdReserva"),
                             codReserva = row.StringParse("codReserva"),
-                            fechaCreación = row.StringParse("fechaCreacion"),
+                            fechaCreación = Convert.ToDateTime(row.StringParse("fechaCreacion")),
                             estadoVenta = row.StringParse("estadoVenta"),
                             codigoAerolinea = row.StringParse("codigoAerolinea"),
                             Tipo = row.StringParse("Tipo"),
                             PCCOfficeID = row.StringParse("PCC_OfficeID"),
                             IATA = row.StringParse("IATA"),
                             RUCEmpresa = row.StringParse("RUC_Empresa"),
-                            razonSocial = null,//row.StringParse("razonSocial"),
-                            aceptarPoliticas = true,//(row.IntParse("aceptarPoliticas") == 1 ? true : false),
-                            ruc = null, //row.IntParse("RUC"),
+                            razonSocial = row.StringParse("razonsocial"),
+                            aceptarPoliticas = (row.IntParse("aceptarPoliticas") == 1 ? true : false),
+                            ruc = row.StringParse("ruc"),
                             descripPaquete = row.StringParse("descripPaquete"),
                             destinoPaquetes = row.StringParse("destinoPaquetes"),
                             fechasPaquetes = row.StringParse("fechasPaquetes"),
                             Proveedor = row.StringParse("Proveedor")
                         };
-                        
+                                                
                         if (Convert.IsDBNull(row["PlanSeguro"]) == false)
                         {
                             objPlanReservaSeguro_NM = new PlanReservaSeguro_NM() {

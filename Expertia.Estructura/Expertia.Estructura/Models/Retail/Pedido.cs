@@ -96,6 +96,15 @@ namespace Expertia.Estructura.Models
         public float? Pef { get; set; }
         public float? Gem { get; set; }
         public int? NumCuotas { get; set; }
+        public int? IdCotVtaNullable
+        {
+            get
+            {
+                int? idCotVtaNullable = null;
+                if (this.IdCotVta > 0) idCotVtaNullable = IdCotVta;
+                return idCotVtaNullable;
+            }
+        }
     }
 
     #region NuevoMundo
@@ -127,8 +136,8 @@ namespace Expertia.Estructura.Models
         {
             #region ProteccionFormaPago
             if (
-                (this.Pedido != null) ||
-                (this.Pedido.Pasarela != null) ||
+                (this.Pedido == null) ||
+                (this.Pedido.Pasarela == null) ||
                 (this.Pedido.Pasarela.FormaPago == null) ||
                 (this.Pedido.Pasarela.FormaPago == string.Empty) ||
                 (this.Pedido.Pasarela.FormaPago.Equals("0"))

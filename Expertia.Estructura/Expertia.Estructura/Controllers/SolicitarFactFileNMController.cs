@@ -72,13 +72,34 @@ namespace Expertia.Estructura.Controllers
                         _cotizSrvRepository._Liberar_UsuWeb_CA(solicitarFactFileNM.intCotId);
                     }
 
-                    /*
+
                     _cotizSrvRepository.Inserta_Post_Cot(
                         solicitarFactFileNM.intCotId,
                         "1",
                         textoPost,
+                        "127.0.0.0",
+                        usuarioLogin.LoginUsuario,
+                        usuarioLogin.IdUsuario,
+                        usuarioLogin.IdDep,
+                        usuarioLogin.IdOfi,
+                        null,
+                        null,
+                        Constantes_SRV.INT_ID_ESTADO_COT_DERIVADO_A_CA,
+                        true,
+                        null,
+                        false,
+                        null,
+                        false,
+                        usuarioLogin.IdUsuario,
+                        usuarioLogin.IdOfi,
+                        usuarioLogin.IdDep,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
                         );
-                    */
+
                 }
                 codMessage = "OK"; exMessage = "El proceso se realizó con éxito";
                 return Ok(new

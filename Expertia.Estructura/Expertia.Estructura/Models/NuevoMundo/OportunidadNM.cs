@@ -65,7 +65,7 @@ namespace Expertia.Estructura.Models
     {
         public string IdReserva { get; set; }
         public string codReserva { get; set; }
-        public string fechaCreación { get; set; }
+        public DateTime fechaCreación { get; set; }
         public string estadoVenta { get; set; }
         public string codigoAerolinea { get; set; }
         public string Tipo { get; set; }
@@ -74,7 +74,7 @@ namespace Expertia.Estructura.Models
         public string RUCEmpresa { get; set; }
         public string razonSocial { get; set; }
         public bool aceptarPoliticas { get; set; }
-        public float? ruc { get; set; }
+        public string ruc { get; set; }
         public string descripPaquete { get; set; }
         public string destinoPaquetes { get; set; }
         public string fechasPaquetes { get; set; }
