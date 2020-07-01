@@ -74,7 +74,7 @@ namespace Expertia.Estructura.Models
         public string RUCEmpresa { get; set; }
         public string razonSocial { get; set; }
         public bool aceptarPoliticas { get; set; }
-        public float? ruc { get; set; }
+        public string ruc { get; set; }
         public string descripPaquete { get; set; }
         public string destinoPaquetes { get; set; }
         public string fechasPaquetes { get; set; }
