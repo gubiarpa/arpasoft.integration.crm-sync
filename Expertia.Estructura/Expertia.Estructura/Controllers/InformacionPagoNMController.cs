@@ -228,14 +228,17 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                (new
+                if (objEnvio != null || jsonResponse != null || ListRptaInformacionPagoSF != null || string.IsNullOrEmpty(error) == false)
                 {
-                    Request = objEnvio,
-                    Response = jsonResponse,
-                    Rpta_NoUpdate_Fail = ListRptaInformacionPagoSF,
-                    Exception = error
-                    //LegacySystems = lInfoPagoNM
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                    (new
+                    {
+                        Request = objEnvio,
+                        Response = jsonResponse,
+                        Rpta_NoUpdate_Fail = ListRptaInformacionPagoSF,
+                        Exception = error
+                        //LegacySystems = lInfoPagoNM
+                    }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                }                    
             }
         }
         #endregion

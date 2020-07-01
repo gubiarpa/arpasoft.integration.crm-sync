@@ -134,14 +134,17 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                (new
+                if (objEnvio != null || SFResponse != null || ListRptaPasajeroSF_Fail != null || string.IsNullOrEmpty(error) == false)
                 {
-                    Request = objEnvio,
-                    Response = SFResponse,
-                    Rpta_NoUpdate_Fail = ListRptaPasajeroSF_Fail,
-                    Exception = error
-                    //LegacySystems = detallePasajerosNMs
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                    (new
+                    {
+                        Request = objEnvio,
+                        Response = SFResponse,
+                        Rpta_NoUpdate_Fail = ListRptaPasajeroSF_Fail,
+                        Exception = error
+                        //LegacySystems = detallePasajerosNMs
+                    }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                }                    
             }
         }
         #endregion

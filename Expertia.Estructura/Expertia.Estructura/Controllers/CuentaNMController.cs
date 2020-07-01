@@ -130,14 +130,17 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                (new
+                if (objEnvio != null || SFResponse != null || ListRptaCuentaSF_Fail != null || string.IsNullOrEmpty(exceptionMsg) == false)
                 {
-                    Request = objEnvio,
-                    Response = SFResponse,
-                    Rpta_NoUpdate_Fail = ListRptaCuentaSF_Fail,                    
-                    Exception = exceptionMsg 
-                    //LegacySystems = cuentasNMs
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);                
+                    (new
+                    {
+                        Request = objEnvio,
+                        Response = SFResponse,
+                        Rpta_NoUpdate_Fail = ListRptaCuentaSF_Fail,                    
+                        Exception = exceptionMsg 
+                        //LegacySystems = cuentasNMs
+                    }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                }
             }
         }
         #endregion

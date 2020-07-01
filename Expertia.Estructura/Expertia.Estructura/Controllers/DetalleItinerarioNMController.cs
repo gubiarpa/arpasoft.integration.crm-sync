@@ -132,14 +132,17 @@ namespace Expertia.Estructura.Controllers
             }
             finally
             {
-                (new
+                if (objEnvio != null || SFResponse != null || ListRptaItinerarioSF_Fail != null || string.IsNullOrEmpty(error) == false)
                 {
-                    Request = objEnvio,
-                    Response = SFResponse,
-                    Rpta_NoUpdate_Fail = ListRptaItinerarioSF_Fail,                                      
-                    Exception = error
-                    //LegacySystems = detItinerarioList
-                }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                    (new
+                    {
+                        Request = objEnvio,
+                        Response = SFResponse,
+                        Rpta_NoUpdate_Fail = ListRptaItinerarioSF_Fail,
+                        Exception = error
+                        //LegacySystems = detItinerarioList
+                    }).TryWriteLogObject(_logFileManager, _clientFeatures);
+                }                    
             }
         }
 
