@@ -82,10 +82,7 @@ namespace Expertia.Estructura.Controllers
                         oInfoPagoNM.IdInformacionPago_SF = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).IdInformacionPago_SF;
 
                         //Aqui Lista ListPago_Boleto_Servicios
-                        if (true)
-                        {
 
-                        }
                         oInfoPagoNM.ListPago_Boleto_Servicios = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF && !string.IsNullOrWhiteSpace(x.reservaID))
                             .Select(x => new PagoBoletoServicios
                             {
@@ -104,26 +101,29 @@ namespace Expertia.Estructura.Controllers
                         oInfoPagoNM.montoDescuento = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).montodescuento;
                         oInfoPagoNM.textoDescuento = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textodescuento;
                         oInfoPagoNM.promoWebCode = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).promowebcode;
-                        oInfoPagoNM.totalFacturar = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).totalfacturar;
-                        oInfoPagoNM.feeAsumidoGeneralBoletos = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).feeAsumidoGeneralBoletos;
+                        oInfoPagoNM.totalFacturar = oInfoPagoNM.totalPagar - oInfoPagoNM.montoDescuento; 
+                        oInfoPagoNM.feeAsumidoGeneralBoletos = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF).Sum(x=>x.feeAsumidoGeneralBoletos);
                         ////Aqui Lista ListPagosDesglose_Paquete
 
 
-                        oInfoPagoNM.ListPagosDesglose_Paquete = informacionPagoNMs.Where(x => x.idOportunidad_SF == item.idOportunidad_SF && !string.IsNullOrWhiteSpace(x.PaqueteId))
-                            .Select(x => new PagosDesglosePaquete
+                        if (!string.IsNullOrWhiteSpace(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId))
+                        {
+                            oInfoPagoNM.ListPagosDesglose_Paquete = new List<PagosDesglosePaquete>();
+                            oInfoPagoNM.ListPagosDesglose_Paquete.Add(new PagosDesglosePaquete
                             {
-                                precioTotalPorHabitacionPaq = x.precioTotalPorHabitacionPaq,
-                                ListPorHabitacionPaq = informacionPagoNMs.Where(y => y.idOportunidad_SF == item.idOportunidad_SF)
-                                                                                             .Select(y => new PorHabitacion_Paq
-                                                                                             {
-                                                                                                 numHabitacionPaquete = y.numHabitacionPaquete,
-                                                                                                 tipoPasajeroPaq = y.tipoPasajeroPaq,
-                                                                                                 cantidadPasajeroPaq = y.cantidadPasajeroPaq,
-                                                                                                 monedaPaq = y.monedaPaq,
-                                                                                                 precioUnitarioPaq = y.precioUnitarioPaq,
-                                                                                                 totalUnitarioPaq = y.totalUnitarioPaq
-                                                                                             }).ToList()
-                            }).ToList();
+                                precioTotalPorHabitacionPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF && !string.IsNullOrWhiteSpace(x.PaqueteId)).precioTotalPorHabitacionPaq,
+                                ListPorHabitacionPaq = informacionPagoNMs.Where(y => y.idOportunidad_SF == item.idOportunidad_SF && !string.IsNullOrWhiteSpace(y.PaqueteId))
+                                                                                                 .Select(y => new PorHabitacion_Paq
+                                                                                                 {
+                                                                                                     numHabitacionPaquete = y.numHabitacionPaquete,
+                                                                                                     tipoPasajeroPaq = y.tipoPasajeroPaq,
+                                                                                                     cantidadPasajeroPaq = y.cantidadPasajeroPaq,
+                                                                                                     monedaPaq = y.monedaPaq,
+                                                                                                     precioUnitarioPaq = y.precioUnitarioPaq,
+                                                                                                     totalUnitarioPaq = y.totalUnitarioPaq
+                                                                                                 }).ToList()
+                            });
+                        }
 
 
                         oInfoPagoNM.precioTotalHabitacionesPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioTotalHabitacionesPaq;
@@ -132,7 +132,7 @@ namespace Expertia.Estructura.Controllers
                         oInfoPagoNM.tarjetaDeAsistencia = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).tarjetaDeAsistencia;
 
                         ////Aqui Lista ListPagosServicio_Paquete =>GetListPagosServicio
-                        
+
                         if (!string.IsNullOrWhiteSpace(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId))
                         {
                             int.TryParse(informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).PaqueteId, out PaqueteId);
@@ -143,11 +143,16 @@ namespace Expertia.Estructura.Controllers
 
                         }
 
-                        oInfoPagoNM.precioTotalActividadesPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioTotalActividadesPaq;
-                        oInfoPagoNM.textoDescuentoPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textoDescuentoPaq;
+                        if (oInfoPagoNM.ListPagosServicio_Paquete != null && oInfoPagoNM.ListPagosServicio_Paquete.Count>0)
+                        {
+                            oInfoPagoNM.precioTotalActividadesPaq = oInfoPagoNM.ListPagosServicio_Paquete.Sum(x => x.precioServ);  
+                        }
+                        oInfoPagoNM.precioTotalPagarPaq = oInfoPagoNM.precioTotalHabitacionesPaq + oInfoPagoNM.gastosAdministrativosPaq + oInfoPagoNM.precioTotalActividadesPaq;
                         oInfoPagoNM.montoDescuentoPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).montoDescuentoPaq;
-                        oInfoPagoNM.totalFacturarPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).totalFacturarPaq;
-                        oInfoPagoNM.precioTotalPagarPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioTotalPagarPaq;
+                        oInfoPagoNM.totalFacturarPaq = oInfoPagoNM.precioTotalPagarPaq + oInfoPagoNM.montoDescuentoPaq;
+                        oInfoPagoNM.textoDescuentoPaq = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).textoDescuentoPaq;
+                     
+                  
                         oInfoPagoNM.cantDiasSeg = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).cantDiasSeg;
                         oInfoPagoNM.precioUnitarioSeg = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).precioUnitarioSeg;
                         oInfoPagoNM.MontoSeg = informacionPagoNMs.First(x => x.idOportunidad_SF == item.idOportunidad_SF).MontoSeg;
@@ -191,7 +196,7 @@ namespace Expertia.Estructura.Controllers
                             _rptaInformacionPagoSF.MensajeError = jsResponse[OutParameter.SF_Mensaje];
                             _rptaInformacionPagoSF.idOportunidad_SF = jsResponse[OutParameter.SF_IdOportunidad3];
                             _rptaInformacionPagoSF.IdInfoPago_SF = jsResponse[OutParameter.SF_IdInformacionPago2];
-                            if (_rptaInformacionPagoSF.CodigoError !="ER" && codigoServicio.Count()>0)
+                            if (_rptaInformacionPagoSF.CodigoError != "ER" && codigoServicio.Count() > 0)
                             {
                                 _rptaInformacionPagoSF.CodigoServicio_NM = codigoServicio[0].ToString();
                                 _rptaInformacionPagoSF.Identificador_NM = codigoServicio[1].ToString();
@@ -203,8 +208,8 @@ namespace Expertia.Estructura.Controllers
                             {
                                 error = error + "Error en el Proceso de Actualizacion - No Actualizo Ningun Registro. Identificador NM : " + _rptaInformacionPagoSF.Identificador_NM.ToString() + "||||";
                                 ListRptaInformacionPagoSF.Add(_rptaInformacionPagoSF);
-                               
-                            }                        
+
+                            }
                         }
                     }
                     else

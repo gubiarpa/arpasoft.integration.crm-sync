@@ -151,7 +151,7 @@ namespace Expertia.Estructura.Repository.NuevoMundo
                         ObjReservasOportunidad_NM = new ReservasOportunidad_NM() {
                             IdReserva = row.StringParse("IdReserva"),
                             codReserva = row.StringParse("codReserva"),
-                            fechaCreación = Convert.ToDateTime(row.StringParse("fechaCreacion")),
+                            fechaCreación = Convert.ToDateTime(row.StringParse("fechaCreacion")).AddHours(Constantes_SRV.INT_SUM_HORAS_FECHAS_ENV_SF),
                             estadoVenta = row.StringParse("estadoVenta"),
                             codigoAerolinea = row.StringParse("codigoAerolinea"),
                             Tipo = row.StringParse("Tipo"),
