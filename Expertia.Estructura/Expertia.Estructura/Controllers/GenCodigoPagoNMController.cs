@@ -49,7 +49,7 @@ namespace Expertia.Estructura.Controllers
                 var pedido = pedido_NM.ToRetail(); // Conversión a Retail
                 /*Validaciones*/
                 validacionPedido(ref pedido, ref _resultpedido, ref _return, ref DtsUsuarioLogin);
-                //if (_return == true) return Ok(_resultpedido);
+                if (_return == true) return Ok(_resultpedido);
 
                 RepositoryByBusiness(pedido.UnidadNegocio.ID);                
 
@@ -662,6 +662,7 @@ namespace Expertia.Estructura.Controllers
 
         private void validacionPedido(ref DatosPedido _pedido, ref Models.PedidoRS _resultPedido, ref bool _return, ref UsuarioLogin UserLogin)
         {
+            _return = false;
             string mensajeError = string.Empty;
             _pedido.IdLang = 1; _pedido.IdWeb = 0;
             string metodoDePago = string.Empty;
